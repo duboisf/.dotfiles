@@ -57,7 +57,7 @@ if has("autocmd")
 endif
 
 " fzf.vim configuration
-nnoremap <leader>f :Ag 
+nnoremap <leader>f :Ag<CR>
 imap <c-x><c-f> <Plug>(fzf-complete-path)
 
 """""""""""""""""""""
