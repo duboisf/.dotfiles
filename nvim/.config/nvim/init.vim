@@ -30,6 +30,7 @@ set encoding=utf-8
 set listchars=tab:→\ ,trail:·,eol:↩
 set list
 set cursorline
+set cursorcolumn
 let mapleader=' '
 
 " jump to last position when reopening a file
