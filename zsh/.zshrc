@@ -15,7 +15,3 @@ zplug load
 for file in ~/.zsh/*.zsh; do
     source $file
 done
-
-export EDITOR=vim
-export MANPAGER='nvim +Man!'
-export MANWIDTH=999
