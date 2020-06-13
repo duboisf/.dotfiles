@@ -1,6 +1,7 @@
 source ~/.zplug/init.zsh
 
 zplug "junegunn/fzf-bin", from:gh-r, as:command, rename-to:fzf
+zplug "kubernetes/minikube", from:gh-r, as:command
 
 if ! zplug check --verbose; then
     printf "Install? [y/N]: "
