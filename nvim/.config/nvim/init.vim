@@ -36,7 +36,16 @@ let mapleader=' '
 
 " jump to last position when reopening a file
 if has("autocmd")
-  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+  au Filetype gitcommit let b:disable_jump_to_last_position = 1
+  fun! JumpToLastPositionWhenReopeningBuffer()
+    if exists('b:disable_jump_to_last_position')
+      return
+    endif
+    if line("'\"") > 0 && line("'\"") <= line("$")
+      exe "normal! g`\""
+    endif
+  endfun
+  au BufReadPost * call JumpToLastPositionWhenReopeningBuffer()
 endif
 
 " fugitive configuration
