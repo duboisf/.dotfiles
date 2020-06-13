@@ -1,5 +1,6 @@
 # The basic stuff
 alias l='ls -lh --color'
+alias la='l -a'
 alias s='cd ..'
 alias pd=popd
 alias open=xdg-open
