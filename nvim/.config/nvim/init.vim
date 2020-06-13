@@ -149,6 +149,16 @@ nnoremap <silent><C-j> :tabnext<CR>
 nnoremap <silent><C-k> :tabprevious<CR>
 nnoremap <silent><C-l> :bnext<CR>
 nnoremap <silent><C-h> :bprevious<CR>
+nnoremap <silent><leader>q :q<CR>
+nnoremap <silent><leader>s :w<CR>
+nnoremap <leader>j <C-W>j
+nnoremap <leader>k <C-W>k
+nnoremap <leader>h <C-W>h
+nnoremap <leader>l <C-W>l
+nnoremap <leader>m <C-W>_
+nnoremap <leader>= <C-W>=
+nnoremap <leader>. 10<C-W>>
+nnoremap <leader>, 10<C-W><
 
 """""""""""""""
 " colorscheme "
