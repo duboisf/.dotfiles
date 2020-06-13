@@ -52,7 +52,9 @@ endif
 nnoremap <leader>g :G<CR>
 
 " vim-go configuration
-autocmd Filetype go nmap <leader>t <Plug>(go-test)
+if has("autocmd")
+  au Filetype go nmap <leader>t <Plug>(go-test)
+endif
 
 " fzf.vim configuration
 nnoremap <leader>f :Ag 
