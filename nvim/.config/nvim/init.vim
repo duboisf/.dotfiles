@@ -31,6 +31,7 @@ set listchars=tab:→\ ,trail:·,eol:↩
 set list
 set cursorline
 set cursorcolumn
+set wildignore+=*/.git/*,*/.hg/*,*/.svn/*
 let mapleader=' '
 
 " jump to last position when reopening a file
