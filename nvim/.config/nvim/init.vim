@@ -37,7 +37,7 @@ if has("autocmd")
 endif
 
 " fugitive configuration
-nnoremap <C-g> :G<CR>
+nnoremap <leader>g :G<CR>
 
 " vim-go configuration
 autocmd Filetype go nmap <leader>t <Plug>(go-test)
