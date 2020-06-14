@@ -4,6 +4,7 @@ alias la='l -a'
 alias s='cd ..'
 alias pd=popd
 alias open=xdg-open
+alias vim=nvim
 
 # Super useful global aliases
 _C() {
