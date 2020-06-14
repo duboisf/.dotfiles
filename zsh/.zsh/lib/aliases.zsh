@@ -74,6 +74,8 @@ alias gci='git commit -v'
 alias gpl='git pull'
 alias gciah='git commit --amend -C HEAD'
 alias gr='git rebase'
+alias grc='git rebase --continue'
+alias gra='git rebase --abort'
 alias gd='git diff'
 alias gdc='git diff --cached'
 
