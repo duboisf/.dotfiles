@@ -6,6 +6,7 @@ zplug "kubernetes/minikube", from:gh-r, as:command
 zplug "themes/agnoster", from:oh-my-zsh, as:theme
 zplug "lib/completion", from:oh-my-zsh
 zplug "lib/key-bindings", from:oh-my-zsh
+zplug "lib/history", from:oh-my-zsh
 
 if ! zplug check --verbose; then
     printf "Install? [y/N]: "
