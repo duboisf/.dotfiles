@@ -63,7 +63,10 @@ imap <c-x><c-f> <Plug>(fzf-complete-path)
 """""""""""""""""""""
 " coc.nvim settings "
 """""""""""""""""""""
-
+let g:coc_global_extensions = [
+\   'coc-json',
+\   'coc-yaml'
+\ ]
 " if hidden is not set, TextEdit might fail.
 set hidden
 " Better display for messages
