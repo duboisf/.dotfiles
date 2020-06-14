@@ -8,5 +8,5 @@ path=(
 
 export MANPAGER='nvim +Man!'
 export MANWIDTH=999
-export EDITOR=vim
+export EDITOR=nvim
 export GPG_TTY=$(tty)
