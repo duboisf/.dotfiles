@@ -1,0 +1,24 @@
+[push]
+	default = simple
+[user]
+	email = 169247+duboisf@users.noreply.github.com
+	name = Fred Dubois
+	signingkey = 7FDBB1D481604E6E
+[alias]
+	poh = push -u duboisf HEAD
+[commit]
+	verbose = true
+	gpgsign = true
+[pull]
+	rebase = true
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[pager]
+	branch = no
+[diff]
+	compactionHeuristic = true
+[url "git@github.com:"]
+	insteadOf = https://github.com/
