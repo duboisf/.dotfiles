@@ -138,7 +138,6 @@ let g:go_def_mapping_enabled = 0
 " nerdtree configuration
 let NERDTreeShowHidden = 1
 let NERDTreeShowLineNumbers = 1
-let NERDTreeWinSize = 60
 nnoremap <silent><leader>tt :NERDTreeToggle<CR>
 nnoremap <silent><leader>tf :NERDTreeFind<CR>
 
