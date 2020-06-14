@@ -15,6 +15,6 @@ fi
 
 zplug load 
 
-for file in ~/.zsh/*.zsh; do
+for file in ~/.zsh/lib/*.zsh; do
     source $file
 done
