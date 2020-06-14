@@ -155,6 +155,10 @@ let g:autoformat_autoindent = 0
 let g:autoformat_retab = 0
 au BufWritePre *.rego Autoformat
 
+" highlight comments in jsonc files (json with comments, used by coc
+" config/vscode)
+autocmd FileType json syntax match Comment +\/\/.\+$+
+
 " Various mappings
 nnoremap <silent><F10> :qa!<CR>
 nnoremap <silent><C-j> :tabnext<CR>
