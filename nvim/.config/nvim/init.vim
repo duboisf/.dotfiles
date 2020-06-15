@@ -33,6 +33,11 @@ set cursorline
 set cursorcolumn
 set wildignore+=*/.git/*,*/.hg/*,*/.svn/*
 set dictionary+=/usr/share/dict/american-english
+" Remove = from isfname so that completing a filename with <C-x><C-f>
+" works even in an assignment like SOME_VAR=/foo/bar. The side effect of this
+" will be that gf won't work with filenames with = in them... I don't think
+" this will cause a lot of problems...
+set isfname-==
 
 let mapleader=' '
 
