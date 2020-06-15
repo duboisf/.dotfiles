@@ -65,7 +65,7 @@ endif
 
 " fzf.vim configuration
 nnoremap <leader>f :Ag<CR>
-imap <c-x><c-f> <Plug>(fzf-complete-path)
+inoremap <expr> <c-x><c-f> fzf#vim#complete#path("fd -t f -H", fzf#wrap({'dir': expand('%:p:h')}))
 
 """""""""""""""""""""
 " coc.nvim settings "
