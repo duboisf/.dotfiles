@@ -12,6 +12,8 @@ zplug "junegunn/fzf", use:"shell/*.zsh"
 zplug "lib/completion", from:oh-my-zsh
 zplug "lib/key-bindings", from:oh-my-zsh
 zplug "lib/history", from:oh-my-zsh
+# Nice syntax highlighting like fish, need to run after compinit (defer:2)
+zplug "zsh-users/zsh-syntax-highlighting", defer:2
 
 # Theme
 zplug "themes/agnoster", from:oh-my-zsh, as:theme
