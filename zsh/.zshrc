@@ -11,6 +11,7 @@ nvm() {
     # now the nvm function is the real one
     nvm "$@"
 }
+zplug "sharkdp/fd", from:gh-r, as:command
 
 # Plugins
 # Add fzf completion and key bindings

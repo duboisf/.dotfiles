@@ -91,7 +91,6 @@ alias tfsl='tf state list'
 alias tfss='tf state show'
 
 # Misc
-alias fd=fdfind
 alias setup_monitors='xrandr --output DP-1-1-2 --mode 2560x1440 --rotate right --output DP-1-3 --mode 2560x1440 --right-of DP-1-1-2 --output eDP-1-1 --mode 2560x1440 --right-of DP-1-3'
 alias rdlv='dlv --listen=:2345 --headless=true --api-version=2 --accept-multiclient'
 alias tn='tmux new -s'
