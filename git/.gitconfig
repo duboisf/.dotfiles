@@ -6,6 +6,8 @@
 	signingkey = 7FDBB1D481604E6E
 [alias]
 	poh = push -u duboisf HEAD
+    prs = !hub pr list
+    prc = !hub pr checkout
 [commit]
 	verbose = true
 	gpgsign = true
