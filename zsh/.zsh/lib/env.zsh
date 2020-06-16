@@ -1,5 +1,6 @@
 
 path=(
+  ~/.local/bin
   /snap/bin
   ~/go/bin
   /usr/local/go/bin
