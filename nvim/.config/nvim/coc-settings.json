@@ -1,3 +1,4 @@
 {
-    "coc.preferences.extensionUpdateCheck": "weekly"
+    "coc.preferences.extensionUpdateCheck": "weekly",
+    "coc.source.emoji.filetypes": ["gitcommit", "markdown"]
 }
