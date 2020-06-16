@@ -8,6 +8,7 @@
 	poh = push -u duboisf HEAD
     prs = !hub pr list
     prc = !hub pr checkout
+    opr = !hub pull-request
 [commit]
 	verbose = true
 	gpgsign = true
