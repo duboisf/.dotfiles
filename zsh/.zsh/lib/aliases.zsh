@@ -66,6 +66,7 @@ alias -g Y='-o yaml'
 
 # git
 alias g='git'
+alias gb='git branch'
 alias gco='git checkout'
 alias ga='git add'
 alias gs='git status --short'
