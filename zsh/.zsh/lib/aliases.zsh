@@ -63,7 +63,6 @@ alias -g Y='-o yaml'
 
 # git
 alias g='git'
-alias git='hub'
 alias gco='git checkout'
 alias ga='git add'
 alias gs='git status --short'
@@ -80,6 +79,10 @@ alias gra='git rebase --abort'
 alias gd='git diff'
 alias gdc='git diff --cached'
 
+# github hub aliases, if hub is installed
+if (( $+commands[hub] )); then
+    alias git='hub'
+fi
 # terraform
 alias tf=terraform
 alias tfi='tf init'
