@@ -6,6 +6,9 @@ alias pd=popd
 alias open=xdg-open
 alias vim=nvim
 
+# open vim in dotfiles folder
+alias edot='cd $(git -C $(readlink ~/.zshrc)(:h) rev-parse --show-toplevel) && vim'
+
 # Super useful global aliases
 _C() {
     # USAGE: _C COLUMN
