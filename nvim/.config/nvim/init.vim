@@ -71,6 +71,7 @@ inoremap <expr> <c-x><c-f> fzf#vim#complete#path("fd -t f -H", fzf#wrap({'dir': 
 " coc.nvim settings "
 """""""""""""""""""""
 let g:coc_global_extensions = [
+\   'coc-go',
 \   'coc-json',
 \   'coc-yaml'
 \ ]
