@@ -9,13 +9,15 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'preservim/nerdtree'
-Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'ryanoasis/vim-devicons'
+Plug 'sheerun/vim-polyglot'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'tsandall/vim-rego'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'Chiel92/vim-autoformat'
+Plug 'mhinz/vim-startify'
 call plug#end()
 
 " vim configuration
