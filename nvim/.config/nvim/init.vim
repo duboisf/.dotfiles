@@ -44,6 +44,18 @@ set isfname-==
 
 let mapleader=' '
 
+" open startify and nerdtree if vim is called without any arguments
+if has("autocmd")
+  function s:DisplayHomeView()
+    if !argc()
+      Startify
+      NERDTree
+      wincmd w
+    endif
+  endfunction
+  autocmd VimEnter * call s:DisplayHomeView()
+endif
+
 " jump to last position when reopening a file
 if has("autocmd")
   au Filetype gitcommit let b:disable_jump_to_last_position = 1
