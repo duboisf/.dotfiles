@@ -33,6 +33,10 @@ if ! zplug check --verbose; then
     fi
 fi
 
+# Update fpath to include local completions.
+# Need to do this before zplug load as it calls compinit
+fpath=(~/.zsh/completions $fpath)
+
 zplug load
 
 # Load local config
