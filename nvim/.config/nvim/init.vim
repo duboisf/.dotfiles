@@ -59,7 +59,7 @@ endif
 " jump to last position when reopening a file
 if has("autocmd")
   au Filetype gitcommit let b:disable_jump_to_last_position = 1
-  fun! JumpToLastPositionWhenReopeningBuffer()
+  fun! s:JumpToLastPositionWhenReopeningBuffer()
     if exists('b:disable_jump_to_last_position')
       return
     endif
@@ -67,7 +67,7 @@ if has("autocmd")
       exe "normal! g`\""
     endif
   endfun
-  au BufReadPost * call JumpToLastPositionWhenReopeningBuffer()
+  au BufReadPost * call s:JumpToLastPositionWhenReopeningBuffer()
 endif
 
 " fugitive configuration
@@ -166,6 +166,14 @@ let NERDTreeShowHidden = 1
 let NERDTreeShowLineNumbers = 1
 nnoremap <silent><leader>tt :NERDTreeToggle<CR>
 nnoremap <silent><leader>tf :NERDTreeFind<CR>
+if has("autocmd")
+  fun! s:QuitIfNERDTreeIsOnlyThingOpen()
+    if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree())
+      quit
+    endif
+  endfun
+  autocmd bufenter * call s:QuitIfNERDTreeIsOnlyThingOpen()
+endif
 
 " airline configuration
 let g:airline#extensions#tabline#enabled = 1
