@@ -5,12 +5,7 @@ zplug "junegunn/fzf-bin", from:gh-r, as:command, rename-to:fzf
 zplug "stedolan/jq", from:gh-r, as:command, rename-to:jq
 zplug "kubernetes/minikube", from:gh-r, as:command
 # Lazy load nvm, see .zsh/lib/nvm.zsh
-zplug "nvm-sh/nvm", use:"nvm.sh", as:command, rename-to:_init_nvm.sh
-nvm() {
-    source _init_nvm.sh
-    # now the nvm function is the real one
-    nvm "$@"
-}
+zplug "nvm-sh/nvm", use:"nvm.sh", as:command, rename-to:_init_nvm
 zplug "sharkdp/fd", from:gh-r, as:command
 
 # Plugins
