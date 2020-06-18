@@ -44,22 +44,12 @@ set isfname-==
 
 let mapleader=' '
 
-" open startify and nerdtree if vim is called without any arguments
-if has("autocmd")
-  function s:DisplayHomeView()
-    if !argc()
-      Startify
-      NERDTree
-      wincmd w
-    endif
-  endfunction
-  autocmd VimEnter * call s:DisplayHomeView()
-endif
-
 " jump to last position when reopening a file
-if has("autocmd")
+aug fred#jump_to_last_position
+  au!
   au Filetype gitcommit let b:disable_jump_to_last_position = 1
-  fun! s:JumpToLastPositionWhenReopeningBuffer()
+  au BufReadPost * call s:JumpToLastPositionWhenReopeningBuffer()
+  fun s:JumpToLastPositionWhenReopeningBuffer()
     if exists('b:disable_jump_to_last_position')
       return
     endif
@@ -67,16 +57,26 @@ if has("autocmd")
       exe "normal! g`\""
     endif
   endfun
-  au BufReadPost * call s:JumpToLastPositionWhenReopeningBuffer()
-endif
+aug end
+
+" tweak man mode
+aug fred#man
+  au!
+  au Filetype man call s:TweakManSettings()
+  fu s:TweakManSettings()
+    set nocursorline
+    set nocursorcolumn
+  endfu
+aug end
 
 " fugitive configuration
-nnoremap <leader>g :G<CR>
+nnoremap <leader>g :G \| wincmd _<CR>
 
 " vim-go configuration
-if has("autocmd")
+aug fred#go
+  au!
   au Filetype go nmap <leader>t <Plug>(go-test)
-endif
+aug end
 
 " fzf.vim configuration
 nnoremap <leader>f :Ag<CR>
@@ -128,10 +128,13 @@ inoremap <silent><expr> <c-space> coc#refresh()
 "nmap <silent> <leader>]c <Plug>(coc-diagnostic-next)
 
 " Remap keys for gotos
-autocmd Filetype go map <silent> gd <Plug>(coc-definition)
-autocmd Filetype go map <silent> gy <Plug>(coc-type-definition)
-autocmd Filetype go map <silent> gi <Plug>(coc-implementation)
-autocmd Filetype go map <silent> gr <Plug>(coc-references)
+aug fred#coc
+  au!
+  au Filetype go map <silent> gd <Plug>(coc-definition)
+  au Filetype go map <silent> gy <Plug>(coc-type-definition)
+  au Filetype go map <silent> gi <Plug>(coc-implementation)
+  au Filetype go map <silent> gr <Plug>(coc-references)
+aug end
 
 " Remap for rename current word
 nmap <leader>rn <Plug>(coc-rename)
@@ -166,14 +169,15 @@ let NERDTreeShowHidden = 1
 let NERDTreeShowLineNumbers = 1
 nnoremap <silent><leader>tt :NERDTreeToggle<CR>
 nnoremap <silent><leader>tf :NERDTreeFind<CR>
-if has("autocmd")
+aug fred#nerdtree
+  au!
+  au BufEnter * call s:QuitIfNERDTreeIsOnlyThingOpen()
   fun! s:QuitIfNERDTreeIsOnlyThingOpen()
     if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree())
       quit
     endif
   endfun
-  autocmd bufenter * call s:QuitIfNERDTreeIsOnlyThingOpen()
-endif
+aug end
 
 " airline configuration
 let g:airline#extensions#tabline#enabled = 1
@@ -189,11 +193,18 @@ let g:formatdef_rego = '"opa fmt"'
 let g:formatters_rego = ['rego']
 let g:autoformat_autoindent = 0
 let g:autoformat_retab = 0
-au BufWritePre *.rego Autoformat
+
+aug fred#rego
+  au!
+  au BufWritePre *.rego Autoformat
+aug end
 
 " highlight comments in jsonc files (json with comments, used by coc
 " config/vscode)
-autocmd FileType json syntax match Comment +\/\/.\+$+
+aug fred#json
+  au!
+  au FileType json syntax match Comment +\/\/.\+$+
+aug end
 
 " Various mappings
 nnoremap <silent><F10> :qa!<CR>
@@ -211,6 +222,8 @@ nnoremap <leader>m <C-W>_
 nnoremap <leader>= <C-W>=
 nnoremap <leader>. 10<C-W>>
 nnoremap <leader>, 10<C-W><
+nnoremap <A-f> <C-f>
+nnoremap <A-b> <C-b>
 
 """""""""""""""
 " colorscheme "
@@ -219,3 +232,4 @@ set termguicolors " Enables 24-bit RGB color in the Terminal UI
 set background=dark
 let g:solarized_visibility = "low"
 colorscheme solarized8
+" vim: sts=2 sw=2 ts=2 et
