@@ -6,11 +6,10 @@ zplug "stedolan/jq", from:gh-r, as:command, rename-to:jq
 zplug "kubernetes/minikube", from:gh-r, as:command
 # Lazy load nvm, see .zsh/lib/nvm.zsh
 zplug "nvm-sh/nvm", use:"nvm.sh", as:command, rename-to:__init_nvm
-zplug "sharkdp/fd", from:gh-r, as:command
 
 # Plugins
 # Add fzf completion and key bindings
-zplug "junegunn/fzf", use:"shell/*.zsh"
+zplug "junegunn/fzf", use:"shell/*.zsh", defer:2
 # Reuse oh-my-zsh configs that I'm used to
 zplug "lib/completion", from:oh-my-zsh
 zplug "lib/key-bindings", from:oh-my-zsh
