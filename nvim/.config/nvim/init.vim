@@ -5,7 +5,6 @@ Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-dispatch'
 Plug 'lifepillar/vim-solarized8'
 Plug 'romainl/flattened'
-"Plug 'fatih/vim-go'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'airblade/vim-gitgutter'
@@ -147,6 +146,14 @@ aug end
 
 " Remap for rename current word
 nmap <leader>rn <Plug>(coc-rename)
+
+nmap <leader>rc <Plug>(coc-float-hide)
+nmap <leader>ol <Plug>(coc-open-link)
+
+" Use `[g` and `]g` to navigate diagnostics
+" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " Remap for format selected region
 vmap <leader>p  <Plug>(coc-format-selected)
