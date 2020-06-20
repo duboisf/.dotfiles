@@ -48,5 +48,18 @@
         "snippet": "\ue60b",
         "typeParameter": "\uf728",
         "default": "\uf29c"
+    },
+    "go.goplsOptions": {
+        "codelens": {
+            "test": true,
+            "generate": true,
+            "upgrade.dependency": true
+        },
+        "deepCompletion": true,
+        "hoverKind": "SynopsisDocumentation",
+        "matcher": "fuzzy",
+        "staticcheck": true,
+        "symbolMatcher": "fuzzy",
+        "usePlaceholders": true
     }
 }
