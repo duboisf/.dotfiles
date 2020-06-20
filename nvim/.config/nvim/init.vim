@@ -113,29 +113,23 @@ set signcolumn=yes
 
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
-"inoremap <silent><expr> <TAB>
-"      \ pumvisible() ? "\<C-n>" :
-"      \ <SID>check_back_space() ? "\<TAB>" :
-"      \ coc#refresh()
-"inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-"
-"function! s:check_back_space() abort
-"  let col = col('.') - 1
-"  return !col || getline('.')[col - 1]  =~# '\s'
-"endfunction
+inoremap <silent><expr> <TAB>
+  \ pumvisible()
+    \ ? coc#_select_confirm()
+    \ : coc#expandableOrJumpable()
+      \ ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>"
+      \ : <SID>check_back_space()
+        \ ? "\<TAB>"
+        \ : coc#refresh()
 
-" Use <CR> confirm completion
-"inoremap <silent><expr> <CR> pumvisible() ? coc#_select_confirm() : 
-"  \"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
 
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
 
-" Use `[c` and `]c` to navigate diagnostics
-"nmap <silent> <leader>[c <Plug>(coc-diagnostic-prev)
-"nmap <silent> <leader>]c <Plug>(coc-diagnostic-next)
-
-" Remap keys for gotos
 aug fred#coc
   au!
   au Filetype go map <silent> gd <Plug>(coc-definition)
@@ -219,17 +213,9 @@ aug fred#json
 aug end
 
 " Various mappings
-nnoremap <silent><F10> :qa!<CR>
-nnoremap <silent><C-j> :tabnext<CR>
-nnoremap <silent><C-k> :tabprevious<CR>
-nnoremap <silent><C-l> :bnext<CR>
-nnoremap <silent><C-h> :bprevious<CR>
-nnoremap <silent><leader>q :q<CR>
-nnoremap <silent><leader>s :w<CR>
-nnoremap <leader>j <C-W>j
-nnoremap <leader>k <C-W>k
-nnoremap <leader>h <C-W>h
-nnoremap <leader>l <C-W>l
+nnoremap <F10> :qa!<CR>
+nnoremap <leader>q :q<CR>
+nnoremap <leader>s :w<CR>
 nnoremap <leader>m <C-W>_
 nnoremap <leader>= <C-W>=
 nnoremap <leader>. 10<C-W>>
