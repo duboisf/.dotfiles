@@ -90,13 +90,17 @@ inoremap <expr> <c-x><c-f> fzf#vim#complete#path("fd -t f -H", fzf#wrap({'dir': 
 """""""""""""""""""""
 " coc.nvim settings "
 """""""""""""""""""""
+" let g:node_client_debug = 1
+" let g:coc_node_args = ['--nolazy', '--inspect-brk=6045']
 let g:coc_global_extensions = [
 \   'coc-emoji',
 \   'coc-go',
 \   'coc-json',
+\   'coc-snippets',
 \   'coc-word',
 \   'coc-yaml'
 \ ]
+
 " if hidden is not set, TextEdit might fail.
 set hidden
 " Better display for messages
