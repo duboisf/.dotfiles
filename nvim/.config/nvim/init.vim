@@ -247,5 +247,7 @@ nnoremap <A-b> <C-b>
 set termguicolors " Enables 24-bit RGB color in the Terminal UI
 set background=dark
 let g:solarized_visibility = "low"
+let g:solarized_termtrans = 1
+let g:solarized_statusline = "flat"
 colorscheme solarized8
 " vim: sts=2 sw=2 ts=2 et
