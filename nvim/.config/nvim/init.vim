@@ -92,6 +92,7 @@ inoremap <expr> <c-x><c-f> fzf#vim#complete#path("fd -t f -H", fzf#wrap({'dir': 
 " let g:node_client_debug = 1
 " let g:coc_node_args = ['--nolazy', '--inspect-brk=6045']
 let g:coc_global_extensions = [
+\   'coc-dictionary',
 \   'coc-emoji',
 \   'coc-go',
 \   'coc-json',
