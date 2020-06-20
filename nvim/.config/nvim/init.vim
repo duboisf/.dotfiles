@@ -171,15 +171,15 @@ nmap <silent> ]g <Plug>(coc-diagnostic-next)
 vmap <leader>p  <Plug>(coc-format-selected)
 nmap <leader>p  <Plug>(coc-format-selected)
 " Show all diagnostics
-nnoremap <silent> <leader>ca :<C-u>CocList diagnostics<cr>
+nnoremap <silent> <leader>od :<C-u>CocList diagnostics<cr>
 " Manage extensions
-nnoremap <silent> <leader>ce :<C-u>CocList extensions<cr>
+nnoremap <silent> <leader>oe :<C-u>CocList extensions<cr>
 " Show commands
-nnoremap <silent> <leader>cc :<C-u>CocList commands<cr>
+nnoremap <silent> <leader>oy :<C-u>CocList commands<cr>
 " Find symbol of current document
-nnoremap <silent> <leader>co :<C-u>CocList outline<cr>
+nnoremap <silent> <leader>oo :<C-u>CocList outline<cr>
 " Search workspace symbols
-nnoremap <silent> <leader>cs :<C-u>CocList --interactive --auto-preview symbols<cr>
+nnoremap <silent> <leader>oi :<C-u>CocList --interactive --auto-preview symbols<cr>
 " Do default action for next item.
 nnoremap <silent> <leader>cj :<C-u>CocNext<CR>
 " Do default action for previous item.
