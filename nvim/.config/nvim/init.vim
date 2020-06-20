@@ -83,7 +83,7 @@ nnoremap <leader>g :G \| wincmd _<CR>
 "let g:go_doc_keywordprg_enabled = 0
 
 " fzf.vim configuration
-nnoremap <leader>f :Ag<CR>
+nnoremap <leader>f :Rg<CR>
 inoremap <expr> <c-x><c-f> fzf#vim#complete#path("fd -t f -H", fzf#wrap({'dir': expand('%:p:h')}))
 
 """""""""""""""""""""
