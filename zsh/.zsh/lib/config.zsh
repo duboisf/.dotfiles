@@ -26,6 +26,7 @@ if (( $+commands[fzf] )); then
     [[ -z $FD_BIN_PATH ]] && FD_BIN_PATH=$commands[fdfind]
     if [[ -n $FD_BIN_PATH ]]; then
         # By default fzf uses find, let's use fd instead
+        FZF_DEFAULT_COMMAND="$FD_BIN_PATH --type f --hidden"
         FZF_CTRL_T_COMMAND="$FD_BIN_PATH --type f --hidden --no-ignore-vcs"
         FZF_ALT_C_COMMAND="$FD_BIN_PATH --type d --hidden --no-ignore-vcs"
     fi
