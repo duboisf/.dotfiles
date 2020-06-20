@@ -1,10 +1,19 @@
 {
+    "coc.preferences.formatOnType": true,
+    "coc.preferences.formatOnTypeFiletypes": [
+        "go",
+        "json"
+    ],
+    "coc.preferences.formatOnSaveFiletypes": [
+        "go",
+        "json"
+    ],
     "coc.preferences.extensionUpdateCheck": "weekly",
     "coc.source.emoji.filetypes": [
         "gitcommit",
         "markdown"
     ],
-    "codeLens.enable": true,
+    "diagnostic.checkCurrentLine": true,
     "diagnostic.infoSign": "ღ",
     "diagnostic.hintSign": "ஐ",
     "diagnostic.warningSign": "⚠",
