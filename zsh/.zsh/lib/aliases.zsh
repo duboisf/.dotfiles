@@ -2,7 +2,6 @@
 alias l='ls -lh --color'
 alias la='l -a'
 alias s='cd ..'
-alias pd=popd
 alias open=xdg-open
 alias vim=nvim
 
@@ -28,13 +27,14 @@ alias ai='sudo apt install'
 alias as='apt search'
 alias af='apt-file search'
 
-# kubernetes/docker aliases
+# kubernetes/docker
 alias d='docker'
 alias mk='minikube'
 alias kns=kubens
 alias kctx=kubectx
 
-# kubectl aliases
+# kubectl
+#########
 if (( $+commands[kubectl] )); then
     alias kc='kubectl'
     alias skc='kubectl --as=$USER --as-group=system:masters'
@@ -73,6 +73,7 @@ if (( $+commands[kubectl] )); then
 fi
 
 # git
+#####
 if (( $+commands[git] )); then
     alias g='git'
     alias gb='git branch'
@@ -93,13 +94,14 @@ if (( $+commands[git] )); then
     alias gdc='git diff --cached'
 fi
 
-# github hub aliases, if hub is installed
+# github hub
+############
 if (( $+commands[hub] )); then
     alias git='hub'
 fi
 
 # terraform
-
+###########
 if (( $+commands[terraform] )); then
     alias tf=terraform
     alias tfi='tf init'
@@ -117,8 +119,12 @@ alias setup_monitors='xrandr --output DP-1-1-2 --mode 2560x1440 --rotate right -
 alias rdlv='dlv --listen=:2345 --headless=true --api-version=2 --accept-multiclient'
 
 # tmux
-
+######
 if (( $+commands[tmux] )); then
     alias tn='tmux new -s'
     alias ta='tmux attach -t'
+fi
+
+if (( $+commands[fdfind] )); then
+    alias fd=fdfind
 fi
