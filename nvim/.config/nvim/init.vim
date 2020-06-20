@@ -187,6 +187,7 @@ let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
 
 " ctrlp.vim configuration
 let g:ctrlp_show_hidden = 1
+let g:ctrlp_working_path_mode = 'ra'
 
 " vim-rego configuration
 let g:formatdef_rego = '"opa fmt"'
