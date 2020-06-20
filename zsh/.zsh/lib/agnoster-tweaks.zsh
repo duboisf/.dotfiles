@@ -23,11 +23,17 @@ prompt_kube_context() {
     local full_ctx=$(kubectl config view --minify -o jsonpath='{.contexts[0].context.cluster}/{.contexts[0].context.namespace}')
     local kube_ctx="${full_ctx%/*}"
     local kube_ns="${full_ctx#*/}"
-    prompt_segment 016 207 " $kube_ctx "
-    if [[ -n $kube_ns ]]; then
-      prompt_segment 207 016 " $kube_ns "
+    if [[ -n $kube_ctx ]]; then
+      if [[ -n $kube_ns ]]; then
+        kube_ctx+="=>$kube_ns"
+      fi
+      prompt_segment '#D26D26' '#000' " ﴱ $kube_ctx "
     fi
   fi
+}
+
+prompt_dir_custom() {
+  prompt_segment '#268bd2' '#002b36' "  %~ "
 }
 
 prompt_newline() {
@@ -35,15 +41,17 @@ prompt_newline() {
   CURRENT_BG=NONE
 }
 
+# Change branch icon
+BRANCH=
+
 AGNOSTER_PROMPT_SEGMENTS=(
-  "prompt_status"
-  "prompt_context"
   "prompt_kube_context"
   "prompt_virtualenv"
-  "prompt_dir"
+  "prompt_dir_custom"
   "prompt_vpn"
   "prompt_end"
   "prompt_newline"
+  "prompt_status"
   "prompt_git"
   "prompt_end"
 )
