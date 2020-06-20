@@ -132,10 +132,17 @@ inoremap <silent><expr> <c-space> coc#refresh()
 
 aug fred#coc
   au!
-  au Filetype go map <silent> gd <Plug>(coc-definition)
-  au Filetype go map <silent> gy <Plug>(coc-type-definition)
-  au Filetype go map <silent> gi <Plug>(coc-implementation)
-  au Filetype go map <silent> gr <Plug>(coc-references)
+  " Highlight the symbol and its references when holding the cursor.
+  au CursorHold * silent call CocActionAsync('highlight')
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+  " Remap keys for gotos
+  fu s:GoCocMappings()
+    nmap <silent> gd <Plug>(coc-definition)
+    nmap <silent> gy <Plug>(coc-type-definition)
+    nmap <silent> gi <Plug>(coc-implementation)
+    nmap <silent> gr <Plug>(coc-references)
+  endfu
+  au Filetype go call s:GoCocMappings()
 aug end
 
 " Use K to show documentation in preview window.
