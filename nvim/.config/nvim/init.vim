@@ -14,10 +14,10 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'sheerun/vim-polyglot'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'tsandall/vim-rego'
+"Plug 'tsandall/vim-rego'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
-Plug 'Chiel92/vim-autoformat'
+"Plug 'Chiel92/vim-autoformat'
 Plug 'mhinz/vim-startify'
 call plug#end()
 
@@ -44,7 +44,6 @@ set dictionary+=/usr/share/dict/american-english
 set isfname-==
 
 let mapleader=' '
-
 " jump to last position when reopening a file
 aug fred#jump_to_last_position
   au!
