@@ -138,6 +138,17 @@ aug fred#coc
   au Filetype go map <silent> gr <Plug>(coc-references)
 aug end
 
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
 " Remap for rename current word
 nmap <leader>rn <Plug>(coc-rename)
 
