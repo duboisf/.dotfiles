@@ -1,4 +1,6 @@
 {
+    "coc.source.word.priority": 2,
+    "coc.source.dictionary.priority": 1,
     "coc.preferences.formatOnType": true,
     "coc.preferences.formatOnTypeFiletypes": [
         "go",
