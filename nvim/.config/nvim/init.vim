@@ -241,7 +241,10 @@ nnoremap <leader>. 10<C-W>>
 nnoremap <leader>, 10<C-W><
 nnoremap <A-f> <C-f>
 nnoremap <A-b> <C-b>
-
+" Yank highlighted selection in visual mode to clipboard
+vnoremap <leader>y "+y
+" Yank highlighted lines in visual mode to clipboard
+vnoremap <leader>Y "+Y
 """""""""""""""
 " colorscheme "
 """""""""""""""
