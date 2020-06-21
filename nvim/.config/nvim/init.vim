@@ -65,6 +65,8 @@ aug fred#man
   fu s:TweakManSettings()
     set nocursorline
     set nocursorcolumn
+    nnoremap f <C-f>
+    nnoremap d <C-b>
   endfu
 aug end
 
