@@ -1,5 +1,6 @@
 # Completion
 ############
+
 # Don't autocomplete . and .., this is set in oh-by-zsh/lib/completion.zsh
 zstyle ':completion:*' special-dirs false
 
@@ -26,14 +27,27 @@ bindkey -s '\ej' "jcdr\n"
 
 # fzf config
 ############
-if (( $+commands[fzf] )); then
-    FD_BIN_PATH=$commands[fd]
-    [[ -z $FD_BIN_PATH ]] && FD_BIN_PATH=$commands[fdfind]
-    if [[ -n $FD_BIN_PATH ]]; then
-        # By default fzf uses find, let's use fd instead
-        FZF_DEFAULT_COMMAND="$FD_BIN_PATH --type f --hidden"
-        FZF_CTRL_T_COMMAND="$FD_BIN_PATH --type f --hidden --no-ignore-vcs"
-        FZF_ALT_C_COMMAND="$FD_BIN_PATH --type d --hidden --no-ignore-vcs"
+
+() {
+    if (( $+commands[fzf] )); then
+        # In debian based distributions, the fd binary is named fdfind
+        local fd_bin_path=${commands[fd]:-$commands[fdfind]}
+        if [[ -n $FD_BIN_PATH ]]; then
+            # By default fzf uses find, let's use fd instead
+            FZF_DEFAULT_COMMAND="$fd_bin_path --type f --hidden"
+            FZF_CTRL_T_COMMAND="$fd_bin_path --type f --hidden --no-ignore-vcs"
+            FZF_ALT_C_COMMAND="$fd_bin_path --type d --hidden --no-ignore-vcs"
+        fi
     fi
-    unset FD_BIN_PATH
-fi
+}
+
+# Editing
+#########
+
+# Edit the current command line in $EDITOR
+autoload -U edit-command-line
+zle -N edit-command-line
+bindkey '\C-x\C-e' edit-command-line
+
+# file rename magic
+bindkey "^[m" copy-prev-shell-word
