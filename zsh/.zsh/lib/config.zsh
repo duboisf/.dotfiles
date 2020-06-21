@@ -16,8 +16,13 @@ bindkey -s '\eu' 'cd ..\n'
 autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
 add-zsh-hook chpwd chpwd_recent_dirs
 zstyle ':chpwd:*' recent-dirs-max 1000
+
+jcdr() {
+    local result="$(cdr -l | fzf --with-nth=2 | awk '{print $1}')"
+    [[ -n $result ]] && cdr $result
+}
 # Bind [Esc-j] (or Alt-j) to fuzzy find a semi-recently visited folder
-bindkey -s '\ej' "cdr \$(cdr -l | egrep -v ' ~$' | fzf --with-nth=2 | awk '{print \$1}')\n"
+bindkey -s '\ej' "jcdr\n"
 
 # fzf config
 ############
