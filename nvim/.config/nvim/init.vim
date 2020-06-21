@@ -193,16 +193,19 @@ nnoremap <silent> <leader>cp :<C-u>CocListResume<CR>
 " nerdtree configuration
 let NERDTreeShowHidden = 1
 let NERDTreeShowLineNumbers = 1
-nnoremap <silent><leader>tt :NERDTreeToggle<CR>
-nnoremap <silent><leader>tf :NERDTreeFind<CR>
+
+nnoremap \t :NERDTreeToggle<CR>
+nnoremap \f :NERDTreeFind<CR>
+
+fun! s:QuitIfNERDTreeIsOnlyThingOpen()
+  if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree())
+    quit
+  endif
+endfun
+
 aug fred#nerdtree
   au!
   au BufEnter * call s:QuitIfNERDTreeIsOnlyThingOpen()
-  fun! s:QuitIfNERDTreeIsOnlyThingOpen()
-    if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree())
-      quit
-    endif
-  endfun
 aug end
 
 " airline configuration
