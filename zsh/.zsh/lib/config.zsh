@@ -7,10 +7,29 @@ zstyle ':completion:*' special-dirs false
 # Directory navigation lifehacks
 ################################
 
+# Define a redraw prompt widget, copied from fzf. Redefining here as to not
+# have a dependency on fzf for non-fzf widgets
+redraw-prompt () {
+    local precmd
+    for precmd in $precmd_functions; do
+        $precmd
+    done
+    zle reset-prompt
+}
+zle -N redraw-prompt
+
 # Use Esc-l (or Alt-l) to list directory content
 bindkey -s '\el' 'l\n'
-# Use Esc+u (or Alt+u) to go up to the parent folder
-bindkey -s '\eu' 'cd ..\n'
+
+cd-to-parent-directory-widget() {
+    cd ..
+    local ret=$?
+    zle redraw-prompt
+    return $ret
+}
+zle -N cd-to-parent-directory-widget
+# Bind Esc+u (or Alt+u) to go up to the parent folder
+bindkey '\eu' cd-to-parent-directory-widget
 
 # Every time we change directories record it in the recently
 # visited directories list
