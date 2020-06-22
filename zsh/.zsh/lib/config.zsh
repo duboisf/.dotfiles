@@ -17,11 +17,16 @@ bindkey -s '\eu' 'cd ..\n'
 autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
 add-zsh-hook chpwd chpwd_recent_dirs
 zstyle ':chpwd:*' recent-dirs-max 1000
+zstyle ':chpwd:*' recent-dirs-pushd true
+# Don't record ~, kinda useless to do so
+zstyle ':chpwd:*' recent-dirs-prune 'pattern:~'
 
 # fuzzy find a semi-recently visited folder
 cdr-widget() {
     setopt localoptions pipefail
-    local dir="$(cdr -l | fzf --with-nth=2 | awk '{print $1}')"
+    local dir="$(cdr -l \
+        | fzf --height='20%' --layout=reverse --info=hidden --header="Recently visited directories" --with-nth=2 \
+        | awk '{print $1}')"
     if [[ -z $dir ]]; then
         zle redisplay
         return 0
