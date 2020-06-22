@@ -39,8 +39,8 @@ setopt autopushd
 autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
 add-zsh-hook chpwd chpwd_recent_dirs
 zstyle ':chpwd:*' recent-dirs-max 1000
-# Don't record ~, kinda useless to do so
-zstyle ':chpwd:*' recent-dirs-prune 'pattern:~'
+# Don't record ~ and /, kinda useless to do so
+zstyle ':chpwd:*' recent-dirs-prune 'pattern:~' 'pattern:/'
 
 # fuzzy find a semi-recently visited folder
 cdr-widget() {
