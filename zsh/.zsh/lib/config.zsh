@@ -39,7 +39,6 @@ setopt autopushd
 autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
 add-zsh-hook chpwd chpwd_recent_dirs
 zstyle ':chpwd:*' recent-dirs-max 1000
-zstyle ':chpwd:*' recent-dirs-pushd true
 # Don't record ~, kinda useless to do so
 zstyle ':chpwd:*' recent-dirs-prune 'pattern:~'
 
