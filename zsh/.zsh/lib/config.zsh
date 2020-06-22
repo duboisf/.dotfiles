@@ -18,12 +18,23 @@ autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
 add-zsh-hook chpwd chpwd_recent_dirs
 zstyle ':chpwd:*' recent-dirs-max 1000
 
-jcdr() {
-    local result="$(cdr -l | fzf --with-nth=2 | awk '{print $1}')"
-    [[ -n $result ]] && cdr $result
+# fuzzy find a semi-recently visited folder
+cdr-widget() {
+    setopt localoptions pipefail
+    local dir="$(cdr -l | fzf --with-nth=2 | awk '{print $1}')"
+    if [[ -z $dir ]]; then
+        zle redisplay
+        return 0
+    fi
+    cdr $dir
+    local ret=$?
+    zle fzf-redraw-prompt
+    return $ret
 }
-# Bind [Esc-j] (or Alt-j) to fuzzy find a semi-recently visited folder
-bindkey -s '\ej' "jcdr\n"
+# define the cdr-widget
+zle -N cdr-widget
+# bind alt-j to the cdr-widget
+bindkey '\ej' cdr-widget
 
 # fzf config
 ############
