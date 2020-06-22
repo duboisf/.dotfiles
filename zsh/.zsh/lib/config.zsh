@@ -31,7 +31,7 @@ cdr-widget() {
         zle redisplay
         return 0
     fi
-    cdr $dir
+    cdr $dir > /dev/null 2>&1
     local ret=$?
     zle fzf-redraw-prompt
     return $ret
