@@ -31,6 +31,9 @@ zle -N cd-to-parent-directory-widget
 # Bind Esc+u (or Alt+u) to go up to the parent folder
 bindkey '\eu' cd-to-parent-directory-widget
 
+# Push to the directory stack on directory change
+setopt autopushd
+
 # Every time we change directories record it in the recently
 # visited directories list
 autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
