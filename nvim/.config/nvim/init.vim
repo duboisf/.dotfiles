@@ -208,6 +208,10 @@ aug fred#nerdtree
   au BufEnter * call s:QuitIfNERDTreeIsOnlyThingOpen()
 aug end
 
+" dispatch configuration
+" disable all mappings, they are interfering with NERDTree's m mapping
+let g:dispatch_no_maps = 1
+
 " airline configuration
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
@@ -250,6 +254,7 @@ nnoremap <A-b> <C-b>
 vnoremap <leader>y "+y
 " Yank highlighted lines in visual mode to clipboard
 vnoremap <leader>Y "+Y
+
 """""""""""""""
 " colorscheme "
 """""""""""""""
