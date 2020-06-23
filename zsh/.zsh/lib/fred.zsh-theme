@@ -48,7 +48,9 @@ prompt_dir() {
   local path=
   [[ ${cwd[1]} != '~' ]] && path+=/
   print -n "%F{black}%K{blue} \ue613 " # folder icon
-  prompt_hard_sep blue black
+  local bg=black
+  [[ $cwd == / ]] && bg=NONE
+  prompt_hard_sep blue $bg
   while (( $#parts > 0 )); do
     part=${parts[1]}
     parts=(${parts:1})
