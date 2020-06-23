@@ -1,26 +1,5 @@
 # vim:ft=zsh ts=2 sw=2 sts=2 et
 
-CURRENT_BG=NONE
-
-# prompt_segment and prompt_end were copied from agnoster's theme
-prompt_segment() {
-  local bg fg
-  [[ -n $1 ]] && bg="%K{$1}" || bg="%k"
-  [[ -n $2 ]] && fg="%F{$2}" || fg="%f"
-  if [[ $CURRENT_BG != 'NONE' && $1 != $CURRENT_BG ]]; then
-    print -n "%{$bg%F{$CURRENT_BG}%}\ue0b0$fg%}"
-  else
-    print -n "%{$bg%}%{$fg%}"
-  fi
-  CURRENT_BG=$1
-  [[ -n $3 ]] && print -n $3
-}
-
-# End the prompt, closing any open segments
-prompt_end() {
-  print -n "%K{red}  %k%F{red}\ue0c8 %f"
-}
-
 prompt_vpn() {
   (( $+commands[ip] || $+commands[jq] )) && return
   ip link show vpn0 &> /dev/null || return
@@ -44,24 +23,59 @@ prompt_kube_context() {
   fi
 }
 
+prompt_last_bg=NONE
+prompt_last_sep_func=
+
+prompt_soft_sep() {
+  local fg=${1:-NONE}
+  local bg=${2:-NONE}
+  prompt_last_sep_func='prompt_soft_sep'
+  print -n "%F{$fg}%K{$bg}\ue0b1"
+}
+
+prompt_hard_sep() {
+  local fg=${1:-NONE}
+  local bg=${2:-NONE}
+  prompt_last_bg=$bg
+  prompt_last_sep_func='prompt_hard_sep'
+  print -n "%F{$fg}%K{$bg}\ue0b0"
+}
+
 prompt_dir() {
-  prompt_segment '#268bd2' '#002b36' "  %~ "
+  emulate -RL zsh
+  local cwd=$(print -P "%~")
+  local parts=(${(s|/|)cwd})
+  local path=
+  [[ ${cwd[1]} != '~' ]] && path+=/
+  print -n "%F{black}%K{blue} \ue613 " # folder icon
+  prompt_hard_sep blue black
+  while (( $#parts > 0 )); do
+    part=${parts[1]}
+    parts=(${parts:1})
+    path="${path}${part}/"
+    print -n "%F{blue}%K{black} "
+    if [[ -r ${~path}.git/index ]]; then
+      print -n "\uf408 " # github icon
+    fi
+    print -n "$part "
+    if (( $#parts > 0 )); then
+      prompt_soft_sep blue black
+    else
+      prompt_hard_sep black NONE
+    fi
+  done
 }
-
-prompt_newline() {
-  print
-  CURRENT_BG=NONE
-}
-
-# Change branch icon
-BRANCH=
 
 prompt_fred() {
-  prompt_kube_context
+  local misc_prompt=$(prompt_kube_context)
+  misc_prompt="$misc_prompt$(prompt_vpn)"
+  if [[ -n "$misc_prompt" ]]; then
+    print "$misc_prompt"
+  fi
   prompt_dir
-  prompt_vpn
-  prompt_newline
-  prompt_end
+  print
+  print -n "%K{magenta}%F{black} \uf120 "
+  prompt_hard_sep magenta NONE
   print -n "%f%k "
 }
 
@@ -71,13 +85,3 @@ prompt_fred_precmd() {
 
 autoload -Uz add-zsh-hook
 add-zsh-hook precmd prompt_fred_precmd
-#AGNOSTER_PROMPT_SEGMENTS=(
-#  "prompt_kube_context"
-#  "prompt_dir_custom"
-#  "prompt_vpn"
-#  "prompt_end"
-#  "prompt_newline"
-#  "prompt_status"
-#  "prompt_git"
-#  "prompt_end"
-#)
