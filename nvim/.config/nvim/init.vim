@@ -13,10 +13,10 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'sheerun/vim-polyglot'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-"Plug 'tsandall/vim-rego'
+Plug 'tsandall/vim-rego'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
-"Plug 'Chiel92/vim-autoformat'
+Plug 'Chiel92/vim-autoformat'
 Plug 'mhinz/vim-startify'
 call plug#end()
 
