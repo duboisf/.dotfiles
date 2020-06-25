@@ -70,6 +70,10 @@ aug fred#man
   endfu
 aug end
 
+" startify configuration
+" don't change directories when jumping to a file
+let g:startify_change_to_dir = 0
+
 " fugitive configuration
 nnoremap <leader>g :G \| wincmd _<CR>
 
