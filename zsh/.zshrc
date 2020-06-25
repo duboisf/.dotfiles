@@ -17,7 +17,7 @@ zplug "lib/history", from:oh-my-zsh
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 
 # Theme
-zplug "agnoster/agnoster-zsh-theme", as:theme
+zplug "duboisf/fred.zsh-theme", as:theme
 
 if ! zplug check --verbose; then
     printf "Install? [y/N]: "
