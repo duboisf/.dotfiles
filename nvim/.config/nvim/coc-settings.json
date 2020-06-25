@@ -1,5 +1,6 @@
 {
-    "coc.source.word.priority": 2,
+    "coc.source.around.priority": 10,
+    "coc.source.word.priority": 5,
     "coc.source.dictionary.priority": 1,
     "coc.preferences.formatOnType": true,
     "coc.preferences.formatOnTypeFiletypes": [
