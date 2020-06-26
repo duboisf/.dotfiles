@@ -18,6 +18,7 @@ Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'Chiel92/vim-autoformat'
 Plug 'mhinz/vim-startify'
+Plug 'will133/vim-dirdiff'
 call plug#end()
 
 " vim configuration
