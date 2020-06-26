@@ -69,7 +69,10 @@ bindkey '\ej' cdr-widget
     if (( $+commands[fzf] )); then
         # In debian based distributions, the fd binary is named fdfind
         local fd_bin_path=${commands[fd]:-$commands[fdfind]}
-        if [[ -n $FD_BIN_PATH ]]; then
+        if [[ -n $fd_bin_path ]]; then
+            typeset -g FZF_ALT_C_COMMAND
+            typeset -g FZF_CTRL_T_COMMAND
+            typeset -g FZF_DEFAULT_COMMAND
             # By default fzf uses find, let's use fd instead
             FZF_DEFAULT_COMMAND="$fd_bin_path --type f --hidden"
             FZF_CTRL_T_COMMAND="$fd_bin_path --type f --hidden --no-ignore-vcs"
