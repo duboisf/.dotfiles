@@ -23,9 +23,9 @@ bindkey -s '\el' 'l\n'
 
 cd-to-parent-directory-widget() {
     cd ..
-    local ret=$?
+    local result=$?
     zle redraw-prompt
-    return $ret
+    return $result
 }
 zle -N cd-to-parent-directory-widget
 # Bind Esc+u (or Alt+u) to go up to the parent folder
