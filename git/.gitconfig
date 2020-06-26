@@ -5,12 +5,12 @@
 	name = Fred Dubois
 	signingkey = 7FDBB1D481604E6E
 [alias]
-    cp = cherry-pick
-    lp = log -p
+	cp = cherry-pick
+	lp = log -p
 	poh = push -u duboisf HEAD
-    prs = !hub pr list
-    prc = !hub pr checkout
-    opr = !hub pull-request
+	prs = !hub pr list
+	prc = !hub pr checkout
+	opr = !git poh && hub pull-request
 [commit]
 	verbose = true
 	gpgsign = true
@@ -27,3 +27,5 @@
 	compactionHeuristic = true
 [url "git@github.com:"]
 	insteadOf = https://github.com/
+
+# vim: noet
