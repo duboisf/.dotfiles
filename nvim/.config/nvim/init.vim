@@ -19,6 +19,9 @@ Plug 'junegunn/fzf.vim'
 Plug 'Chiel92/vim-autoformat'
 Plug 'mhinz/vim-startify'
 Plug 'will133/vim-dirdiff'
+" Requires git, fzf, python3, ripgrep
+" Optional bat(like cat but 10x nicer!), exa(like ls but nicer!)
+Plug 'yuki-ycino/fzf-preview.vim'
 call plug#end()
 
 " vim configuration
@@ -92,6 +95,31 @@ nnoremap <leader>g :G \| wincmd _<CR>
 " fzf.vim configuration
 nnoremap <leader>f :Rg<CR>
 inoremap <expr> <c-x><c-f> fzf#vim#complete#path("fd -t f -H", fzf#wrap({'dir': expand('%:p:h')}))
+
+" fzf-preview configuration
+nmap <Leader>f [fzf-p]
+xmap <Leader>f [fzf-p]
+
+nnoremap <silent> [fzf-p]r     :<C-u>FzfPreviewFromResources project_mru directory<CR>
+nnoremap <silent> [fzf-p]gs    :<C-u>FzfPreviewGitStatus<CR>
+nnoremap <silent> [fzf-p]b     :<C-u>FzfPreviewBuffers<CR>
+nnoremap <silent> [fzf-p]B     :<C-u>FzfPreviewAllBuffers<CR>
+nnoremap <silent> [fzf-p]d     :<C-u>FzfPreviewDirectory <C-R>=expand('%:h')<CR><CR>
+nnoremap <silent> [fzf-p]e     :<C-u>FzfPreviewDirectory<CR>
+nnoremap <silent> [fzf-p]f     :<C-u>FzfPreviewProjectCommandGrep<CR>
+nnoremap <silent> [fzf-p]o     :<C-u>FzfPreviewFromResources buffer project_mru<CR>
+nnoremap <silent> [fzf-p]/     :<C-u>FzfPreviewLines -add-fzf-arg=--no-sort -add-fzf-arg=--query="'"<CR>
+nnoremap <silent> [fzf-p]*     :<C-u>FzfPreviewLines -add-fzf-arg=--no-sort -add-fzf-arg=--query="'<C-r>=expand('<cword>')<CR>"<CR>
+nnoremap          [fzf-p]gr    :<C-u>FzfPreviewProjectGrep<Space>
+xnoremap          [fzf-p]gr    "sy:FzfPreviewProjectGrep<Space>-F<Space>"<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"
+nnoremap <silent> [fzf-p]q     :<C-u>FzfPreviewQuickFix<CR>
+nnoremap <silent> [fzf-p]l     :<C-u>FzfPreviewLocationList<CR>
+let g:fzf_preview_grep_cmd = 'rg --line-number --hidden --no-heading'
+let g:fzf_preview_use_dev_icons = 1
+let g:fzf_preview_directory_files_command = 'fd . --type=file --hidden'
+let g:fzf_preview_lines_command = 'bat --color=always --theme="Solarized (dark)" --style=header,numbers,changes'
+let g:fzf_preview_command = 'bat --color=always --theme="Solarized (dark)" --style=full {-1}'
+let g:fzf_preview_filelist_postprocess_command = 'xargs -d "\n" exa --color=always' " Use exa
 
 """""""""""""""""""""
 " coc.nvim settings "
