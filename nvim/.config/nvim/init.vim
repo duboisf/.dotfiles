@@ -3,6 +3,7 @@ Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-dispatch'
+Plug 'tpope/vim-commentary'
 Plug 'lifepillar/vim-solarized8'
 Plug 'romainl/flattened'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
