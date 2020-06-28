@@ -1,3 +1,4 @@
+export ZPLUG_LOG_LOAD_FAILURE=true
 source ~/.zplug/init.zsh
 
 # Commands
