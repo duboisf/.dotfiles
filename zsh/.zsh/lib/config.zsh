@@ -54,25 +54,22 @@ typeset -g force_chpwd_recent_dirs=0
 # is non-zero, we don't skip. The force_chpwd_recent_dirs is recent
 # at the end of the function.
 custom_chpwd_recent_dirs () {
-	emulate -L zsh
-	setopt extendedglob
-	local -aU reply
-	integer changed
+    emulate -L zsh
+    setopt extendedglob
+    local -aU reply
+    integer changed
     typeset -g force_chpwd_recent_dirs
-	autoload -Uz chpwd_recent_filehandler chpwd_recent_add
-    if (( $force_chpwd_recent_dirs == 0 ))
-    then
-        if [[ ! -o interactive || $ZSH_SUBSHELL -ne 0 || ( -n $ZSH_EVAL_CONTEXT && $ZSH_EVAL_CONTEXT != toplevel(:[a-z]#func|)# ) ]]
-        then
+    autoload -Uz chpwd_recent_filehandler chpwd_recent_add
+    if (( $force_chpwd_recent_dirs == 0 )); then
+        if [[ ! -o interactive || $ZSH_SUBSHELL -ne 0 || ( -n $ZSH_EVAL_CONTEXT && $ZSH_EVAL_CONTEXT != toplevel(:[a-z]#func|)# ) ]]; then
             return
         fi
     fi
-	chpwd_recent_filehandler
-	if [[ $reply[1] != $PWD ]]
-	then
-		chpwd_recent_add $PWD && changed=1 
-		(( changed )) && chpwd_recent_filehandler $reply
-	fi
+    chpwd_recent_filehandler
+    if [[ $reply[1] != $PWD ]]; then
+        chpwd_recent_add $PWD && changed=1
+        (( changed )) && chpwd_recent_filehandler $reply
+    fi
     force_chpwd_recent_dirs=0
 }
 
