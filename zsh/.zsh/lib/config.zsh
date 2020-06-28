@@ -115,12 +115,12 @@ bindkey '\ej' cdr-widget
 #   when pressing ctrl-e, put
 fzf-history-widget () {
     emulate -L zsh
-	local selected num
-	setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2> /dev/null
-	selected=($(fc -rl 1 | perl -ne 'print if !$seen{(/^\s*[0-9]+\s+(.*)/, $1)}++' |
+    local selected num
+    setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2> /dev/null
+    selected=($(fc -rl 1 | perl -ne 'print if !$seen{(/^\s*[0-9]+\s+(.*)/, $1)}++' |
     FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --expect=ctrl-e,ctrl-i --tiebreak=index --bind=ctrl-r:toggle-sort $FZF_CTRL_R_OPTS --query=${(qqq)LBUFFER} +m" $(__fzfcmd))) 
-	local ret=$? 
-	if [[ -n "$selected" ]]; then
+    local ret=$? 
+    if [[ -n "$selected" ]]; then
         local -i execute_directly=1
         local pressed_key
         pressed_key=$selected[1]
@@ -129,8 +129,8 @@ fzf-history-widget () {
             shift selected
         fi
         # selected history entry
-		num=$selected[1] 
-		if [[ -n "$num" ]]; then
+        num=$selected[1] 
+        if [[ -n "$num" ]]; then
             if [[ $pressed_key == ctrl-i ]]; then
                 # ctrl-i to insert the selected history entry
                 # after the cursor
@@ -141,10 +141,10 @@ fzf-history-widget () {
             if (( $execute_directly )); then
                 zle accept-line
             fi
-		fi
-	fi
-	zle reset-prompt
-	return $ret
+        fi
+    fi
+    zle reset-prompt
+    return $ret
 }
 
 if (( $+commands[fzf] )); then
