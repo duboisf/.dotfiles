@@ -306,4 +306,10 @@ let g:solarized_visibility = "low"
 let g:solarized_termtrans = 1
 let g:solarized_statusline = "flat"
 colorscheme solarized8
+
+" Modify coc CursorHold highlight color
+hi default CocHighlightText guibg=#4d1e0a
+hi default link CocHighlightRead   CocHighlightText
+hi default link CocHighlightWrite  CocHighlightText
+
 " vim: sts=2 sw=2 ts=2 et
