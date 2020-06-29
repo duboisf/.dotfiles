@@ -162,6 +162,7 @@ if (( $+commands[fzf] )); then
             }
             zle -N fzf-cd-widget-wrapper
             bindkey '\ec' fzf-cd-widget-wrapper
+            # Use fd instead of find
             typeset -g FZF_ALT_C_COMMAND
             typeset -g FZF_CTRL_T_COMMAND
             typeset -g FZF_DEFAULT_COMMAND
@@ -169,6 +170,21 @@ if (( $+commands[fzf] )); then
             FZF_DEFAULT_COMMAND="$fd_bin_path --type file --follow --hidden"
             FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
             FZF_ALT_C_COMMAND="$fd_bin_path --type directory --follow --hidden"
+            # Use fd instead of find for zsh completion
+            _fzf_compgen_path() fd --hidden --follow . "$1"
+            # Use fd to generate the list for directory completion
+            _fzf_compgen_dir() fd --type directory --hidden --follow . "$1"
+            # This function is used to pass different options to fzf based
+            # on the command we are displaying completion for
+            _fzf_comprun() {
+                local cmd=$1
+                shift
+                case $cmd in
+                    *) fzf "$@";;
+                esac
+            }
+            # fzf completion for functions
+            _fzf_complete_functions() _fzf_complete -- "$@" < <(print ${(kF)functions})
         fi
     }
 fi
