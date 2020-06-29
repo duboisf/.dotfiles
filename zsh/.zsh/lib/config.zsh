@@ -166,9 +166,9 @@ if (( $+commands[fzf] )); then
             typeset -g FZF_CTRL_T_COMMAND
             typeset -g FZF_DEFAULT_COMMAND
             # By default fzf uses find, let's use fd instead
-            FZF_DEFAULT_COMMAND="$fd_bin_path --type f --hidden"
-            FZF_CTRL_T_COMMAND="$fd_bin_path --type f --hidden --no-ignore-vcs"
-            FZF_ALT_C_COMMAND="$fd_bin_path --type d --hidden --no-ignore-vcs"
+            FZF_DEFAULT_COMMAND="$fd_bin_path --type file --follow --hidden"
+            FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+            FZF_ALT_C_COMMAND="$fd_bin_path --type directory --follow --hidden"
         fi
     }
 fi
