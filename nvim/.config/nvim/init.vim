@@ -11,6 +11,9 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'preservim/nerdtree'
 Plug 'ryanoasis/vim-devicons'
+" Plug 'fatih/vim-go'
+" For some reason, if vim-polyglot is added before vim-go,
+" it breaks vim-go.
 Plug 'sheerun/vim-polyglot'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -83,15 +86,20 @@ let g:startify_change_to_dir = 0
 nnoremap <leader>g :G \| wincmd _<CR>
 
 " vim-go configuration
-"aug fred#go
-"  au!
-"  au Filetype go nmap <leader>t <Plug>(go-test)
-"aug end
-"
-"" disable vim-go :GoDef short cut (gd)
-"" this is handled by LanguageClient [LC]
-"let g:go_def_mapping_enabled = 0
-"let g:go_doc_keywordprg_enabled = 0
+aug fred#go
+  au!
+  au Filetype go nmap <leader>t <Plug>(go-test)
+aug end
+
+" disable vim-go :GoDef short cut (gd)
+" this is handled by LanguageClient [LC]
+let g:go_def_mapping_enabled = 0
+let g:go_doc_keywordprg_enabled = 0
+" extra highlighting options
+" start by disabling vim-polyglot
+let g:polyglot_disabled = ['go']
+let g:go_highlight_operators = 1
+let g:go_highlight_functions = 1
 
 " fzf.vim configuration
 nnoremap <leader>f :Rg<CR>
