@@ -26,6 +26,7 @@ Plug 'will133/vim-dirdiff'
 " Requires git, fzf, python3, ripgrep
 " Optional bat(like cat but 10x nicer!), exa(like ls but nicer!)
 Plug 'yuki-ycino/fzf-preview.vim'
+Plug 'michaeljsmith/vim-indent-object'
 call plug#end()
 
 " vim configuration
