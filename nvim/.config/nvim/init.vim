@@ -118,8 +118,9 @@ nnoremap <silent> [fzf-p]d     :<C-u>FzfPreviewDirectory <C-R>=expand('%:h')<CR>
 nnoremap <silent> [fzf-p]e     :<C-u>FzfPreviewDirectory<CR>
 nnoremap <silent> [fzf-p]f     :<C-u>FzfPreviewProjectCommandGrep<CR>
 nnoremap <silent> [fzf-p]o     :<C-u>FzfPreviewFromResources buffer project_mru<CR>
-nnoremap <silent> [fzf-p]/     :<C-u>FzfPreviewLines -add-fzf-arg=--no-sort -add-fzf-arg=--query="'"<CR>
+nnoremap <silent> [fzf-p]/     :<C-u>FzfPreviewLines -add-fzf-arg=--no-sort<CR>
 nnoremap <silent> [fzf-p]*     :<C-u>FzfPreviewLines -add-fzf-arg=--no-sort -add-fzf-arg=--query="'<C-r>=expand('<cword>')<CR>"<CR>
+nnoremap <silent> [fzf-p]s     :<C-u>FzfPreviewProjectGrep <C-r>=expand('<cword>')<CR><CR>
 nnoremap          [fzf-p]gr    :<C-u>FzfPreviewProjectGrep<Space>
 xnoremap          [fzf-p]gr    "sy:FzfPreviewProjectGrep<Space>-F<Space>"<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"
 nnoremap <silent> [fzf-p]q     :<C-u>FzfPreviewQuickFix<CR>
