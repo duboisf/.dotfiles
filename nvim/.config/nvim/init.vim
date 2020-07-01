@@ -24,6 +24,7 @@ Plug 'will133/vim-dirdiff'
 " Optional bat(like cat but 10x nicer!), exa(like ls but nicer!)
 Plug 'yuki-ycino/fzf-preview.vim'
 Plug 'michaeljsmith/vim-indent-object'
+Plug 'psliwka/vim-smoothie'
 call plug#end()
 
 " vim configuration
@@ -281,6 +282,10 @@ aug fred#rego
   au BufWritePre *.rego Autoformat
 aug end
 
+" vim-smoothie configuration
+silent! nmap <unique> <A-f> <Plug>(SmoothieForwards)
+silent! nmap <unique> <A-b> <Plug>(SmoothieBackwards)
+
 " highlight comments in jsonc files (json with comments, used by coc
 " config/vscode)
 aug fred#json
@@ -296,8 +301,6 @@ nnoremap <leader>m <C-W>_
 nnoremap <leader>= <C-W>=
 nnoremap <leader>. 10<C-W>>
 nnoremap <leader>, 10<C-W><
-nnoremap <A-f> <C-f>
-nnoremap <A-b> <C-b>
 " Yank highlighted selection in visual mode to clipboard
 vnoremap <leader>y "+y
 " Yank highlighted lines in visual mode to clipboard
