@@ -131,9 +131,10 @@ nnoremap <silent> [fzf-p]l     :<C-u>FzfPreviewLocationList<CR>
 let g:fzf_preview_grep_cmd = 'rg --line-number --hidden --no-heading'
 let g:fzf_preview_use_dev_icons = 1
 let g:fzf_preview_directory_files_command = 'fd . --type=file --hidden'
-let g:fzf_preview_lines_command = 'bat --color=always --theme="Solarized (dark)" --style=header,numbers,changes'
-let g:fzf_preview_command = 'bat --color=always --theme="Solarized (dark)" --style=full {-1}'
+let g:fzf_preview_lines_command = 'bat --color=always --theme="Solarized (dark)" --style=numbers,changes'
+let g:fzf_preview_command = 'bat --color=always --theme="Solarized (dark)" --style=numbers,changes {-1}'
 let g:fzf_preview_filelist_postprocess_command = 'xargs -d "\n" exa --color=always' " Use exa
+let g:fzf_preview_fzf_preview_window_option = 'up:30%'
 
 """""""""""""""""""""
 " coc.nvim settings "
