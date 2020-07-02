@@ -1,3 +1,7 @@
+[color]
+	pager = no
+[core]
+	pager = vim -R
 [push]
 	default = simple
 [user]
