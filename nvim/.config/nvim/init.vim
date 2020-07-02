@@ -126,7 +126,7 @@ nnoremap <silent> [fzf-p]/     :<C-u>FzfPreviewLines -add-fzf-arg=--no-sort<CR>
 nnoremap <silent> [fzf-p]*     :<C-u>FzfPreviewLines -add-fzf-arg=--no-sort -add-fzf-arg=--query="'<C-r>=expand('<cword>')<CR>"<CR>
 nnoremap <silent> [fzf-p]s     :<C-u>FzfPreviewProjectGrep <C-r>=expand('<cword>')<CR><CR>
 nnoremap          [fzf-p]gr    :<C-u>FzfPreviewProjectGrep<Space>
-xnoremap          [fzf-p]gr    "sy:FzfPreviewProjectGrep<Space>-F<Space>"<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"
+xnoremap          [fzf-p]s     "sy:FzfPreviewProjectGrep<Space>-F<Space>"<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"
 nnoremap <silent> [fzf-p]q     :<C-u>FzfPreviewQuickFix<CR>
 nnoremap <silent> [fzf-p]l     :<C-u>FzfPreviewLocationList<CR>
 let g:fzf_preview_grep_cmd = 'rg --line-number --hidden --no-heading'
