@@ -4,7 +4,6 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-commentary'
-Plug 'lifepillar/vim-solarized8'
 Plug 'romainl/flattened'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'ctrlpvim/ctrlp.vim'
@@ -13,7 +12,6 @@ Plug 'preservim/nerdtree'
 Plug 'ryanoasis/vim-devicons'
 Plug 'fatih/vim-go'
 Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
 Plug 'tsandall/vim-rego'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
@@ -25,6 +23,9 @@ Plug 'will133/vim-dirdiff'
 Plug 'yuki-ycino/fzf-preview.vim'
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'psliwka/vim-smoothie'
+" themes
+Plug 'lifepillar/vim-solarized8'
+Plug 'rakr/vim-one'
 call plug#end()
 
 " vim configuration
@@ -264,7 +265,7 @@ let g:dispatch_no_maps = 1
 " airline configuration
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
-let g:airline_theme = 'base16_solarized'
+let g:airline_theme = 'one'
 let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
 
 " ctrlp.vim configuration
@@ -318,7 +319,7 @@ set background=dark
 let g:solarized_visibility = "low"
 let g:solarized_termtrans = 1
 let g:solarized_statusline = "flat"
-colorscheme solarized8
+colorscheme one
 
 " Modify coc CursorHold highlight color
 hi default CocHighlightText guibg=#4d1e0a
