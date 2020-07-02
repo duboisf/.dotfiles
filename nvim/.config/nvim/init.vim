@@ -90,6 +90,15 @@ nnoremap <leader>g :G \| wincmd _<CR>
 aug fred#go
   au!
   au Filetype go nmap <leader>t <Plug>(go-test)
+  fu s:GoSettings()
+    " Not sure about using an abbreviation... should I use a snippet?
+    abbreviate ane assert.Nil(t, err)
+    nmap <leader>t <Plug>(go-test)
+    command! -bang A call go#alternate#Switch(<bang>0, 'edit')
+    command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
+    command! -bang AS call go#alternate#Switch(<bang>0, 'split')
+  endfu
+  autocmd Filetype go call s:GoSettings()
 aug end
 
 " disable vim-go :GoDef short cut (gd)
