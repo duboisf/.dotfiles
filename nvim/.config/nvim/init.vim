@@ -116,6 +116,9 @@ let g:go_highlight_types = 1
 let g:go_highlight_fields = 1
 let g:go_highlight_variable_declarations = 1
 let g:go_highlight_variable_assignments = 1
+" Use goimports
+let g:go_fmt_command = 'goimports'
+let g:go_fmt_fail_silently = 1
 
 " fzf.vim configuration
 nnoremap <leader>f :Rg<CR>
