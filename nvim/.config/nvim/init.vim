@@ -143,7 +143,7 @@ nnoremap          [fzf-p]gr    :<C-u>FzfPreviewProjectGrep<Space>
 xnoremap          [fzf-p]s     "sy:FzfPreviewProjectGrep<Space>-F<Space>"<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"
 nnoremap <silent> [fzf-p]q     :<C-u>FzfPreviewQuickFix<CR>
 nnoremap <silent> [fzf-p]l     :<C-u>FzfPreviewLocationList<CR>
-let g:fzf_preview_grep_cmd = 'rg --line-number --hidden --no-heading'
+let g:fzf_preview_grep_cmd = "rg --line-number --hidden --no-heading --glob='!.git'"
 let g:fzf_preview_use_dev_icons = 1
 let g:fzf_preview_directory_files_command = 'fd . --type=file --hidden'
 let g:fzf_preview_lines_command = 'bat --color=always --theme="Solarized (dark)" --style=numbers,changes'
