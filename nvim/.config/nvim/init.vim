@@ -1,4 +1,5 @@
 call plug#begin(stdpath('data') . '/plugged')
+Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
