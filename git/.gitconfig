@@ -1,7 +1,7 @@
 [color]
 	pager = no
 [core]
-	pager = vim -R
+	pager = vim -R --cmd 'let g:pager_mode = 1'
 [push]
 	default = simple
 [user]

@@ -30,6 +30,8 @@ Plug 'lifepillar/vim-solarized8'
 Plug 'rakr/vim-one'
 call plug#end()
 
+let g:pager_mode = get(g:, 'pager_mode', 0)
+
 " vim configuration
 set mouse=a
 set relativenumber
@@ -307,6 +309,12 @@ aug fred#json
   au!
   au FileType json syntax match Comment +\/\/.\+$+
 aug end
+
+" pager mode configuration
+if g:pager_mode == 1 
+  set nolist
+  nnoremap q :q<CR>
+endif
 
 " Various mappings
 nnoremap <F10> :qa!<CR>

@@ -7,7 +7,7 @@ path=(
   $path
 )
 
-export MANPAGER='nvim +Man!'
+export MANPAGER='nvim --cmd "let g:pager_mode = 1" +Man!'
 export MANWIDTH=999
 export EDITOR=nvim
 export GPG_TTY=$(tty)
