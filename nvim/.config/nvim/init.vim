@@ -5,6 +5,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-commentary'
+Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
 Plug 'romainl/flattened'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'ctrlpvim/ctrlp.vim'
