@@ -299,12 +299,6 @@ aug fred#rego
   au BufWritePre *.rego Autoformat
 aug end
 
-" vim-smoothie configuration
-silent! nmap <unique> <A-f> <Plug>(SmoothieForwards)
-silent! nmap <unique> <A-b> <Plug>(SmoothieBackwards)
-silent! nmap <unique> <A-d> <Plug>(SmoothieDownwards)
-silent! nmap <unique> <A-u> <Plug>(SmoothieUpwards)
-
 " highlight comments in jsonc files (json with comments, used by coc
 " config/vscode)
 aug fred#json
