@@ -18,7 +18,7 @@ _C() {
 alias -g C='| _C'
 alias -g G='| grep'
 alias -g L='| less'
-alias -g V='| vim -n -R -'
+alias -g V='| nvim -n -R --cmd "let g:pager_mode = 1" '
 alias -g S='| sort'
 alias -g SU='| sort -u'
 

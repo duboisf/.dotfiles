@@ -313,6 +313,7 @@ aug end
 " pager mode configuration
 if g:pager_mode == 1 
   set nolist
+  set nowrap
   nnoremap q :q<CR>
 endif
 
