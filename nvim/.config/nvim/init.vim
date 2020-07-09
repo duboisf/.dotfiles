@@ -163,7 +163,7 @@ let g:firenvim_config = {
             \ 'cmdline': 'firenvim',
             \ 'priority': 0,
             \ 'selector': 'textarea',
-            \ 'takeover': 'always',
+            \ 'takeover': 'never',
         \ },
     \ }
 \ }
