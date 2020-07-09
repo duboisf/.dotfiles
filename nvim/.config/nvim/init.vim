@@ -1,38 +1,47 @@
+" Check if nvim was started by firenvim. If so, we want to disable
+" some plugins and tweak some settings, reason being that sometimes
+" the size of the nvim window is _realy_ small (2-3 lines!)
+let g:started_by_firenvim = get(g:, 'started_by_firenvim', v:false)
+
 call plug#begin(stdpath('data') . '/plugged')
-Plug 'tpope/vim-eunuch'
-Plug 'tpope/vim-sensible'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-rhubarb'
-Plug 'tpope/vim-dispatch'
-Plug 'tpope/vim-commentary'
-Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
-Plug 'romainl/flattened'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'ctrlpvim/ctrlp.vim'
-Plug 'airblade/vim-gitgutter'
-Plug 'preservim/nerdtree'
-Plug 'ryanoasis/vim-devicons'
-Plug 'fatih/vim-go'
-Plug 'vim-airline/vim-airline'
-Plug 'tsandall/vim-rego'
-Plug 'junegunn/fzf'
-Plug 'junegunn/fzf.vim'
 Plug 'Chiel92/vim-autoformat'
-Plug 'mhinz/vim-startify'
-Plug 'will133/vim-dirdiff'
-" Requires git, fzf, python3, ripgrep
-" Optional bat(like cat but 10x nicer!), exa(like ls but nicer!)
-Plug 'yuki-ycino/fzf-preview.vim'
+Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
 Plug 'michaeljsmith/vim-indent-object'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'psliwka/vim-smoothie'
-" themes
-Plug 'lifepillar/vim-solarized8'
-Plug 'rakr/vim-one'
+Plug 'rakr/vim-one' " this is a nice theme
+Plug 'tpope/vim-commentary'
+
+" Only load the following plugins if we are not using nvim inside chrome
+if g:started_by_firenvim == v:false
+  Plug 'airblade/vim-gitgutter'
+  Plug 'ctrlpvim/ctrlp.vim'
+  Plug 'fatih/vim-go'
+  Plug 'junegunn/fzf'
+  Plug 'junegunn/fzf.vim'
+  Plug 'mhinz/vim-startify'
+  Plug 'preservim/nerdtree'
+  Plug 'ryanoasis/vim-devicons'
+  Plug 'tpope/vim-dispatch'
+  Plug 'tpope/vim-eunuch'
+  Plug 'tpope/vim-fugitive'
+  Plug 'tpope/vim-rhubarb'
+  " vim-sensible sets things like ruler and laststatus which we don't want
+  " when we are using firenvim
+  Plug 'tpope/vim-sensible'
+  Plug 'tsandall/vim-rego'
+  Plug 'vim-airline/vim-airline'
+  Plug 'will133/vim-dirdiff'
+  " Requires git, fzf, python3, ripgrep
+  " Optional bat(like cat but 10x nicer!), exa(like ls but nicer!)
+  Plug 'yuki-ycino/fzf-preview.vim'
+endif
+
 call plug#end()
 
-let g:pager_mode = get(g:, 'pager_mode', 0)
-
-" vim configuration
+"""""""""""""""""""""
+" vim configuration "
+"""""""""""""""""""""
 set mouse=a
 set relativenumber
 set number
@@ -54,7 +63,55 @@ set dictionary+=/usr/share/dict/american-english
 " this will cause a lot of problems...
 set isfname-==
 
+" tweak settings if we are using nvim as a pager, we know this because
+" se set the pager_mode variable when we do
+if exists('g:pager_mode')
+  set nolist
+  set nowrap
+  " use q in normal mode to quit, like in less
+  nnoremap q :q<CR>
+endif
+
+if exists('g:started_by_firenvim')
+  aug fred#firenvim
+    au!
+    au BufEnter github.com_*.txt set filetype=markdown
+  aug end
+endif
+
+" Try to make nvim optimal when we only have an nvim window that's just 2-3
+" lines high.
+if exists('g:started_by_firenvim')
+  " Never show the status line
+  set laststatus=0
+  " Don't show the line and column of the cursor position
+  set noruler
+  " Don't show the last command in the last line
+  set noshowcmd
+  " Don't show the current mode (insert, visual, etc.)
+  set noshowmode
+endif
+
+" Use the spacebar as the key for <leader> mappings
 let mapleader=' '
+
+" Miscellaneous mappings
+nnoremap <F10> :qa!<CR>
+nnoremap <leader>q :q<CR>
+nnoremap <leader>s :w<CR>
+nnoremap <leader>m <C-W>_
+nnoremap <leader>= <C-W>=
+nnoremap <leader>. 10<C-W>>
+nnoremap <leader>, 10<C-W><
+" Toggle wrap
+nnoremap <leader>w :set wrap!<CR>
+" Toggle paste
+nnoremap <leader>p :set paste!<CR>
+" Yank highlighted selection in visual mode to clipboard
+vnoremap <leader>y "+y
+" Yank highlighted lines in visual mode to clipboard
+vnoremap <leader>Y "+Y
+
 " jump to last position when reopening a file
 aug fred#jump_to_last_position
   au!
@@ -82,12 +139,32 @@ aug fred#man
   endfu
 aug end
 
+"########################
+"# PLUGIN CONFIGURATION #
+"########################
+
 " startify configuration
-" don't change directories when jumping to a file
+" don't change cwd when jumping to a file
 let g:startify_change_to_dir = 0
 
 " fugitive configuration
+" Open :G in a maximized window 
 nnoremap <leader>g :G \| wincmd _<CR>
+
+" firenvim configuration
+let g:firenvim_config = { 
+    \ 'globalSettings': {
+        \ 'alt': 'all',
+    \  },
+    \ 'localSettings': {
+        \ '.*': {
+            \ 'cmdline': 'firenvim',
+            \ 'priority': 0,
+            \ 'selector': 'textarea',
+            \ 'takeover': 'always',
+        \ },
+    \ }
+\ }
 
 " vim-go configuration
 aug fred#go
@@ -306,33 +383,10 @@ aug fred#json
   au FileType json syntax match Comment +\/\/.\+$+
 aug end
 
-" pager mode configuration
-if g:pager_mode == 1 
-  set nolist
-  set nowrap
-  nnoremap q :q<CR>
-endif
+"#######################
+"# THEME CONFIGURATION #
+"#######################
 
-" Various mappings
-nnoremap <F10> :qa!<CR>
-nnoremap <leader>q :q<CR>
-nnoremap <leader>s :w<CR>
-nnoremap <leader>m <C-W>_
-nnoremap <leader>= <C-W>=
-nnoremap <leader>. 10<C-W>>
-nnoremap <leader>, 10<C-W><
-" Toggle wrap
-nnoremap <leader>w :set wrap!<CR>
-" Toggle paste
-nnoremap <leader>p :set paste!<CR>
-" Yank highlighted selection in visual mode to clipboard
-vnoremap <leader>y "+y
-" Yank highlighted lines in visual mode to clipboard
-vnoremap <leader>Y "+Y
-
-"""""""""""""""
-" colorscheme "
-"""""""""""""""
 set termguicolors " Enables 24-bit RGB color in the Terminal UI
 set background=dark
 let g:solarized_visibility = "low"
