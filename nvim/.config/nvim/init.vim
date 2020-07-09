@@ -54,7 +54,9 @@ set encoding=utf-8
 set listchars=tab:→\ ,trail:·,eol:↩
 set list
 set cursorline
-set cursorcolumn
+if !&diff
+  set cursorcolumn
+endif
 set wildignore+=*/.git/*,*/.hg/*,*/.svn/*
 set dictionary+=/usr/share/dict/american-english
 " Remove = from isfname so that completing a filename with <C-x><C-f>
