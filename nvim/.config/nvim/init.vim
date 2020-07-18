@@ -11,6 +11,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'psliwka/vim-smoothie'
 Plug 'rakr/vim-one' " this is a nice theme
 Plug 'tpope/vim-commentary'
+Plug 'justinmk/vim-sneak'
 
 " Only load the following plugins if we are not using nvim inside chrome
 if g:started_by_firenvim == v:false
