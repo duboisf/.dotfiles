@@ -8,6 +8,7 @@ Plug 'Chiel92/vim-autoformat'
 Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'psliwka/vim-smoothie'
 Plug 'rakr/vim-one' " this is a nice theme
 Plug 'tpope/vim-commentary'
