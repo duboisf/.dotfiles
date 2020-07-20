@@ -152,11 +152,11 @@ aug end
 let g:startify_change_to_dir = 0
 
 " fugitive configuration
-" Open :G in a maximized window 
+" Open :G in a maximized window
 nnoremap <leader>g :G \| wincmd _<CR>
 
 " firenvim configuration
-let g:firenvim_config = { 
+let g:firenvim_config = {
     \ 'globalSettings': {
         \ 'alt': 'all',
     \  },
