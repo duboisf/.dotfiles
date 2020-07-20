@@ -393,10 +393,11 @@ aug end
 
 set termguicolors " Enables 24-bit RGB color in the Terminal UI
 set background=dark
-let g:solarized_visibility = "low"
-let g:solarized_termtrans = 1
-let g:solarized_statusline = "flat"
 colorscheme one
+
+" tweaks to theme
+hi clear Search
+hi default Search gui=reverse guifg=#ff6d00
 
 " Modify coc CursorHold highlight color
 hi default CocHighlightText guibg=#4d1e0a
