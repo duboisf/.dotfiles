@@ -45,3 +45,8 @@ zplug load
 for file in ~/.zsh/lib/*.zsh; do
     source $file
 done
+
+if [[ -d ~/.zsh/functions ]]; then
+    fpath=(~/.zsh/functions $fpath)
+    autoload ~/.zsh/functions/*(:t)
+fi
