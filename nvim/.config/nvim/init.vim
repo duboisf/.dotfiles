@@ -12,6 +12,9 @@ Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'psliwka/vim-smoothie'
 Plug 'rakr/vim-one' " this is a nice theme
 Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
 Plug 'justinmk/vim-sneak'
 
 " Only load the following plugins if we are not using nvim inside chrome
