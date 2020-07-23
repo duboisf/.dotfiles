@@ -119,6 +119,9 @@ nnoremap <leader>p :set paste!<CR>
 vnoremap <leader>y "+y
 " Yank highlighted lines in visual mode to clipboard
 vnoremap <leader>Y "+Y
+" Tab and Shift-Tab keys cycle through buffers
+nnoremap <Tab> :bn<CR>
+nnoremap <S-Tab> :bp<CR>
 
 " jump to last position when reopening a file
 aug fred#jump_to_last_position
