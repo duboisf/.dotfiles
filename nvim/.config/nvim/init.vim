@@ -22,6 +22,7 @@ Plug 'justinmk/vim-sneak'
 if g:started_by_firenvim == v:false
   Plug 'airblade/vim-gitgutter'
   Plug 'ctrlpvim/ctrlp.vim'
+  Plug 'editorconfig/editorconfig-vim'
   Plug 'fatih/vim-go'
   Plug 'junegunn/fzf'
   Plug 'junegunn/fzf.vim'
