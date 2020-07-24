@@ -155,6 +155,9 @@ aug end
 "# PLUGIN CONFIGURATION #
 "########################
 
+" editorconfig configuration
+let g:EditorConfig_exclude_patterns = ['fugitive://.*']
+
 " startify configuration
 " don't change cwd when jumping to a file
 let g:startify_change_to_dir = 0
