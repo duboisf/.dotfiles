@@ -7,6 +7,10 @@ path=(
   $path
 )
 
+if [[ -d ~/.tfenv/bin ]]; then
+    path=(~/.tfenv/bin $path)
+fi
+
 export MANPAGER='nvim --cmd "let g:pager_mode = 1" +Man!'
 export MANWIDTH=999
 export EDITOR=nvim
