@@ -41,7 +41,7 @@ if g:started_by_firenvim == v:false
   Plug 'will133/vim-dirdiff'
   " Requires git, fzf, python3, ripgrep
   " Optional bat(like cat but 10x nicer!), exa(like ls but nicer!)
-  Plug 'yuki-ycino/fzf-preview.vim'
+  Plug 'yuki-ycino/fzf-preview.vim', { 'branch': 'release', 'do': ':UpdateRemotePlugins' }
 endif
 
 call plug#end()
