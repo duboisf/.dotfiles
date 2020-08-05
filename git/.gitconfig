@@ -14,7 +14,7 @@
 	poh = push -u duboisf HEAD
 	prs = !hub pr list
 	prc = !hub pr checkout
-	opr = !git poh && hub pull-request --browse --copy
+	opr = !git poh && hub pull-request
 [commit]
 	verbose = true
 	gpgsign = true
