@@ -155,6 +155,16 @@ aug end
 "# PLUGIN CONFIGURATION #
 "########################
 
+" nvim-treesitter configuration
+
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  highlight = {
+      enable = true,
+  },
+}
+EOF
+
 " editorconfig configuration
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
