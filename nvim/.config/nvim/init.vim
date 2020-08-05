@@ -223,28 +223,28 @@ inoremap <expr> <c-x><c-f> fzf#vim#complete#path("fd -t f -H", fzf#wrap({'dir': 
 nmap <Leader>f [fzf-p]
 xmap <Leader>f [fzf-p]
 
-nnoremap <silent> [fzf-p]r     :<C-u>FzfPreviewFromResources project_mru directory<CR>
-nnoremap <silent> [fzf-p]gs    :<C-u>FzfPreviewGitStatus<CR>
-nnoremap <silent> [fzf-p]b     :<C-u>FzfPreviewBuffers<CR>
-nnoremap <silent> [fzf-p]B     :<C-u>FzfPreviewAllBuffers<CR>
-nnoremap <silent> [fzf-p]d     :<C-u>FzfPreviewDirectory <C-R>=expand('%:h')<CR><CR>
-nnoremap <silent> [fzf-p]e     :<C-u>FzfPreviewDirectory<CR>
-nnoremap <silent> [fzf-p]f     :<C-u>FzfPreviewProjectCommandGrep<CR>
-nnoremap <silent> [fzf-p]o     :<C-u>FzfPreviewFromResources buffer project_mru<CR>
-nnoremap <silent> [fzf-p]/     :<C-u>FzfPreviewLines -add-fzf-arg=--no-sort<CR>
-nnoremap <silent> [fzf-p]*     :<C-u>FzfPreviewLines -add-fzf-arg=--no-sort -add-fzf-arg=--query="'<C-r>=expand('<cword>')<CR>"<CR>
-nnoremap <silent> [fzf-p]s     :<C-u>FzfPreviewProjectGrep <C-r>=expand('<cword>')<CR><CR>
-nnoremap          [fzf-p]gr    :<C-u>FzfPreviewProjectGrep<Space>
-xnoremap          [fzf-p]s     "sy:FzfPreviewProjectGrep<Space>-F<Space>"<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"
-nnoremap <silent> [fzf-p]q     :<C-u>FzfPreviewQuickFix<CR>
-nnoremap <silent> [fzf-p]l     :<C-u>FzfPreviewLocationList<CR>
-let g:fzf_preview_grep_cmd = "rg --line-number --hidden --no-heading --glob='!.git'"
-let g:fzf_preview_use_dev_icons = 1
-let g:fzf_preview_directory_files_command = 'fd . --type=file --hidden'
-let g:fzf_preview_lines_command = 'bat --color=always --theme="Solarized (dark)" --style=numbers,changes'
+nnoremap <silent> [fzf-p]r     <cmd>CocCommand fzf-preview.FromResources project_mru directory<CR>
+nnoremap <silent> [fzf-p]gs    <cmd>CocCommand fzf-preview.GitStatus<CR>
+nnoremap <silent> [fzf-p]b     <cmd>CocCommand fzf-preview.Buffers<CR>
+nnoremap <silent> [fzf-p]B     <cmd>CocCommand fzf-preview.AllBuffers<CR>
+nnoremap <silent> [fzf-p]d     <cmd>CocCommand fzf-preview.DirectoryFiles <C-R>=expand('%:h')<CR><CR>
+nnoremap <silent> [fzf-p]e     <cmd>CocCommand fzf-preview.DirectoryFiles<CR>
+nnoremap <silent> [fzf-p]f     <cmd>CocCommand fzf-preview.ProjectCommandGrep<CR>
+nnoremap <silent> [fzf-p]o     <cmd>CocCommand fzf-preview.FromResources buffer project_mru<CR>
+nnoremap <silent> [fzf-p]/     <cmd>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort<CR>
+nnoremap <silent> [fzf-p]*     <cmd>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'<C-r>=expand('<cword>')<CR>"<CR>
+nnoremap <silent> [fzf-p]s     <cmd>FzfPreviewProjectGrep <C-r>=expand('<cword>')<CR><CR>
+nnoremap          [fzf-p]gr    <cmd>FzfPreviewProjectGrep<Space>
+xnoremap          [fzf-p]s     "sy<cmd>CocCommand fzf-preview.ProjectGrep<Space>-F<Space>"<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"
+nnoremap <silent> [fzf-p]q     <cmd>CocCommand fzf-preview.QuickFix<CR>
+nnoremap <silent> [fzf-p]l     <cmd>CocCommand fzf-preview.LocationList<CR>
 let g:fzf_preview_command = 'bat --color=always --theme="Solarized (dark)" --style=numbers,changes {-1}'
+let g:fzf_preview_directory_files_command = 'fd . --type=file --hidden'
 let g:fzf_preview_filelist_postprocess_command = 'xargs -d "\n" exa --color=always' " Use exa
 let g:fzf_preview_fzf_preview_window_option = 'up:30%'
+let g:fzf_preview_grep_cmd = "rg --line-number --hidden --no-heading --glob='!.git'"
+let g:fzf_preview_lines_command = 'bat --color=always --theme="Solarized (dark)" --style=numbers,changes'
+let g:fzf_preview_use_dev_icons = 1
 
 """""""""""""""""""""
 " coc.nvim settings "
