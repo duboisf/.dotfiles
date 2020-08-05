@@ -234,18 +234,16 @@ nmap <Leader>f [fzf-p]
 xmap <Leader>f [fzf-p]
 
 nnoremap <silent> [fzf-p]r     <cmd>CocCommand fzf-preview.FromResources project_mru directory<CR>
-nnoremap <silent> [fzf-p]gs    <cmd>CocCommand fzf-preview.GitStatus<CR>
 nnoremap <silent> [fzf-p]b     <cmd>CocCommand fzf-preview.Buffers<CR>
 nnoremap <silent> [fzf-p]B     <cmd>CocCommand fzf-preview.AllBuffers<CR>
-nnoremap <silent> [fzf-p]d     <cmd>CocCommand fzf-preview.DirectoryFiles <C-R>=expand('%:h')<CR><CR>
+nnoremap <silent> [fzf-p]d     :<C-U>CocCommand fzf-preview.DirectoryFiles <C-R>=expand('%:h')<CR><CR>
 nnoremap <silent> [fzf-p]e     <cmd>CocCommand fzf-preview.DirectoryFiles<CR>
-nnoremap <silent> [fzf-p]f     <cmd>CocCommand fzf-preview.ProjectCommandGrep<CR>
 nnoremap <silent> [fzf-p]o     <cmd>CocCommand fzf-preview.FromResources buffer project_mru<CR>
-nnoremap <silent> [fzf-p]/     <cmd>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort<CR>
-nnoremap <silent> [fzf-p]*     <cmd>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'<C-r>=expand('<cword>')<CR>"<CR>
-nnoremap <silent> [fzf-p]s     <cmd>FzfPreviewProjectGrep <C-r>=expand('<cword>')<CR><CR>
-nnoremap          [fzf-p]gr    <cmd>FzfPreviewProjectGrep<Space>
-xnoremap          [fzf-p]s     "sy<cmd>CocCommand fzf-preview.ProjectGrep<Space>-F<Space>"<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"
+nnoremap <silent> [fzf-p]/     :<C-U>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort<CR>
+nnoremap <silent> [fzf-p]*     :<C-U>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'<C-r>=expand('<cword>')<CR>"<CR>
+nnoremap <silent> [fzf-p]f     :<C-U>CocCommand fzf-preview.ProjectGrep<Space>
+nnoremap <silent> [fzf-p]s     :<C-U>CocCommand fzf-preview.ProjectGrep <C-r>=expand('<cword>')<CR><CR>
+xnoremap          [fzf-p]s     "sy:<C-U>CocCommand fzf-preview.ProjectGrep<Space>-F<Space>"<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"<CR>
 nnoremap <silent> [fzf-p]q     <cmd>CocCommand fzf-preview.QuickFix<CR>
 nnoremap <silent> [fzf-p]l     <cmd>CocCommand fzf-preview.LocationList<CR>
 let g:fzf_preview_command = 'bat --color=always --theme="Solarized (dark)" --style=numbers,changes {-1}'
@@ -264,6 +262,7 @@ let g:fzf_preview_use_dev_icons = 1
 let g:coc_global_extensions = [
 \   'coc-dictionary',
 \   'coc-emoji',
+\   'coc-fzf-preview',
 \   'coc-go',
 \   'coc-json',
 \   'coc-snippets',
