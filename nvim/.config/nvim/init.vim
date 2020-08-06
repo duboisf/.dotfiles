@@ -226,7 +226,6 @@ let g:go_fmt_command = 'goimports'
 let g:go_fmt_fail_silently = 1
 
 " fzf.vim configuration
-nnoremap <leader>f :Rg<CR>
 inoremap <expr> <c-x><c-f> fzf#vim#complete#path("fd -t f -H", fzf#wrap({'dir': expand('%:p:h')}))
 
 " fzf-preview configuration
