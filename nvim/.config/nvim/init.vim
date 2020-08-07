@@ -232,7 +232,7 @@ inoremap <expr> <c-x><c-f> fzf#vim#complete#path("fd -t f -H", fzf#wrap({'dir': 
 nnoremap <silent> <Leader>fr     <cmd>CocCommand fzf-preview.FromResources project_mru directory<CR>
 nnoremap <silent> <Leader>fb     <cmd>CocCommand fzf-preview.Buffers<CR>
 nnoremap <silent> <Leader>fB     <cmd>CocCommand fzf-preview.AllBuffers<CR>
-nnoremap <silent> <Leader>fd     <cmd>CocCommand fzf-preview.DirectoryFiles <C-R>=expand('%:h')<CR><CR>
+nnoremap <silent> <Leader>fd     :<C-U>CocCommand fzf-preview.DirectoryFiles <C-R>=expand('%:h')<CR><CR>
 nnoremap <silent> <Leader>fe     <cmd>CocCommand fzf-preview.DirectoryFiles<CR>
 nnoremap <silent> <Leader>fo     <cmd>CocCommand fzf-preview.FromResources buffer project_mru<CR>
 nnoremap <silent> <Leader>f/     <cmd>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort<CR>
