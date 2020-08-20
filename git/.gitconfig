@@ -9,6 +9,7 @@
 	name = Fred Dubois
 	signingkey = 7FDBB1D481604E6E
 [alias]
+	co = checkout
 	cp = cherry-pick
 	lp = log -p
 	poh = push -u duboisf HEAD
