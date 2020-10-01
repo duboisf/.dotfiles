@@ -451,4 +451,8 @@ hi default CocHighlightText guibg=#4d1e0a
 hi default link CocHighlightRead   CocHighlightText
 hi default link CocHighlightWrite  CocHighlightText
 
+hi CocUnderline gui=undercurl term=undercurl
+hi CocErrorHighlight ctermfg=red  guifg=#ff0000 gui=undercurl term=undercurl
+hi CocWarningHighlight ctermfg=yellow guifg=#ffff00 gui=undercurl term=undercurl
+
 " vim: sts=2 sw=2 ts=2 et
