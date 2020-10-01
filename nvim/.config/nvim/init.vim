@@ -208,7 +208,8 @@ aug fred#go
     command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
     command! -bang AS call go#alternate#Switch(<bang>0, 'split')
   endfu
-  autocmd Filetype go call s:GoSettings()
+  au Filetype go call s:GoSettings()
+  au BufWritePre *.go :call CocAction('runCommand', 'editor.action.organizeImport')
 aug end
 
 " disable vim-go :GoDef short cut (gd)
@@ -226,9 +227,9 @@ let g:go_highlight_types = 1
 let g:go_highlight_fields = 1
 let g:go_highlight_variable_declarations = 1
 let g:go_highlight_variable_assignments = 1
-" Use goimports
-let g:go_fmt_command = 'goimports'
-let g:go_fmt_fail_silently = 1
+" Don't use vim-go to format file on save, we use coc-go with the autocmd
+" BufWritePre define above
+let g:go_fmt_autosave = 0
 
 " fzf.vim configuration
 inoremap <expr> <c-x><c-f> fzf#vim#complete#path("fd -t f -H", fzf#wrap({'dir': expand('%:p:h')}))
