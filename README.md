@@ -14,6 +14,19 @@ stow nvim
 # etc.
 ```
 
+## Install nvim
+
+Download nightly build from [here](https://github.com/neovim/neovim/releases/nightly) and then:
+
+```sh
+cd ~/Downloads
+chmod +x ./nvim.appimage
+./nvim.appimage --appimage-extract                                                                                                                                                                                        
+mv squashfs-root/ ~/.local/nvim                                                                                                                                                                                           
+mkdir ~/.local/bin
+ln -s ~/.local/nvim/AppRun ~/.local/bin/nvim
+```
+
 ## Install kitty
 
 ```sh
