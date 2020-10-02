@@ -13,3 +13,26 @@ stow zsh
 stow nvim
 # etc.
 ```
+
+## Install kitty
+
+```sh
+curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
+sudo ln -s /home/fred/.local/kitty.app/bin/kitty /usr/local/bin/kitty
+sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /usr/local/bin/kitty 100
+```
+
+## Install keybase
+
+```sh
+curl --remote-name https://prerelease.keybase.io/keybase_amd64.deb
+sudo apt install ./keybase_amd64.deb
+run_keybase
+```
+
+### Import keybase pgp key into gpg
+
+```
+keybase pgp export | gpg --import
+keybase pgp export --secret | gpg --import --allow-secret-key-import
+```
