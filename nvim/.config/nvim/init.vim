@@ -315,6 +315,7 @@ if g:pager_mode == v:false
       nmap <silent> gy <Plug>(coc-type-definition)
       nmap <silent> gi <Plug>(coc-implementation)
       nmap <silent> gr <Plug>(coc-references)
+      nmap <silent> gn <Plug>(coc-rename)
     endfu
     au Filetype go call s:GoCocMappings()
   aug end
