@@ -40,11 +40,22 @@ Download nightly build from [here](https://github.com/neovim/neovim/releases/nig
 ```sh
 cd ~/Downloads
 chmod +x ./nvim.appimage
-./nvim.appimage --appimage-extract                                                                                                                                                                                        
-mv squashfs-root/ ~/.local/nvim                                                                                                                                                                                           
+./nvim.appimage --appimage-extract
+mv squashfs-root/ ~/.local/nvim
 mkdir ~/.local/bin
 ln -s ~/.local/nvim/AppRun ~/.local/bin/nvim
 ```
+
+### Setup nvim dependencies
+
+To get all the nvim plugins working properly we need to install python and node:
+
+```sh
+sudo apt install python3-pip
+pip3 install pynvim
+```
+
+We also need to install some binaries like [bat](https://github.com/sharkdp/bat/releases), rg (`sudo apt install ripgrep`) and [fd](https://github.com/sharkdp/fd/releases).
 
 ## Install kitty
 
