@@ -14,6 +14,25 @@ stow nvim
 # etc.
 ```
 
+## Install github's hub
+
+GitHub's `hub` is an alias for `git` in my zsh config. It makes cloning repos from GitHub a breeze, among other things. Install with:
+
+```sh
+sudo apt install hub
+```
+
+## Install nerdfonts
+
+These fonts are needed to render the terminal and nvim correctly:
+
+```sh
+# This repo is huge, takes time to clone even with depth=1
+git clone --depth=1 ryanoasis/nerd-fonts
+cd nerd-fonts
+./install.sh
+```
+
 ## Install nvim
 
 Download nightly build from [here](https://github.com/neovim/neovim/releases/nightly) and then:
@@ -49,3 +68,9 @@ run_keybase
 keybase pgp export | gpg --import
 keybase pgp export --secret | gpg --import --allow-secret-key-import
 ```
+
+# Setup
+
+## Fix gnome-shell overview shortcut for Kinesis Advantage2 keyboard
+
+My Kinesis Advantage2 keyboard's Super (windows) key doesn't trigger the Gnome Shell Overview by default. This is because the Super key on the keyboard is actually a _right_ Super key. We can fix this by installing gnome-tweaks (`sudo apt install gnome-tweaks`) and picking the _right_ Super key as the _Overview Shortcut_ in the `Keyboard & Mouse` section.
