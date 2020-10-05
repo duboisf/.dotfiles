@@ -27,10 +27,13 @@ sudo apt install hub
 These fonts are needed to render the terminal and nvim correctly:
 
 ```sh
-# This repo is huge, takes time to clone even with depth=1
-git clone --depth=1 ryanoasis/nerd-fonts
-cd nerd-fonts
-./install.sh
+cd ~/Downloads
+wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/FiraCode.zip
+wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/JetBrainsMono.zip
+mkdir ~/.fonts
+cd ~/.fonts
+unzip ~/Downloads/{FiraCode,JetBrainsMono}.zip
+fc-cache -fv
 ```
 
 ## Install nvim
