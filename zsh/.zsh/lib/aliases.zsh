@@ -115,7 +115,7 @@ if (( $+commands[terraform] )); then
 fi
 
 # Misc
-alias setup_monitors='xrandr --output DP-1-1-2 --mode 2560x1440 --rotate right --output DP-1-3 --mode 2560x1440 --right-of DP-1-1-2 --output eDP-1-1 --mode 2560x1440 --right-of DP-1-3'
+alias setup_monitors='xrandr --output DP-1-2-2 --mode 2560x1440 --rotate right --output HDMI-1-1 --mode 2560x1440 --right-of DP-1-2-2 --output eDP-1-1 --mode 2560x1440 --right-of HDMI-1-1'
 alias rdlv='dlv --listen=:2345 --headless=true --api-version=2 --accept-multiclient'
 
 # tmux
