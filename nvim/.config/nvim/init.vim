@@ -202,7 +202,8 @@ aug fred#go
   fu s:GoSettings()
     " Not sure about using an abbreviation... should I use a snippet?
     abbreviate ane assert.Nil(t, err)
-    nmap <leader>t <Plug>(go-test)
+    nmap <leader>tt <Plug>(go-test)
+    nmap <leader>tf <Plug>(go-test-func)
     command! -bang A call go#alternate#Switch(<bang>0, 'edit')
     command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
     command! -bang AS call go#alternate#Switch(<bang>0, 'split')
