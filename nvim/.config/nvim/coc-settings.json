@@ -59,15 +59,15 @@
     },
     "go.goplsOptions": {
         "codelens": {
-            "test": true,
+            "gc_details": true,
             "generate": true,
-            "upgrade.dependency": true
+            "upgrade_dependency": true
         },
         "deepCompletion": true,
-        "hoverKind": "SynopsisDocumentation",
-        "matcher": "fuzzy",
+        "hoverKind": "FullDocumentation",
+        "matcher": "Fuzzy",
         "staticcheck": true,
-        "symbolMatcher": "fuzzy",
+        "symbolMatcher": "Fuzzy",
         "usePlaceholders": true
     }
 }
