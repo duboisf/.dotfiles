@@ -27,6 +27,9 @@
     "diagnostic.signOffset": 9999999,
     "diagnostic.highlightOffset": 9999999,
     "diagnostic.refreshOnInsertMode": true,
+    "diagnostic.virtualText": true,
+    "diagnostic.virtualTextCurrentLineOnly": false,
+    "diagnostic.virtualTextPrefix": "  ",
     "suggest.completionItemKindLabels": {
         "keyword": "\uf1de",
         "variable": "\ue79b",
