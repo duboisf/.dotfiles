@@ -178,7 +178,7 @@ let g:startify_change_to_dir = 0
 
 " fugitive configuration
 " Open :G in a maximized window
-nnoremap <leader>g :G \| wincmd _<CR>
+nnoremap <leader>g :G<CR>
 
 " firenvim configuration
 let g:firenvim_config = {
