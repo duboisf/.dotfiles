@@ -110,7 +110,6 @@ endif
 let mapleader=' '
 
 " Miscellaneous mappings
-nnoremap <F10> :qa!<CR>
 nnoremap <leader>q :q<CR>
 nnoremap <leader>s :w<CR>
 nnoremap <leader>m <C-W>_
