@@ -1,6 +1,7 @@
 {
     "coc.source.around.priority": 10,
     "coc.source.word.priority": 5,
+    "coc.source.emoji.priority": 2,
     "coc.source.dictionary.priority": 1,
     "coc.preferences.formatOnType": true,
     "coc.preferences.formatOnTypeFiletypes": [
@@ -14,6 +15,7 @@
     "coc.preferences.extensionUpdateCheck": "weekly",
     "coc.source.emoji.filetypes": [
         "gitcommit",
+        "go", // sure, why not?
         "markdown"
     ],
     "diagnostic.checkCurrentLine": true,
