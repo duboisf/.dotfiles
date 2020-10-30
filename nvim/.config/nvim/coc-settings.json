@@ -58,11 +58,6 @@
         "default": "\uf29c"
     },
     "go.goplsOptions": {
-        "codelens": {
-            "gc_details": true,
-            "generate": true,
-            "upgrade_dependency": true
-        },
         "deepCompletion": true,
         "hoverKind": "FullDocumentation",
         "matcher": "Fuzzy",
