@@ -29,6 +29,7 @@ if g:started_by_firenvim == v:false
   Plug 'ctrlpvim/ctrlp.vim'
   Plug 'editorconfig/editorconfig-vim'
   Plug 'fatih/vim-go'
+  Plug 'hashivim/vim-terraform'
   Plug 'junegunn/fzf'
   Plug 'junegunn/fzf.vim'
   Plug 'mhinz/vim-startify'
@@ -257,6 +258,11 @@ let g:fzf_preview_lines_command = 'bat --color=always --theme="Solarized (dark)"
 let g:fzf_preview_use_dev_icons = 1
 
 if g:pager_mode == v:false
+
+  """"""""""""""""""""""""""
+  " vim-terraform settings "
+  """"""""""""""""""""""""""
+  let g:terraform_fmt_on_save=1
 
   """""""""""""""""""""
   " coc.nvim settings "
