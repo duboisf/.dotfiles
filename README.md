@@ -36,6 +36,14 @@ unzip ~/Downloads/{FiraCode,JetBrainsMono}.zip
 fc-cache -fv
 ```
 
+## Install nvm
+
+nvm stands for Node Version Manager. Node is used by nvim's coc plugin. To install nvm, run:
+
+```sh
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | bash
+```
+
 ## Install nvim
 
 Download nightly build from [here](https://github.com/neovim/neovim/releases/nightly) and then:
@@ -88,3 +96,4 @@ keybase pgp export --secret | gpg --import --allow-secret-key-import
 ## Fix gnome-shell overview shortcut for Kinesis Advantage2 keyboard
 
 My Kinesis Advantage2 keyboard's Super (windows) key doesn't trigger the Gnome Shell Overview by default. This is because the Super key on the keyboard is actually a _right_ Super key. We can fix this by installing gnome-tweaks (`sudo apt install gnome-tweaks`) and picking the _right_ Super key as the _Overview Shortcut_ in the `Keyboard & Mouse` section.
+
