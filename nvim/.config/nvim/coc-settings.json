@@ -64,5 +64,19 @@
         "staticcheck": true,
         "symbolMatcher": "Fuzzy",
         "usePlaceholders": true
+    },
+    "languageserver": {
+        "terraform": {
+            "command": "terraform-ls",
+            "args": [
+                "serve"
+            ],
+            "filetypes": [
+                "terraform",
+                "tf"
+            ],
+            "initializationOptions": {},
+            "settings": {}
+        }
     }
 }
