@@ -2,7 +2,6 @@ export ZPLUG_LOG_LOAD_FAILURE=true
 source ~/.zplug/init.zsh
 
 # Commands
-zplug "junegunn/fzf-bin", from:gh-r, as:command, rename-to:fzf
 zplug "stedolan/jq", from:gh-r, as:command, rename-to:jq
 zplug "kubernetes/minikube", from:gh-r, as:command
 # Lazy load nvm, see .zsh/lib/nvm.zsh
