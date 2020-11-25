@@ -27,7 +27,7 @@
     "diagnostic.signOffset": 9999999,
     "diagnostic.highlightOffset": 9999999,
     "diagnostic.refreshOnInsertMode": true,
-    "diagnostic.virtualText": true,
+    "diagnostic.virtualText": false,
     "diagnostic.virtualTextCurrentLineOnly": false,
     "diagnostic.virtualTextPrefix": "  ",
     "suggest.completionItemKindLabels": {
