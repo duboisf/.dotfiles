@@ -115,7 +115,7 @@ if (( $+commands[terraform] )); then
     alias tfw='tf workspace'
     alias tfwl='tfw list'
     alias tfws='tfw select'
-    alias tfwsc='tfw show'
+    alias tfwss='tfw show'
 fi
 
 # Misc
