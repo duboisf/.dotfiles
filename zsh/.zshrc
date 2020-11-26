@@ -41,7 +41,7 @@ fpath=(~/.zsh/completions $fpath)
 zplug load
 
 # Load local config
-for file in ~/.zsh/lib/*.zsh; do
+for file in ~/.zsh/lib/*.zsh ~/.zsh.private/lib/*.zsh(N); do
     source $file
 done
 
