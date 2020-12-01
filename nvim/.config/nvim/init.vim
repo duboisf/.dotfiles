@@ -7,22 +7,25 @@ let g:started_by_firenvim = get(g:, 'started_by_firenvim', v:false)
 let g:pager_mode = get(g:, 'pager_mode', v:false)
 
 call plug#begin(stdpath('data') . '/plugged')
-Plug 'Chiel92/vim-autoformat'
-Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
-Plug 'junegunn/limelight.vim'
-Plug 'justinmk/vim-sneak'
-Plug 'michaeljsmith/vim-indent-object'
-Plug 'nvim-treesitter/nvim-treesitter'
-Plug 'psliwka/vim-smoothie'
-Plug 'rakr/vim-one' " this is a nice theme
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-unimpaired'
 
+" Always load the following plugins
+Plug 'rakr/vim-one' " this is a nice theme
+Plug 'nvim-treesitter/nvim-treesitter'
+
+" Only load the following plugins if we're not using nvim as a pager
 if g:pager_mode == v:false
+  Plug 'Chiel92/vim-autoformat'
+  Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
+  Plug 'junegunn/limelight.vim'
+  Plug 'justinmk/vim-sneak'
+  Plug 'michaeljsmith/vim-indent-object'
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  Plug 'psliwka/vim-smoothie'
   Plug 'rhysd/vim-grammarous'
+  Plug 'tpope/vim-commentary'
+  Plug 'tpope/vim-repeat'
+  Plug 'tpope/vim-surround'
+  Plug 'tpope/vim-unimpaired'
 endif
 
 " Only load the following plugins if we are not using nvim inside chrome
