@@ -10,10 +10,8 @@ call plug#begin(stdpath('data') . '/plugged')
 Plug 'Chiel92/vim-autoformat'
 Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
 Plug 'junegunn/limelight.vim'
+Plug 'justinmk/vim-sneak'
 Plug 'michaeljsmith/vim-indent-object'
-if g:pager_mode == v:false
-  Plug 'neoclide/coc.nvim', {'branch': 'release'}
-endif
 Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'psliwka/vim-smoothie'
 Plug 'rakr/vim-one' " this is a nice theme
@@ -21,7 +19,11 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
-Plug 'justinmk/vim-sneak'
+
+if g:pager_mode == v:false
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  Plug 'rhysd/vim-grammarous'
+endif
 
 " Only load the following plugins if we are not using nvim inside chrome
 if g:started_by_firenvim == v:false
@@ -258,6 +260,11 @@ let g:fzf_preview_lines_command = 'bat --color=always --theme="Solarized (dark)"
 let g:fzf_preview_use_dev_icons = 1
 
 if g:pager_mode == v:false
+
+  """""""""""""""""""""""""""
+  " vim-grammarous settings "
+  """""""""""""""""""""""""""
+  nmap <leader>mo <Plug>(grammarous-open-info-window)
 
   """"""""""""""""""""""""""
   " vim-terraform settings "
