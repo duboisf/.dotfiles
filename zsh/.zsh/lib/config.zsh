@@ -104,6 +104,14 @@ bindkey '\ej' cdr-widget
 
 # END Recently visited directories
 
+# history
+#########
+
+# from the manual for share_history: This option both imports new commands from
+# the history file, and also causes your typed commands to be appended to the
+# history file"
+setopt share_history
+
 # fzf config
 ############
 
