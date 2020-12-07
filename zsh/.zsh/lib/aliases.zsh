@@ -33,6 +33,12 @@ alias mk='minikube'
 alias kns=kubens
 alias kctx=kubectx
 
+# codefresh
+###########
+if (( $+commands[codefresh] )); then
+    alias cf=codefresh
+fi
+
 # kubectl
 #########
 if (( $+commands[kubectl] )); then
