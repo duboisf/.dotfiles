@@ -138,3 +138,13 @@ fi
 if (( $+commands[fdfind] )); then
     alias fd=fdfind
 fi
+
+
+if (( $+commands[helm] )); then
+    alias h=helm
+    alias hl='h ls'
+    alias hu='h repo up'
+    alias hsh='h search hub'
+    alias hs='h search repo'
+    alias hsd='h search repo --devel'
+fi
