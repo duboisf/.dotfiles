@@ -11,6 +11,7 @@ call plug#begin(stdpath('data') . '/plugged')
 " Always load the following plugins
 Plug 'rakr/vim-one' " this is a nice theme
 Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 
 " Only load the following plugins if we're not using nvim as a pager
 if g:pager_mode == v:false
