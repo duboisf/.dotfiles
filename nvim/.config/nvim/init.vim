@@ -119,6 +119,7 @@ let mapleader=' '
 " Miscellaneous mappings
 nnoremap <leader>q :q<CR>
 nnoremap <leader>s :w<CR>
+nnoremap <leader>b :bd<CR>
 nnoremap <leader>m <C-W>_
 nnoremap <leader>= <C-W>=
 nnoremap <leader>. 10<C-W>>
