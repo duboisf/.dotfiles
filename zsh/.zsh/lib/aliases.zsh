@@ -65,7 +65,7 @@ if (( $+commands[kubectl] )); then
     alias dsecret='kc describe secret'
     if (( $+commands[jq] )); then
         # base64 decode kubebernetes secrets
-        alias -g DS='| jq -r ".data | map_values(@base64d)"'
+        alias -g DS="-o yaml | yq --yaml-roundtrip '. + {"stringData": (.data | map_values(@base64d))} | del(.data)'"
     fi
     alias jo='kc get job'
     alias djo='kc describe job'
