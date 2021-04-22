@@ -158,4 +158,5 @@ if (( $+commands[helm] )); then
     alias hsh='h search hub'
     alias hs='h search repo'
     alias hsd='h search repo --devel'
+    alias hru='h repo up'
 fi
