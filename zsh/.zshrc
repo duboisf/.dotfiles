@@ -21,6 +21,8 @@ zplug "junegunn/fzf", use:"shell/*.zsh", defer:2
 # Reuse oh-my-zsh configs that I'm used to
 zplug "lib/completion", from:oh-my-zsh
 zplug "lib/history", from:oh-my-zsh
+zplug "plugins/kubectl", from:oh-my-zsh
+zplug "plugins/helm", from:oh-my-zsh
 # Nice syntax highlighting like fish, need to run after compinit (defer:2)
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 
