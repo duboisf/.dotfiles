@@ -106,6 +106,17 @@ if (( $+commands[hub] )); then
     alias git='hub'
 fi
 
+# github gh
+###########
+if (( $+commands[gh] )); then
+    alias p='gh pr'
+    alias prv='p view'
+    alias prc='p create'
+    alias prco='p checkout'
+    alias prl='p list'
+    alias prlv='p list -w'
+fi
+
 # terraform
 ###########
 if (( $+commands[terraform] )); then
