@@ -76,6 +76,7 @@ if (( $+commands[kubectl] )); then
     alias -g AN='--all-namespaces'
     alias -g J='-o json'
     alias -g Y='-o yaml'
+    alias kubelistall='kubectl api-resources --verbs=list --namespaced -o name | grep -v event | xargs -n 1 kubectl get --show-kind --ignore-not-found'
 fi
 
 # git
