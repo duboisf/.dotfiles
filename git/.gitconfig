@@ -14,9 +14,6 @@
 	lp = log -p
 	pfh = push -u duboisf HEAD
 	poh = push -u origin HEAD
-	prs = !hub pr list
-	prc = !hub pr checkout
-	opr = !git poh && hub pull-request
 [commit]
 	verbose = true
 	gpgsign = true
