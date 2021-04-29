@@ -23,6 +23,7 @@ if g:pager_mode == v:false
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
   Plug 'psliwka/vim-smoothie'
   Plug 'rhysd/vim-grammarous'
+  Plug 'towolf/vim-helm'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-surround'
