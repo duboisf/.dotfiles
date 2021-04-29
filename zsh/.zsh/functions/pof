@@ -1,0 +1,3 @@
+# vim: set ft=zsh
+
+kubectl get po | fzf --bind 'up:preview-page-up,down:preview-page-down,ctrl-d:preview(POD=$(echo {} | cut -d " " -f 1); kubectl get po $POD -o yaml | bat --theme="Solarized (light)" --language=yaml --color=always --file-name=$POD)'
