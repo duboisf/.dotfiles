@@ -1,0 +1,8 @@
+local branches=$(git branch --merged | grep -Ev "^\*")
+if [[ -n $branches ]]; then
+    git branch -d $branches
+else
+    print "Nothing to clean."
+fi
+
+# vim: ft=zsh
