@@ -1,4 +1,4 @@
-local branches=$(git branch --merged | grep -Ev "^\*" | xargs)
+local branches=($(git branch --merged | grep -Ev "^\*" | xargs))
 if [[ -n $branches ]]; then
     git branch -d $branches
 else
