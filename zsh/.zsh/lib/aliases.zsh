@@ -101,12 +101,6 @@ if (( $+commands[git] )); then
     alias gdc='git diff --cached'
 fi
 
-# github hub
-############
-if (( $+commands[hub] )); then
-    alias git='hub'
-fi
-
 # github gh
 ###########
 if (( $+commands[gh] )); then
