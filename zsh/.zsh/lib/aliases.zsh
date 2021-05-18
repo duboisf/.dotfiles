@@ -115,9 +115,6 @@ if (( $+commands[gh] )); then
     alias prc='p create'
     alias prco='p checkout'
     alias prlv='p list -w'
-    if (( $+commands[fzf] )); then
-        alias prvf='gh pr view $(gh pr list | fzf | cut -f 1)'
-    fi
 fi
 
 # terraform
