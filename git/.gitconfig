@@ -14,6 +14,7 @@
 	lp = log -p
 	pfh = push -u duboisf HEAD
 	poh = push -u origin HEAD
+	browse = !gh repo view -w
 [commit]
 	verbose = true
 	gpgsign = true
