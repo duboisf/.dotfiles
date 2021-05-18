@@ -37,18 +37,23 @@ if ! zplug check --verbose; then
     fi
 fi
 
-# Update fpath to include local completions.
-# Need to do this before zplug load as it calls compinit
-fpath=(~/.zsh/completions $fpath)
+if [[ -d ~/.zsh/completions ]]; then
+    fpath=(~/.zsh/completions $fpath)
+fi
+
+if [[ -d ~/.zsh/functions ]]; then
+    fpath=(~/.zsh/functions $fpath)
+fi
 
 zplug load
+
+
+if [[ -d ~/.zsh/functions ]]; then
+    autoload ~/.zsh/functions/*(N)
+fi
 
 # Load local config
 for file in ~/.zsh/lib/*.zsh ~/.zsh.private/lib/*.zsh(N); do
     source $file
 done
 
-if [[ -d ~/.zsh/functions ]]; then
-    fpath=(~/.zsh/functions $fpath)
-    autoload ~/.zsh/functions/*(:t)
-fi
