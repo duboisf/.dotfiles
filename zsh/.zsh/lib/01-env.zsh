@@ -4,6 +4,8 @@ path=(
   /snap/bin
   ~/go/bin
   /usr/local/go/bin
+  ~/.pulumi/bin
+  ~/.poetry/bin
   $path
 )
 
