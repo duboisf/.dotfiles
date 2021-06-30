@@ -14,7 +14,10 @@
 	lp = log -p
 	pfh = push -u duboisf HEAD
 	poh = push -u origin HEAD
-	browse = !gh repo view -w
+	gclone = !gh repo clone
+	pr-merge = !gh pr merge --merge --delete-branch
+	prv = !gh pr view
+	auto-pr-merge = !gh pr merge --auto --merge
 [commit]
 	verbose = true
 	gpgsign = true
