@@ -27,6 +27,9 @@ alias ai='sudo apt install'
 alias as='apt search'
 alias af='apt-file search'
 
+# kitty
+alias icat='kitty +kitten icat'
+
 # kubernetes/docker
 alias d='docker'
 alias mk='minikube'
