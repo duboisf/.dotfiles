@@ -9,15 +9,17 @@
 	name = Fred Dubois
 	signingkey = 7FDBB1D481604E6E
 [alias]
+	auto-pr-merge = !gh pr merge --auto --merge
+	# Prevent annoying 'Opening in existing browser session.' message
+	browse = !bash -c 'gh browse &> /dev/null'
 	co = checkout
 	cp = cherry-pick
+	gclone = !gh repo clone
 	lp = log -p
 	pfh = push -u duboisf HEAD
 	poh = push -u origin HEAD
-	gclone = !gh repo clone
 	pr-merge = !gh pr merge --merge --delete-branch
 	prv = !gh pr view
-	auto-pr-merge = !gh pr merge --auto --merge
 [commit]
 	verbose = true
 	gpgsign = true
