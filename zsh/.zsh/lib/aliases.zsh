@@ -1,5 +1,5 @@
 # The basic stuff
-alias l='ls -lh --color'
+alias l='exa -l --color=auto'
 alias la='l -a'
 alias s='cd ..'
 alias open=xdg-open
