@@ -200,6 +200,14 @@ fi
 # Editing
 #########
 
+# Copy the current buffer into the system clipboard so that you can paste with ctrl-v
+copy-to-system-clipboard () {
+    print -rn -- $BUFFER | xclip -selection clipboard
+}
+
+zle -N copy-to-system-clipboard
+bindkey '\C-x\C-y' copy-to-system-clipboard
+
 # Edit the current command line in $EDITOR
 autoload -U edit-command-line
 zle -N edit-command-line
