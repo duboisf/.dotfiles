@@ -200,6 +200,11 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 " don't change cwd when jumping to a file
 let g:startify_change_to_dir = 0
 
+let g:startify_lists = [
+      \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
+      \ { 'type': 'files',     'header': ['   MRU']            },
+      \ ]
+
 " fugitive configuration
 " Open :G in a maximized window
 nnoremap <leader>g :G<CR>
