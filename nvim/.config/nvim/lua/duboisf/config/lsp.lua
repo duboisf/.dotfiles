@@ -25,7 +25,7 @@ local on_attach = function(client, bufnr)
   -- buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
   buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
   buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  buf_set_keymap('n', '<space>a', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
   -- buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
   buf_set_keymap('n', 'gr', '<cmd>Telescope lsp_references<CR>', opts)
   buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
@@ -35,8 +35,12 @@ local on_attach = function(client, bufnr)
   buf_set_keymap("n", "<leader>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
   buf_set_keymap('n', '<leader>l', '<cmd>lua vim.lsp.codelens.run()<CR>', opts)
 
-  vim.api.nvim_exec("autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh()", false)
+  -- vim.api.nvim_exec("autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh()", false)
+  vim.api.nvim_command [[autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh()]]
   -- vim.api.nvim_exec("autocmd CursorHold * lua vim.lsp.diagnostic.show_line_diagnostics()", false)
+  vim.api.nvim_command [[autocmd CursorHold  <buffer> lua vim.lsp.buf.document_highlight()]]
+  vim.api.nvim_command [[autocmd CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()]]
+  vim.api.nvim_command [[autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()]]
 end
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
@@ -51,10 +55,10 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   }
 )
 
--- vim.fn.sign_define('lspdiagnosticssignerror', { text = "", texthl = "lspdiagnosticsdefaulterror" })
--- vim.fn.sign_define('lspdiagnosticssignwarning', { text = "", texthl = "lspdiagnosticsdefaultwarning" })
--- vim.fn.sign_define('lspdiagnosticssigninformation', { text = "", texthl = "lspdiagnosticsdefaultinformation" })
--- vim.fn.sign_define('lspdiagnosticssignhint', { text = "", texthl = "lspdiagnosticsdefaulthint" })
+vim.fn.sign_define('LspDiagnosticsSignError', { text = " ", texthl = "LspDiagnosticsSignError" })
+vim.fn.sign_define('LspDiagnosticsSignWarning', { text = " ", texthl = "LspDiagnosticsSignWarning" })
+vim.fn.sign_define('LspDiagnosticsSignInformation', { text = " ", texthl = "LspDiagnosticsSignInformation" })
+vim.fn.sign_define('LspDiagnosticsSignHint', { text = " ", texthl = "LspDiagnosticsSignHint" })
 
 -- use a loop to conveniently call 'setup' on multiple servers and
 -- map buffer local keybindings when the language server attaches
@@ -72,16 +76,26 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 --     debounce_text_changes = 150,
 --   }
 -- }
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true
+capabilities.textDocument.completion.completionItem.resolveSupport = {
+  properties = {
+    'documentation',
+    'detail',
+    'additionalTextEdits',
+  }
+}
+
 lspconfig.gopls.setup{
   on_attach = on_attach,
-  -- capabilities = capabilities,
+  capabilities = capabilities,
   flags = {
     allow_incremental_sync = true
   },
   init_options = {
     staticcheck = false,
-    allExperiments = false,
-    usePlaceholders = false,
+    allExperiments = true,
+    usePlaceholders = true,
     analyses = {
       nilness = true,
       unusedparams = true,
@@ -98,20 +112,20 @@ lspconfig.gopls.setup{
   },
 }
 
-local configs = require 'lspconfig/configs'
+-- local configs = require 'lspconfig/configs'
 
-if not lspconfig.golangcilsp then
-    configs.golangcilsp = {
-        default_config = {
-            cmd = {'golangci-lint-langserver'},
-            root_dir = lspconfig.util.root_pattern('.git', 'go.mod'),
-            init_options = {
-                    command = { "golangci-lint", "run", "--out-format", "json" };
-            }
-        };
-    }
-end
+-- if not lspconfig.golangcilsp then
+--     configs.golangcilsp = {
+--         default_config = {
+--             cmd = {'golangci-lint-langserver'},
+--             root_dir = lspconfig.util.root_pattern('.git', 'go.mod'),
+--             init_options = {
+--                     command = { "golangci-lint", "run", "--out-format", "json" };
+--             }
+--         };
+--     }
+-- end
 
-lspconfig.golangcilsp.setup {
-    filetypes = {'go'}
-}
+-- lspconfig.golangcilsp.setup {
+--     filetypes = {'go'}
+-- }

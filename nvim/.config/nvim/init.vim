@@ -21,6 +21,7 @@ if g:pager_mode == v:false
   " Plug 'ctrlpvim/ctrlp.vim'
   Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
   Plug 'hrsh7th/nvim-compe'
+  Plug 'hrsh7th/vim-vsnip'
   " Plug 'junegunn/limelight.vim'
   " Plug 'justinmk/vim-sneak'
   " Plug 'michaeljsmith/vim-indent-object'
@@ -32,12 +33,13 @@ if g:pager_mode == v:false
   " Plug 'psliwka/vim-smoothie'
   Plug 'rhysd/vim-grammarous'
   " Plug 'SirVer/ultisnips'
+  Plug 'simrat39/symbols-outline.nvim'
   " Plug 'towolf/vim-helm'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-unimpaired'
-  Plug 'windwp/nvim-autopairs'
+  " Plug 'windwp/nvim-autopairs'
 endif
 
 " Only load the following plugins if we are not using nvim inside chrome
@@ -489,7 +491,7 @@ nnoremap <silent> <leader>fb <cmd>Telescope buffers<cr>
 
 " compe configuration
 inoremap <silent><expr> <C-Space> compe#complete()
-" inoremap <silent><expr> <CR>      compe#confirm(luaeval("require 'nvim-autopairs'.autopairs_cr()"))
+inoremap <silent><expr> <CR>      compe#confirm('<CR>')
 inoremap <silent><expr> <C-e>     compe#close('<C-e>')
 inoremap <silent><expr> <C-f>     compe#scroll({ 'delta': +4 })
 inoremap <silent><expr> <C-d>     compe#scroll({ 'delta': -4 })
@@ -506,6 +508,10 @@ colorscheme one
 hi clear Search
 hi default Search gui=reverse guifg=#ff6d00
 
+hi LspReferenceText guibg=#4d1e0a
+hi LspReferenceRead guibg=#1d1e0a
+hi LspReferenceWrite guibg=#fd1e0a
+
 hi LspDiagnosticsVirtualTextError guifg=Red ctermfg=Red
 hi LspDiagnosticsVirtualTextWarning guifg=Yellow ctermfg=Yellow
 hi LspDiagnosticsVirtualTextInformation guifg=White ctermfg=White
@@ -520,7 +526,5 @@ hi LspDiagnosticsFloatingError guifg=#E74C3C
 hi LspDiagnosticsSignError guifg=#E74C3C
 
 hi LspCodeLens guifg=Cyan
-
-hi LspReferenceText guifg=Green
 
 " vim: sts=2 sw=2 ts=2 et
