@@ -521,4 +521,6 @@ hi LspDiagnosticsSignError guifg=#E74C3C
 
 hi LspCodeLens guifg=Cyan
 
+hi LspReferenceText guifg=Green
+
 " vim: sts=2 sw=2 ts=2 et
