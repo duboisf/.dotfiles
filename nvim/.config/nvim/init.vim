@@ -20,6 +20,7 @@ if g:pager_mode == v:false
   Plug 'Chiel92/vim-autoformat'
   " Plug 'ctrlpvim/ctrlp.vim'
   Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
+  Plug 'golang/vscode-go'
   Plug 'hrsh7th/nvim-compe'
   Plug 'hrsh7th/vim-vsnip'
   " Plug 'junegunn/limelight.vim'
@@ -198,6 +199,12 @@ aug end
 if g:pager_mode == v:false
   lua require('duboisf/config')
 end
+
+" lsp configuration
+augroup lsp
+  autocmd!
+  autocmd BufWritePre * lua require'duboisf.config.lsp'.safe_formatting_sync()
+augroup END
 
 " editorconfig configuration
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
@@ -485,6 +492,8 @@ aug end
 " telescope configuration
 nnoremap <silent> <leader>fe <cmd>lua require('duboisf.config.telescope').project_files()<cr>
 nnoremap <silent> <leader>fd <cmd>lua require('duboisf.config.telescope').cwd_files()<cr>
+nnoremap <silent> <leader>fs <cmd>Telescope lsp_document_symbols<cr>
+nnoremap <silent> <leader>fw <cmd>Telescope lsp_dynamic_document_symbols<cr>
 nnoremap <silent> <leader>* <cmd>Telescope current_buffer_fuzzy_find<cr>
 nnoremap <silent> <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <silent> <leader>fb <cmd>Telescope buffers<cr>
@@ -495,6 +504,29 @@ inoremap <silent><expr> <CR>      compe#confirm('<CR>')
 inoremap <silent><expr> <C-e>     compe#close('<C-e>')
 inoremap <silent><expr> <C-f>     compe#scroll({ 'delta': +4 })
 inoremap <silent><expr> <C-d>     compe#scroll({ 'delta': -4 })
+
+" vsnip configuration
+"
+" NOTE: You can use other key to expand snippet.
+
+" Expand or jump
+imap <expr> <C-j>   vsnip#available( 1)  ? '<Plug>(vsnip-jump-next)' : '<C-l>'
+smap <expr> <C-j>   vsnip#available( 1)  ? '<Plug>(vsnip-jump-next)' : '<C-l>'
+imap <expr> <C-k>   vsnip#available(-1)  ? '<Plug>(vsnip-jump-prev)' : '<C-l>'
+smap <expr> <C-k>   vsnip#available(-1)  ? '<Plug>(vsnip-jump-prev)' : '<C-l>'
+
+" Jump forward or backward
+" imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+" smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+" imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+" smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+
+" Select or cut text to use as $TM_SELECTED_TEXT in the next snippet.
+" See https://github.com/hrsh7th/vim-vsnip/pull/50
+" nmap        s   <Plug>(vsnip-select-text)
+" xmap        s   <Plug>(vsnip-select-text)
+" nmap        S   <Plug>(vsnip-cut-text)
+" xmap        S   <Plug>(vsnip-cut-text)
 
 "#######################
 "# THEME CONFIGURATION #

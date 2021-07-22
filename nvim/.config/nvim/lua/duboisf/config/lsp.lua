@@ -32,7 +32,6 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
   buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
   --buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
-  buf_set_keymap("n", "<leader>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
   buf_set_keymap('n', '<leader>l', '<cmd>lua vim.lsp.codelens.run()<CR>', opts)
 
   -- vim.api.nvim_exec("autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh()", false)
@@ -60,22 +59,6 @@ vim.fn.sign_define('LspDiagnosticsSignWarning', { text = " ", texthl = "LspDi
 vim.fn.sign_define('LspDiagnosticsSignInformation', { text = " ", texthl = "LspDiagnosticsSignInformation" })
 vim.fn.sign_define('LspDiagnosticsSignHint', { text = " ", texthl = "LspDiagnosticsSignHint" })
 
--- use a loop to conveniently call 'setup' on multiple servers and
--- map buffer local keybindings when the language server attaches
--- nvim_lsp.gopls.setup {
---   on_attach = on_attach,
---   init_options = {
---     analyses = {
---         printf = false
---     },
---     codelenses = {
---         test = true
---     }
---   },
---   flags = {
---     debounce_text_changes = 150,
---   }
--- }
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 capabilities.textDocument.completion.completionItem.resolveSupport = {
@@ -112,6 +95,13 @@ lspconfig.gopls.setup{
   },
 }
 
+local function safe_formatting_sync()
+  local id, client = next(vim.lsp.buf_get_clients())
+  if id ~= nil and client.resolved_capabilities.document_formatting then
+    vim.lsp.buf.formatting_sync(nil, 100)
+  end
+end
+
 -- local configs = require 'lspconfig/configs'
 
 -- if not lspconfig.golangcilsp then
@@ -129,3 +119,6 @@ lspconfig.gopls.setup{
 -- lspconfig.golangcilsp.setup {
 --     filetypes = {'go'}
 -- }
+return {
+    safe_formatting_sync = safe_formatting_sync
+}

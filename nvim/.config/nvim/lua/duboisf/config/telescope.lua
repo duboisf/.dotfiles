@@ -61,4 +61,12 @@ function M.project_files(opts)
   end
 end
 
+function M.document_symbols()
+  local input = vim.fn.input('Query: ')
+  if input == '' then
+    return
+  end
+  require'telescope.builtin'.lsp_workspace_symbols()
+end
+
 return M
