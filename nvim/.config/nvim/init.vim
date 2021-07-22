@@ -204,7 +204,7 @@ end
 augroup lsp
   autocmd!
   autocmd BufWritePre * lua require'duboisf.config.lsp'.safe_formatting_sync()
-augroup END
+augroup end
 
 " editorconfig configuration
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
@@ -490,13 +490,17 @@ aug fred#json
 aug end
 
 " telescope configuration
-nnoremap <silent> <leader>fe <cmd>lua require('duboisf.config.telescope').project_files()<cr>
-nnoremap <silent> <leader>fd <cmd>lua require('duboisf.config.telescope').cwd_files()<cr>
-nnoremap <silent> <leader>fs <cmd>Telescope lsp_document_symbols<cr>
-nnoremap <silent> <leader>fw <cmd>Telescope lsp_dynamic_document_symbols<cr>
-nnoremap <silent> <leader>* <cmd>Telescope current_buffer_fuzzy_find<cr>
-nnoremap <silent> <leader>fg <cmd>Telescope live_grep<cr>
-nnoremap <silent> <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <silent> <leader>fe  <cmd>lua require('duboisf.config.telescope').project_files()<cr>
+nnoremap <silent> <leader>fd  <cmd>lua require('duboisf.config.telescope').cwd_files()<cr>
+nnoremap <silent> <leader>fs  <cmd>Telescope lsp_document_symbols<cr>
+nnoremap <silent> <leader>fw  <cmd>Telescope lsp_dynamic_workspace_symbols<cr>
+nnoremap <silent> <leader>f*  <cmd>Telescope current_buffer_fuzzy_find<cr>
+nnoremap <silent> <leader>fgg <cmd>Telescope live_grep cwd=%:h<cr>
+nnoremap <silent> <leader>fgw <cmd>Telescope live_grep<cr>
+nnoremap <silent> <leader>fb  <cmd>Telescope buffers<cr>
+nnoremap <silent> <leader>fh  <cmd>Telescope help_tags<cr>
+nnoremap <silent> <leader>fr  <cmd>Telescope registers<cr>
+nnoremap <silent> <leader>fm  <cmd>Telescope keymaps<cr>
 
 " compe configuration
 inoremap <silent><expr> <C-Space> compe#complete()

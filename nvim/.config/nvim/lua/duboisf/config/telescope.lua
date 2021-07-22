@@ -7,11 +7,12 @@ require('telescope').setup{
       '--with-filename',
       '--line-number',
       '--column',
-      '--smart-case'
+      '--smart-case',
+      '--hidden',
     },
-    prompt_prefix = "🔎",
-    selection_caret = "👉",
-    entry_prefix = "  ",
+    prompt_prefix = "🔎 ",
+    selection_caret = "👉 ",
+    entry_prefix = "   ",
     initial_mode = "insert",
     selection_strategy = "reset",
     sorting_strategy = "descending",
@@ -50,7 +51,7 @@ function M.cwd_files(opts)
   if cwd == "" then
       cwd = vim.fn.getcwd()
   end
-  require('telescope.builtin').find_files({ cwd = cwd })
+  require('telescope.builtin').find_files({ cwd = cwd, hidden = true })
 end
 
 function M.project_files(opts)
