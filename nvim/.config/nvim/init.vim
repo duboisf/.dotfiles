@@ -19,6 +19,7 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': 
 if g:pager_mode == v:false
   Plug 'Chiel92/vim-autoformat'
   " Plug 'ctrlpvim/ctrlp.vim'
+  Plug 'fatih/vim-go'
   Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
   Plug 'golang/vscode-go'
   Plug 'hrsh7th/nvim-compe'
@@ -237,41 +238,36 @@ let g:firenvim_config = {
     \ }
 \ }
 
-" " vim-go configuration
-" aug fred#go
-"   au!
-"   au Filetype go nmap <leader>t <Plug>(go-test)
-"   fu s:GoSettings()
-"     " Not sure about using an abbreviation... should I use a snippet?
-"     abbreviate ane assert.Nil(t, err)
-"     nmap <leader>tt <Plug>(go-test)
-"     nmap <leader>tf <Plug>(go-test-func)
-"     command! -bang A call go#alternate#Switch(<bang>0, 'edit')
-"     command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
-"     command! -bang AS call go#alternate#Switch(<bang>0, 'split')
-"   endfu
-"   au Filetype go call s:GoSettings()
-"   au BufWritePre *.go :call CocAction('runCommand', 'editor.action.organizeImport')
-" aug end
+" vim-go configuration
+aug fred#go
+  au!
+  au Filetype go nmap <leader>t <Plug>(go-test)
+  fu s:GoSettings()
+    nmap <leader>tt <Plug>(go-test)
+    nmap <leader>tf <Plug>(go-test-func)
+    nmap <c-^>      <Plug>(go-alternate-edit)
+    nmap <leader>tc <Cmd>GoCoverage<CR>
+    command! -bang A call go#alternate#Switch(<bang>0, 'edit')
+    command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
+    command! -bang AS call go#alternate#Switch(<bang>0, 'split')
+  endfu
+  au Filetype go call s:GoSettings()
+aug end
 
-" " disable vim-go :GoDef short cut (gd)
-" " this is handled by LanguageClient [LC]
-" let g:go_def_mapping_enabled = 0
-" " disable gopls as we are using coc-go
-" let g:go_gopls_enabled = 0
-" let g:go_doc_keywordprg_enabled = 0
-" " extra highlighting options
-" let g:go_highlight_operators = 1
-" let g:go_highlight_functions = 1
-" let g:go_highlight_function_parameters = 1
-" let g:go_highlight_function_calls = 1
-" let g:go_highlight_types = 1
-" let g:go_highlight_fields = 1
-" let g:go_highlight_variable_declarations = 1
-" let g:go_highlight_variable_assignments = 1
-" " Don't use vim-go to format file on save, we use coc-go with the autocmd
-" " BufWritePre define above
-" let g:go_fmt_autosave = 0
+" disable vim-go :GoDef short cut (gd)
+" this is handled by LanguageClient [LC]
+let g:go_def_mapping_enabled = 0
+" disable gopls as we are using coc-go
+let g:go_gopls_enabled = 0
+let g:go_doc_keywordprg_enabled = 0
+" disable highlighting, we use tree-sitter
+let g:go_highlight_string_spellcheck = 0
+let g:go_highlight_format_strings = 0
+let g:go_highlight_diagnostic_errors = 0
+let g:go_highlight_diagnostic_errors = 0
+let g:go_highlight_diagnostic_warnings = 0
+" Don't use vim-go to format file on save, we use lsp to do this
+let g:go_fmt_autosave = 0
 
 " fzf.vim configuration
 inoremap <expr> <c-x><c-f> fzf#vim#complete#path("fd -t f -H", fzf#wrap({'dir': expand('%:p:h')}))
