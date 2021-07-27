@@ -91,6 +91,7 @@ set expandtab
 set encoding=utf-8
 set listchars=tab:→\ ,trail:·,eol:↩
 set list
+set scrolloff=5
 set cursorline
 if !&diff
   set cursorcolumn
