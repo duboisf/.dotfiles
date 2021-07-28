@@ -48,12 +48,12 @@ endif
 
 " Only load the following plugins if we are not using nvim inside chrome
 if g:started_by_firenvim == v:false
-  Plug 'airblade/vim-gitgutter'
   Plug 'ctrlpvim/ctrlp.vim'
   Plug 'editorconfig/editorconfig-vim'
   Plug 'hashivim/vim-terraform'
   Plug 'junegunn/fzf'
   Plug 'junegunn/fzf.vim'
+  Plug 'lewis6991/gitsigns.nvim', {'branch': 'main'}
   Plug 'mhinz/vim-startify'
   Plug 'preservim/nerdtree'
   Plug 'ryanoasis/vim-devicons'
@@ -82,6 +82,7 @@ call plug#end()
 """""""""""""""""""""
 " vim configuration "
 """""""""""""""""""""
+set termguicolors " Enables 24-bit RGB color in the Terminal UI
 set mouse=a
 set relativenumber
 set number
@@ -115,7 +116,7 @@ set updatetime=100
 " don't give |ins-completion-menu| messages.
 set shortmess+=c
 " always show signcolumns
-set signcolumn=yes
+set signcolumn=yes:2
 
 " tweak settings if we are using nvim as a pager, we know this because
 " se set the pager_mode variable when we do
@@ -535,13 +536,15 @@ smap <expr> <C-k>   vsnip#available(-1)  ? '<Plug>(vsnip-jump-prev)' : '<C-l>'
 "# THEME CONFIGURATION #
 "#######################
 
-set termguicolors " Enables 24-bit RGB color in the Terminal UI
 set background=dark
 colorscheme one
 
 " tweaks to theme
 hi clear Search
 hi default Search gui=reverse guifg=#ff6d00
+
+" used to display git blames with gitsigns
+hi FloatBorder guifg=white guibg=#333841
 
 hi LspReferenceText guibg=#4d1e0a
 hi LspReferenceRead guibg=#1d1e0a
