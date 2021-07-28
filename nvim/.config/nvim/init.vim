@@ -106,7 +106,6 @@ set dictionary+=/usr/share/dict/american-english
 " will be that gf won't work with filenames with = in them... I don't think
 " this will cause a lot of problems...
 set isfname-==
-
 " if hidden is not set, TextEdit might fail.
 set hidden
 " Better display for messages
@@ -117,6 +116,8 @@ set updatetime=100
 set shortmess+=c
 " always show signcolumns
 set signcolumn=yes:2
+" show interactive substitute
+set inccommand=nosplit
 
 " tweak settings if we are using nvim as a pager, we know this because
 " se set the pager_mode variable when we do
