@@ -11,9 +11,11 @@ let g:enable_coc = get(g:, 'enable_coc', v:false)
 call plug#begin(stdpath('data') . '/plugged')
 
 " Always load the following plugins
-Plug 'rakr/vim-one' " this is a nice theme
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+Plug 'norcalli/nvim-colorizer.lua'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'rakr/vim-one' " this is a nice theme
+
 
 " Only load the following plugins if we're not using nvim as a pager
 if g:pager_mode == v:false
