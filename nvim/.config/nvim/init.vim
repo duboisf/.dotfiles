@@ -469,7 +469,7 @@ endfu
 
 aug fred#airline
   au!
-  au User AirlineAfterInit call s:airline_treesitter_init()
+  " au User AirlineAfterInit call s:airline_treesitter_init()
 aug end
 
 " ctrlp.vim configuration
