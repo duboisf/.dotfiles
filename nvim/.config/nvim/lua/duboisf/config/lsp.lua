@@ -54,10 +54,10 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   }
 )
 
-vim.fn.sign_define('LspDiagnosticsSignError', { text = " ", texthl = "LspDiagnosticsSignError" })
-vim.fn.sign_define('LspDiagnosticsSignWarning', { text = " ", texthl = "LspDiagnosticsSignWarning" })
-vim.fn.sign_define('LspDiagnosticsSignInformation', { text = " ", texthl = "LspDiagnosticsSignInformation" })
-vim.fn.sign_define('LspDiagnosticsSignHint', { text = " ", texthl = "LspDiagnosticsSignHint" })
+vim.fn.sign_define('LspDiagnosticsSignError', { text = "", texthl = "LspDiagnosticsSignError" })
+vim.fn.sign_define('LspDiagnosticsSignWarning', { text = "", texthl = "LspDiagnosticsSignWarning" })
+vim.fn.sign_define('LspDiagnosticsSignInformation', { text = "", texthl = "LspDiagnosticsSignInformation" })
+vim.fn.sign_define('LspDiagnosticsSignHint', { text = "", texthl = "LspDiagnosticsSignHint" })
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
@@ -102,23 +102,24 @@ local function safe_formatting_sync()
   end
 end
 
--- local configs = require 'lspconfig/configs'
+local configs = require 'lspconfig/configs'
 
--- if not lspconfig.golangcilsp then
---     configs.golangcilsp = {
---         default_config = {
---             cmd = {'golangci-lint-langserver'},
---             root_dir = lspconfig.util.root_pattern('.git', 'go.mod'),
---             init_options = {
---                     command = { "golangci-lint", "run", "--out-format", "json" };
---             }
---         };
---     }
--- end
+if not lspconfig.golangcilsp then
+    configs.golangcilsp = {
+        default_config = {
+            cmd = {'golangci-lint-langserver'},
+            root_dir = lspconfig.util.root_pattern('.git', 'go.mod'),
+            init_options = {
+                    command = { "golangci-lint", "run", "--out-format", "json" };
+            }
+        };
+    }
+end
 
--- lspconfig.golangcilsp.setup {
---     filetypes = {'go'}
--- }
+lspconfig.golangcilsp.setup {
+    filetypes = {'go'}
+}
+
 return {
     safe_formatting_sync = safe_formatting_sync
 }
