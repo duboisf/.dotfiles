@@ -260,6 +260,7 @@ aug fred#go
     command! -bang AS call go#alternate#Switch(<bang>0, 'split')
   endfu
   au Filetype go call s:GoSettings()
+  au BufRead,BufNewFile */helm/templates/*.yaml set syntax=gohtmltmpl
 aug end
 
 " disable vim-go :GoDef short cut (gd)
