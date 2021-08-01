@@ -495,8 +495,9 @@ aug fred#json
 aug end
 
 " telescope configuration
-nnoremap <silent> <leader>fe  <cmd>lua require('duboisf.config.telescope').project_files()<cr>
+nnoremap <silent> <leader>fe  <cmd>lua require('duboisf.config.telescope').project_files { previewer = false }<cr>
 nnoremap <silent> <leader>fd  <cmd>lua require('duboisf.config.telescope').cwd_files()<cr>
+nnoremap <silent> <leader>fa  <cmd>lua require('duboisf.config.telescope').asana_tasks { username = 'fred.dubois@sonder.com' }<cr>
 nnoremap <silent> <leader>fs  <cmd>Telescope lsp_document_symbols<cr>
 nnoremap <silent> <leader>fw  <cmd>Telescope lsp_dynamic_workspace_symbols<cr>
 nnoremap <silent> <leader>f*  <cmd>Telescope current_buffer_fuzzy_find<cr>
