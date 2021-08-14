@@ -538,6 +538,12 @@ smap <expr> <C-k>   vsnip#available(-1)  ? '<Plug>(vsnip-jump-prev)' : '<C-l>'
 " nmap        S   <Plug>(vsnip-cut-text)
 " xmap        S   <Plug>(vsnip-cut-text)
 
+"""""""""""""""""""""
+" Misc autocommands "
+"""""""""""""""""""""
+
+au TextYankPost * lua vim.highlight.on_yank { higroup="IncSearch", timeout=300, on_visual=true }
+
 "#######################
 "# THEME CONFIGURATION #
 "#######################
