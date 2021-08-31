@@ -60,7 +60,7 @@ alias dcm='kc describe configmap'
 alias secret='kc get secret'
 alias dsecret='kc describe secret'
 # base64 decode kubebernetes secrets
-alias -g DS="-o json | jq '. + {"stringData": (.data | map_values(@base64d))} | del(.data)'"
+alias -g DS="-o json | jq '. + {"stringData": (.data | map_values(@base64d))} | del(.data, .metadata.managedFields)'"
 alias jo='kc get job'
 alias djo='kc describe job'
 alias cronjob='kc get cronjob'
