@@ -65,19 +65,43 @@ vim.fn.sign_define('LspDiagnosticsSignWarning', { text = "", texthl = "LspDia
 vim.fn.sign_define('LspDiagnosticsSignInformation', { text = "", texthl = "LspDiagnosticsSignInformation" })
 vim.fn.sign_define('LspDiagnosticsSignHint', { text = "", texthl = "LspDiagnosticsSignHint" })
 
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities.textDocument.completion.completionItem.snippetSupport = true
-capabilities.textDocument.completion.completionItem.resolveSupport = {
-  properties = {
-    'documentation',
-    'detail',
-    'additionalTextEdits',
+lspconfig.tsserver.setup{ on_attach = on_attach }
+lspconfig.terraformls.setup{ on_attach = on_attach }
+lspconfig.solargraph.setup{ on_attach = on_attach }
+lspconfig.pyright.setup{ on_attach = on_attach }
+
+do
+  schemas = {}
+  schemas["http://json.schemastore.org/github-workflow"] = "/.github/workflows/*.yml"
+  lspconfig.yamlls.setup{
+    on_attach = on_attach,
+    settings = {
+      yaml = {
+        schemas = schemas,
+        schemaDownload = { enable = true },
+        trace = {
+          server = "verbose"
+        },
+        validate = true,
+      }
+    }
   }
-}
+end
 
 lspconfig.gopls.setup{
   on_attach = on_attach,
-  capabilities = capabilities,
+  capabilities = (function()
+    local capabilities = vim.lsp.protocol.make_client_capabilities()
+    capabilities.textDocument.completion.completionItem.snippetSupport = true
+    capabilities.textDocument.completion.completionItem.resolveSupport = {
+      properties = {
+        'documentation',
+        'detail',
+        'additionalTextEdits',
+      }
+    }
+    return capabilities
+    end)(),
   flags = {
     allow_incremental_sync = true
   },
@@ -108,23 +132,22 @@ local function safe_formatting_sync()
   end
 end
 
-local configs = require 'lspconfig/configs'
+-- local configs = require 'lspconfig/configs'
 
-if not lspconfig.golangcilsp then
-    configs.golangcilsp = {
-        default_config = {
-            cmd = {'golangci-lint-langserver'},
-            root_dir = lspconfig.util.root_pattern('.git', 'go.mod'),
-            init_options = {
-                    command = { "golangci-lint", "run", "--out-format", "json" };
-            }
-        };
-    }
-end
+-- if not lspconfig.golangcilsp then
+--     configs.golangcilsp = {
+--       default_config = {
+--         cmd = {'golangci-lint-langserver'},
+--         filetypes = {'go'},
+--         root_dir = lspconfig.util.root_pattern('.git', 'go.mod'),
+--         init_options = {
+--           command = { "golangci-lint", "run", "--out-format", "json" }
+--         }
+--       },
+--     }
+-- end
 
-lspconfig.golangcilsp.setup {
-    filetypes = {'go'}
-}
+-- lspconfig.golangcilsp.setup()
 
 return {
     safe_formatting_sync = safe_formatting_sync
