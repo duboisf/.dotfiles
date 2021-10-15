@@ -6,44 +6,55 @@ let g:started_by_firenvim = get(g:, 'started_by_firenvim', v:false)
 " Check if we started nvim in pager mode
 let g:pager_mode = get(g:, 'pager_mode', v:false)
 
-let g:enable_coc = get(g:, 'enable_coc', v:true)
+let g:enable_coc = get(g:, 'enable_coc', v:false)
 
 call plug#begin(stdpath('data') . '/plugged')
 
 " Always load the following plugins
-Plug 'rakr/vim-one' " this is a nice theme
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+Plug 'norcalli/nvim-colorizer.lua'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'rakr/vim-one' " this is a nice theme
+
 
 " Only load the following plugins if we're not using nvim as a pager
 if g:pager_mode == v:false
   Plug 'Chiel92/vim-autoformat'
+  " Plug 'ctrlpvim/ctrlp.vim'
+  Plug 'fatih/vim-go'
   Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
-  Plug 'junegunn/limelight.vim'
-  Plug 'justinmk/vim-sneak'
-  Plug 'michaeljsmith/vim-indent-object'
+  Plug 'golang/vscode-go'
+  Plug 'hrsh7th/nvim-compe'
+  Plug 'hrsh7th/vim-vsnip'
+  " Plug 'junegunn/limelight.vim'
+  " Plug 'justinmk/vim-sneak'
+  " Plug 'michaeljsmith/vim-indent-object'
   if g:enable_coc == v:true
       Plug 'neoclide/coc.nvim', {'branch': 'release'}
   endif
+  Plug 'neovim/nvim-lspconfig'
   Plug 'nvim-treesitter/playground'
-  Plug 'psliwka/vim-smoothie'
+  " Plug 'psliwka/vim-smoothie'
   Plug 'rhysd/vim-grammarous'
-  Plug 'towolf/vim-helm'
+  " Plug 'SirVer/ultisnips'
+  Plug 'simrat39/symbols-outline.nvim'
+  " Plug 'towolf/vim-helm'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-unimpaired'
+  " Plug 'windwp/nvim-autopairs'
 endif
 
+Plug 'kabouzeid/nvim-lspinstall'
+
 " Only load the following plugins if we are not using nvim inside chrome
-if g:started_by_firenvim == v:false
-  Plug 'airblade/vim-gitgutter'
-  Plug 'ctrlpvim/ctrlp.vim'
+ if g:started_by_firenvim == v:true
   Plug 'editorconfig/editorconfig-vim'
-  Plug 'fatih/vim-go'
   Plug 'hashivim/vim-terraform'
   Plug 'junegunn/fzf'
   Plug 'junegunn/fzf.vim'
+  Plug 'lewis6991/gitsigns.nvim', {'branch': 'main'}
   Plug 'mhinz/vim-startify'
   Plug 'preservim/nerdtree'
   Plug 'ryanoasis/vim-devicons'
@@ -56,12 +67,15 @@ if g:started_by_firenvim == v:false
   Plug 'tpope/vim-sensible'
   Plug 'tsandall/vim-rego'
   Plug 'vim-airline/vim-airline'
-  Plug 'will133/vim-dirdiff'
-  if g:enable_coc == v:true
-    " Requires coc, git, fzf, python3, ripgrep
-    " Optional bat(like cat but 10x nicer!), exa(like ls but nicer!)
-    Plug 'yuki-ycino/fzf-preview.vim', { 'branch': 'release', 'do': ':UpdateRemotePlugins' }
-  end
+  " Plug 'will133/vim-dirdiff'
+  " Requires git, fzf, python3, ripgrep
+  " Optional bat(like cat but 10x nicer!), exa(like ls but nicer!)
+  " Plug 'yuki-ycino/fzf-preview.vim', { 'branch': 'release/rpc' }
+  " telescope has the following dependencies
+  Plug 'kyazdani42/nvim-web-devicons'
+  Plug 'nvim-lua/popup.nvim'
+  Plug 'nvim-lua/plenary.nvim'
+  Plug 'nvim-telescope/telescope.nvim'
 endif
 
 call plug#end()
@@ -69,6 +83,7 @@ call plug#end()
 """""""""""""""""""""
 " vim configuration "
 """""""""""""""""""""
+set termguicolors " Enables 24-bit RGB color in the Terminal UI
 set mouse=a
 set relativenumber
 set number
@@ -80,6 +95,7 @@ set expandtab
 set encoding=utf-8
 set listchars=tab:→\ ,trail:·,eol:↩
 set list
+set scrolloff=0
 set cursorline
 if !&diff
   set cursorcolumn
@@ -91,6 +107,18 @@ set dictionary+=/usr/share/dict/american-english
 " will be that gf won't work with filenames with = in them... I don't think
 " this will cause a lot of problems...
 set isfname-==
+" if hidden is not set, TextEdit might fail.
+set hidden
+" Better display for messages
+set cmdheight=2
+" Smaller updatetime for CursorHold & CursorHoldI
+set updatetime=100
+" don't give |ins-completion-menu| messages.
+set shortmess+=c
+" always show signcolumns
+set signcolumn=yes:2
+" show interactive substitute
+set inccommand=nosplit
 
 " tweak settings if we are using nvim as a pager, we know this because
 " se set the pager_mode variable when we do
@@ -132,6 +160,9 @@ nnoremap <leader>m <C-W>_
 nnoremap <leader>= <C-W>=
 nnoremap <leader>. 10<C-W>>
 nnoremap <leader>, 10<C-W><
+" Move selection up or down
+xnoremap <C-Up> xkP`[V`]
+xnoremap <C-Down> xp`[V`]
 " Toggle wrap
 nnoremap <leader>w :set wrap!<CR>
 " Toggle paste
@@ -175,23 +206,15 @@ aug end
 "# PLUGIN CONFIGURATION #
 "########################
 
-" nvim-treesitter configuration
+if g:pager_mode == v:false
+  lua require('duboisf/config')
+end
 
-lua <<EOF
-require'nvim-treesitter.configs'.setup {
-  highlight = {
-      enable = true,
-  },
-}
-
-require'nvim-treesitter.configs'.setup {
-  playground = {
-    enable = true,
-    updatetime = 25,
-    persist_queries = false,
-  },
-}
-EOF
+" lsp configuration
+augroup lsp
+  autocmd!
+  autocmd BufWritePre * lua require'duboisf.config.lsp'.safe_formatting_sync()
+augroup end
 
 " editorconfig configuration
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
@@ -229,16 +252,16 @@ aug fred#go
   au!
   au Filetype go nmap <leader>t <Plug>(go-test)
   fu s:GoSettings()
-    " Not sure about using an abbreviation... should I use a snippet?
-    abbreviate ane assert.Nil(t, err)
     nmap <leader>tt <Plug>(go-test)
     nmap <leader>tf <Plug>(go-test-func)
+    nmap <c-^>      <Plug>(go-alternate-edit)
+    nmap <leader>tc <Cmd>GoCoverage<CR>
     command! -bang A call go#alternate#Switch(<bang>0, 'edit')
     command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
     command! -bang AS call go#alternate#Switch(<bang>0, 'split')
   endfu
   au Filetype go call s:GoSettings()
-  au BufWritePre *.go :call CocAction('runCommand', 'editor.action.organizeImport')
+  au BufRead,BufNewFile */helm/templates/*.yaml set syntax=gohtmltmpl
 aug end
 
 " disable vim-go :GoDef short cut (gd)
@@ -247,45 +270,39 @@ let g:go_def_mapping_enabled = 0
 " disable gopls as we are using coc-go
 let g:go_gopls_enabled = 0
 let g:go_doc_keywordprg_enabled = 0
-" extra highlighting options
-let g:go_highlight_operators = 1
-let g:go_highlight_functions = 1
-let g:go_highlight_function_parameters = 1
-let g:go_highlight_function_calls = 1
-let g:go_highlight_types = 1
-let g:go_highlight_fields = 1
-let g:go_highlight_variable_declarations = 1
-let g:go_highlight_variable_assignments = 1
-" Don't use vim-go to format file on save, we use coc-go with the autocmd
-" BufWritePre define above
+" disable highlighting, we use tree-sitter
+let g:go_highlight_string_spellcheck = 0
+let g:go_highlight_format_strings = 0
+let g:go_highlight_diagnostic_errors = 0
+let g:go_highlight_diagnostic_errors = 0
+let g:go_highlight_diagnostic_warnings = 0
+" Don't use vim-go to format file on save, we use lsp to do this
 let g:go_fmt_autosave = 0
 
 " fzf.vim configuration
 inoremap <expr> <c-x><c-f> fzf#vim#complete#path("fd -t f -H", fzf#wrap({'dir': expand('%:p:h')}))
 
-if g:enable_coc == v:true
-  " fzf-preview configuration
-  nnoremap <silent> <Leader>fr      <cmd>CocCommand fzf-preview.FromResources project_mru directory<CR>
-  nnoremap <silent> <Leader>fb      <cmd>CocCommand fzf-preview.Buffers<CR>
-  nnoremap <silent> <Leader>fB      <cmd>CocCommand fzf-preview.AllBuffers<CR>
-  nnoremap <silent> <Leader>fe      <cmd>CocCommand fzf-preview.DirectoryFiles<CR>
-  nnoremap <silent> <Leader>fo      <cmd>CocCommand fzf-preview.FromResources buffer project_mru<CR>
-  nnoremap <silent> <Leader>f/      <cmd>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort<CR>
-  nnoremap <silent> <Leader>fq      <cmd>CocCommand fzf-preview.QuickFix<CR>
-  nnoremap <silent> <Leader>fl      <cmd>CocCommand fzf-preview.LocationList<CR>
-  nnoremap <silent> <Leader>f*     :<C-U>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'<C-r>=expand('<cword>')<CR>"<CR>
-  nnoremap <silent> <Leader>fd     :<C-U>CocCommand fzf-preview.DirectoryFiles <C-R>=expand('%:h')<CR><CR>
-  nnoremap          <Leader>ff     :<C-U>CocCommand fzf-preview.ProjectGrep<Space>
-  nnoremap <silent> <Leader>fs     :<C-U>CocCommand fzf-preview.ProjectGrep <C-r>=expand('<cword>')<CR><CR>
-  xnoremap          <Leader>fs     "sy:<C-U>CocCommand fzf-preview.ProjectGrep<Space>-F<Space>"<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"<CR>
-  let g:fzf_preview_command = 'bat --color=always --theme="Solarized (dark)" --style=numbers,changes {-1}'
-  let g:fzf_preview_directory_files_command = 'fd . --type=file --hidden'
-  let g:fzf_preview_filelist_postprocess_command = 'xargs -d "\n" exa --color=always' " Use exa
-  let g:fzf_preview_fzf_preview_window_option = 'up:30%'
-  let g:fzf_preview_grep_cmd = "rg --line-number --hidden --no-heading --glob='!.git'"
-  let g:fzf_preview_lines_command = 'bat --color=always --theme="Solarized (dark)" --style=numbers,changes'
-  let g:fzf_preview_use_dev_icons = 1
-endif
+" fzf-preview configuration
+" nnoremap <silent> <Leader>fr      <cmd>FzfPreviewFromResourcesRpc project_mru directory<CR>
+" nnoremap <silent> <Leader>fb      <cmd>FzfPreviewBuffersRpc<CR>
+" nnoremap <silent> <Leader>fB      <cmd>FzfPreviewAllBuffersRpc<CR>
+" nnoremap <silent> <Leader>fe      <cmd>FzfPreviewDirectoryFilesRpc<CR>
+" nnoremap <silent> <Leader>fo      <cmd>FzfPreviewFromResourcesRpc buffer project_mru<CR>
+" nnoremap <silent> <Leader>f/      <cmd>FzfPreviewLinesRpc --add-fzf-arg=--no-sort<CR>
+" nnoremap <silent> <Leader>fq      <cmd>FzfPreviewQuickFixRpc<CR>
+" nnoremap <silent> <Leader>fl      <cmd>FzfPreviewLocationListRpc<CR>
+" nnoremap <silent> <Leader>f*     :<C-U>FzfPreviewLinesRpc --add-fzf-arg=--no-sort --add-fzf-arg=--query="'<C-r>=expand('<cword>')<CR>"<CR>
+" nnoremap <silent> <Leader>fd     :<C-U>FzfPreviewDirectoryFilesRpc <C-R>=expand('%:h')<CR><CR>
+" nnoremap          <Leader>ff     :<C-U>FzfPreviewProjectGrepRpc<Space>
+" nnoremap <silent> <Leader>fs     :<C-U>FzfPreviewProjectGrepRpc <C-r>=expand('<cword>')<CR><CR>
+" xnoremap          <Leader>fs     "sy:<C-U>FzfPreviewProjectGrepRpc<Space>-F<Space>"<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"<CR>
+" let g:fzf_preview_command = 'bat --color=always --theme="Solarized (dark)" --style=numbers,changes {-1}'
+" let g:fzf_preview_directory_files_command = 'fd . --type=file --hidden'
+" let g:fzf_preview_filelist_postprocess_command = 'xargs -d "\n" exa --color=always' " Use exa
+" let g:fzf_preview_fzf_preview_window_option = 'up:30%'
+" let g:fzf_preview_grep_cmd = "rg --line-number --hidden --no-heading --glob='!.git'"
+" let g:fzf_preview_lines_command = 'bat --color=always --theme="Solarized (dark)" --style=numbers,changes'
+" let g:fzf_preview_use_dev_icons = 1
 
 if g:pager_mode == v:false
 
@@ -325,7 +342,7 @@ if g:pager_mode == v:false
     " don't give |ins-completion-menu| messages.
     set shortmess+=c
     " always show signcolumns
-    set signcolumn=yes
+    set signcolumn=yes:3
 
     " Use tab for trigger completion with characters ahead and navigate.
     " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
@@ -453,7 +470,7 @@ endfu
 
 aug fred#airline
   au!
-  au User AirlineAfterInit call s:airline_treesitter_init()
+  " au User AirlineAfterInit call s:airline_treesitter_init()
 aug end
 
 " ctrlp.vim configuration
@@ -478,11 +495,60 @@ aug fred#json
   au FileType json syntax match Comment +\/\/.\+$+
 aug end
 
+" telescope configuration
+nnoremap <silent> <leader>fe  <cmd>lua require('duboisf.config.telescope').project_files { previewer = false }<cr>
+nnoremap <silent> <leader>fd  <cmd>lua require('duboisf.config.telescope').cwd_files()<cr>
+nnoremap <silent> <leader>fa  <cmd>lua require('duboisf.config.telescope').asana_tasks { username = 'fred.dubois@sonder.com' }<cr>
+nnoremap <silent> <leader>fs  <cmd>Telescope lsp_document_symbols<cr>
+nnoremap <silent> <leader>fw  <cmd>Telescope lsp_dynamic_workspace_symbols<cr>
+nnoremap <silent> <leader>f*  <cmd>Telescope current_buffer_fuzzy_find<cr>
+nnoremap <silent> <leader>fgg <cmd>Telescope live_grep cwd=%:h<cr>
+nnoremap <silent> <leader>fgw <cmd>Telescope live_grep<cr>
+nnoremap <silent> <leader>fb  <cmd>Telescope buffers<cr>
+nnoremap <silent> <leader>fh  <cmd>Telescope help_tags<cr>
+nnoremap <silent> <leader>fr  <cmd>Telescope registers<cr>
+nnoremap <silent> <leader>fm  <cmd>Telescope keymaps<cr>
+
+" compe configuration
+inoremap <silent><expr> <C-Space> compe#complete()
+inoremap <silent><expr> <CR>      compe#confirm('<CR>')
+inoremap <silent><expr> <C-e>     compe#close('<C-e>')
+" inoremap <silent><expr> <C-f>     compe#scroll({ 'delta': +4 })
+" inoremap <silent><expr> <C-d>     compe#scroll({ 'delta': -4 })
+
+" vsnip configuration
+"
+" NOTE: You can use other key to expand snippet.
+
+" Expand or jump
+imap <expr> <C-j>   vsnip#available( 1)  ? '<Plug>(vsnip-jump-next)' : '<C-l>'
+smap <expr> <C-j>   vsnip#available( 1)  ? '<Plug>(vsnip-jump-next)' : '<C-l>'
+imap <expr> <C-k>   vsnip#available(-1)  ? '<Plug>(vsnip-jump-prev)' : '<C-l>'
+smap <expr> <C-k>   vsnip#available(-1)  ? '<Plug>(vsnip-jump-prev)' : '<C-l>'
+
+" Jump forward or backward
+" imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+" smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+" imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+" smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+
+" Select or cut text to use as $TM_SELECTED_TEXT in the next snippet.
+" See https://github.com/hrsh7th/vim-vsnip/pull/50
+" nmap        s   <Plug>(vsnip-select-text)
+" xmap        s   <Plug>(vsnip-select-text)
+" nmap        S   <Plug>(vsnip-cut-text)
+" xmap        S   <Plug>(vsnip-cut-text)
+
+"""""""""""""""""""""
+" Misc autocommands "
+"""""""""""""""""""""
+
+au TextYankPost * lua vim.highlight.on_yank { higroup="IncSearch", timeout=300, on_visual=true }
+
 "#######################
 "# THEME CONFIGURATION #
 "#######################
 
-set termguicolors " Enables 24-bit RGB color in the Terminal UI
 set background=dark
 colorscheme one
 
@@ -490,13 +556,26 @@ colorscheme one
 hi clear Search
 hi default Search gui=reverse guifg=#ff6d00
 
-" Modify coc CursorHold highlight color
-hi default CocHighlightText guibg=#4d1e0a
-hi default link CocHighlightRead   CocHighlightText
-hi default link CocHighlightWrite  CocHighlightText
+" used to display git blames with gitsigns
+hi FloatBorder guifg=white guibg=#333841
 
-hi CocUnderline gui=undercurl term=undercurl
-hi CocErrorHighlight ctermfg=red  guifg=#ff0000 gui=undercurl term=undercurl
-hi CocWarningHighlight ctermfg=yellow guifg=#ffff00 gui=undercurl term=undercurl
+hi LspReferenceText guibg=#4d1e0a
+hi LspReferenceRead guibg=#1d1e0a
+hi LspReferenceWrite guibg=#fd1e0a
+
+hi LspDiagnosticsVirtualTextError guifg=Red ctermfg=Red
+hi LspDiagnosticsVirtualTextWarning guifg=Yellow ctermfg=Yellow
+hi LspDiagnosticsVirtualTextInformation guifg=White ctermfg=White
+hi LspDiagnosticsVirtualTextHint guifg=White ctermfg=White
+
+hi LspDiagnosticsUnderlineError guifg=Red ctermfg=NONE cterm=undercurl gui=undercurl
+hi LspDiagnosticsUnderlineWarning guifg=Yellow ctermfg=NONE cterm=underline gui=underline
+hi LspDiagnosticsUnderlineInformation guifg=NONE ctermfg=NONE cterm=underline gui=underline
+hi LspDiagnosticsUnderlineHint guifg=Cyan ctermfg=NONE cterm=underline gui=underline
+
+hi LspDiagnosticsFloatingError guifg=#E74C3C
+hi LspDiagnosticsSignError guifg=#E74C3C
+
+hi LspCodeLens guifg=Cyan
 
 " vim: sts=2 sw=2 ts=2 et

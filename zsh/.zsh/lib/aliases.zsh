@@ -60,7 +60,7 @@ alias dcm='kc describe configmap'
 alias secret='kc get secret'
 alias dsecret='kc describe secret'
 # base64 decode kubebernetes secrets
-alias -g DS="-o yaml | yq --yaml-roundtrip '. + {"stringData": (.data | map_values(@base64d))} | del(.data)'"
+alias -g DS="-o json | jq '. + {"stringData": (.data | map_values(@base64d))} | del(.data, .metadata.managedFields)'"
 alias jo='kc get job'
 alias djo='kc describe job'
 alias cronjob='kc get cronjob'
@@ -134,3 +134,7 @@ alias hsh='h search hub'
 alias hs='h search repo'
 alias hsd='h search repo --devel'
 alias hru='h repo up'
+
+# pulumi
+#########
+alias pu=pulumi
