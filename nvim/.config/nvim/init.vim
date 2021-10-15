@@ -49,7 +49,7 @@ endif
 Plug 'kabouzeid/nvim-lspinstall'
 
 " Only load the following plugins if we are not using nvim inside chrome
- if g:started_by_firenvim == v:true
+if g:started_by_firenvim == v:false
   Plug 'editorconfig/editorconfig-vim'
   Plug 'hashivim/vim-terraform'
   Plug 'junegunn/fzf'
