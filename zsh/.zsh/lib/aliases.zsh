@@ -134,3 +134,7 @@ alias hsh='h search hub'
 alias hs='h search repo'
 alias hsd='h search repo --devel'
 alias hru='h repo up'
+
+# pulumi
+#########
+alias pu=pulumi

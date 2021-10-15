@@ -46,9 +46,10 @@ if g:pager_mode == v:false
   " Plug 'windwp/nvim-autopairs'
 endif
 
+Plug 'kabouzeid/nvim-lspinstall'
+
 " Only load the following plugins if we are not using nvim inside chrome
-if g:started_by_firenvim == v:false
-  Plug 'ctrlpvim/ctrlp.vim'
+ if g:started_by_firenvim == v:true
   Plug 'editorconfig/editorconfig-vim'
   Plug 'hashivim/vim-terraform'
   Plug 'junegunn/fzf'

@@ -12,29 +12,26 @@ local on_attach = function(client, bufnr)
   -- Mappings.
   local opts = { noremap=true, silent=true }
 
-  -- See `:help vim.lsp.*` for documentation on any of the below functions
-  buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-  buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+  local normal_mappings = {}
+  local nm = normal_mappings
+  nm['gD']        = '<Cmd>lua vim.lsp.buf.declaration()<CR>'
+  nm['gd']        = '<Cmd>lua vim.lsp.buf.definition()<CR>'
+  nm['K']         = '<Cmd>lua vim.lsp.buf.hover()<CR>'
+  nm['gi']        = '<cmd>lua vim.lsp.buf.implementation()<CR>'
+  nm['<space>D']  = '<cmd>lua vim.lsp.buf.type_definition()<CR>'
+  nm['<space>rn'] = '<cmd>lua vim.lsp.buf.rename()<CR>'
+  nm['<space>a']  = '<cmd>lua vim.lsp.buf.code_action()<CR>'
+  nm['gr']        = '<cmd>Telescope lsp_references<CR>'
+  nm['<space>d']  = '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>'
+  nm['[d']        = '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>'
+  nm[']d']        = '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>'
+  nm['<leader>l'] = '<cmd>lua vim.lsp.codelens.run()<CR>'
+  for lhs, rhs in pairs(normal_mappings) do
+    buf_set_keymap('n', lhs, rhs, opts)
+  end
   for _, mode in ipairs({'n', 'i'}) do
     buf_set_keymap(mode, '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
   end
-  -- buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-  -- buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
-  -- buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
-  buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-  buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  buf_set_keymap('n', '<space>a', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-  -- buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  buf_set_keymap('n', 'gr', '<cmd>Telescope lsp_references<CR>', opts)
-  buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
-  buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
-  buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-  --buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
-  buf_set_keymap('n', '<leader>l', '<cmd>lua vim.lsp.codelens.run()<CR>', opts)
-
-  -- vim.api.nvim_exec("autocmd CursorHold * lua vim.lsp.diagnostic.show_line_diagnostics()", false)
 
   if client.resolved_capabilities.code_lens then
     vim.api.nvim_exec("autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh()", false)
