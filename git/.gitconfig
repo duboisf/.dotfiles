@@ -18,7 +18,7 @@
 	lp = log -p
 	pfh = push -u duboisf HEAD
 	poh = push -u origin HEAD
-	pr-merge = !gh pr merge --merge --delete-branch && git pull
+	pr-merge = !gh pr merge --merge --delete-branch && git pull --prune
 	prv = !gh pr view
 [commit]
 	verbose = true
