@@ -75,8 +75,10 @@ end
 do
   local curl = require'plenary.curl'
   local asana = io.open('/home/fred/.asana')
-  local token = asana:read('*a')
-  asana:close()
+  if asana then
+    local token = asana:read('*a')
+    asana:close()
+  end
 
   local function join(list, sep)
     local cumul = ""
