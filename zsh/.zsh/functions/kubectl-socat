@@ -1,0 +1,17 @@
+
+if (( $# < 4 )); then
+  print "USAGE: $0 NAME HOST LOCAL_PORT [REMOTE_PORT]" >&2
+  return 1
+fi
+
+local POD_NAME=socat-$1
+local HOST=$2
+local LOCAL_PORT=$3
+local REMOTE_HOST=${4:-${LOCAL_PORT}}
+
+kubectl run $POD_NAME --image=marcnuri/port-forward --env="REMOTE_HOST=$HOST" --env="REMOTE_PORT=$REMOTE_HOST" --env="LOCAL_PORT=$LOCAL_PORT" \
+    && kubectl wait --for=condition=ready --timeout=60s pod $POD_NAME \
+    && kubectl port-forward $POD_NAME $LOCAL_PORT:$LOCAL_PORT
+kubectl delete pod $POD_NAME
+
+# vim: set syntax=zsh
