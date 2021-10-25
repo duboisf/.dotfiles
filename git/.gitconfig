@@ -20,6 +20,7 @@
 	poh = push -u origin HEAD
 	pr-merge = !gh pr merge --merge --delete-branch && git pull --prune
 	prv = !gh pr view
+	create-branch = !bash -c \"git switch -c fd/$1\"
 [commit]
 	verbose = true
 	gpgsign = true
