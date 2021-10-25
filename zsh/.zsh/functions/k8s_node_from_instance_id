@@ -1,0 +1,12 @@
+
+(( $# != 1 )) && print -u2 "USAGE: $0 AWS_INSTANCE_ID" && return 1
+
+instance_id=$1
+
+no J | \
+  jq -r --arg instance_id $instance_id '
+      .items[]
+    | select(.spec.providerID | contains($instance_id))
+    | .metadata.name'
+
+# vim: set syntax=zsh
