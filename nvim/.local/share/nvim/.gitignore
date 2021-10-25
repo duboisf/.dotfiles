@@ -4,3 +4,4 @@ swap/
 log
 rplugin.vim
 telescope_history
+tree-sitter-*
