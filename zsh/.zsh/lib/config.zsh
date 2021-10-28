@@ -177,7 +177,7 @@ if (( $+commands[fzf] )); then
             # By default fzf uses find, let's use fd instead
             FZF_DEFAULT_COMMAND="$fd_bin_path --type file --follow --hidden --no-ignore"
             FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-            FZF_ALT_C_COMMAND="$fd_bin_path --type directory --follow --hidden --no-ignore"
+            FZF_ALT_C_COMMAND="$fd_bin_path --type directory --follow --hidden"
             # Use fd instead of find for zsh completion
             _fzf_compgen_path() fd --hidden --follow --no-ignore . "$1"
             # Use fd to generate the list for directory completion
