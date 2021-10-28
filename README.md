@@ -71,8 +71,12 @@ We also need to install some binaries like [bat](https://github.com/sharkdp/bat/
 ## Install kitty
 
 ```sh
-curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
-sudo ln -s /home/fred/.local/kitty.app/bin/kitty /usr/local/bin/kitty
+mkdir ~/.local/stow
+curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin \
+  dest=~/.local/stow
+cd ~/.local/stow
+stow -v kitty.app
+sudo ln -s /home/fred/.local/bin/kitty /usr/local/bin/kitty
 sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /usr/local/bin/kitty 100
 ```
 
