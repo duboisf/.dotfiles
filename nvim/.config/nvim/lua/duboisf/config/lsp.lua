@@ -68,7 +68,48 @@ lspconfig.solargraph.setup{ on_attach = on_attach }
 lspconfig.pyright.setup{ on_attach = on_attach }
 
 do
-  schemas = {}
+  local system_name
+  if vim.fn.has("mac") == 1 then
+    system_name = "macOS"
+  elseif vim.fn.has("unix") == 1 then
+    system_name = "Linux"
+  elseif vim.fn.has('win32') == 1 then
+    system_name = "Windows"
+  else
+    print("Unsupported system for sumneko")
+  end
+  local sumneko_binary = vim.fn.stdpath('data')..'/lsp_servers/sumneko_lua/extension/server/bin/'..system_name..'/lua-language-server'
+  local runtime_path = vim.split(package.path, ';')
+  table.insert(runtime_path, 'lua/?.lua')
+  table.insert(runtime_path, 'lua/?/init.lua')
+
+  lspconfig.sumneko_lua.setup{
+    cmd = {sumneko_binary},
+    on_attach = on_attach,
+    settings = {
+      Lua = {
+        diagnostics = {
+          globals = {'vim'},
+        },
+        runtime = {
+          path = runtime_path,
+          version = 'LuaJIT',
+        },
+        telemetry = {
+          enabled = false
+        },
+        workspace = {
+          checkThirdParty = false,
+          library = vim.api.nvim_get_runtime_file('', true),
+          maxPreload = 2000,
+        },
+      }
+    }
+  }
+end
+
+do
+  local schemas = {}
   schemas["http://json.schemastore.org/github-workflow"] = "/.github/workflows/*.yml"
   lspconfig.yamlls.setup{
     on_attach = on_attach,
