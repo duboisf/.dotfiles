@@ -2,6 +2,7 @@ plugged/
 shada/
 swap/
 log
+lsp_servers/
 rplugin.vim
 telescope_history
 tree-sitter-*
