@@ -1,0 +1,16 @@
+# What protocol to use when performing git operations. Supported values: ssh, https
+git_protocol: https
+# What editor gh should run when creating issues, pull requests, etc. If blank, will refer to environment.
+editor:
+# When to interactively prompt. This is a global config that cannot be overridden by hostname. Supported values: enabled, disabled
+prompt: enabled
+# A pager program to send command output to, e.g. "less". Set the value to "cat" to disable the pager.
+pager:
+# Aliases allow you to create nicknames for gh commands
+aliases:
+    co: pr checkout
+    delete-merged-pr: '!gh pr merge --delete-branch && git pull --prune'
+    create-pr: '!gh pr create && gh pr merge --auto --merge'
+    fclone: repo clone Flatbook/$1
+    clone: repo clone
+    view-latest-release: '!gh release view --repo cli/cli --json body | jq .body -r | glow -p -'
