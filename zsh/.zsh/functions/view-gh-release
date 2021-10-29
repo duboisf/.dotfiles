@@ -1,0 +1,16 @@
+emulate -RL zsh
+
+setopt err_return warn_create_global
+
+local repo=${1:-cli/cli}
+local selected_release=$(
+    gh release list --repo $repo \
+        | fzf --prompt="Pick ${repo} release to view: " \
+        | awk '{print $(NF-1)}'
+)
+
+if [[ -n $selected_release ]]; then
+    gh release view --repo $repo --json body $selected_release \
+        | jq -r .body \
+        | glow -p -
+fi
