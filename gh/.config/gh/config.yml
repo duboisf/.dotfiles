@@ -8,9 +8,12 @@ prompt: enabled
 pager:
 # Aliases allow you to create nicknames for gh commands
 aliases:
-    co: pr checkout
     delete-merged-pr: '!gh pr merge --delete-branch && git pull --prune'
     create-pr: '!gh pr create && gh pr merge --auto --merge'
     fclone: repo clone Flatbook/$1
     clone: repo clone
     view-latest-release: '!gh release view --repo cli/cli --json body | jq .body -r | glow -p -'
+    download-latest: |
+        !picked_asset=$(gh release view -R cli/cli --json assets -q ".assets[].name" \
+            | fzf --prompt="Pick an asset to download: "); \
+          test -n $picked_asset && echo "Downloading asset $picked_asset..." && gh release download -R cli/cli -p $picked_asset
