@@ -1,3 +1,8 @@
+local isTelescopeLoaded = pcall(require, 'telescope')
+if not isTelescopeLoaded then
+  return
+end
+
 local previewers = require'telescope.previewers'
 
 require('telescope').setup{
