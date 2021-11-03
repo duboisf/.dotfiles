@@ -12,7 +12,25 @@ aliases:
     create-pr: '!gh pr create && gh pr merge --auto --merge'
     fclone: repo clone Flatbook/$1
     clone: repo clone
-    view-latest-release: '!repo=${1:-cli/cli}; gh release view --repo $repo --json body | jq .body -r | glow -p -'
+    view-latest-release: |
+      !repo=${1:-cli/cli}; gh release view --repo $repo --json assets,body,publishedAt,tagName,name,url --template '
+      # {{ .name }}
+      
+      {{ .url }}
+      
+      _Published {{ timeago .publishedAt }}_
+      
+      {{ .body }}
+      
+      {{- if ne (len .assets) 0 }}
+      
+      | Assets |
+      | ---- |
+      {{- range .assets }}
+      | {{ .name }} |
+      {{- end }}
+      {{- end }}
+      ' | glow -p -
     download-latest-release: |
         !repo=${1:-cli/cli}; picked_asset=$(gh release view -R $repo --json assets -q ".assets[].name" \
             | fzf --prompt="Pick an asset to download: "); \
