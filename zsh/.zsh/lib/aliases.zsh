@@ -15,12 +15,14 @@ _C() {
     typeset column=$1
     awk "{ print \$$column }"
 }
+
 alias -g C='| _C'
 alias -g G='| grep'
 alias -g L='| less'
-alias -g V='| nvim -n -R --cmd "let g:pager_mode = 1" '
 alias -g S='| sort'
 alias -g SU='| sort -u'
+alias -g V='| nvim -n -R --cmd "let g:pager_mode = 1" '
+alias -g X='| xclip -selection clipboard'
 
 # debian and derivatives package management aliases
 alias ai='sudo apt install'
