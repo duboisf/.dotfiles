@@ -67,6 +67,15 @@ lspconfig.terraformls.setup{ on_attach = on_attach }
 lspconfig.solargraph.setup{ on_attach = on_attach }
 lspconfig.pyright.setup{ on_attach = on_attach }
 
+local lsp_servers_dir = vim.fn.stdpath('data')..'/lsp_servers'
+
+do
+  local bashls_server_binary = lsp_servers_dir..'/bash/node_modules/.bin/bash-language-server'
+  lspconfig.bashls.setup{
+    cmd = { bashls_server_binary, 'start' },
+    on_attach = on_attach }
+end
+
 do
   local system_name
   if vim.fn.has("mac") == 1 then
