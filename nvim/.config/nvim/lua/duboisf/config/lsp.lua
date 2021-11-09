@@ -70,6 +70,14 @@ lspconfig.pyright.setup{ on_attach = on_attach }
 local lsp_servers_dir = vim.fn.stdpath('data')..'/lsp_servers'
 
 do
+  local dockerls_server_binary = lsp_servers_dir..'/dockerfile/node_modules/.bin/docker-langserver'
+  lspconfig.dockerls.setup{
+    cmd = { dockerls_server_binary, '--stdio' },
+    on_attach = on_attach
+  }
+end
+
+do
   local bashls_server_binary = lsp_servers_dir..'/bash/node_modules/.bin/bash-language-server'
   lspconfig.bashls.setup{
     cmd = { bashls_server_binary, 'start' },
