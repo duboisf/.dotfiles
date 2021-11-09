@@ -13,32 +13,32 @@ aliases:
     fclone: repo clone Flatbook/$1
     clone: repo clone
     view-latest-release: |
-      !repo=${1:-cli/cli}; gh release view --repo $repo --json assets,body,publishedAt,tagName,name,url --template '
-      # {{ .name }}
-      
-      {{ .url }}
-      
-      _Published {{ timeago .publishedAt }}_
-      
-      {{ .body }}
-      
-      {{- if ne (len .assets) 0 }}
-      
-      | Assets |
-      | ---- |
-      {{- range .assets }}
-      | {{ .name }} |
-      {{- end }}
-      {{- end }}
-      ' | glow -p -
-    download-latest-release: |
-      !repo=${1:-cli/cli}; picked_asset=$(gh release view -R $repo --json assets -q ".assets[].name" \
-          | fzf --prompt="Pick an asset to download: "); \
-        test -n $picked_asset && echo "Downloading asset $picked_asset..." && gh release download -R $repo -p $picked_asset
-    switch-branch: |
-      !
-      picked_branch="$(git branch --list \
-        | fzf --preview='echo; git log -20 --color --decorate ${-1}'
-        )";
-      test -n "$picked_branch" && git switch "$(echo "$picked_branch" | cut -c 3-)"
+        !repo=${1:-cli/cli}; gh release view --repo $repo --json assets,body,publishedAt,tagName,name,url --template '
+        # {{ .name }}
 
+        {{ .url }}
+
+        _Published {{ timeago .publishedAt }}_
+
+        {{ .body }}
+
+        {{- if ne (len .assets) 0 }}
+
+        | Assets |
+        | ---- |
+        {{- range .assets }}
+        | {{ .name }} |
+        {{- end }}
+        {{- end }}
+        ' | glow -p -
+    download-latest-release: |
+        !repo=${1:-cli/cli}; picked_asset=$(gh release view -R $repo --json assets -q ".assets[].name" \
+            | fzf --prompt="Pick an asset to download: "); \
+          test -n $picked_asset && echo "Downloading asset $picked_asset..." && gh release download -R $repo -p $picked_asset
+    switch-branch: |
+        !
+        picked_branch="$(git branch --list \
+          | fzf --preview='echo; git log -20 --color --decorate ${-1}'
+          )";
+        test -n "$picked_branch" && git switch "$(echo "$picked_branch" | cut -c 3-)"
+    bors-merge: pr comment --body "bors r+"
