@@ -17,6 +17,7 @@ _C() {
 }
 
 alias -g C='| _C'
+alias -g F='| fzf'
 alias -g G='| grep'
 alias -g L='| less'
 alias -g S='| sort'
