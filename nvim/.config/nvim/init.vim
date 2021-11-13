@@ -29,9 +29,6 @@ if g:pager_mode == v:false
   " Plug 'junegunn/limelight.vim'
   " Plug 'justinmk/vim-sneak'
   " Plug 'michaeljsmith/vim-indent-object'
-  if g:enable_coc == v:true
-      Plug 'neoclide/coc.nvim', {'branch': 'release'}
-  endif
   Plug 'neovim/nvim-lspconfig'
   Plug 'nvim-treesitter/playground'
   " Plug 'psliwka/vim-smoothie'
@@ -67,10 +64,8 @@ if g:started_by_firenvim == v:false
   Plug 'tpope/vim-sensible'
   Plug 'tsandall/vim-rego'
   Plug 'vim-airline/vim-airline'
-  " Plug 'will133/vim-dirdiff'
   " Requires git, fzf, python3, ripgrep
   " Optional bat(like cat but 10x nicer!), exa(like ls but nicer!)
-  " Plug 'yuki-ycino/fzf-preview.vim', { 'branch': 'release/rpc' }
   " telescope has the following dependencies
   Plug 'kyazdani42/nvim-web-devicons'
   Plug 'nvim-lua/popup.nvim'
