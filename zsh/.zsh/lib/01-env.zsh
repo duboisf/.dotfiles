@@ -1,5 +1,6 @@
 
 path=(
+  ~/.krew/bin
   ~/.local/bin
   /snap/bin
   ~/go/bin
