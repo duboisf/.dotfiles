@@ -1,0 +1,8 @@
+emulate -RL zsh
+setopt err_return warn_create_global
+
+local repo=$1
+local tag=$2
+local size_uncompressed=$(docker images | grep $repo | grep $tag | perl -wlne '/\s(\S+)$/ and print $1')
+local size_compressed=$(docker manifest inspect 382627676829.dkr.ecr.us-east-1.amazonaws.com/flatbook:$tag | jq '[.layers[].size] | add' | numfmt --to=si)
+print "$repo:$tag:\n\t  compressed size: $size_compressed\n\tuncompressed size: $size_uncompressed"
