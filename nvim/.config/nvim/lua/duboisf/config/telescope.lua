@@ -51,6 +51,8 @@ require('telescope').setup{
   }
 }
 
+require('telescope').load_extension 'file_browser'
+
 local M = {}
 
 function M.cwd_files(opts)
