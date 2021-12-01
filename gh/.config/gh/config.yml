@@ -41,4 +41,4 @@ aliases:
           | fzf --preview='echo; git log -20 --color --decorate ${-1}'
           )";
         test -n "$picked_branch" && git switch "$(echo "$picked_branch" | cut -c 3-)"
-    bors-merge: pr comment --body "bors r+"
+    bors-merge: pr comment --body "bors merge"
