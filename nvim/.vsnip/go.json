@@ -1,0 +1,7 @@
+{
+    "tr": {
+        "prefix": "tr",
+        "body": "t.Run($1, func(t *testing.T) {\n\t$2\n})",
+        "description": "Create a new test inside an existing test function"
+    }
+}
