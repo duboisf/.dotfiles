@@ -1,0 +1,7 @@
+(( $# != 1 )) && print "USAGE: $0 <KUBERNETES SECRET NAME>" >&2 && return 1
+
+for file in ca.crt tls.crt tls.key; do
+    kubectl get secret $1 -o json \
+        | jq -r --arg key $file '.data[$key] | @base64d' \
+        > ${1}-${file}
+done
