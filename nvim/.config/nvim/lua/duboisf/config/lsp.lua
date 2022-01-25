@@ -22,10 +22,12 @@ local on_attach = function(client, bufnr)
   nm['<space>rn'] = '<cmd>lua vim.lsp.buf.rename()<CR>'
   nm['<space>a']  = '<cmd>lua vim.lsp.buf.code_action()<CR>'
   nm['gr']        = '<cmd>Telescope lsp_references<CR>'
-  nm['<space>d']  = '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>'
+  nm['<space>d']  = '<cmd>lua vim.diagnostic.open_float()<CR>'
   nm['[d']        = '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>'
   nm[']d']        = '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>'
   nm['<leader>l'] = '<cmd>lua vim.lsp.codelens.run()<CR>'
+  nm['<leader>F'] = '<cmd>lua require"duboisf.config.lsp".safe_formatting_sync()<CR>'
+
   for lhs, rhs in pairs(normal_mappings) do
     buf_set_keymap('n', lhs, rhs, opts)
   end
@@ -106,7 +108,11 @@ do
     settings = {
       Lua = {
         diagnostics = {
-          globals = {'vim'},
+          globals = {
+            'obj', -- argocd lua health check global
+            'vim',
+          },
+          disable = {'lowercase-global'},
         },
         runtime = {
           path = runtime_path,
