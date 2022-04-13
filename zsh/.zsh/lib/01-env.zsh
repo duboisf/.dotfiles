@@ -30,4 +30,4 @@ if [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
     fi
 fi
 
-
+export BAT_THEME='Solarized (dark)'
