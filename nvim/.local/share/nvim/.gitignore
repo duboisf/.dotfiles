@@ -1,6 +1,7 @@
 plugged/
 shada/
 swap/
+site/pack/
 log
 lsp_servers/
 rplugin.vim
