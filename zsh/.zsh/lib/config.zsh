@@ -215,3 +215,6 @@ bindkey '\C-x\C-e' edit-command-line
 
 # file rename magic
 bindkey "^[m" copy-prev-shell-word
+
+# Use Esc-s (or Alt-s) to switch git branches
+bindkey -s '\es' 'gh switch-branch\n'
