@@ -1,3 +1,6 @@
+" Use packer
+lua require("duboisf.config.plugins")
+
 " Check if nvim was started by firenvim. If so, we want to disable
 " some plugins and tweak some settings, reason being that sometimes
 " the size of the nvim window is _realy_ small (2-3 lines!)
@@ -16,34 +19,29 @@ Plug 'norcalli/nvim-colorizer.lua'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'rakr/vim-one' " this is a nice theme
 
-
 " Only load the following plugins if we're not using nvim as a pager
 if g:pager_mode == v:false
-  Plug 'Chiel92/vim-autoformat'
-  " Plug 'ctrlpvim/ctrlp.vim'
+  " Plug 'Chiel92/vim-autoformat'
   Plug 'fatih/vim-go'
   Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
   Plug 'golang/vscode-go'
-  Plug 'hrsh7th/nvim-compe'
   Plug 'hrsh7th/vim-vsnip'
   " Plug 'junegunn/limelight.vim'
-  " Plug 'justinmk/vim-sneak'
   " Plug 'michaeljsmith/vim-indent-object'
-  Plug 'neovim/nvim-lspconfig'
   Plug 'nvim-treesitter/playground'
   " Plug 'psliwka/vim-smoothie'
   Plug 'rhysd/vim-grammarous'
+  Plug 'sbdchd/neoformat'
   " Plug 'SirVer/ultisnips'
-  Plug 'simrat39/symbols-outline.nvim'
+  " Plug 'simrat39/symbols-outline.nvim'
   " Plug 'towolf/vim-helm'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-unimpaired'
   " Plug 'windwp/nvim-autopairs'
-endif
 
-Plug 'williamboman/nvim-lsp-installer'
+endif
 
 " Only load the following plugins if we are not using nvim inside chrome
 if g:started_by_firenvim == v:false
@@ -207,10 +205,10 @@ if g:pager_mode == v:false
 end
 
 " lsp configuration
-augroup lsp
-  autocmd!
-  autocmd BufWritePre * lua require'duboisf.config.lsp'.safe_formatting_sync()
-augroup end
+" augroup lsp
+  " autocmd!
+  " autocmd BufWritePre * lua require'duboisf.config.lsp'.safe_formatting_sync()
+" augroup end
 
 " editorconfig configuration
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
@@ -301,6 +299,9 @@ inoremap <expr> <c-x><c-f> fzf#vim#complete#path("fd -t f -H", fzf#wrap({'dir': 
 " let g:fzf_preview_use_dev_icons = 1
 
 if g:pager_mode == v:false
+
+  " prettier config
+  let g:neoformat_try_node_exe = 1
 
   """""""""""""""""""""""""""
   " vim-grammarous settings "
@@ -493,6 +494,7 @@ aug end
 
 " telescope configuration
 nnoremap <silent> <leader>fe  <cmd>lua require('duboisf.config.telescope').project_files { previewer = false }<cr>
+" nnoremap <silent> <leader>fe  <cmd>Telescope find_files<cr>
 nnoremap <silent> <leader>fd  <cmd>lua require('duboisf.config.telescope').cwd_files()<cr>
 nnoremap <silent> <leader>ff  <cmd>lua require 'telescope'.extensions.file_browser.file_browser()<CR>
 nnoremap <silent> <leader>fa  <cmd>lua require('duboisf.config.telescope').asana_tasks { username = 'fred.dubois@sonder.com' }<cr>

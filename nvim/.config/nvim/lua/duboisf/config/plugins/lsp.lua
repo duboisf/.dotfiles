@@ -1,3 +1,6 @@
+-- This needs to be called first
+require('nvim-lsp-installer').setup {}
+
 local lspconfig = require('lspconfig')
 
 -- Use an on_attach function to only map the following keys
@@ -45,6 +48,10 @@ local on_attach = function(client, bufnr)
     vim.api.nvim_command [[autocmd CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()]]
     vim.api.nvim_command [[autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()]]
   end
+
+  if vim.bo[bufnr].filetype == 'yaml' and string.find(vim.api.nvim_buf_get_name(bufnr), '/templates/') then
+    vim.diagnostic.disable()
+  end
 end
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
@@ -68,42 +75,15 @@ lspconfig.tsserver.setup{ on_attach = on_attach }
 lspconfig.terraformls.setup{ on_attach = on_attach }
 lspconfig.solargraph.setup{ on_attach = on_attach }
 lspconfig.pyright.setup{ on_attach = on_attach }
-
-local lsp_servers_dir = vim.fn.stdpath('data')..'/lsp_servers'
-
-do
-  local dockerls_server_binary = lsp_servers_dir..'/dockerfile/node_modules/.bin/docker-langserver'
-  lspconfig.dockerls.setup{
-    cmd = { dockerls_server_binary, '--stdio' },
-    on_attach = on_attach
-  }
-end
+lspconfig.jsonls.setup{ on_attach = on_attach }
+lspconfig.dockerls.setup{ on_attach = on_attach }
+lspconfig.bashls.setup{ on_attach = on_attach }
 
 do
-  local bashls_server_binary = lsp_servers_dir..'/bash/node_modules/.bin/bash-language-server'
-  lspconfig.bashls.setup{
-    cmd = { bashls_server_binary, 'start' },
-    on_attach = on_attach }
-end
-
-do
-  local system_name
-  if vim.fn.has("mac") == 1 then
-    system_name = "macOS"
-  elseif vim.fn.has("unix") == 1 then
-    system_name = "Linux"
-  elseif vim.fn.has('win32') == 1 then
-    system_name = "Windows"
-  else
-    print("Unsupported system for sumneko")
-  end
-  local sumneko_binary = vim.fn.stdpath('data')..'/lsp_servers/sumneko_lua/extension/server/bin/'..system_name..'/lua-language-server'
   local runtime_path = vim.split(package.path, ';')
   table.insert(runtime_path, 'lua/?.lua')
   table.insert(runtime_path, 'lua/?/init.lua')
-
   lspconfig.sumneko_lua.setup{
-    cmd = {sumneko_binary},
     on_attach = on_attach,
     settings = {
       Lua = {
