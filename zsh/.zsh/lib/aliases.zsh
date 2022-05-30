@@ -76,6 +76,7 @@ alias -g AN='--all-namespaces'
 alias -g J='-o json'
 alias -g Y='-o yaml'
 alias kubelistall='kubectl api-resources --verbs=list --namespaced -o name | grep -v event | xargs -n 1 kubectl get --show-kind --ignore-not-found'
+alias nod='kubectl get no -o custom-columns=NAME:".metadata.name",POD_TYPE:".metadata.labels.pod-type",INSTANCE_TYPE:".metadata.labels.node\.kubernetes\.io/instance-type",CAPACITY_TYPE:".metadata.labels.eks\.amazonaws\.com/capacityType",CAPACITY_TYPE2:".metadata.labels.karpenter\.sh/capacity-type",KERNEL_VERSION:".status.nodeInfo.kernelVersion",NODEGROUP_NAME:".metadata.labels.eks\.amazonaws\.com/nodegroup"'
 
 # git
 #####
@@ -143,3 +144,11 @@ alias hru='h repo up'
 # pulumi
 #########
 alias pu=pulumi
+alias pl='pulumi stack ls'
+alias pss='pulumi stack select'
+alias pp='pulumi preview'
+
+# openssl
+##########
+alias view-cert='openssl x509 -text -noout -in'
+alias s_connect='openssl s_client -state -debug -connect'
