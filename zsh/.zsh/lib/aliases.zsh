@@ -51,8 +51,8 @@ alias dpo='kc describe po'
 alias deploy='kc get deploy'
 alias ddeploy='kc describe deploy'
 alias logs='kc logs'
-alias no='kc --as=$USER --as-group=system:masters get no'
-alias dno='kc --as=$USER --as-group=system:masters describe no'
+alias no='kc get no -L karpenter.sh/provisioner-name -L node.kubebernetes.io/instance-type -L purpose'
+alias dno='kc describe no'
 alias svc='kc get svc'
 alias dsvc='kc describe svc'
 alias rs='kc rollout status'
@@ -76,7 +76,6 @@ alias -g AN='--all-namespaces'
 alias -g J='-o json'
 alias -g Y='-o yaml'
 alias kubelistall='kubectl api-resources --verbs=list --namespaced -o name | grep -v event | xargs -n 1 kubectl get --show-kind --ignore-not-found'
-alias nod='kubectl get no -o custom-columns=NAME:".metadata.name",POD_TYPE:".metadata.labels.pod-type",INSTANCE_TYPE:".metadata.labels.node\.kubernetes\.io/instance-type",CAPACITY_TYPE:".metadata.labels.eks\.amazonaws\.com/capacityType",CAPACITY_TYPE2:".metadata.labels.karpenter\.sh/capacity-type",KERNEL_VERSION:".status.nodeInfo.kernelVersion",NODEGROUP_NAME:".metadata.labels.eks\.amazonaws\.com/nodegroup"'
 
 # git
 #####
