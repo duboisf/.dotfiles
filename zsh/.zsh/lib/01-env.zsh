@@ -1,5 +1,8 @@
 
+export VOLTA_HOME="$HOME/.volta"
+
 path=(
+  $VOLTA_HOME/bin
   ~/.krew/bin
   ~/.local/bin
   /snap/bin
