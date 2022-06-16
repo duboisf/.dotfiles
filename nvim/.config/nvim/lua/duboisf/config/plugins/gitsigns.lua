@@ -1,18 +1,16 @@
 local loaded, gitsigns = pcall(require, 'gitsigns')
 if loaded then
   gitsigns.setup {
-    current_line_blame = true,
-    current_line_blame_opts = {
-      delay = 3000,
-    },
+		debug_mode = true,
+    -- current_line_blame = true,
+    -- current_line_blame_opts = {
+    --   delay = 3000,
+    -- },
     preview_config = {
       border = 'rounded',
-      row = 1,
     },
-    word_diff = true,
+    -- word_diff = true,
     on_attach = function(bufnr)
-      local gs = package.loaded.gitsigns
-
       local function map(mode, l, r, opts)
         opts = opts or {}
         opts.buffer = bufnr
@@ -22,6 +20,8 @@ if loaded then
       -- Navigation
       map('n', ']c', "&diff ? ']c' : '<cmd>Gitsigns next_hunk<CR>'", {expr=true})
       map('n', '[c', "&diff ? '[c' : '<cmd>Gitsigns prev_hunk<CR>'", {expr=true})
+
+      local gs = gitsigns
 
       -- Actions
       map({'n', 'v'}, '<leader>hs', gs.stage_hunk)
@@ -40,4 +40,7 @@ if loaded then
       map({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
     end
   }
+  -- used to display git blames with gitsigns
+  vim.cmd 'autocmd ColorScheme * highlight FloatBorder guifg=white guibg=#282c34'
+  vim.cmd 'autocmd ColorScheme * highlight link GitSignsDeleteLn DiffDelete'
 end

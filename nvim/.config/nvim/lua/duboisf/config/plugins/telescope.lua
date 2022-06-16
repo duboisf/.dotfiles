@@ -3,9 +3,30 @@ if not isTelescopeLoaded then
   return
 end
 
-local previewers = require'telescope.previewers'
+local previewers = require 'telescope.previewers'
 
-require('telescope').setup{
+local nmap = function (lhs, rhs)
+  vim.api.nvim_set_keymap("n", lhs, rhs, {
+    silent = true,
+    noremap = true,
+  })
+end
+
+nmap("<leader>f", "<cmd>lua require('duboisf.config.plugins.telescope').project_files { previewer = false }<cr>")
+nmap("<leader>fd", "<cmd>lua require('duboisf.config.plugins.telescope').cwd_files()<cr>")
+nmap("<leader>ff", "<cmd>lua require 'telescope'.extensions.file_browser.file_browser()<CR>")
+nmap("<leader>fa", "<cmd>lua require('duboisf.config.plugins.telescope').asana_tasks { username = 'fred.dubois@sonder.com' }<cr>")
+nmap("<leader>fs", "<cmd>Telescope lsp_document_symbols<cr>")
+nmap("<leader>fw", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>")
+nmap("<leader>f*", "<cmd>Telescope current_buffer_fuzzy_find<cr>")
+nmap("<leader>fgg","<cmd>Telescope live_grep cwd=%:h<cr>")
+nmap("<leader>fgw","<cmd>Telescope live_grep<cr>")
+nmap("<leader>fb", "<cmd>Telescope buffers<cr>")
+nmap("<leader>fh", "<cmd>Telescope help_tags<cr>")
+nmap("<leader>fr", "<cmd>Telescope registers<cr>")
+nmap("<leader>fm", "<cmd>Telescope keymaps<cr>")
+
+require('telescope').setup {
   defaults = {
     vimgrep_arguments = {
       'rg',
@@ -32,9 +53,9 @@ require('telescope').setup{
         mirror = false,
       },
     },
-    file_sorter =  require'telescope.sorters'.get_fzy_sorter,
+    file_sorter = require 'telescope.sorters'.get_fzy_sorter,
     file_ignore_patterns = {},
-    generic_sorter =  require'telescope.sorters'.get_fzy_sorter,
+    generic_sorter = require 'telescope.sorters'.get_fzy_sorter,
     winblend = 20,
     border = {},
     borderchars = { '─', '│', '─', '│', '╭', '╮', '╯', '╰' },
@@ -43,11 +64,11 @@ require('telescope').setup{
     -- path_display = { 'smart' },
     set_env = { ['COLORTERM'] = 'truecolor' }, -- default = nil,
     -- file_previewer = require'telescope.previewers'.vim_buffer_cat.new,
-    grep_previewer = require'telescope.previewers'.vim_buffer_vimgrep.new,
-    qflist_previewer = require'telescope.previewers'.vim_buffer_qflist.new,
+    grep_previewer = require 'telescope.previewers'.vim_buffer_vimgrep.new,
+    qflist_previewer = require 'telescope.previewers'.vim_buffer_qflist.new,
 
     -- Developer configurations: Not meant for general override
-    buffer_previewer_maker = require'telescope.previewers'.buffer_previewer_maker
+    buffer_previewer_maker = require 'telescope.previewers'.buffer_previewer_maker
   }
 }
 
@@ -58,16 +79,16 @@ local M = {}
 function M.cwd_files(opts)
   local cwd = vim.fn.expand('%:h')
   if cwd == "" then
-      cwd = vim.fn.getcwd()
+    cwd = vim.fn.getcwd()
   end
   require('telescope.builtin').find_files({ cwd = cwd, hidden = true })
 end
 
 function M.project_files(opts)
   local opts = opts or {}
-  local ok = pcall(require'telescope.builtin'.git_files, opts)
+  local ok = pcall(require 'telescope.builtin'.git_files, opts)
   if not ok then
-    require'telescope.builtin'.find_files(opts)
+    require 'telescope.builtin'.find_files(opts)
   end
 end
 
@@ -76,11 +97,11 @@ function M.document_symbols()
   if input == '' then
     return
   end
-  require'telescope.builtin'.lsp_workspace_symbols()
+  require 'telescope.builtin'.lsp_workspace_symbols()
 end
 
 do
-  local curl = require'plenary.curl'
+  local curl = require 'plenary.curl'
   local asana = io.open('/home/fred/.asana')
   if asana then
     local token = asana:read('*a')
@@ -113,14 +134,14 @@ do
   local function recent_tasks(opts)
     -- local current_date = vim.fn.trim(vim.fn.system('date --date="7 days ago" +%Y-%m-%d'))
     local url = join {
-     'https://app.asana.com/api/1.0/tasks?',
+      'https://app.asana.com/api/1.0/tasks?',
       join({
         'workspace=14435158881936',
         'completed_since=now',
         -- 'modified_since=' .. current_date .. 'T00:00:00Z',
         'assignee=' .. opts.username,
         'opt_fields=name,permalink_url',
-        },
+      },
         '&'
       )
     }
@@ -153,10 +174,10 @@ do
   end
 
   local function default_asana_callback(value)
-      local line = vim.fn.getline('.')
-      local col = vim.fn.col('.')
-      local markdown_link = '[Asana task](' .. value .. '/f)'
-      vim.fn.setline('.', string.sub(line, 1, col) .. markdown_link .. string.sub(line, col))
+    local line = vim.fn.getline('.')
+    local col = vim.fn.col('.')
+    local markdown_link = '[Asana task](' .. value .. '/f)'
+    vim.fn.setline('.', string.sub(line, 1, col) .. markdown_link .. string.sub(line, col))
   end
 
   function M.asana_tasks(opts)
