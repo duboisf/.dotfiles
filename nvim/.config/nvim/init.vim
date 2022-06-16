@@ -249,4 +249,9 @@ aug end
 
 au TextYankPost * lua vim.highlight.on_yank { higroup="IncSearch", timeout=300, on_visual=true }
 
+colorscheme one
+set background=dark
+hi clear Search
+hi default Search gui=reverse guifg=#ff6d00
+
 " vim: sts=2 sw=2 ts=2 et

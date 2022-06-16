@@ -13,6 +13,14 @@ cmp.setup({
     format = lspkind.cmp_format({
       mode = 'symbol_text', -- show only symbol annotations
       maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+      menu = ({
+        buffer = "[Buffer]",
+        dictionary = "[Dict]",
+        luasnip = "[LuaSnip]",
+        path = "[Path]",
+        emoji = "[Emoji]",
+        nvim_lsp = "[LSP]",
+      })
     })
   },
   snippet = {
@@ -36,6 +44,14 @@ cmp.setup({
       cmp.config.compare.sort_text,
       cmp.config.compare.length,
       cmp.config.compare.order,
+      -- cmp.config.compare.locality,
+      -- cmp.config.compare.kind,
+      -- cmp.config.compare.offset,
+      -- cmp.config.compare.exact,
+      -- cmp.config.compare.recently_used,
+      -- cmp.config.compare.sort_text,
+      -- cmp.config.compare.length,
+      -- cmp.config.compare.order,
     },
   },
   mapping = cmp.mapping.preset.insert({
@@ -74,15 +90,16 @@ cmp.setup({
       end
     end, { "i", "s" }),
   }),
+  -- preselect = cmp.PreselectMode.None,
   sources = cmp.config.sources({
-  -- sources = {
+    -- sources = {
     { name = 'nvim_lsp' },
     { name = 'nvim_lsp_signature_help' },
-    { name = 'emoji', option = { insert = true }, max_item_count = 10 },
+    { name = 'emoji', keyword_length = 4, option = { insert = true } },
     { name = 'luasnip', max_item_count = 3 },
     { name = 'buffer', max_item_count = 3 },
     { name = 'path' },
-    { name = 'dictionary', keyword_length = 3, max_item_count = 5 },
+    { name = 'dictionary', keyword_length = 3, max_item_count = 10 },
   })
 })
 
@@ -138,4 +155,3 @@ vim.api.nvim_create_autocmd('ColorScheme', {
     c 'highlight! CmpItemKindUnit guibg=NONE guifg=#D4D4D4'
   end,
 })
-

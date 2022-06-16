@@ -3,7 +3,8 @@ local fn = vim.fn
 local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
 local packer_bootstrap = false
 if fn.empty(fn.glob(install_path)) > 0 then
-  packer_bootstrap = fn.system({ 'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path })
+  packer_bootstrap = fn.system({ 'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim',
+    install_path })
 end
 
 local group = vim.api.nvim_create_augroup("duboisf#config#plugins", {})
@@ -47,16 +48,7 @@ return require('packer').startup(function(use)
     'windwp/nvim-autopairs',
   }
 
-  use {
-    'rakr/vim-one',
-    config = function()
-      vim.cmd 'colorscheme one'
-      vim.opt.background = "dark"
-      -- tweaks to theme
-      vim.cmd 'hi clear Search'
-      vim.cmd 'hi default Search gui=reverse guifg=#ff6d00'
-    end
-  }
+  use 'rakr/vim-one'
 
   if not startedByFirevim then
     use {
@@ -65,7 +57,6 @@ return require('packer').startup(function(use)
       'junegunn/fzf',
       'junegunn/fzf.vim',
       'mhinz/vim-startify',
-      'preservim/nerdtree',
       'ryanoasis/vim-devicons',
       'tpope/vim-dispatch',
       'tpope/vim-eunuch',
@@ -76,34 +67,30 @@ return require('packer').startup(function(use)
       'tsandall/vim-rego',
     }
 
+    use 'preservim/nerdtree'
+
     use {
       'vim-airline/vim-airline',
       config = function() require 'duboisf.config.plugins.airline' end,
-      requires = {
-        'rakr/vim-one',
-      }
     }
   end
 
   use {
     'lewis6991/gitsigns.nvim',
-		requires = {
-			'rakr/vim-one',
-		},
     config = function() require 'duboisf.config.plugins.gitsigns' end,
   }
 
   use {
+    -- Requires git, fzf, python3, ripgrep
+    -- Optional bat(like cat but 10x nicer!), exa(like ls but nicer!)
     'nvim-telescope/telescope.nvim',
     disable = startedByFirevim,
     requires = {
-      -- Requires git, fzf, python3, ripgrep
-      -- Optional bat(like cat but 10x nicer!), exa(like ls but nicer!)
-      -- telescope has the following dependencies
       'kyazdani42/nvim-web-devicons',
       'nvim-lua/popup.nvim',
       'nvim-lua/plenary.nvim',
       'nvim-telescope/telescope-file-browser.nvim',
+      use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' },
     },
     config = function() require 'duboisf.config.plugins.telescope' end
   }
@@ -111,7 +98,6 @@ return require('packer').startup(function(use)
   use {
     'fatih/vim-go',
     disable = pagerMode,
-    filetype = { "*.go" },
     config = function() require 'duboisf.config.plugins.go' end
   }
 
@@ -127,10 +113,8 @@ return require('packer').startup(function(use)
 
   use {
     'iamcco/markdown-preview.nvim',
-    disable = pagerMode,
     run = function() vim.fn['mkdp#util#install']() end,
     setup = function() vim.g.mkdp_filetypes = { "markdown" } end,
-    ft = { "markdown" },
   }
 
   use {
@@ -150,28 +134,36 @@ return require('packer').startup(function(use)
     config = function() vim.notify = require('notify').notify end,
   }
 
+  use { 'hrsh7th/cmp-buffer', after = 'nvim-cmp' }
+  use { 'hrsh7th/cmp-cmdline', after = 'nvim-cmp' }
+  use { 'hrsh7th/cmp-emoji', after = 'nvim-cmp' }
+  use { 'hrsh7th/cmp-nvim-lsp-signature-help', after = 'nvim-cmp' }
+  use { 'hrsh7th/cmp-path', after = 'nvim-cmp' }
+  use { 'saadparwaiz1/cmp_luasnip', after = 'nvim-cmp' }
+
+  use {
+    'uga-rosa/cmp-dictionary',
+    config = function()
+      require("cmp_dictionary").setup {
+        async = true,
+        dic = {
+          ["*"] = { "/usr/share/dict/words" },
+        }
+      }
+    end,
+    after = 'nvim-cmp',
+  }
+
   use {
     'hrsh7th/nvim-cmp',
-    config = function() require 'duboisf.config.plugins.cmp' end,
+    event = "BufEnter",
+    config = function()
+      print("cmp")
+      require 'duboisf.config.plugins.cmp'
+    end,
     requires = {
-      'hrsh7th/cmp-buffer',
-      'hrsh7th/cmp-cmdline',
-      'hrsh7th/cmp-emoji',
-      'hrsh7th/cmp-nvim-lsp',
-      'hrsh7th/cmp-nvim-lsp-signature-help',
-      'hrsh7th/cmp-path',
       'onsails/lspkind.nvim',
-      use {
-        'uga-rosa/cmp-dictionary',
-        config = function()
-          require("cmp_dictionary").setup {
-            dic = {
-              ["*"] = { "/usr/share/dict/words" },
-            }
-          }
-        end
-      },
-      'saadparwaiz1/cmp_luasnip',
+      'hrsh7th/cmp-nvim-lsp'
     }
   }
 
@@ -182,24 +174,22 @@ return require('packer').startup(function(use)
     },
   }
 
+  use 'williamboman/nvim-lsp-installer'
+
   use {
     'neovim/nvim-lspconfig',
     config = function() require 'duboisf.config.plugins.lsp' end,
-    requires = {
-      use {
-        'williamboman/nvim-lsp-installer',
-        config = function() require('nvim-lsp-installer').setup {} end,
-      },
-      'rakr/vim-one',
-      'hrsh7th/nvim-cmp',
+    after = {
+      'nvim-cmp',
+      'nvim-lsp-installer',
     }
   }
 
+  use 'rafamadriz/friendly-snippets'
+
   use {
     'L3MON4D3/LuaSnip',
-    requires = {
-      'rafamadriz/friendly-snippets',
-    },
+    after = 'friendly-snippets',
     config = function() require 'duboisf.config.plugins.luasnip' end,
   }
 
