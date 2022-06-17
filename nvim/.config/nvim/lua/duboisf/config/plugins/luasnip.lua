@@ -65,9 +65,4 @@ ls.add_snippets(nil, {
       }), t("]("), f(function() return vim.fn.getreg('+') end, {}), t(")")
     })
   },
-  lua = {
-    s({
-      trig = ""
-    }),
-  },
 })
