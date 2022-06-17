@@ -39,7 +39,6 @@ return require('packer').startup(function(use)
   use {
     'justinmk/vim-sneak',
     'michaeljsmith/vim-indent-object',
-    'simrat39/symbols-outline.nvim',
     'tpope/vim-commentary',
     'tpope/vim-repeat',
     'tpope/vim-surround',
@@ -50,21 +49,52 @@ return require('packer').startup(function(use)
   if not startedByFirevim then
     use {
       'editorconfig/editorconfig-vim',
-      'hashivim/vim-terraform',
       'junegunn/fzf',
       'junegunn/fzf.vim',
       'mhinz/vim-startify',
       'ryanoasis/vim-devicons',
-      'tpope/vim-dispatch',
       'tpope/vim-eunuch',
-      'tpope/vim-fugitive',
-      'tpope/vim-rhubarb',
       -- vim-sensible sets things like ruler and laststatus which we don't want when we are using firenvim
       'tpope/vim-sensible',
       'tsandall/vim-rego',
     }
 
-    use 'preservim/nerdtree'
+    use {
+      'tpope/vim-fugitive',
+      keys = "<leader>g",
+      config = function()
+        -- Open :G in a maximized window
+        vim.cmd 'nnoremap <leader>g :G<CR>'
+      end,
+    }
+
+    use { 'tpope/vim-rhubarb', after = 'vim-fugitive' }
+
+    use {
+      'preservim/nerdtree',
+      keys = { '<Bslash>t', '<Bslash>f' },
+      config = function()
+        vim.cmd [[
+          " nerdtree configuration
+          let NERDTreeShowHidden = 1
+          let NERDTreeShowLineNumbers = 1
+
+          nnoremap \t :NERDTreeToggle<CR>
+          nnoremap \f :NERDTreeFind<CR>
+
+          fun! s:QuitIfNERDTreeIsOnlyThingOpen()
+            if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree())
+              quit
+            endif
+          endfun
+
+          aug fred#nerdtree
+            au!
+            au BufEnter * call s:QuitIfNERDTreeIsOnlyThingOpen()
+          aug end
+        ]]
+      end
+    }
 
     use {
       'vim-airline/vim-airline',
@@ -192,7 +222,7 @@ return require('packer').startup(function(use)
 
   use {
     'rakr/vim-one',
-    config = function ()
+    config = function()
       local c = vim.cmd
       c 'colorscheme one'
       c 'set background=dark'

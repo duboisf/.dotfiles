@@ -141,10 +141,6 @@ let g:startify_lists = [
       \ { 'type': 'files',     'header': ['   MRU']            },
       \ ]
 
-" fugitive configuration
-" Open :G in a maximized window
-nnoremap <leader>g :G<CR>
-
 " firenvim configuration
 let g:firenvim_config = {
     \ 'globalSettings': {
@@ -159,78 +155,6 @@ let g:firenvim_config = {
         \ },
     \ }
 \ }
-
-" vim-go configuration
-aug fred#go
-  au!
-  au Filetype go nmap <leader>t <Plug>(go-test)
-  fu s:GoSettings()
-    nmap <leader>tt <Plug>(go-test)
-    nmap <leader>tf <Plug>(go-test-func)
-    nmap <c-^>      <Plug>(go-alternate-edit)
-    nmap <leader>tc <Cmd>GoCoverage<CR>
-    command! -bang A call go#alternate#Switch(<bang>0, 'edit')
-    command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
-    command! -bang AS call go#alternate#Switch(<bang>0, 'split')
-  endfu
-  au Filetype go call s:GoSettings()
-  au BufRead,BufNewFile */helm/templates/*.yaml set syntax=gohtmltmpl
-aug end
-
-" disable vim-go :GoDef short cut (gd)
-" this is handled by LanguageClient [LC]
-let g:go_def_mapping_enabled = 0
-let g:go_code_completion_enabled = 0
-let g:go_gopls_enabled = 0
-let g:go_doc_keywordprg_enabled = 0
-" disable highlighting, we use tree-sitter
-let g:go_highlight_string_spellcheck = 0
-let g:go_highlight_format_strings = 0
-let g:go_highlight_diagnostic_errors = 0
-let g:go_highlight_diagnostic_errors = 0
-let g:go_highlight_diagnostic_warnings = 0
-" Don't use vim-go to format file on save, we use lsp to do this
-let g:go_fmt_autosave = 0
-let g:go_imports_autosave = 0
-
-if g:pager_mode == v:false
-
-  " prettier config
-  let g:neoformat_try_node_exe = 1
-
-  """""""""""""""""""""""""""
-  " vim-grammarous settings "
-  """""""""""""""""""""""""""
-  nmap <leader>mo <Plug>(grammarous-open-info-window)
-
-  """"""""""""""""""""""""""
-  " vim-terraform settings "
-  """"""""""""""""""""""""""
-  let g:terraform_fmt_on_save=1
-
-endif
-
-" nerdtree configuration
-let NERDTreeShowHidden = 1
-let NERDTreeShowLineNumbers = 1
-
-nnoremap \t :NERDTreeToggle<CR>
-nnoremap \f :NERDTreeFind<CR>
-
-fun! s:QuitIfNERDTreeIsOnlyThingOpen()
-  if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree())
-    quit
-  endif
-endfun
-
-aug fred#nerdtree
-  au!
-  au BufEnter * call s:QuitIfNERDTreeIsOnlyThingOpen()
-aug end
-
-" dispatch configuration
-" disable all mappings, they are interfering with NERDTree's m mapping
-let g:dispatch_no_maps = 1
 
 " vim-rego configuration
 let g:formatdef_rego = '"opa fmt"'
@@ -248,10 +172,5 @@ aug end
 """""""""""""""""""""
 
 au TextYankPost * lua vim.highlight.on_yank { higroup="IncSearch", timeout=300, on_visual=true }
-
-colorscheme one
-set background=dark
-hi clear Search
-hi default Search gui=reverse guifg=#ff6d00
 
 " vim: sts=2 sw=2 ts=2 et
