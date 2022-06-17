@@ -12,7 +12,7 @@ local nmap = function (lhs, rhs)
   })
 end
 
-nmap("<leader>f", "<cmd>lua require('duboisf.config.plugins.telescope').project_files { previewer = false }<cr>")
+nmap("<leader>f", "<cmd>lua require('duboisf.config.plugins.telescope').project_files()<cr>")
 nmap("<leader>fd", "<cmd>lua require('duboisf.config.plugins.telescope').cwd_files()<cr>")
 nmap("<leader>ff", "<cmd>lua require 'telescope'.extensions.file_browser.file_browser()<CR>")
 nmap("<leader>fa", "<cmd>lua require('duboisf.config.plugins.telescope').asana_tasks { username = 'fred.dubois@sonder.com' }<cr>")
