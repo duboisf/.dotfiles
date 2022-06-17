@@ -34,7 +34,6 @@ local startedByFirevim = vim.g.started_by_firenvim
 local pagerMode = vim.g.pager_mode
 
 return require('packer').startup(function(use)
-
   use 'wbthomason/packer.nvim'
 
   use {
@@ -47,8 +46,6 @@ return require('packer').startup(function(use)
     'tpope/vim-unimpaired',
     'windwp/nvim-autopairs',
   }
-
-  use 'rakr/vim-one'
 
   if not startedByFirevim then
     use {
@@ -191,6 +188,17 @@ return require('packer').startup(function(use)
     'L3MON4D3/LuaSnip',
     after = 'friendly-snippets',
     config = function() require 'duboisf.config.plugins.luasnip' end,
+  }
+
+  use {
+    'rakr/vim-one',
+    config = function ()
+      local c = vim.cmd
+      c 'colorscheme one'
+      c 'set background=dark'
+      c 'hi clear Search'
+      c 'hi default Search gui=reverse guifg=#ff6d00'
+    end
   }
 
   -- Automatically set up your configuration after cloning packer.nvim
