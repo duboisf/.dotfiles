@@ -68,7 +68,7 @@ cmp.setup({
     ['<CR>'] = cmp.mapping.confirm({ select = true }),
     ['<C-j>'] = cmp.mapping(function(fallback)
       local ls = require("luasnip")
-      if ls.expand_or_jumpable() then
+      if ls.expand_or_locally_jumpable() then
         ls.expand_or_jump()
       else
         fallback()
@@ -126,10 +126,6 @@ cmp.setup.cmdline(':', {
     { name = 'cmdline' }
   })
 })
-
--- set keybinds for both INSERT and VISUAL.
-vim.api.nvim_set_keymap("i", "<C-l>", "<Plug>luasnip-next-choice", {})
-vim.api.nvim_set_keymap("s", "<C-l>", "<Plug>luasnip-next-choice", {})
 
 local group = vim.api.nvim_create_augroup('duboisf#config#plugins#cmp', { clear = true })
 vim.api.nvim_create_autocmd('ColorScheme', {
