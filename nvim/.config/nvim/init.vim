@@ -1,13 +1,8 @@
-" Use packer
-lua require("duboisf.config.plugins")
+" Loads packer and other configurations
+lua require("duboisf.config")
 
 " Check if we started nvim in pager mode
 let g:pager_mode = get(g:, 'pager_mode', v:false)
-
-" Check if nvim was started by firenvim. If so, we want to disable
-" some plugins and tweak some settings, reason being that sometimes
-" the size of the nvim window is _realy_ small (2-3 lines!)
-let g:started_by_firenvim = get(g:, 'started_by_firenvim', v:false)
 
 """""""""""""""""""""
 " vim configuration "
@@ -38,14 +33,24 @@ set dictionary+=/usr/share/dict/american-english
 set isfname-==
 " if hidden is not set, TextEdit might fail.
 set hidden
+" Don't show the current mode (insert, visual, etc.)
+set noshowmode
 " Better display for messages
 set cmdheight=2
 " Smaller updatetime for CursorHold & CursorHoldI
 set updatetime=100
 " don't give |ins-completion-menu| messages.
 set shortmess+=c
-" always show signcolumns
-set signcolumn=yes:2
+
+aug fred#signcolumn
+  au!
+  " always show signcolumns. We set it on BufRead, otherwise on nvim startup 
+  " we see the startup screen flash for a moment and disappear. This is
+  " because setting signcolumn hides the startup screen message.
+  au BufRead * setlocal signcolumn=yes:2
+aug end
+
+" set signcolumn=yes:2
 " show interactive substitute
 set inccommand=nosplit
 
@@ -99,19 +104,6 @@ aug fred#jump_to_last_position
   endfun
 aug end
 
-" Try to make nvim optimal when we only have an nvim window that's just 2-3
-" lines high.
-if exists("g:started_by_firenvim")
-  " Never show the status line
-  set laststatus=0
-  " Don't show the line and column of the cursor position
-  set noruler
-  " Don't show the last command in the last line
-  set noshowcmd
-  " Don't show the current mode (insert, visual, etc.)
-  set noshowmode
-endif
-
 " tweak man mode
 aug fred#man
   au!
@@ -156,20 +148,12 @@ let g:firenvim_config = {
     \ }
 \ }
 
-" vim-rego configuration
-let g:formatdef_rego = '"opa fmt"'
-let g:formatters_rego = ['rego']
-let g:autoformat_autoindent = 0
-let g:autoformat_retab = 0
-
-aug fred#rego
-  au!
-  au BufWritePre *.rego Autoformat
-aug end
-
 """""""""""""""""""""
 " Misc autocommands "
 """""""""""""""""""""
+
+let g:loaded_netrw       = 1
+let g:loaded_netrwPlugin = 1
 
 au TextYankPost * lua vim.highlight.on_yank { higroup="IncSearch", timeout=300, on_visual=true }
 

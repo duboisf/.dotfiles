@@ -65,4 +65,14 @@ ls.add_snippets(nil, {
       }), t("]("), f(function() return vim.fn.getreg('+') end, {}), t(")")
     })
   },
+
+  lua = {
+    s({
+      trig = 'lf',
+      namr = 'lambda function',
+      dscr = 'Creates an inline lambda function used to pass as a parameter',
+    }, {
+      t("function() "), i(1, ""), t(" end"),
+    }),
+  },
 })

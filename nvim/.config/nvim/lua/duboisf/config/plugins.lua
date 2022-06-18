@@ -26,55 +26,63 @@ function _G.dump(...)
   return ...
 end
 
--- Check if nvim was started by firenvim. If so, we want to disable
--- some plugins and tweak some settings, reason being that sometimes
--- the size of the nvim window is _realy_ small (2-3 lines!)
-local startedByFirevim = vim.g.started_by_firenvim
-
-local pagerMode = vim.g.pager_mode
-
-return require('packer').startup(function(use)
+require('packer').startup({function(use)
   use 'wbthomason/packer.nvim'
 
+  use 'justinmk/vim-sneak'
+  use 'michaeljsmith/vim-indent-object'
+  use 'tpope/vim-commentary'
+  use 'tpope/vim-repeat'
+  use 'tpope/vim-surround'
+  use 'tpope/vim-unimpaired'
+  use 'windwp/nvim-autopairs'
+
+  -- Check if nvim was started by firenvim. If so, we want to disable
+  -- some plugins and tweak some settings, reason being that sometimes
+  -- the size of the nvim window is _realy_ small (2-3 lines!)
+  use { 'editorconfig/editorconfig-vim' }
+  use { 'junegunn/fzf' }
+  use { 'junegunn/fzf.vim' }
+  use { 'mhinz/vim-startify' }
+  use { 'tpope/vim-eunuch' }
+  -- vim-sensible sets things like ruler and laststatus which we don't want when we are using firenvim
+  use { 'tpope/vim-sensible' }
+
   use {
-    'justinmk/vim-sneak',
-    'michaeljsmith/vim-indent-object',
-    'tpope/vim-commentary',
-    'tpope/vim-repeat',
-    'tpope/vim-surround',
-    'tpope/vim-unimpaired',
-    'windwp/nvim-autopairs',
+    'tsandall/vim-rego',
+    ft = { 'rego' },
+    config = function ()
+      vim.cmd [[
+        " vim-rego configuration
+        let g:formatdef_rego = '"opa fmt"'
+        let g:formatters_rego = ['rego']
+        let g:autoformat_autoindent = 0
+        let g:autoformat_retab = 0
+
+        aug fred#rego
+          au!
+          au BufWritePre *.rego Autoformat
+        aug end
+      ]]
+    end
   }
 
-  if not startedByFirevim then
-    use {
-      'editorconfig/editorconfig-vim',
-      'junegunn/fzf',
-      'junegunn/fzf.vim',
-      'mhinz/vim-startify',
-      'ryanoasis/vim-devicons',
-      'tpope/vim-eunuch',
-      -- vim-sensible sets things like ruler and laststatus which we don't want when we are using firenvim
-      'tpope/vim-sensible',
-      'tsandall/vim-rego',
-    }
+  use {
+    'tpope/vim-fugitive',
+    config = function()
+      -- Open :G in a maximized window
+      vim.cmd 'nnoremap <leader>g :G<CR>'
+    end,
+  }
 
-    use {
-      'tpope/vim-fugitive',
-      keys = "<leader>g",
-      config = function()
-        -- Open :G in a maximized window
-        vim.cmd 'nnoremap <leader>g :G<CR>'
-      end,
-    }
+  use { 'tpope/vim-rhubarb', after = 'vim-fugitive' }
 
-    use { 'tpope/vim-rhubarb', after = 'vim-fugitive' }
+  use { 'ryanoasis/vim-devicons' }
 
-    use {
-      'preservim/nerdtree',
-      keys = { '<Bslash>t', '<Bslash>f' },
-      config = function()
-        vim.cmd [[
+  use {
+    'preservim/nerdtree',
+    config = function()
+      vim.cmd [[
           " nerdtree configuration
           let NERDTreeShowHidden = 1
           let NERDTreeShowLineNumbers = 1
@@ -93,14 +101,13 @@ return require('packer').startup(function(use)
             au BufEnter * call s:QuitIfNERDTreeIsOnlyThingOpen()
           aug end
         ]]
-      end
-    }
+    end
+  }
 
-    use {
-      'vim-airline/vim-airline',
-      config = function() require 'duboisf.config.plugins.airline' end,
-    }
-  end
+  use {
+    'vim-airline/vim-airline',
+    config = function() require 'duboisf.config.plugins.airline' end,
+  }
 
   use {
     'lewis6991/gitsigns.nvim',
@@ -111,12 +118,10 @@ return require('packer').startup(function(use)
     -- Requires git, fzf, python3, ripgrep
     -- Optional bat(like cat but 10x nicer!), exa(like ls but nicer!)
     'nvim-telescope/telescope.nvim',
-    disable = startedByFirevim,
     requires = {
       'kyazdani42/nvim-web-devicons',
       'nvim-lua/popup.nvim',
       'nvim-lua/plenary.nvim',
-      'nvim-telescope/telescope-file-browser.nvim',
       use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' },
     },
     config = function() require 'duboisf.config.plugins.telescope' end
@@ -124,13 +129,12 @@ return require('packer').startup(function(use)
 
   use {
     'fatih/vim-go',
-    disable = pagerMode,
+    ft = { 'go', 'gomod' },
     config = function() require 'duboisf.config.plugins.go' end
   }
 
   use {
     'junegunn/limelight.vim',
-    disable = pagerMode
   }
 
   use {
@@ -141,6 +145,7 @@ return require('packer').startup(function(use)
   use {
     'iamcco/markdown-preview.nvim',
     run = function() vim.fn['mkdp#util#install']() end,
+    ft = { 'markdown' },
     setup = function() vim.g.mkdp_filetypes = { "markdown" } end,
   }
 
@@ -157,7 +162,6 @@ return require('packer').startup(function(use)
 
   use {
     'rcarriga/nvim-notify',
-    disable = startedByFirevim,
     config = function() vim.notify = require('notify').notify end,
   }
 
@@ -181,16 +185,31 @@ return require('packer').startup(function(use)
     after = 'nvim-cmp',
   }
 
+
+  -- nvim-cmp depends on cmp-nvim-lsp so since we are lazy loading this plugin
+  -- it means that all of the plugins that depend on cmp-nvim-lsp will load
+  -- lazily.
+  use {
+    'hrsh7th/cmp-nvim-lsp',
+    event = {
+      -- When we read a file we want nvim-cmp and lsp to initialize
+      'BufRead',
+      -- We use nvim-cmp for command completion too, so init completion
+      -- when we want to use the nvim command line
+      'CmdLineEnter'
+    },
+  }
+
+  use {
+    'onsails/lspkind.nvim',
+  }
+
   use {
     'hrsh7th/nvim-cmp',
-    event = "BufEnter",
-    config = function()
-      print("cmp")
-      require 'duboisf.config.plugins.cmp'
-    end,
-    requires = {
-      'onsails/lspkind.nvim',
-      'hrsh7th/cmp-nvim-lsp'
+    config = function() print("cmp"); require 'duboisf.config.plugins.cmp' end,
+    after = {
+      'lspkind.nvim',
+      'cmp-nvim-lsp',
     }
   }
 
@@ -216,7 +235,7 @@ return require('packer').startup(function(use)
 
   use {
     'L3MON4D3/LuaSnip',
-    after = 'friendly-snippets',
+    after = { 'friendly-snippets', 'nvim-cmp' },
     config = function() require 'duboisf.config.plugins.luasnip' end,
   }
 
@@ -235,4 +254,4 @@ return require('packer').startup(function(use)
   if packer_bootstrap then
     require('packer').sync()
   end
-end)
+end, config = { profile = { enable = true, threshold = 1 } } })

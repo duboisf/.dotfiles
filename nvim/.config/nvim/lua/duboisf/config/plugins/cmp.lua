@@ -35,6 +35,9 @@ cmp.setup({
   sorting = {
     priority_weight = 2,
     comparators = {
+      -- compare_locality uses distance-based sorting, taken from cmp-buffer README.
+      -- It can also improve the accuracy of LSP suggestions too.
+      function(...) return require'cmp_buffer':compare_locality(...) end,
       cmp.config.compare.offset,
       cmp.config.compare.exact,
       cmp.config.compare.score,
@@ -65,7 +68,7 @@ cmp.setup({
       end
     end, { "i", "s" }),
     ['<C-e>'] = cmp.mapping.abort(),
-    ['<CR>'] = cmp.mapping.confirm({ select = true }),
+    ['<CR>'] = cmp.mapping.confirm({ select = false }),
     ['<C-j>'] = cmp.mapping(function(fallback)
       local ls = require("luasnip")
       if ls.expand_or_locally_jumpable() then
@@ -97,7 +100,21 @@ cmp.setup({
     { name = 'nvim_lsp_signature_help' },
     { name = 'emoji', keyword_length = 4, option = { insert = true } },
     { name = 'luasnip', max_item_count = 3 },
-    { name = 'buffer', max_item_count = 3 },
+    {
+      name = 'buffer',
+      option = {
+        get_bufnrs = function()
+          -- get all visible buffers
+          local bufs = {}
+          for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+            if vim.api.nvim_buf_is_loaded(buf) then
+              bufs[buf] = true
+            end
+          end
+          return vim.tbl_keys(bufs)
+        end
+      }
+    },
     { name = 'path' },
     { name = 'dictionary', keyword_length = 3, max_item_count = 10 },
   })

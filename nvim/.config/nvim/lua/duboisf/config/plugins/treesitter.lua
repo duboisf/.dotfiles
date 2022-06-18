@@ -1,4 +1,4 @@
-local treesitterConfig = {
+require 'nvim-treesitter.configs'.setup({
   highlight = {
     enable = true, -- false will disable the whole extension
     disable = { 'c', 'rust' }, -- list of language that will be disabled
@@ -74,6 +74,4 @@ local treesitterConfig = {
     }
   },
   ensure_installed = 'all' -- one of 'all', 'maintained', or a list of languages
-}
-
--- require 'nvim-treesitter.configs'.setup(treesitterConfig)
+})
