@@ -24,7 +24,7 @@ end
 vim.api.nvim_create_autocmd("BufWritePost", {
   group = group,
   desc = "Run packer.compile() when any plugin lua config file gets saved",
-  pattern = "*/.config/*/duboisf/config/plugins.lua",
+  pattern = "*/.config/nvim/init.lua",
   command = "source <afile> | PackerCompile",
 })
 vim.api.nvim_create_autocmd("User", {
@@ -39,6 +39,20 @@ function _G.dump(...)
   return ...
 end
 
+-- jump to last position when reopening a file
+autocmd('Filetype', function() vim.b.disable_jump_to_last_position = 1 end)
+  
+  -- au Filetype gitcommit let b:disable_jump_to_last_position = 1
+  -- au BufReadPost * call s:JumpToLastPositionWhenReopeningBuffer()
+  -- fun s:JumpToLastPositionWhenReopeningBuffer()
+  --   if exists('b:disable_jump_to_last_position')
+  --     return
+  --   endif
+  --   if line("'\"") > 0 && line("'\"") <= line("$")
+  --     exe "normal! g`\""
+  --   endif
+  -- endfun
+-- aug end
 require('packer').startup({function(use)
   use 'wbthomason/packer.nvim'
 
@@ -48,7 +62,11 @@ require('packer').startup({function(use)
   use 'tpope/vim-repeat'
   use 'tpope/vim-surround'
   use 'tpope/vim-unimpaired'
-  use 'windwp/nvim-autopairs'
+
+  use {
+    'windwp/nvim-autopairs',
+    config = function() require'nvim-autopairs'.setup {} end,
+  }
 
   -- Check if nvim was started by firenvim. If so, we want to disable
   -- some plugins and tweak some settings, reason being that sometimes
@@ -137,7 +155,9 @@ require('packer').startup({function(use)
       'nvim-lua/plenary.nvim',
       use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' },
     },
-    config = function() require 'duboisf.config.plugins.telescope' end
+    command = "Telescope",
+    keys = "<space>f",
+    config = function() print("loading telescope"); require 'duboisf.config.plugins.telescope' end
   }
 
   use {
@@ -221,8 +241,9 @@ require('packer').startup({function(use)
     'hrsh7th/nvim-cmp',
     config = function() print("cmp"); require 'duboisf.config.plugins.cmp' end,
     after = {
-      'lspkind.nvim',
       'cmp-nvim-lsp',
+      'lspkind.nvim',
+      'nvim-autopairs',
     }
   }
 
@@ -252,16 +273,7 @@ require('packer').startup({function(use)
     config = function() require 'duboisf.config.plugins.luasnip' end,
   }
 
-  use {
-    'rakr/vim-one',
-    config = function()
-      local c = vim.cmd
-      c 'colorscheme one'
-      c 'set background=dark'
-      c 'hi clear Search'
-      c 'hi default Search gui=reverse guifg=#ff6d00'
-    end
-  }
+  use 'rakr/vim-one'
 
   -- Automatically set up your configuration after cloning packer.nvim
   if packer_bootstrap then
@@ -311,15 +323,9 @@ set updatetime=100
 " don't give |ins-completion-menu| messages.
 set shortmess+=c
 
-aug fred#signcolumn
-  au!
-  " always show signcolumns. We set it on BufRead, otherwise on nvim startup 
-  " we see the startup screen flash for a moment and disappear. This is
-  " because setting signcolumn hides the startup screen message.
-  au BufRead * setlocal signcolumn=yes:2
-aug end
+" always show signcolumns. We set it on BufRead, otherwise on nvim startup 
+set signcolumn=yes:2
 
-" set signcolumn=yes:2
 " show interactive substitute
 set inccommand=nosplit
 
@@ -357,21 +363,6 @@ vnoremap <leader>Y "+Y
 " Tab and Shift-Tab keys cycle through buffers
 nnoremap <Tab> :bn<CR>
 nnoremap <S-Tab> :bp<CR>
-
-" jump to last position when reopening a file
-aug fred#jump_to_last_position
-  au!
-  au Filetype gitcommit let b:disable_jump_to_last_position = 1
-  au BufReadPost * call s:JumpToLastPositionWhenReopeningBuffer()
-  fun s:JumpToLastPositionWhenReopeningBuffer()
-    if exists('b:disable_jump_to_last_position')
-      return
-    endif
-    if line("'\"") > 0 && line("'\"") <= line("$")
-      exe "normal! g`\""
-    endif
-  endfun
-aug end
 
 " tweak man mode
 aug fred#man
@@ -425,6 +416,11 @@ let g:loaded_netrw       = 1
 let g:loaded_netrwPlugin = 1
 
 au TextYankPost * lua vim.highlight.on_yank { higroup="IncSearch", timeout=300, on_visual=true }
+
+colorscheme one
+set background=dark
+hi clear Search
+hi default Search gui=reverse guifg=#ff6d00
 
 ]]
 

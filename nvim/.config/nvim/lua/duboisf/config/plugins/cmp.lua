@@ -37,7 +37,7 @@ cmp.setup({
     comparators = {
       -- compare_locality uses distance-based sorting, taken from cmp-buffer README.
       -- It can also improve the accuracy of LSP suggestions too.
-      function(...) return require'cmp_buffer':compare_locality(...) end,
+      function(...) return require 'cmp_buffer':compare_locality(...) end,
       cmp.config.compare.offset,
       cmp.config.compare.exact,
       cmp.config.compare.score,
@@ -168,3 +168,5 @@ vim.api.nvim_create_autocmd('ColorScheme', {
     c 'highlight! CmpItemKindUnit guibg=NONE guifg=#D4D4D4'
   end,
 })
+
+cmp.event:on('confirm_done', require 'nvim-autopairs.completion.cmp'.on_confirm_done({ map_char = { tex = '' } }))
