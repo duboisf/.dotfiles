@@ -41,48 +41,49 @@ end
 
 -- jump to last position when reopening a file
 autocmd('Filetype', function() vim.b.disable_jump_to_last_position = 1 end)
-  
-  -- au Filetype gitcommit let b:disable_jump_to_last_position = 1
-  -- au BufReadPost * call s:JumpToLastPositionWhenReopeningBuffer()
-  -- fun s:JumpToLastPositionWhenReopeningBuffer()
-  --   if exists('b:disable_jump_to_last_position')
-  --     return
-  --   endif
-  --   if line("'\"") > 0 && line("'\"") <= line("$")
-  --     exe "normal! g`\""
-  --   endif
-  -- endfun
+
+-- au Filetype gitcommit let b:disable_jump_to_last_position = 1
+-- au BufReadPost * call s:JumpToLastPositionWhenReopeningBuffer()
+-- fun s:JumpToLastPositionWhenReopeningBuffer()
+--   if exists('b:disable_jump_to_last_position')
+--     return
+--   endif
+--   if line("'\"") > 0 && line("'\"") <= line("$")
+--     exe "normal! g`\""
+--   endif
+-- endfun
 -- aug end
-require('packer').startup({function(use)
+require('packer').startup({ function(use)
   use 'wbthomason/packer.nvim'
 
-  use 'justinmk/vim-sneak'
-  use 'michaeljsmith/vim-indent-object'
-  use 'tpope/vim-commentary'
-  use 'tpope/vim-repeat'
-  use 'tpope/vim-surround'
-  use 'tpope/vim-unimpaired'
+  use { 'justinmk/vim-sneak', event = "VimEnter" }
+  use { 'michaeljsmith/vim-indent-object', event = "VimEnter" }
+  use { 'tpope/vim-commentary', event = "VimEnter" }
+  use { 'tpope/vim-repeat', event = "VimEnter" }
+  use { 'tpope/vim-surround', event = "VimEnter" }
+  use { 'tpope/vim-unimpaired', event = "VimEnter" }
 
   use {
     'windwp/nvim-autopairs',
-    config = function() require'nvim-autopairs'.setup {} end,
+    event = 'VimEnter',
+    config = function() require 'nvim-autopairs'.setup {} end,
   }
 
   -- Check if nvim was started by firenvim. If so, we want to disable
   -- some plugins and tweak some settings, reason being that sometimes
   -- the size of the nvim window is _realy_ small (2-3 lines!)
-  use { 'editorconfig/editorconfig-vim' }
-  use { 'junegunn/fzf' }
-  use { 'junegunn/fzf.vim' }
-  use { 'mhinz/vim-startify' }
-  use { 'tpope/vim-eunuch' }
+  use { 'editorconfig/editorconfig-vim', event = "VimEnter" }
+  use { 'junegunn/fzf', event = "VimEnter" }
+  use { 'junegunn/fzf.vim', event = "VimEnter" }
+  use 'mhinz/vim-startify'
+  use { 'tpope/vim-eunuch', event = "VimEnter" }
   -- vim-sensible sets things like ruler and laststatus which we don't want when we are using firenvim
-  use { 'tpope/vim-sensible' }
+  use 'tpope/vim-sensible'
 
   use {
     'tsandall/vim-rego',
     ft = { 'rego' },
-    config = function ()
+    config = function()
       vim.cmd [[
         " vim-rego configuration
         let g:formatdef_rego = '"opa fmt"'
@@ -100,6 +101,7 @@ require('packer').startup({function(use)
 
   use {
     'tpope/vim-fugitive',
+    keys = "<space>g",
     config = function()
       -- Open :G in a maximized window
       vim.cmd 'nnoremap <leader>g :G<CR>'
@@ -108,10 +110,11 @@ require('packer').startup({function(use)
 
   use { 'tpope/vim-rhubarb', after = 'vim-fugitive' }
 
-  use { 'ryanoasis/vim-devicons' }
+  use { 'ryanoasis/vim-devicons', event = 'VimEnter' }
 
   use {
     'preservim/nerdtree',
+    cmd = { 'NERDTreeToggle', 'NERDTreeFind' },
     config = function()
       vim.cmd [[
           " nerdtree configuration
@@ -142,6 +145,7 @@ require('packer').startup({function(use)
 
   use {
     'lewis6991/gitsigns.nvim',
+    event = 'User InGitRepo',
     config = function() require 'duboisf.config.plugins.gitsigns' end,
   }
 
@@ -157,7 +161,7 @@ require('packer').startup({function(use)
     },
     command = "Telescope",
     keys = "<space>f",
-    config = function() print("loading telescope"); require 'duboisf.config.plugins.telescope' end
+    config = function() require 'duboisf.config.plugins.telescope' end
   }
 
   use {
@@ -168,10 +172,12 @@ require('packer').startup({function(use)
 
   use {
     'junegunn/limelight.vim',
+    event = 'VimEnter',
   }
 
   use {
     'norcalli/nvim-colorizer.lua',
+    event = 'VimEnter',
     config = function() require "colorizer".setup() end
   }
 
@@ -184,17 +190,20 @@ require('packer').startup({function(use)
 
   use {
     'nvim-treesitter/nvim-treesitter',
+    event = 'VimEnter',
     config = function() require 'duboisf.config.plugins.treesitter' end,
   }
 
   use {
     'glacambre/firenvim',
+    event = 'VimEnter',
     run = function() vim.fn['firenvim#install'](0) end,
     config = function() require('duboisf.config.plugins.firenvim') end,
   }
 
   use {
     'rcarriga/nvim-notify',
+    event = 'VimEnter',
     config = function() vim.notify = require('notify').notify end,
   }
 
@@ -235,11 +244,12 @@ require('packer').startup({function(use)
 
   use {
     'onsails/lspkind.nvim',
+    event = 'VimEnter',
   }
 
   use {
     'hrsh7th/nvim-cmp',
-    config = function() print("cmp"); require 'duboisf.config.plugins.cmp' end,
+    config = function() require 'duboisf.config.plugins.cmp' end,
     after = {
       'cmp-nvim-lsp',
       'lspkind.nvim',
@@ -249,6 +259,7 @@ require('packer').startup({function(use)
 
   use {
     'kyazdani42/nvim-tree.lua',
+    event = 'VimEnter',
     requires = {
       'kyazdani42/nvim-web-devicons',
     },
@@ -265,7 +276,10 @@ require('packer').startup({function(use)
     }
   }
 
-  use 'rafamadriz/friendly-snippets'
+  use {
+    'rafamadriz/friendly-snippets',
+    event = 'VimEnter',
+  }
 
   use {
     'L3MON4D3/LuaSnip',
@@ -328,6 +342,18 @@ set signcolumn=yes:2
 
 " show interactive substitute
 set inccommand=nosplit
+
+if exists('g:started_by_firenvim')
+  " Try to make nvim optimal when we only have an nvim window that's just 2-3 lines high
+  " Never show the status line
+  set laststatus = 0
+  " Don't show the line and column of the cursor position
+  set noruler
+  " Don't show the last command in the last line
+  set noshowcmd
+  " Don't show open tabs and buffers on the first line
+  set showtabline = 0
+endif
 
 " tweak settings if we are using nvim as a pager, we know this because
 " we set the pager_mode variable when we do

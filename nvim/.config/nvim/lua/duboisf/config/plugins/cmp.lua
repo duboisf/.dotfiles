@@ -96,7 +96,7 @@ cmp.setup({
   -- preselect = cmp.PreselectMode.None,
   sources = cmp.config.sources({
     -- sources = {
-    { name = 'nvim_lsp', max_item_count = 10 },
+    { name = 'nvim_lsp' },
     { name = 'nvim_lsp_signature_help' },
     { name = 'emoji', keyword_length = 4, option = { insert = true } },
     { name = 'luasnip', max_item_count = 3 },
