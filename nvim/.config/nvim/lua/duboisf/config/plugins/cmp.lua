@@ -97,9 +97,9 @@ cmp.setup({
   sources = cmp.config.sources({
     -- sources = {
     { name = 'nvim_lsp' },
-    { name = 'nvim_lsp_signature_help' },
+    { name = 'luasnip' },
+    -- { name = 'nvim_lsp_signature_help' },
     { name = 'emoji', keyword_length = 4, option = { insert = true } },
-    { name = 'luasnip', max_item_count = 3 },
     {
       name = 'buffer',
       option = {
@@ -116,7 +116,7 @@ cmp.setup({
       }
     },
     { name = 'path' },
-    { name = 'dictionary', keyword_length = 3, max_item_count = 10 },
+    -- { name = 'dictionary', keyword_length = 3, max_item_count = 10 },
   })
 })
 
