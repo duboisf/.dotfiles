@@ -53,8 +53,8 @@ local on_attach = function(client, bufnr)
   nm['<space>a']        = '<cmd>lua vim.lsp.buf.code_action()<CR>'
   nm['gr']              = '<cmd>Telescope lsp_references<CR>'
   nm['<space>d']        = '<cmd>lua vim.diagnostic.open_float()<CR>'
-  nm['[d']              = '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>'
-  nm[']d']              = '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>'
+  nm['[d']              = '<cmd>lua vim.diagnostic.goto_prev()<CR>'
+  nm[']d']              = '<cmd>lua vim.diagnostic.goto_next()<CR>'
   nm['<leader>l']       = '<cmd>lua vim.lsp.codelens.run()<CR>'
   nm['<leader>F']       = '<cmd>lua require"cfg.plugins.lsp".safe_formatting_sync()<CR>'
 
