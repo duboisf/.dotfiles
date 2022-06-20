@@ -9,6 +9,13 @@ local nmap = function(lhs, rhs)
   })
 end
 
+local function get_cwd()
+  local cwd = vim.fn.expand('%:h')
+  if cwd == "" then
+    cwd = vim.fn.getcwd()
+  end
+  return cwd
+end
 --
 --
 -- Custom pickers
@@ -17,10 +24,7 @@ end
 
 -- Searches for files under the directory of the current buffer
 local function cwd_files()
-  local cwd = vim.fn.expand('%:h')
-  if cwd == "" then
-    cwd = vim.fn.getcwd()
-  end
+  local cwd = get_cwd()
   builtin.find_files({
     cwd = cwd, hidden = true,
     prompt_title = "Find Files under " .. cwd,
@@ -71,11 +75,11 @@ nmap('<leader>fga', function()
     additional_args = function() return { "--no-ignore-vcs" } end
   }
 end)
-nmap('<leader>fgg', function()
-  local current_file_folder = vim.fn.expand('%:h')
+nmap('<leader>fgd', function()
+  local cwd = get_cwd()
   builtin.live_grep {
-    cwd = current_file_folder,
-    prompt_title = "Live Grep under " .. current_file_folder
+    cwd = cwd,
+    prompt_title = "Live Grep under " .. cwd,
   }
 end)
 nmap('<leader>fgw', function()
