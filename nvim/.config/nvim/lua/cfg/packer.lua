@@ -242,6 +242,13 @@ require('packer').startup({ function(use)
   use 'williamboman/nvim-lsp-installer'
 
   use {
+    'sbdchd/neoformat',
+    config = function ()
+      vim.g.neoformat_try_node_exe = 1
+    end
+  }
+
+  use {
     'neovim/nvim-lspconfig',
     config = function() require 'cfg.plugins.lsp' end,
     after = {
