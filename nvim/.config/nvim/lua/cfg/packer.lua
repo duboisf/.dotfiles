@@ -36,7 +36,7 @@ require('packer').startup({ function(use)
   -- Check if nvim was started by firenvim. If so, we want to disable
   -- some plugins and tweak some settings, reason being that sometimes
   -- the size of the nvim window is _realy_ small (2-3 lines!)
-  use { 'editorconfig/editorconfig-vim', event = "VimEnter" }
+  use 'gpanders/editorconfig.nvim'
   use { 'junegunn/fzf', event = "VimEnter" }
   use { 'junegunn/fzf.vim', event = "VimEnter" }
   use 'mhinz/vim-startify'
