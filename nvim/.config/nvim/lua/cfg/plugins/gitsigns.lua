@@ -42,7 +42,7 @@ if loaded then
     end
   }
 
-  local group = vim.api.nvim_create_augroup('duboisf#config#plugins#lsp', { clear = true })
+  local group = vim.api.nvim_create_augroup('cfg#plugins#lsp', { clear = true })
   vim.api.nvim_create_autocmd('ColorScheme', {
     group = group,
     pattern = "*",

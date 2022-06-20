@@ -32,31 +32,6 @@ cmp.setup({
     completion = cmp.config.window.bordered(),
     documentation = cmp.config.window.bordered(),
   },
-  sorting = {
-    priority_weight = 2,
-    comparators = {
-      -- compare_locality uses distance-based sorting, taken from cmp-buffer README.
-      -- It can also improve the accuracy of LSP suggestions too.
-      function(...) return require 'cmp_buffer':compare_locality(...) end,
-      cmp.config.compare.offset,
-      cmp.config.compare.exact,
-      cmp.config.compare.score,
-      cmp.config.compare.recently_used,
-      cmp.config.compare.locality,
-      cmp.config.compare.kind,
-      cmp.config.compare.sort_text,
-      cmp.config.compare.length,
-      cmp.config.compare.order,
-      -- cmp.config.compare.locality,
-      -- cmp.config.compare.kind,
-      -- cmp.config.compare.offset,
-      -- cmp.config.compare.exact,
-      -- cmp.config.compare.recently_used,
-      -- cmp.config.compare.sort_text,
-      -- cmp.config.compare.length,
-      -- cmp.config.compare.order,
-    },
-  },
   mapping = cmp.mapping.preset.insert({
     ['<C-b>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
@@ -96,8 +71,8 @@ cmp.setup({
   -- preselect = cmp.PreselectMode.None,
   sources = cmp.config.sources({
     -- sources = {
-    { name = 'nvim_lsp' },
     { name = 'luasnip' },
+    { name = 'nvim_lsp' },
     -- { name = 'nvim_lsp_signature_help' },
     { name = 'emoji', keyword_length = 4, option = { insert = true } },
     {
@@ -117,7 +92,32 @@ cmp.setup({
     },
     { name = 'path' },
     -- { name = 'dictionary', keyword_length = 3, max_item_count = 10 },
-  })
+  }),
+  sorting = {
+    priority_weight = 2,
+    comparators = {
+      -- compare_locality uses distance-based sorting, taken from cmp-buffer README.
+      -- It can also improve the accuracy of LSP suggestions too.
+      function(...) return require 'cmp_buffer':compare_locality(...) end,
+      cmp.config.compare.offset,
+      cmp.config.compare.exact,
+      cmp.config.compare.score,
+      cmp.config.compare.recently_used,
+      cmp.config.compare.locality,
+      cmp.config.compare.kind,
+      cmp.config.compare.sort_text,
+      cmp.config.compare.length,
+      cmp.config.compare.order,
+      -- cmp.config.compare.locality,
+      -- cmp.config.compare.kind,
+      -- cmp.config.compare.offset,
+      -- cmp.config.compare.exact,
+      -- cmp.config.compare.recently_used,
+      -- cmp.config.compare.sort_text,
+      -- cmp.config.compare.length,
+      -- cmp.config.compare.order,
+    },
+  },
 })
 
 -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
@@ -144,7 +144,7 @@ cmp.setup.cmdline(':', {
   })
 })
 
-local group = vim.api.nvim_create_augroup('duboisf#config#plugins#cmp', { clear = true })
+local group = vim.api.nvim_create_augroup('cfg#plugins#cmp', { clear = true })
 vim.api.nvim_create_autocmd('ColorScheme', {
   group = group,
   pattern = "*",

@@ -1,7 +1,7 @@
 -- This needs to be called first
 require('nvim-lsp-installer').setup {}
 
-local group = vim.api.nvim_create_augroup('duboisf#config#plugins#lsp', { clear = true })
+local group = vim.api.nvim_create_augroup('cfg#plugins#lsp', { clear = true })
 vim.api.nvim_create_autocmd('ColorScheme', {
   group = group,
   pattern = "*",
@@ -56,7 +56,7 @@ local on_attach = function(client, bufnr)
   nm['[d']              = '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>'
   nm[']d']              = '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>'
   nm['<leader>l']       = '<cmd>lua vim.lsp.codelens.run()<CR>'
-  nm['<leader>F']       = '<cmd>lua require"duboisf.config.plugins.lsp".safe_formatting_sync()<CR>'
+  nm['<leader>F']       = '<cmd>lua require"cfg.plugins.lsp".safe_formatting_sync()<CR>'
 
   for lhs, rhs in pairs(normal_mappings) do
     buf_set_keymap('n', lhs, rhs, opts)

@@ -72,6 +72,11 @@ require('packer').startup({ function(use)
     end,
   }
 
+  use {
+    'rafcamlet/nvim-luapad',
+    cmd = { 'Luapad' },
+  }
+
   use { 'tpope/vim-rhubarb', after = 'vim-fugitive' }
 
   use { 'ryanoasis/vim-devicons', event = 'VimEnter' }
@@ -182,7 +187,10 @@ require('packer').startup({ function(use)
     'nvim-lualine/lualine.nvim',
     config = function()
       require'lualine'.setup {
-        option = { theme = 'onedark' }
+        options = { theme = 'onedark' },
+        tabline = {
+          lualine_b = { 'buffers' },
+        }
       }
     end,
     requires = { 'kyazdani42/nvim-web-devicons' }
@@ -249,14 +257,17 @@ require('packer').startup({ function(use)
     }
   }
 
-  use {
-    'rafamadriz/friendly-snippets',
-    event = 'VimEnter',
-  }
+  -- use {
+  --   'rafamadriz/friendly-snippets',
+  --   event = 'VimEnter',
+  -- }
 
   use {
     'L3MON4D3/LuaSnip',
-    after = { 'friendly-snippets', 'nvim-cmp' },
+    after = {
+      -- 'friendly-snippets',
+      'nvim-cmp'
+    },
     config = function() require 'cfg.plugins.luasnip' end,
   }
 
