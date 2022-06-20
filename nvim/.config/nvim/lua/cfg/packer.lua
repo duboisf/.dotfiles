@@ -213,13 +213,7 @@ require('packer').startup({ function(use)
   -- lazily.
   use {
     'hrsh7th/cmp-nvim-lsp',
-    event = {
-      -- When we read a file we want nvim-cmp and lsp to initialize
-      'BufRead',
-      -- We use nvim-cmp for command completion too, so init completion
-      -- when we want to use the nvim command line
-      'CmdLineEnter'
-    },
+    event = 'VimEnter',
   }
 
   use {
