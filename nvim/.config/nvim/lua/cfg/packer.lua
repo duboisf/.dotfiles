@@ -14,7 +14,7 @@ if fn.empty(fn.glob(install_path)) > 0 then
 end
 
 autocmd(group, "BufWritePost", "*/cfg/packer.lua", "source <afile> | PackerCompile", {
-  desc = "Run packer.compile() when any plugin lua config file gets saved",
+  desc = "Run packer.compile() when the packer.lua config file gets saved",
 })
 
 require('packer').startup({ function(use)
@@ -105,12 +105,12 @@ require('packer').startup({ function(use)
 
   -- use {
   --   'vim-airline/vim-airline',
-  --   config = function() require 'duboisf.config.plugins.airline' end,
+  --   config = function() require 'cfg.plugins.airline' end,
   -- }
 
   use {
     'lewis6991/gitsigns.nvim',
-    config = function() require 'duboisf.config.plugins.gitsigns' end,
+    config = function() require 'cfg.plugins.gitsigns' end,
   }
 
   use {
@@ -125,13 +125,13 @@ require('packer').startup({ function(use)
     },
     command = "Telescope",
     keys = "<space>f",
-    config = function() require 'duboisf.config.plugins.telescope' end
+    config = function() require 'cfg.plugins.telescope' end
   }
 
   use {
     'fatih/vim-go',
     ft = { 'go', 'gomod' },
-    config = function() require 'duboisf.config.plugins.go' end
+    config = function() require 'cfg.plugins.go' end
   }
 
   use {
@@ -155,14 +155,14 @@ require('packer').startup({ function(use)
   use {
     'nvim-treesitter/nvim-treesitter',
     event = 'VimEnter',
-    config = function() require 'duboisf.config.plugins.treesitter' end,
+    config = function() require 'cfg.plugins.treesitter' end,
   }
 
   use {
     'glacambre/firenvim',
     event = 'VimEnter',
     run = function() vim.fn['firenvim#install'](0) end,
-    config = function() require('duboisf.config.plugins.firenvim') end,
+    config = function() require('cfg.plugins.firenvim') end,
   }
 
   use {
@@ -180,7 +180,12 @@ require('packer').startup({ function(use)
 
   use {
     'nvim-lualine/lualine.nvim',
-    requires = { 'kyazdani42/nvim-web-devicons', opt = true }
+    config = function()
+      require'lualine'.setup {
+        option = { theme = 'onedark' }
+      }
+    end,
+    requires = { 'kyazdani42/nvim-web-devicons' }
   }
   -- use {
   --   'uga-rosa/cmp-dictionary',
@@ -217,7 +222,7 @@ require('packer').startup({ function(use)
 
   use {
     'hrsh7th/nvim-cmp',
-    config = function() require 'duboisf.config.plugins.cmp' end,
+    config = function() require 'cfg.plugins.cmp' end,
     after = {
       'cmp-nvim-lsp',
       'lspkind.nvim',
@@ -237,7 +242,7 @@ require('packer').startup({ function(use)
 
   use {
     'neovim/nvim-lspconfig',
-    config = function() require 'duboisf.config.plugins.lsp' end,
+    config = function() require 'cfg.plugins.lsp' end,
     after = {
       'nvim-cmp',
       'nvim-lsp-installer',
@@ -252,7 +257,7 @@ require('packer').startup({ function(use)
   use {
     'L3MON4D3/LuaSnip',
     after = { 'friendly-snippets', 'nvim-cmp' },
-    config = function() require 'duboisf.config.plugins.luasnip' end,
+    config = function() require 'cfg.plugins.luasnip' end,
   }
 
   use {

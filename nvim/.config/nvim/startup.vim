@@ -45,14 +45,15 @@ set signcolumn=yes:2
 " show interactive substitute
 set inccommand=nosplit
 
+" Don't show the last command in the last line
+set noshowcmd
+
 if exists('g:started_by_firenvim')
   " Try to make nvim optimal when we only have an nvim window that's just 2-3 lines high
   " Never show the status line
   set laststatus = 0
   " Don't show the line and column of the cursor position
   set noruler
-  " Don't show the last command in the last line
-  set noshowcmd
   " Don't show open tabs and buffers on the first line
   set showtabline = 0
 endif
