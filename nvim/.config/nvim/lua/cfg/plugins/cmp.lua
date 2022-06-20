@@ -96,6 +96,7 @@ cmp.setup({
   sorting = {
     priority_weight = 2,
     comparators = {
+      cmp.config.compare.exact,
       -- compare_locality uses distance-based sorting, taken from cmp-buffer README.
       -- It can also improve the accuracy of LSP suggestions too.
       function(...) return require 'cmp_buffer':compare_locality(...) end,
