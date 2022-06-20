@@ -1,7 +1,7 @@
 local ls = require 'luasnip'
 local types = require 'luasnip.util.types'
 
-local higroup = vim.api.nvim_create_augroup('duboisf#config#plugins#luasnip', { clear = true })
+local higroup = vim.api.nvim_create_augroup('cfg#plugins#luasnip', { clear = true })
 vim.api.nvim_create_autocmd('ColorScheme', {
   group = higroup,
   pattern = "*",
@@ -67,6 +67,10 @@ ls.add_snippets(nil, {
   },
 
   lua = {
+    s("ll", fmt("local {var} = {something}", {
+      var = i(1, ""),
+      something = i(2, ""),
+    })),
     s({
       trig = 'lf',
       namr = 'lambda function',
