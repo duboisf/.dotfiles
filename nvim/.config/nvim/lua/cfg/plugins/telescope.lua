@@ -1,20 +1,44 @@
 local M = {}
 
-local telescope = require'telescope'
-local previewers = require 'telescope.previewers'
 local builtin = require 'telescope.builtin'
 
-local nmap = function (lhs, rhs)
+local nmap = function(lhs, rhs)
   vim.keymap.set("n", lhs, rhs, {
     silent = true,
     noremap = true,
   })
 end
 
-nmap('<leader>fc', function() builtin.commands() end)
-nmap('<leader>fe', function() M.project_files() end)
-nmap('<leader>fd', function() M.cwd_files() end)
-nmap('<leader>fs', function() builtin.lsp_document_symbols() end)
+local function cwd_files()
+  local cwd = vim.fn.expand('%:h')
+  if cwd == "" then
+    cwd = vim.fn.getcwd()
+  end
+  builtin.find_files({
+    cwd = cwd, hidden = true,
+    prompt_title = "Find Files under " .. cwd,
+  })
+end
+
+local function find_all_files()
+  builtin.find_files {
+    find_command = { "fd", "--type", "f", "--hidden", "--no-ignore-vcs" }
+    -- prompt_title = ""
+  }
+end
+
+local function project_files()
+  local ok = pcall(builtin.git_files, { prompt_title = "[Git] Project Files" })
+  if not ok then
+    builtin.find_files({ prompt_title = "[Find] Project Files" })
+  end
+end
+
+nmap('<leader>fa', find_all_files)
+nmap('<leader>fc', builtin.commands)
+nmap('<leader>fe', project_files)
+nmap('<leader>fd', cwd_files)
+nmap('<leader>fs', builtin.lsp_document_symbols)
 nmap('<leader>fw', function()
   local clients = vim.lsp.buf_get_clients(0)
   if #clients > 0 then
@@ -22,12 +46,28 @@ nmap('<leader>fw', function()
   end
   vim.notify('no lsp clients attached to current buffer', vim.log.levels.WARN)
 end)
-nmap('<leader>f*', function() builtin.current_buffer_fuzzy_find() end)
-nmap('<leader>fgg',function() builtin.live_grep { cwd = vim.fn.expand('%:h') } end)
-nmap('<leader>fgw',function() builtin.live_grep() end)
-nmap('<leader>fb', function() builtin.buffers() end)
-nmap('<leader>fh', function() builtin.help_tags() end)
-nmap('<leader>fr', function() builtin.oldfiles() end)
+nmap('<leader>f*', builtin.current_buffer_fuzzy_find)
+nmap('<leader>fga', function()
+  builtin.live_grep {
+    prompt_title = "Workspace Live Grep of all the things",
+    additional_args = function() return { "--no-ignore-vcs" } end
+  }
+end)
+nmap('<leader>fgg', function()
+  local current_file_folder = vim.fn.expand('%:h')
+  builtin.live_grep {
+    cwd = current_file_folder,
+    prompt_title = "Live Grep under " .. current_file_folder
+  }
+end)
+nmap('<leader>fgw', function()
+  builtin.live_grep {
+    prompt_title = "Workspace Live Grep"
+  }
+end)
+nmap('<leader>fb', builtin.buffers)
+nmap('<leader>fh', builtin.help_tags)
+nmap('<leader>fr', builtin.oldfiles)
 
 require('telescope').setup {
   defaults = {
@@ -75,31 +115,7 @@ require('telescope').setup {
   }
 }
 
-require'telescope'.load_extension 'fzf'
-
-function M.cwd_files(opts)
-  local cwd = vim.fn.expand('%:h')
-  if cwd == "" then
-    cwd = vim.fn.getcwd()
-  end
-  require('telescope.builtin').find_files({ cwd = cwd, hidden = true })
-end
-
-function M.project_files(opts)
-  local opts = opts or {}
-  local ok = pcall(require 'telescope.builtin'.git_files, opts)
-  if not ok then
-    require 'telescope.builtin'.find_files(opts)
-  end
-end
-
-function M.document_symbols()
-  local input = vim.fn.input('Query: ')
-  if input == '' then
-    return
-  end
-  require 'telescope.builtin'.lsp_workspace_symbols()
-end
+require 'telescope'.load_extension 'fzf'
 
 -- do
 --   local curl = require 'plenary.curl'
@@ -234,5 +250,3 @@ end
 --     }):find()
 --   end
 -- end
-
-return M
