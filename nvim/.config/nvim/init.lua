@@ -13,6 +13,11 @@ function _G.dump(...)
   return ...
 end
 
+function _G.reload_lua(module)
+  package.loaded[module] = nil
+  require(module)
+end
+
 -- Jump to last position when reopening a buffer
 local group = autogroup('cfg#jump_to_last_position', true)
 autocmd(group, 'Filetype', "*", function() vim.b.disable_jump_to_last_position = 1 end)
