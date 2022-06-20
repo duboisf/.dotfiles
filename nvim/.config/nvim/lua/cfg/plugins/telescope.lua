@@ -9,6 +9,13 @@ local nmap = function(lhs, rhs)
   })
 end
 
+--
+--
+-- Custom pickers
+--
+--
+
+-- Searches for files under the directory of the current buffer
 local function cwd_files()
   local cwd = vim.fn.expand('%:h')
   if cwd == "" then
@@ -20,6 +27,10 @@ local function cwd_files()
   })
 end
 
+-- Searches for all files, including hidden and git ignored files. Useful when
+-- I'm working on my dotfiles for example, since sometimes I want to open a
+-- file that's in an external vim plugin which is under a path that's in a
+-- .gitignore.
 local function find_all_files()
   builtin.find_files {
     find_command = { "fd", "--type", "f", "--hidden", "--no-ignore-vcs" }
@@ -27,6 +38,8 @@ local function find_all_files()
   }
 end
 
+-- Searches by using the builtin git_files picker but falling back to
+-- find_files if we aren't in a git repo
 local function project_files()
   local ok = pcall(builtin.git_files, { prompt_title = "[Git] Project Files" })
   if not ok then
@@ -34,18 +47,23 @@ local function project_files()
   end
 end
 
-nmap('<leader>fa', find_all_files)
-nmap('<leader>fc', builtin.commands)
-nmap('<leader>fe', project_files)
-nmap('<leader>fd', cwd_files)
-nmap('<leader>fs', builtin.lsp_document_symbols)
-nmap('<leader>fw', function()
+-- Searche workspace LSP symbols but checks if there's an LSP client attached
+-- to the current buffer first. If there isn't, notifies me instead of throwing
+-- an error.
+local function lsp_dynamic_workspace_symbols()
   local clients = vim.lsp.buf_get_clients(0)
   if #clients > 0 then
     return builtin.lsp_dynamic_workspace_symbols()
   end
   vim.notify('no lsp clients attached to current buffer', vim.log.levels.WARN)
-end)
+end
+
+nmap('<leader>fa', find_all_files)
+nmap('<leader>fc', builtin.commands)
+nmap('<leader>fe', project_files)
+nmap('<leader>fd', cwd_files)
+nmap('<leader>fs', builtin.lsp_document_symbols)
+nmap('<leader>fw', lsp_dynamic_workspace_symbols)
 nmap('<leader>f*', builtin.current_buffer_fuzzy_find)
 nmap('<leader>fga', function()
   builtin.live_grep {
