@@ -1,6 +1,0 @@
-{
-    "Asana Task": {
-        "prefix": ["at"],
-        "body": "[Asana task](${VIM:@+})"
-    }
-}
