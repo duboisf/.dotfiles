@@ -65,7 +65,6 @@ require('packer').startup({ function(use)
 
   use {
     'tpope/vim-fugitive',
-    keys = "<space>g",
     config = function()
       -- Open :G in a maximized window
       vim.cmd 'nnoremap <leader>g :G<CR>'
@@ -186,7 +185,7 @@ require('packer').startup({ function(use)
   use {
     'nvim-lualine/lualine.nvim',
     config = function()
-      require'lualine'.setup {
+      require 'lualine'.setup {
         options = { theme = 'onedark' },
         tabline = {
           lualine_b = { 'buffers' },
