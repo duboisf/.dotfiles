@@ -117,6 +117,14 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 " don't change cwd when jumping to a file
 let g:startify_change_to_dir = 0
 
+let g:startify_lists = [
+      \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
+      \ { 'type': 'files',     'header': ['   MRU']            },
+      \ { 'type': 'sessions',  'header': ['   Sessions']       },
+      \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
+      \ { 'type': 'commands',  'header': ['   Commands']       },
+      \ ]
+
 " firenvim configuration
 let g:firenvim_config = {
     \ 'globalSettings': {
