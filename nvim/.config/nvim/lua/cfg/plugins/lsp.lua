@@ -31,15 +31,11 @@ local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protoco
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
-  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-
-  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
-
   --Enable completion triggered by <c-x><c-o>
-  buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+  vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
   -- Mappings.
-  local opts = { noremap = true, silent = true }
+  local opts = { noremap = true, silent = true, buffer = bufnr }
 
   local normal_mappings = {}
   local nm              = normal_mappings
@@ -59,11 +55,11 @@ local on_attach = function(client, bufnr)
   nm['<leader>F']       = '<cmd>lua require"cfg.plugins.lsp".safe_formatting_sync()<CR>'
 
   for lhs, rhs in pairs(normal_mappings) do
-    buf_set_keymap('n', lhs, rhs, opts)
+    vim.keymap.set('n', lhs, rhs, opts)
   end
-  -- for _, mode in ipairs({ 'n', 'i' }) do
-  --   buf_set_keymap(mode, '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-  -- end
+  for _, mode in ipairs({ 'n', 'i' }) do
+    vim.keymap.set(mode, '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  end
 
   if client.resolved_capabilities.code_lens then
     vim.api.nvim_exec("autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh()", false)
@@ -108,8 +104,9 @@ lspconfig.bashls.setup { capabilities = capabilities, on_attach = on_attach }
 
 do
   -- local runtime_path = vim.split(package.path, ';')
-  -- table.insert(runtime_path, 'lua/?.lua')
-  -- table.insert(runtime_path, 'lua/?/init.lua')
+  local runtime_path = {}
+  table.insert(runtime_path, 'lua/?.lua')
+  table.insert(runtime_path, 'lua/?/init.lua')
   lspconfig.sumneko_lua.setup {
     capabilities = capabilities,
     on_attach = on_attach,
@@ -117,13 +114,12 @@ do
       Lua = {
         diagnostics = {
           globals = {
-            -- 'obj', -- argocd lua health check global
             'vim',
           },
           -- disable = {'lowercase-global'},
         },
         runtime = {
-          -- path = runtime_path,
+          path = runtime_path,
           version = 'LuaJIT',
         },
         telemetry = {
@@ -131,7 +127,7 @@ do
         },
         workspace = {
           -- checkThirdParty = false,
-          library = vim.api.nvim_get_runtime_file('', true),
+          -- library = vim.api.nvim_get_runtime_file('', true),
           -- maxPreload = 2000,
         },
       }
