@@ -55,7 +55,7 @@ ls.add_snippets(nil, {
   all = {
     s({
       trig = "ast",
-      namr = "Asana Task",
+      name = "Asana Task",
       dscr = "Create an asana task markdown link with the text in the copy buffer",
     }, {
       t("["), c(1, {
@@ -73,10 +73,22 @@ ls.add_snippets(nil, {
     })),
     s({
       trig = 'lf',
-      namr = 'lambda function',
+      name = 'lambda function',
       dscr = 'Creates an inline lambda function used to pass as a parameter',
     }, {
       t("function() "), i(1, ""), t(" end"),
     }),
+  },
+
+  go = {
+    s({
+      trig = "fmterr",
+      name = [[fmt.Error("...: %w", err)]],
+      dscr = "Wrap err with fmt.Error's %w formating operand",
+    }, fmt([[fmt.Errorf("{}: %w", {})]],
+      {
+        i(1, ""), i(2, "err")
+      }
+    )),
   },
 })

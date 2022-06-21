@@ -2,21 +2,13 @@ local fn = vim.fn
 local utils = require("core.utils")
 local autogroup = utils.autogroup
 local autocmd = utils.autocmd
+local o = vim.o
+
+-- load global functions like dump
+require('core')
 
 -- Load plugins
 require("cfg.packer")
-
-
-function _G.dump(...)
-  local objects = vim.tbl_map(vim.inspect, { ... })
-  print(unpack(objects))
-  return ...
-end
-
-function _G.reload_lua(module)
-  package.loaded[module] = nil
-  require(module)
-end
 
 -- Jump to last position when reopening a buffer
 local group = autogroup('cfg', true)
@@ -42,6 +34,25 @@ autocmd(
     desc = 'Jump to last position when reopening a buffer'
   }
 )
+
+o.laststatus = 3
+
+if utils.startedByFirenvim() then
+  -- Try to make nvim optimal when we only have an nvim window that's just 2-3 lines high
+  -- Never show the status line
+  o.laststatus = 0
+
+  -- Don't show the line and column of the cursor position
+  o.ruler = false
+
+  -- Don't show open tabs and buffers on the first line
+  o.showtabline = 0
+
+  -- Reduce cmd lines to minimum. For now the min is 1 buf after
+  -- https://github.com/neovim/neovim/pull/16251 gets released the
+  -- min is going to be 0
+  o.cmdheight = 1
+end
 
 -- vim.keymap.set('n', '<C-o>', function()
 --   local ts_utils = require'nvim-treesitter.ts_utils'

@@ -1,12 +1,12 @@
 local M = {}
 
--- simplify  creating autogroups
+-- Simplify creating autogroups
 function M.autogroup(name, clear)
   local opts = { clear = clear or false }
   return vim.api.nvim_create_augroup(name, opts)
 end
 
--- simplicy creating autocmds
+-- Simplicy creating autocmds
 function M.autocmd(group, events, pattern, callback, opts)
   opts = opts or {}
   if type(events) == 'string' then
@@ -22,11 +22,17 @@ function M.autocmd(group, events, pattern, callback, opts)
   return vim.api.nvim_create_autocmd(events, opts)
 end
 
--- Check if nvim was started by firenvim. If so, we want to disable
--- some plugins and tweak some settings, reason being that sometimes
--- the size of the nvim window is _realy_ small (2-3 lines!)
-function M.notStartedByFirenvim()
+-- Check if neovim was started by firenvim
+function M.startedByFirenvim()
   return vim.g.started_by_firenvim == nil
 end
+
+-- Check if nvim was not started by firenvim. This function is useful in the
+-- packer cond key, like:
+-- cond = notStartedByFirenvim
+function M.notStartedByFirenvim()
+  return not M.startedByFirenvim()
+end
+
 
 return M

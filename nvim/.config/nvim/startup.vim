@@ -39,11 +39,14 @@ set updatetime=100
 " don't give |ins-completion-menu| messages.
 set shortmess+=c
 
-" always show signcolumns. We set it on BufRead, otherwise on nvim startup 
+" always show signcolumns
 set signcolumn=yes:2
 
 " show interactive substitute
 set inccommand=nosplit
+
+" highlight lua code in .vim files
+let g:vimsyn_embed = 'l'
 
 " Don't show the last command in the last line
 set noshowcmd
@@ -132,10 +135,6 @@ let g:startify_lists = [
 """""""""""""""""""""
 " Misc autocommands "
 """""""""""""""""""""
-
-" deactivate netrw
-let g:loaded_netrw       = 1
-let g:loaded_netrwPlugin = 1
 
 au TextYankPost * lua vim.highlight.on_yank { higroup="IncSearch", timeout=300, on_visual=true }
 

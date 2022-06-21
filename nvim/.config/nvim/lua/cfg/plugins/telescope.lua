@@ -1,4 +1,5 @@
 local builtin = require 'telescope.builtin'
+local themes = require 'telescope.themes'
 
 local nmap = function(lhs, rhs)
   vim.keymap.set("n", lhs, rhs, {
@@ -36,8 +37,8 @@ end
 -- .gitignore.
 local function find_all_files()
   builtin.find_files {
-    find_command = { "fd", "--type", "f", "--hidden", "--no-ignore-vcs" }
-    -- prompt_title = ""
+    find_command = { "fd", "--type", "f", "--hidden", "--no-ignore-vcs" },
+    prompt_title = "Find files [all the things]"
   }
 end
 

@@ -70,11 +70,10 @@ cmp.setup({
   }),
   -- preselect = cmp.PreselectMode.None,
   sources = cmp.config.sources({
-    -- sources = {
     { name = 'luasnip' },
     { name = 'nvim_lsp' },
-    -- { name = 'nvim_lsp_signature_help' },
-    { name = 'emoji', keyword_length = 4, option = { insert = true } },
+    { name = 'nvim_lsp_signature_help' },
+    { name = 'emoji', option = { insert = true } },
     {
       name = 'buffer',
       option = {
@@ -91,12 +90,10 @@ cmp.setup({
       }
     },
     { name = 'path' },
-    -- { name = 'dictionary', keyword_length = 3, max_item_count = 10 },
   }),
   sorting = {
     priority_weight = 2,
     comparators = {
-      cmp.config.compare.exact,
       -- compare_locality uses distance-based sorting, taken from cmp-buffer README.
       -- It can also improve the accuracy of LSP suggestions too.
       function(...) return require 'cmp_buffer':compare_locality(...) end,
@@ -109,14 +106,6 @@ cmp.setup({
       cmp.config.compare.sort_text,
       cmp.config.compare.length,
       cmp.config.compare.order,
-      -- cmp.config.compare.locality,
-      -- cmp.config.compare.kind,
-      -- cmp.config.compare.offset,
-      -- cmp.config.compare.exact,
-      -- cmp.config.compare.recently_used,
-      -- cmp.config.compare.sort_text,
-      -- cmp.config.compare.length,
-      -- cmp.config.compare.order,
     },
   },
 })
@@ -131,6 +120,13 @@ cmp.setup.cmdline('/', {
 
 -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
 cmp.setup.cmdline(':', {
+  formatting = {
+    format = function(_, vim_item)
+      -- remove duplicates
+      vim_item.dup = 0
+      return vim_item
+    end
+  },
   mapping = cmp.mapping.preset.cmdline({
     ['<C-f>'] = {
       c = function(fallback)
@@ -145,11 +141,7 @@ cmp.setup.cmdline(':', {
   })
 })
 
-local group = vim.api.nvim_create_augroup('cfg#plugins#cmp', { clear = true })
-vim.api.nvim_create_autocmd('ColorScheme', {
-  group = group,
-  pattern = "*",
-  callback = function()
+local function fix_highlights()
     local c = vim.cmd
     -- gray
     c 'highlight! CmpItemAbbrDeprecated guibg=NONE gui=strikethrough guifg=#808080'
@@ -167,7 +159,15 @@ vim.api.nvim_create_autocmd('ColorScheme', {
     c 'highlight! CmpItemKindKeyword guibg=NONE guifg=#D4D4D4'
     c 'highlight! CmpItemKindProperty guibg=NONE guifg=#D4D4D4'
     c 'highlight! CmpItemKindUnit guibg=NONE guifg=#D4D4D4'
-  end,
+end
+
+fix_highlights()
+
+local group = vim.api.nvim_create_augroup('cfg#plugins#cmp', { clear = true })
+vim.api.nvim_create_autocmd('ColorScheme', {
+  group = group,
+  pattern = "*",
+  callback = fix_highlights,
 })
 
-cmp.event:on('confirm_done', require 'nvim-autopairs.completion.cmp'.on_confirm_done({ map_char = { tex = '' } }))
+cmp.event:on('confirm_done', require('nvim-autopairs.completion.cmp').on_confirm_done({ map_char = { tex = '' } }))

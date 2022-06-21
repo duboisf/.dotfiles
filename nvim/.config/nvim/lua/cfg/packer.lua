@@ -13,11 +13,15 @@ if fn.empty(fn.glob(install_path)) > 0 then
     install_path })
 end
 
-autocmd(group, "BufWritePost", "*/cfg/packer.lua", "source <afile> | PackerCompile", {
+autocmd(group, "BufWritePost", "*/cfg/packer.lua", "let b:disable_jump_to_last_position = 1 | source <afile> | PackerCompile", {
   desc = "Run packer.compile() when the packer.lua config file gets saved",
 })
 
 require('packer').startup({ function(use)
+  local function notStartedByFirenvim()
+    return vim.g.started_by_firenvim == nil
+  end
+
   use 'wbthomason/packer.nvim'
 
   use { 'justinmk/vim-sneak', event = "VimEnter" }
@@ -29,30 +33,29 @@ require('packer').startup({ function(use)
 
   use {
     'windwp/nvim-autopairs',
-    event = 'VimEnter',
     config = function() require 'nvim-autopairs'.setup {} end,
   }
 
   use {
     'gpanders/editorconfig.nvim',
-    cond = utils.notStartedByFirenvim,
+    cond = notStartedByFirenvim,
   }
 
   use {
     'junegunn/fzf',
-    cond = utils.notStartedByFirenvim,
+    cond = notStartedByFirenvim,
     event = "VimEnter",
   }
 
   use {
     'junegunn/fzf.vim',
-    cond = utils.notStartedByFirenvim,
+    cond = notStartedByFirenvim,
     event = "VimEnter",
   }
 
   use {
     'mhinz/vim-startify',
-    cond = utils.notStartedByFirenvim,
+    cond = notStartedByFirenvim,
   }
 
   use { 'tpope/vim-eunuch', event = "VimEnter" }
@@ -60,7 +63,7 @@ require('packer').startup({ function(use)
   -- vim-sensible sets things like ruler and laststatus which we don't want when we are using firenvim
   use {
     'tpope/vim-sensible',
-    cond = utils.notStartedByFirenvim,
+    cond = notStartedByFirenvim,
   }
 
   use {
@@ -140,7 +143,7 @@ require('packer').startup({ function(use)
     -- Requires git, fzf, python3, ripgrep
     -- Optional bat(like cat but 10x nicer!), exa(like ls but nicer!)
     'nvim-telescope/telescope.nvim',
-    cond = utils.notStartedByFirenvim,
+    cond = notStartedByFirenvim,
     requires = {
       'kyazdani42/nvim-web-devicons',
       'nvim-lua/popup.nvim',
@@ -148,6 +151,15 @@ require('packer').startup({ function(use)
       use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' },
     },
     config = function() require 'cfg.plugins.telescope' end
+  }
+
+  --
+  -- telescope
+  --
+  use {
+    'nvim-telescope/telescope-github.nvim',
+    after = 'telescope.nvim',
+    config = function() require 'telescope'.load_extension 'gh' end
   }
 
   use {
@@ -192,24 +204,10 @@ require('packer').startup({ function(use)
     config = function() vim.notify = require('notify').notify end,
   }
 
-  use { 'hrsh7th/cmp-buffer', after = 'nvim-cmp' }
-  use { 'hrsh7th/cmp-cmdline', after = 'nvim-cmp' }
-  use { 'hrsh7th/cmp-emoji', after = 'nvim-cmp' }
-  use { 'hrsh7th/cmp-nvim-lsp-signature-help', after = 'nvim-cmp' }
-  use { 'hrsh7th/cmp-path', after = 'nvim-cmp' }
-  use { 'saadparwaiz1/cmp_luasnip', after = 'nvim-cmp' }
-
   use {
     'nvim-lualine/lualine.nvim',
-    cond = utils.notStartedByFirenvim,
-    config = function()
-      require 'lualine'.setup {
-        options = { theme = 'onedark' },
-        tabline = {
-          lualine_b = { 'buffers' },
-        }
-      }
-    end,
+    cond = notStartedByFirenvim,
+    config = function() require 'cfg.plugins.lualine' end,
     requires = { 'kyazdani42/nvim-web-devicons' }
   }
   -- use {
@@ -225,36 +223,39 @@ require('packer').startup({ function(use)
   --   after = 'nvim-cmp',
   -- }
 
-
-  -- nvim-cmp depends on cmp-nvim-lsp so since we are lazy loading this plugin
-  -- it means that all of the plugins that depend on cmp-nvim-lsp will load
-  -- lazily.
-  use {
-    'hrsh7th/cmp-nvim-lsp',
-    event = 'VimEnter',
-  }
-
-  use {
-    'onsails/lspkind.nvim',
-    event = 'VimEnter',
-  }
-
-  use {
-    'hrsh7th/nvim-cmp',
-    config = function() require 'cfg.plugins.cmp' end,
-    after = {
-      'cmp-nvim-lsp',
-      'lspkind.nvim',
-      'nvim-autopairs',
-    }
-  }
-
   use {
     'kyazdani42/nvim-tree.lua',
     event = 'VimEnter',
     requires = {
       'kyazdani42/nvim-web-devicons',
     },
+  }
+
+  --
+  -- nvim-cmp
+  --
+  for _, source in ipairs({
+    'hrsh7th/cmp-buffer',
+    'hrsh7th/cmp-cmdline',
+    'hrsh7th/cmp-emoji',
+    'hrsh7th/cmp-nvim-lsp-signature-help',
+    'hrsh7th/cmp-path',
+    'saadparwaiz1/cmp_luasnip',
+  }) do
+    use { source, after = 'nvim-cmp' }
+  end
+
+  use {
+    'hrsh7th/nvim-cmp',
+    cond = notStartedByFirenvim,
+    config = function() require 'cfg.plugins.cmp' end,
+    requires = {
+      'onsails/lspkind.nvim',
+      'hrsh7th/cmp-nvim-lsp',
+    },
+    after = {
+      'nvim-autopairs',
+    }
   }
 
   use 'williamboman/nvim-lsp-installer'
