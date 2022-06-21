@@ -17,6 +17,10 @@ autocmd(group, "BufWritePost", "*/cfg/packer.lua", "source <afile> | PackerCompi
   desc = "Run packer.compile() when the packer.lua config file gets saved",
 })
 
+local function notStartedByFirenvim()
+  return vim.g.started_by_firenvim == nil
+end
+
 require('packer').startup({ function(use)
   use 'wbthomason/packer.nvim'
 
@@ -164,7 +168,6 @@ require('packer').startup({ function(use)
 
   use {
     'glacambre/firenvim',
-    event = 'VimEnter',
     run = function() vim.fn['firenvim#install'](0) end,
     config = function() require('cfg.plugins.firenvim') end,
   }
@@ -184,6 +187,7 @@ require('packer').startup({ function(use)
 
   use {
     'nvim-lualine/lualine.nvim',
+    cond = notStartedByFirenvim,
     config = function()
       require 'lualine'.setup {
         options = { theme = 'onedark' },
