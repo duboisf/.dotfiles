@@ -1,5 +1,3 @@
-local M = {}
-
 local builtin = require 'telescope.builtin'
 
 local nmap = function(lhs, rhs)
@@ -16,6 +14,7 @@ local function get_cwd()
   end
   return cwd
 end
+
 --
 --
 -- Custom pickers
@@ -51,17 +50,34 @@ local function project_files()
   end
 end
 
+-- returns true if the current buffer has an LSP client attached to it
+local function has_lsp_client_attached()
+  local clients = vim.lsp.buf_get_clients(0)
+  if #clients == 0 then
+    vim.notify('no lsp clients attached to current buffer', vim.log.levels.WARN, { title = "Telescope" })
+    return false
+  end
+  return true
+end
+
 -- Searche workspace LSP symbols but checks if there's an LSP client attached
 -- to the current buffer first. If there isn't, notifies me instead of throwing
 -- an error.
 local function lsp_dynamic_workspace_symbols()
-  local clients = vim.lsp.buf_get_clients(0)
-  if #clients > 0 then
+  if has_lsp_client_attached() then
     return builtin.lsp_dynamic_workspace_symbols()
   end
-  vim.notify('no lsp clients attached to current buffer', vim.log.levels.WARN)
 end
 
+-- Wrapper to check if there's an LSP client attache to the current buffer
+-- before invoking builtin.lsp_references
+local function lsp_references()
+  if has_lsp_client_attached() then
+    return builtin.lsp_references()
+  end
+end
+
+nmap('gr', lsp_references)
 nmap('<leader>fa', find_all_files)
 nmap('<leader>fc', builtin.commands)
 nmap('<leader>fe', project_files)
