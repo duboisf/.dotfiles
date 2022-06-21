@@ -19,7 +19,7 @@ function _G.reload_lua(module)
 end
 
 -- Jump to last position when reopening a buffer
-local group = autogroup('cfg#jump_to_last_position', true)
+local group = autogroup('cfg', true)
 -- disable jumping to last position when writting git commit messages
 autocmd(group, 'FileType', "gitcommit", function()
   vim.b.disable_jump_to_last_position = true

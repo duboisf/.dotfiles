@@ -51,11 +51,15 @@ set noshowcmd
 if exists('g:started_by_firenvim')
   " Try to make nvim optimal when we only have an nvim window that's just 2-3 lines high
   " Never show the status line
-  set laststatus = 0
+  set laststatus=0
   " Don't show the line and column of the cursor position
   set noruler
   " Don't show open tabs and buffers on the first line
-  set showtabline = 0
+  set showtabline=0
+  " Reduce cmd lines to minimum. For now the min is 1 buf after
+  " https://github.com/neovim/neovim/pull/16251 gets released the
+  " min is going to be 0
+  set cmdheight=1
 endif
 
 " tweak settings if we are using nvim as a pager, we know this because
@@ -124,21 +128,6 @@ let g:startify_lists = [
       \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
       \ { 'type': 'commands',  'header': ['   Commands']       },
       \ ]
-
-" firenvim configuration
-let g:firenvim_config = {
-    \ 'globalSettings': {
-        \ 'alt': 'all',
-    \  },
-    \ 'localSettings': {
-        \ '.*': {
-            \ 'cmdline': 'firenvim',
-            \ 'priority': 0,
-            \ 'selector': 'textarea',
-            \ 'takeover': 'never',
-        \ },
-    \ }
-\ }
 
 """""""""""""""""""""
 " Misc autocommands "

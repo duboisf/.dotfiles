@@ -17,10 +17,6 @@ autocmd(group, "BufWritePost", "*/cfg/packer.lua", "source <afile> | PackerCompi
   desc = "Run packer.compile() when the packer.lua config file gets saved",
 })
 
-local function notStartedByFirenvim()
-  return vim.g.started_by_firenvim == nil
-end
-
 require('packer').startup({ function(use)
   use 'wbthomason/packer.nvim'
 
@@ -37,16 +33,35 @@ require('packer').startup({ function(use)
     config = function() require 'nvim-autopairs'.setup {} end,
   }
 
-  -- Check if nvim was started by firenvim. If so, we want to disable
-  -- some plugins and tweak some settings, reason being that sometimes
-  -- the size of the nvim window is _realy_ small (2-3 lines!)
-  use 'gpanders/editorconfig.nvim'
-  use { 'junegunn/fzf', event = "VimEnter" }
-  use { 'junegunn/fzf.vim', event = "VimEnter" }
-  use 'mhinz/vim-startify'
+  use {
+    'gpanders/editorconfig.nvim',
+    cond = utils.notStartedByFirenvim,
+  }
+
+  use {
+    'junegunn/fzf',
+    cond = utils.notStartedByFirenvim,
+    event = "VimEnter",
+  }
+
+  use {
+    'junegunn/fzf.vim',
+    cond = utils.notStartedByFirenvim,
+    event = "VimEnter",
+  }
+
+  use {
+    'mhinz/vim-startify',
+    cond = utils.notStartedByFirenvim,
+  }
+
   use { 'tpope/vim-eunuch', event = "VimEnter" }
+
   -- vim-sensible sets things like ruler and laststatus which we don't want when we are using firenvim
-  use 'tpope/vim-sensible'
+  use {
+    'tpope/vim-sensible',
+    cond = utils.notStartedByFirenvim,
+  }
 
   use {
     'tsandall/vim-rego',
@@ -125,14 +140,13 @@ require('packer').startup({ function(use)
     -- Requires git, fzf, python3, ripgrep
     -- Optional bat(like cat but 10x nicer!), exa(like ls but nicer!)
     'nvim-telescope/telescope.nvim',
+    cond = utils.notStartedByFirenvim,
     requires = {
       'kyazdani42/nvim-web-devicons',
       'nvim-lua/popup.nvim',
       'nvim-lua/plenary.nvim',
       use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' },
     },
-    cmd = "Telescope",
-    keys = "<space>f",
     config = function() require 'cfg.plugins.telescope' end
   }
 
@@ -187,7 +201,7 @@ require('packer').startup({ function(use)
 
   use {
     'nvim-lualine/lualine.nvim',
-    cond = notStartedByFirenvim,
+    cond = utils.notStartedByFirenvim,
     config = function()
       require 'lualine'.setup {
         options = { theme = 'onedark' },
@@ -247,7 +261,7 @@ require('packer').startup({ function(use)
 
   use {
     'sbdchd/neoformat',
-    config = function ()
+    config = function()
       vim.g.neoformat_try_node_exe = 1
     end
   }
