@@ -88,6 +88,9 @@ nnoremap <leader>, 10<C-W><
 " Move selection up or down
 xnoremap <C-Up> xkP`[V`]
 xnoremap <C-Down> xp`[V`]
+" Move current line up or down
+nnoremap <C-Up> ddkP
+nnoremap <C-Down> ddp
 " Toggle wrap
 nnoremap <leader>w :set wrap!<CR>
 " Toggle paste
