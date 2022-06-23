@@ -1,39 +1,9 @@
-local fn = vim.fn
 local utils = require("core.utils")
-local autogroup = utils.autogroup
-local autocmd = utils.autocmd
-local o = vim.o
-
--- load global functions like dump
-require('core')
 
 -- Load plugins
 require("cfg.packer")
 
--- Jump to last position when reopening a buffer
-local group = autogroup('cfg', true)
--- disable jumping to last position when writting git commit messages
-autocmd(group, 'FileType', "gitcommit", function()
-  vim.b.disable_jump_to_last_position = true
-end)
--- when opening a file, jump to the last position we were in that file (if there was one)
-autocmd(
-  group,
-  'BufReadPost',
-  "*",
-  function()
-    if vim.b.disable_jump_to_last_position then
-      return
-    end
-    if fn.line("'\"") > 0 and fn.line("'\"") <= fn.line("$") then
-      fn.execute('normal! g`\"')
-    end
-  end
-  ,
-  {
-    desc = 'Jump to last position when reopening a buffer'
-  }
-)
+local o = vim.o
 
 o.laststatus = 3
 
