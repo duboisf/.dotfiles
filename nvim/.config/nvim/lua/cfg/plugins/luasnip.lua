@@ -48,47 +48,45 @@ local date = function() return { os.date('%Y-%m-%d') } end
 vim.api.nvim_set_keymap("i", "<C-l>", "<Plug>luasnip-next-choice", {})
 vim.api.nvim_set_keymap("s", "<C-l>", "<Plug>luasnip-next-choice", {})
 
--- Load vscode snipperts from other plugins
-require('luasnip.loaders.from_vscode').lazy_load()
+-- -- Load vscode snipperts from other plugins
+-- require('luasnip.loaders.from_vscode').lazy_load()
 
-ls.add_snippets(nil, {
-  all = {
-    s({
-      trig = "ast",
-      name = "Asana Task",
-      dscr = "Create an asana task markdown link with the text in the copy buffer",
-    }, {
-      t("["), c(1, {
-        t("Asana Task"),
-        t("Change Management Task"),
-        i(nil, ""),
-      }), t("]("), f(function() return vim.fn.getreg('+') end, {}), t(")")
-    })
-  },
+ls.add_snippets('all', {
+  s({
+    trig = "ast",
+    name = "Asana Task",
+    dscr = "Create an asana task markdown link with the text in the copy buffer",
+  }, {
+    t("["), c(1, {
+      t("Asana Task"),
+      t("Change Management Task"),
+      i(nil, ""),
+    }), t("]("), f(function() return vim.fn.getreg('+') end, {}), t(")")
+  })
+})
 
-  lua = {
-    s("ll", fmt("local {var} = {something}", {
-      var = i(1, ""),
-      something = i(2, ""),
-    })),
-    s({
-      trig = 'lf',
-      name = 'lambda function',
-      dscr = 'Creates an inline lambda function used to pass as a parameter',
-    }, {
-      t("function() "), i(1, ""), t(" end"),
-    }),
-  },
+ls.add_snippets('lua', {
+  s("ll", fmt("local {var} = {something}", {
+    var = i(1, ""),
+    something = i(2, ""),
+  })),
+  s({
+    trig = 'lf',
+    name = 'lambda function',
+    dscr = 'Creates an inline lambda function used to pass as a parameter',
+  }, {
+    t("function() "), i(1, ""), t(" end"),
+  }),
+})
 
-  go = {
-    s({
-      trig = "fmterr",
-      name = [[fmt.Error("...: %w", err)]],
-      dscr = "Wrap err with fmt.Error's %w formating operand",
-    }, fmt([[fmt.Errorf("{}: %w", {})]],
-      {
-        i(1, ""), i(2, "err")
-      }
-    )),
-  },
+ls.add_snippets('go', {
+  s({
+    trig = "fmterr",
+    name = [[fmt.Error("...: %w", err)]],
+    dscr = "Wrap err with fmt.Error's %w formating operand",
+  }, fmt([[fmt.Errorf("{}: %w", {})]],
+    {
+      i(1, ""), i(2, "err")
+    }
+  )),
 })
