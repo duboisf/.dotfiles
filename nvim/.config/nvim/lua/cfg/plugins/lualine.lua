@@ -11,7 +11,8 @@ require 'lualine'.setup {
         'filename',
         path = 1,
       },
-    }
+    },
+    lualine_z = { 'location', '%L' },
   },
   tabline = {
     lualine_b = { 'buffers' },
