@@ -193,6 +193,11 @@ require('packer').startup({ function(use)
   }
 
   use {
+    'nvim-treesitter/playground',
+    after = 'nvim-treesitter',
+  }
+
+  use {
     'glacambre/firenvim',
     run = function() vim.fn['firenvim#install'](0) end,
     config = function() require('cfg.plugins.firenvim') end,

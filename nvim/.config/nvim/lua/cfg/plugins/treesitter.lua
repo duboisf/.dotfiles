@@ -20,8 +20,7 @@ require 'nvim-treesitter.configs'.setup({
   },
   playground = {
     enable = true,
-    updatetime = 25,
-    persist_queries = false,
+    persist_queries = true,
   },
   refactor = {
     highlight_definitions = {

@@ -9,9 +9,6 @@ end
 -- Simplicy creating autocmds
 function M.autocmd(group, events, pattern, callback, opts)
   opts = opts or {}
-  if type(events) == 'string' then
-    events = { events }
-  end
   opts.group = group
   opts.pattern = pattern
   if type(callback) == 'string' then
