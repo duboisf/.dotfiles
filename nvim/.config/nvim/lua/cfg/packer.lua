@@ -185,6 +185,9 @@ require('packer').startup({ function(use)
     setup = function() vim.g.mkdp_filetypes = { "markdown" } end,
   }
 
+  --
+  -- treesitter
+  --
   use {
     'nvim-treesitter/nvim-treesitter',
     event = 'VimEnter',
@@ -194,6 +197,11 @@ require('packer').startup({ function(use)
   use {
     'nvim-treesitter/playground',
     after = 'nvim-treesitter',
+  }
+
+  use {
+    'p00f/nvim-ts-rainbow',
+    after = 'nvim-treesitter'
   }
 
   use {
