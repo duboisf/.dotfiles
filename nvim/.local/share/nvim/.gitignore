@@ -1,10 +1,11 @@
-plugged/
-shada/
-swap/
-site/pack/
-log
 lsp_servers/
+plugged/
+session/
+shada/
+site/pack/
+swap/
+.netrwhist
+log
 rplugin.vim
 telescope_history
-.netrwhist
 tree-sitter-*
