@@ -104,8 +104,7 @@ require('packer').startup({ function(use)
 
   use {
     'preservim/nerdtree',
-    cmd = { 'NERDTreeToggle', 'NERDTreeFind' },
-    keys = { '<Bslash>f', '<Blash>t' },
+    event = 'VimEnter',
     config = function()
       vim.cmd [[
           " nerdtree configuration
