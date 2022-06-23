@@ -6,4 +6,5 @@ log
 lsp_servers/
 rplugin.vim
 telescope_history
+.netrwhist
 tree-sitter-*
