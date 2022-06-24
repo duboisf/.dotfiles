@@ -83,7 +83,7 @@ cmp.setup({
     end, { "i", "s" }),
   }),
   performance = {
-    -- debounce = 150,
+    debounce = 300,
   },
   preselect = cmp.PreselectMode.None,
   sources = cmp.config.sources({
