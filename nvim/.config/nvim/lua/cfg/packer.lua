@@ -237,7 +237,7 @@ require('packer').startup({ function(use)
 
   use {
     'kyazdani42/nvim-tree.lua',
-    event = 'VimEnter',
+    config = function() require('nvim-tree').setup() end,
     requires = {
       'kyazdani42/nvim-web-devicons',
     },
