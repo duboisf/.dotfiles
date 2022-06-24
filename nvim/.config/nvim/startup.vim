@@ -51,6 +51,9 @@ let g:vimsyn_embed = 'l'
 " Don't show the last command in the last line
 set noshowcmd
 
+" use only 1 status line for all open windows
+set laststatus=3
+
 if exists('g:started_by_firenvim')
   " Try to make nvim optimal when we only have an nvim window that's just 2-3 lines high
   " Never show the status line
