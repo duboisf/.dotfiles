@@ -1,6 +1,8 @@
 -- This needs to be called first
 require('nvim-lsp-installer').setup {}
 
+local lspconfig = require('lspconfig')
+
 local group = vim.api.nvim_create_augroup('cfg#plugins#lsp', { clear = true })
 vim.api.nvim_create_autocmd('ColorScheme', {
   group = group,
@@ -23,8 +25,6 @@ vim.api.nvim_create_autocmd('ColorScheme', {
     c 'hi LspCodeLens guifg=Cyan'
   end,
 })
-
-local lspconfig = require('lspconfig')
 
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
@@ -159,36 +159,38 @@ lspconfig.gopls.setup {
   capabilities = (function()
     -- local capabilities = vim.lsp.protocol.make_client_capabilities()
     local caps = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-    caps.textDocument.completion.completionItem.snippetSupport = true
-    caps.textDocument.completion.completionItem.resolveSupport = {
-      properties = {
-        'documentation',
-        'detail',
-        'additionalTextEdits',
-      }
-    }
+    -- caps.textDocument.completion.completionItem.snippetSupport = true
+    -- caps.textDocument.completion.completionItem.resolveSupport = {
+    --   properties = {
+    --     'documentation',
+    --     'detail',
+    --     'additionalTextEdits',
+    --   }
+    -- }
     return caps
   end)(),
-  flags = {
-    allow_incremental_sync = true
-  },
+  -- flags = {
+  --   allow_incremental_sync = true
+  -- },
   init_options = {
-    staticcheck = false,
     allExperiments = true,
+    -- allowImplicitNetworkAccess = true,
+    -- templateExtensions = { "yaml" },
+    -- staticcheck = false,
     usePlaceholders = true,
-    analyses = {
-      nilness = true,
-      unusedparams = true,
-    },
-    codelenses = {
-      gc_details = true,
-      test = true,
-      generate = true,
-      regenerate_cgo = true,
-      tidy = true,
-      upgrade_dependency = true,
-      vendor = true,
-    },
+    -- analyses = {
+    --   nilness = true,
+    --   unusedparams = true,
+    -- },
+    -- codelenses = {
+    --   gc_details = false,
+    --   test = true,
+    --   generate = true,
+    --   regenerate_cgo = true,
+    --   tidy = true,
+    --   upgrade_dependency = true,
+    --   vendor = false,
+    -- },
   },
 }
 
