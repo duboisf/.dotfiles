@@ -8,8 +8,9 @@ prompt: enabled
 pager:
 # Aliases allow you to create nicknames for gh commands
 aliases:
-    merge-pr-and-delete: 'pr merge --delete-branch'
-    create-pr: '!gh pr create && gh pr merge --auto --merge'
+    merge-pr-and-delete: pr merge --delete-branch
+    create-pr: |
+      !gh pr create && gh pr merge --auto --merge
     fclone: repo clone Flatbook/$1
     clone: repo clone
     view-latest-release: |
