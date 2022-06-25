@@ -3,28 +3,43 @@ require('nvim-lsp-installer').setup {}
 
 local lspconfig = require('lspconfig')
 
-local group = vim.api.nvim_create_augroup('cfg#plugins#lsp', { clear = true })
-vim.api.nvim_create_autocmd('ColorScheme', {
-  group = group,
-  pattern = "*",
-  callback = function()
-    local c = vim.cmd
-    c 'hi LspReferenceText guibg=#4d1e0a'
-    c 'hi LspReferenceRead guibg=#1d1e0a'
-    c 'hi LspReferenceWrite guibg=#fd1e0a'
-    c 'hi DiagnosticVirtualTextError guifg=Red ctermfg=Red'
-    c 'hi DiagnosticVirtualTextWarning guifg=Yellow ctermfg=Yellow'
-    c 'hi DiagnosticVirtualTextInformation guifg=White ctermfg=White'
-    c 'hi DiagnosticVirtualTextHint guifg=White ctermfg=White'
-    c 'hi DiagnosticUnderlineError guifg=Red ctermfg=NONE cterm=undercurl gui=undercurl'
-    c 'hi DiagnosticUnderlineWarning guifg=Yellow ctermfg=NONE cterm=underline gui=underline'
-    c 'hi DiagnosticUnderlineInformation guifg=NONE ctermfg=NONE cterm=underline gui=underline'
-    c 'hi DiagnosticUnderlineHint guifg=Cyan ctermfg=NONE cterm=underline gui=underline'
-    c 'hi DiagnosticFloatingError guifg=#E74C3C'
-    c 'hi DiagnosticSignError guifg=#E74C3C'
-    c 'hi LspCodeLens guifg=Cyan'
-  end,
-})
+do
+  vim.cmd [[
+    sign define DiagnosticSignError text= texthl=DiagnosticSignError
+    sign define DiagnosticSignWarning text= texthl=DiagnosticSignWarning
+    sign define DiagnosticSignInformation text= texthl=DiagnosticSignInformation
+    sign define DiagnosticSignHint text= texthl=DiagnosticSignHint
+  ]]
+
+  local group = vim.api.nvim_create_augroup('cfg#plugins#lsp', { clear = true })
+  local function set_highlights()
+    vim.cmd [[
+      hi LspSignatureActiveParameter guibg=#ff7f00
+      hi LspReferenceText guibg=#4d1e0a
+      hi LspReferenceRead guibg=#1d1e0a
+      hi LspReferenceWrite guibg=#fd1e0a
+      hi DiagnosticVirtualTextError guifg=Red ctermfg=Red
+      hi DiagnosticVirtualTextWarning guifg=Yellow ctermfg=Yellow
+      hi DiagnosticVirtualTextInformation guifg=White ctermfg=White
+      hi DiagnosticVirtualTextHint guifg=White ctermfg=White
+      hi DiagnosticUnderlineError guifg=Red ctermfg=NONE cterm=undercurl gui=undercurl
+      hi DiagnosticUnderlineWarning guifg=Yellow ctermfg=NONE cterm=underline gui=underline
+      hi DiagnosticUnderlineInformation guifg=NONE ctermfg=NONE cterm=underline gui=underline
+      hi DiagnosticUnderlineHint guifg=Cyan ctermfg=NONE cterm=underline gui=underline
+      hi DiagnosticFloatingError guifg=#E74C3C
+      hi DiagnosticSignError guifg=#E74C3C
+      hi LspCodeLens guifg=Cyan
+    ]]
+  end
+
+  vim.api.nvim_create_autocmd('ColorScheme', {
+    group = group,
+    pattern = "*",
+    callback = set_highlights,
+  })
+
+  set_highlights()
+end
 
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
@@ -86,13 +101,8 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   },
   signs = true,
   update_in_insert = false,
-}
-)
+})
 
-vim.fn.sign_define('LspDiagnosticsSignError', { text = "", texthl = "LspDiagnosticsSignError" })
-vim.fn.sign_define('LspDiagnosticsSignWarning', { text = "", texthl = "LspDiagnosticsSignWarning" })
-vim.fn.sign_define('LspDiagnosticsSignInformation', { text = "", texthl = "LspDiagnosticsSignInformation" })
-vim.fn.sign_define('LspDiagnosticsSignHint', { text = "", texthl = "LspDiagnosticsSignHint" })
 
 lspconfig.tsserver.setup { capabilities = capabilities, on_attach = on_attach }
 lspconfig.terraformls.setup { capabilities = capabilities, on_attach = on_attach }
@@ -126,9 +136,9 @@ do
           enabled = false
         },
         workspace = {
-          -- checkThirdParty = false,
-          -- library = vim.api.nvim_get_runtime_file('', true),
-          -- maxPreload = 2000,
+          checkThirdParty = false,
+          library = vim.api.nvim_get_runtime_file('', true),
+          maxPreload = 1000,
         },
       }
     }
