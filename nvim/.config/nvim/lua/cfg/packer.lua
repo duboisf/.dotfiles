@@ -13,7 +13,8 @@ if fn.empty(fn.glob(install_path)) > 0 then
     install_path })
 end
 
-autocmd(group, "BufWritePost", "*/cfg/packer.lua", "let b:disable_jump_to_last_position = 1 | source <afile> | PackerCompile", {
+autocmd(group, "BufWritePost", "*/cfg/packer.lua",
+  "let b:disable_jump_to_last_position = 1 | source <afile> | PackerCompile", {
   desc = "Run packer.compile() when the packer.lua config file gets saved",
 })
 
