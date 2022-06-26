@@ -101,8 +101,6 @@ require('packer').startup({ function(use)
 
   use { 'tpope/vim-rhubarb', after = 'vim-fugitive' }
 
-  use { 'ryanoasis/vim-devicons', event = 'VimEnter' }
-
   use {
     'preservim/nerdtree',
     event = 'VimEnter',
