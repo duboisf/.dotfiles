@@ -10,6 +10,8 @@ require('nvim-tree').setup {
     mappings = {
       list = {
         { key = 'u', action = 'dir_up' },
+        { key = 'h', action = 'toggle_dotfiles' },
+        { key = 'H', action = '' },
       },
     }
   },
