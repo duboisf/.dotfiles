@@ -313,6 +313,11 @@ require('packer').startup({ function(use)
     end
   }
 
+  use {
+    'mickael-menu/zk-nvim',
+    config = function() require('cfg.plugins.zk-nvim') end
+  }
+
   -- Automatically set up your configuration after cloning packer.nvim
   if packer_bootstrap then
     require('packer').sync()
