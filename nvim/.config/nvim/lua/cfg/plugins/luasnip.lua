@@ -70,6 +70,7 @@ ls.add_snippets('lua', {
     var = i(1, ""),
     something = i(2, ""),
   })),
+
   s({
     trig = 'lf',
     name = 'lambda function',
@@ -77,6 +78,8 @@ ls.add_snippets('lua', {
   }, {
     t("function() "), i(1, ""), t(" end"),
   }),
+
+  s('f', {i(1, ''), t(' = '), i(2, ''), t(',')})
 })
 
 ls.add_snippets('go', {
