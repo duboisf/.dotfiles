@@ -1,4 +1,13 @@
-require 'lualine'.setup {
+local mode = require('lualine.components.mode')
+
+local function enhanced_mode()
+  if active_hydra then
+    return string.upper(active_hydra.name)
+  end
+  return mode()
+end
+
+require('lualine').setup {
   options = {
     theme = 'onedark',
     disabled_filetypes = {
@@ -6,6 +15,7 @@ require 'lualine'.setup {
     }
   },
   sections = {
+    lualine_a = { enhanced_mode },
     lualine_c = {
       {
         'filename',

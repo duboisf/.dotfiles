@@ -2,7 +2,7 @@ require('nvim-tree').setup {
   create_in_closed_folder = true,
   hijack_cursor = true,
   update_focused_file = {
-    enable = true,
+    enable = false,
     update_root = true,
   },
   view = {

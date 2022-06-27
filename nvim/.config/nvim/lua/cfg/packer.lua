@@ -102,8 +102,14 @@ require('packer').startup({ function(use)
   use { 'tpope/vim-rhubarb', after = 'vim-fugitive' }
 
   use {
+      'anuvyklack/keymap-layer.nvim',
+  }
+
+  use {
     'anuvyklack/hydra.nvim',
-    config = function() require('cfg.plugins.hydra') end
+    event = 'VimEnter',
+    config = function() require('cfg.plugins.hydra') end,
+    after = { 'keymap-layer.nvim' }
   }
 
   use {
