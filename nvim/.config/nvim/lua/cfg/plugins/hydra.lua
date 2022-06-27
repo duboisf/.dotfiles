@@ -17,7 +17,7 @@ local function incremental_selection()
 end
 
 Hydra({
-  name = 'TS Context',
+  name = '🌳 Incremental Selection',
   config = {
     color = 'pink',
     invoke_on_body = true,
@@ -25,13 +25,15 @@ Hydra({
     on_exit = function() end,
     -- timeout = 1000,
   },
-  mode = 'n',
+  mode = { 'n', 'x' },
   body = 'gs',
   heads = {
-    { 'j', 'hi', { mode = 'n', } },
-    -- { 'j', function() incremental_selection().node_incremental() end, { mode = 'x', } },
-    -- { 'k', function() incremental_selection().node_decremental() end, { private = false, mode = 'x', } },
-    -- { 'l', function() incremental_selection().scope_incremental() end, { private = false, mode = 'x' } },
+    { 'j', ":lua require'nvim-treesitter.incremental_selection'.node_incremental()<CR>", { desc = 'Node++', silent = true } },
+    { 'k', ":lua require'nvim-treesitter.incremental_selection'.node_decremental()<CR>", { desc = 'Node--', silent = true } },
+    { 'l', ":lua require'nvim-treesitter.incremental_selection'.scope_incremental()<CR>", { desc = 'Scope++', silent = true } },
+    { 'y', 'y', { desc = 'Copy', exit = true } },
+    { '<C-c>', '<Esc>', { exit = true } },
+    { '<Esc>', '<Esc>', { exit = true } },
   }
 })
 
