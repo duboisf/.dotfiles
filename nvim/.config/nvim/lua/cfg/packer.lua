@@ -204,6 +204,12 @@ require('packer').startup({ function(use)
   }
 
   use {
+    'nvim-treesitter/nvim-treesitter-context',
+    config = function() require 'treesitter-context'.setup {} end,
+    after = 'nvim-treesitter',
+  }
+
+  use {
     'p00f/nvim-ts-rainbow',
     after = 'nvim-treesitter'
   }
@@ -226,6 +232,7 @@ require('packer').startup({ function(use)
     config = function() require 'cfg.plugins.lualine' end,
     requires = { 'kyazdani42/nvim-web-devicons' }
   }
+
   -- use {
   --   'uga-rosa/cmp-dictionary',
   --   config = function()
