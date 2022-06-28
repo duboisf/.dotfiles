@@ -164,45 +164,72 @@ do
   }
 end
 
-lspconfig.gopls.setup {
-  on_attach = on_attach,
-  capabilities = (function()
-    -- local capabilities = vim.lsp.protocol.make_client_capabilities()
-    local caps = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-    -- caps.textDocument.completion.completionItem.snippetSupport = true
-    -- caps.textDocument.completion.completionItem.resolveSupport = {
-    --   properties = {
-    --     'documentation',
-    --     'detail',
-    --     'additionalTextEdits',
-    --   }
-    -- }
-    return caps
-  end)(),
-  -- flags = {
-  --   allow_incremental_sync = true
-  -- },
-  init_options = {
-    allExperiments = true,
-    -- allowImplicitNetworkAccess = true,
-    -- templateExtensions = { "yaml" },
-    -- staticcheck = false,
-    usePlaceholders = true,
-    -- analyses = {
-    --   nilness = true,
-    --   unusedparams = true,
+do
+  local util = require('lspconfig/util')
+  local lastRootPath = nil
+  local gopath = os.getenv("GOPATH")
+  if gopath == nil then
+    local ok = false
+    ok, gopath = pcall(vim.fn.system, { 'go', 'env', 'GOPATH' })
+    if ok then
+      gopath = vim.trim(gopath)
+    else
+      gopath = ""
+    end
+  end
+  local gopathmod = gopath .. '/pkg/mod'
+  lspconfig.gopls.setup {
+    on_attach = on_attach,
+    capabilities = (function()
+      -- local capabilities = vim.lsp.protocol.make_client_capabilities()
+      local caps = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+      -- caps.textDocument.completion.completionItem.snippetSupport = true
+      -- caps.textDocument.completion.completionItem.resolveSupport = {
+      --   properties = {
+      --     'documentation',
+      --     'detail',
+      --     'additionalTextEdits',
+      --   }
+      -- }
+      return caps
+    end)(),
+    -- flags = {
+    --   allow_incremental_sync = true
     -- },
-    -- codelenses = {
-    --   gc_details = false,
-    --   test = true,
-    --   generate = true,
-    --   regenerate_cgo = true,
-    --   tidy = true,
-    --   upgrade_dependency = true,
-    --   vendor = false,
-    -- },
-  },
-}
+    init_options = {
+      allExperiments = true,
+      -- allowImplicitNetworkAccess = true,
+      -- templateExtensions = { "yaml" },
+      -- staticcheck = false,
+      usePlaceholders = true,
+      -- analyses = {
+      --   nilness = true,
+      --   unusedparams = true,
+      -- },
+      -- codelenses = {
+      --   gc_details = false,
+      --   test = true,
+      --   generate = true,
+      --   regenerate_cgo = true,
+      --   tidy = true,
+      --   upgrade_dependency = true,
+      --   vendor = false,
+      -- },
+    },
+    -- don't spawn a new gopls instance if we are jumping to definitions of
+    -- functions in dependencies that are in the $GOPATH. Without this, a new
+    -- gopls instance will spawn and the root dir will be the $GOPATH and it
+    -- can't jump to symbols because it can't find a go.mod.
+    root_dir = function(fname)
+      local fullpath = vim.fn.expand(fname, ':p')
+      if string.find(fullpath, gopathmod) and lastRootPath ~= nil then
+        return lastRootPath
+      end
+      lastRootPath = util.root_pattern("go.mod", ".git")(fname)
+      return lastRootPath
+    end,
+  }
+end
 
 local function safe_formatting_sync()
   local id, client = next(vim.lsp.buf_get_clients())
