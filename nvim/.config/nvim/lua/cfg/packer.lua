@@ -102,7 +102,7 @@ require('packer').startup({ function(use)
   use { 'tpope/vim-rhubarb', after = 'vim-fugitive' }
 
   use {
-      'anuvyklack/keymap-layer.nvim',
+    'anuvyklack/keymap-layer.nvim',
   }
 
   use {
@@ -217,7 +217,7 @@ require('packer').startup({ function(use)
 
   use {
     'p00f/nvim-ts-rainbow',
-    after = 'nvim-treesitter'
+    after = 'nvim-treesitter',
   }
 
   use {
