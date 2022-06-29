@@ -152,7 +152,6 @@ require('packer').startup({ function(use)
     -- Requires git, fzf, python3, ripgrep
     -- Optional bat(like cat but 10x nicer!), exa(like ls but nicer!)
     'nvim-telescope/telescope.nvim',
-    cond = notStartedByFirenvim,
     requires = {
       'kyazdani42/nvim-web-devicons',
       'nvim-lua/popup.nvim',
@@ -276,7 +275,6 @@ require('packer').startup({ function(use)
 
   use {
     'hrsh7th/nvim-cmp',
-    cond = notStartedByFirenvim,
     config = function() require 'cfg.plugins.cmp' end,
     requires = {
       'onsails/lspkind.nvim',
