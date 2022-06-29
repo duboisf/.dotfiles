@@ -79,11 +79,3 @@ require('nvim-treesitter.configs').setup {
   },
   ensure_installed = 'all' -- one of 'all', 'maintained', or a list of languages
 }
-
-local ft_to_lang = require('nvim-treesitter.parsers').ft_to_lang
-require('nvim-treesitter.parsers').ft_to_lang = function(ft)
-  if ft == 'zsh' then
-    ft = 'bash'
-  end
-  return ft_to_lang(ft)
-end
