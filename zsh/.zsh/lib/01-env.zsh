@@ -22,6 +22,7 @@ export GPG_TTY=$(tty)
 export MANPAGER='nvim --cmd "let g:pager_mode = 1" +Man!'
 export MANWIDTH=999
 export NVM_DIR=~/.nvm
+export ZK_NOTEBOOK_DIR=~/notes
 
 if [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
