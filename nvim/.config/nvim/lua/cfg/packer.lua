@@ -227,8 +227,8 @@ require('packer').startup({ function(use)
 
   use {
     'rcarriga/nvim-notify',
-    event = 'VimEnter',
-    config = function() vim.notify = require('notify').notify end,
+    after = 'telescope.nvim',
+    config = function() require('cfg.plugins.nvim_notify') end,
   }
 
   use {
