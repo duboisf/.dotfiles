@@ -14,9 +14,12 @@ set softtabstop=4
 set shiftwidth=4
 set expandtab
 set encoding=utf-8
-set listchars=tab:→\ ,trail:·,eol:↩
+" show tabs, newlines and trailing spaces
 set list
-set scrolloff=0
+" specify the characters to use for tabs, trailing spaces and newlines
+set listchars=tab:→\ ,trail:·,eol:↩
+" minimum num of screenlines to keep aboe and below the cursor
+set scrolloff=3
 set cursorline
 if !&diff
   set cursorcolumn
