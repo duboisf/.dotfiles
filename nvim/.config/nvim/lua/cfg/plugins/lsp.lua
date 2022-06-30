@@ -110,7 +110,7 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 lspconfig.tsserver.setup { capabilities = capabilities, on_attach = on_attach }
 lspconfig.terraformls.setup { capabilities = capabilities, on_attach = on_attach }
 -- lspconfig.solargraph.setup { capabilities = capabilities, on_attach = on_attach }
-lspconfig.pyright.setup { capabilities = capabilities, on_attach = on_attach }
+-- lspconfig.pyright.setup { capabilities = capabilities, on_attach = on_attach }
 lspconfig.jsonls.setup { capabilities = capabilities, on_attach = on_attach }
 lspconfig.dockerls.setup { capabilities = capabilities, on_attach = on_attach }
 lspconfig.bashls.setup { capabilities = capabilities, on_attach = on_attach }
