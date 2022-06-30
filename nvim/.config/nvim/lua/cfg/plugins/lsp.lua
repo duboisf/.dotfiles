@@ -18,9 +18,9 @@ do
   local function set_highlights()
     vim.cmd [[
       hi LspSignatureActiveParameter guibg=#ff7f00
-      hi LspReferenceText guibg=#4d1e0a
-      hi LspReferenceRead guibg=#1d1e0a
-      hi LspReferenceWrite guibg=#8a3080
+      hi LspReferenceText guibg=#1d1e0a
+      hi LspReferenceRead guibg=#007000
+      hi LspReferenceWrite guibg=#ff7f00
       hi DiagnosticVirtualTextError guifg=Red ctermfg=Red
       hi DiagnosticVirtualTextWarning guifg=Yellow ctermfg=Yellow
       hi DiagnosticVirtualTextInformation guifg=White ctermfg=White
