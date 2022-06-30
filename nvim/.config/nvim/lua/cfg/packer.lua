@@ -334,6 +334,9 @@ require('packer').startup({ function(use)
     config = function() require('cfg.plugins.zk') end
   }
 
+  -- Render markdown files directly inside a buffer using glow
+  use { 'ellisonleao/glow.nvim' }
+
   -- Automatically set up your configuration after cloning packer.nvim
   if packer_bootstrap then
     require('packer').sync()
