@@ -1,3 +1,7 @@
+
+" load plugins using packer
+lua require("cfg.packer")
+
 " Check if we started nvim in pager mode
 let g:pager_mode = get(g:, 'pager_mode', v:false)
 
