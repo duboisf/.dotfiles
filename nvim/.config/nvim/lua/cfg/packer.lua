@@ -138,11 +138,6 @@ require('packer').startup({ function(use)
     end
   }
 
-  -- use {
-  --   'vim-airline/vim-airline',
-  --   config = function() require 'cfg.plugins.airline' end,
-  -- }
-
   use {
     'lewis6991/gitsigns.nvim',
     config = function() require 'cfg.plugins.gitsigns' end,
