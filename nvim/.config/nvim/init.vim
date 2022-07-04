@@ -67,20 +67,6 @@ let g:do_filetype_lua = 1
 " don't use filetype.vim for filetype detection
 let g:did_load_filetypes = 0
 
-if exists('g:started_by_firenvim')
-  " Try to make nvim optimal when we only have an nvim window that's just 2-3 lines high
-  " Never show the status line
-  set laststatus=0
-  " Don't show the line and column of the cursor position
-  set noruler
-  " Don't show open tabs and buffers on the first line
-  set showtabline=0
-  " Reduce cmd lines to minimum. For now the min is 1 buf after
-  " https://github.com/neovim/neovim/pull/16251 gets released the
-  " min is going to be 0
-  set cmdheight=1
-endif
-
 " tweak settings if we are using nvim as a pager, we know this because
 " we set the pager_mode variable when we do
 if g:pager_mode
