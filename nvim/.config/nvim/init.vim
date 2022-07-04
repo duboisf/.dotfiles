@@ -37,8 +37,6 @@ set dictionary+=/usr/share/dict/american-english
 " will be that gf won't work with filenames with = in them... I don't think
 " this will cause a lot of problems...
 set isfname-==
-" if hidden is not set, TextEdit might fail.
-set hidden
 " Don't show the current mode (insert, visual, etc.)
 set noshowmode
 " Better display for messages
