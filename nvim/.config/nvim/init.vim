@@ -8,7 +8,9 @@ let g:pager_mode = get(g:, 'pager_mode', v:false)
 """""""""""""""""""""
 " vim configuration "
 """""""""""""""""""""
-set termguicolors " Enables 24-bit RGB color in the Terminal UI
+
+" Enable 24-bit RGB color in the Terminal UI
+set termguicolors
 set mouse=a
 set relativenumber
 set number
@@ -60,6 +62,12 @@ set noshowcmd
 
 " use only 1 status line for all open windows
 set laststatus=3
+
+" use filetype.lua for filetype detection, it's way faster
+" see https://neovim.io/news/2022/04#filetypelua
+let g:do_filetype_lua = 1 
+" don't use filetype.vim for filetype detection
+let g:did_load_filetypes = 0
 
 if exists('g:started_by_firenvim')
   " Try to make nvim optimal when we only have an nvim window that's just 2-3 lines high
