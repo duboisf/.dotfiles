@@ -79,6 +79,7 @@ local function lsp_references()
 end
 
 nmap('gr', lsp_references)
+nmap('<leader>ff', ':Telescope<CR>')
 nmap('<leader>fa', find_all_files)
 nmap('<leader>fc', builtin.commands)
 nmap('<leader>fe', project_files)
