@@ -184,7 +184,7 @@ require('packer').startup({ function(use)
 
   use {
     'iamcco/markdown-preview.nvim',
-    run = function() vim.fn['mkdp#util#install']() end,
+    run = ':call mkdp#util#install()',
     ft = { 'markdown' },
     setup = function() vim.g.mkdp_filetypes = { "markdown" } end,
   }
@@ -196,6 +196,7 @@ require('packer').startup({ function(use)
     'nvim-treesitter/nvim-treesitter',
     event = 'VimEnter',
     config = function() require 'cfg.plugins.treesitter' end,
+    run = ':TSUpdate',
   }
 
   use {
