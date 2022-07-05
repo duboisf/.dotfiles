@@ -2,15 +2,21 @@ local ls = require 'luasnip'
 local types = require 'luasnip.util.types'
 
 local higroup = vim.api.nvim_create_augroup('cfg#plugins#luasnip', { clear = true })
+
+local function setup_highlights()
+    vim.cmd [[
+      hi LuaSnipChoiceNode guifg=#d65d0e
+      hi LuaSnipInsertNode guifg=#fabd2f
+    ]]
+end
+
 vim.api.nvim_create_autocmd('ColorScheme', {
   group = higroup,
   pattern = "*",
-  callback = function()
-    local c = vim.cmd
-    c 'hi LuaSnipChoiceNode guifg=#d65d0e'
-    c 'hi LuaSnipInsertNode guifg=#fabd2f'
-  end,
+  callback = setup_highlights,
 })
+
+setup_highlights()
 
 ls.config.setup({
   ext_opts = {
@@ -53,7 +59,7 @@ vim.api.nvim_set_keymap("s", "<C-l>", "<Plug>luasnip-next-choice", {})
 
 ls.add_snippets('all', {
   s({
-    trig = "ast",
+    trig = "at",
     name = "Asana Task",
     dscr = "Create an asana task markdown link with the text in the copy buffer",
   }, {
