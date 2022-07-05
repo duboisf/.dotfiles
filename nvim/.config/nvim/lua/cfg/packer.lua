@@ -101,41 +101,13 @@ require('packer').startup({ function(use)
 
   use { 'tpope/vim-rhubarb', after = 'vim-fugitive' }
 
-  use {
-    'anuvyklack/keymap-layer.nvim',
-  }
+  use { 'anuvyklack/keymap-layer.nvim' }
 
   use {
     'anuvyklack/hydra.nvim',
     event = 'VimEnter',
     config = function() require('cfg.plugins.hydra') end,
     after = { 'keymap-layer.nvim' }
-  }
-
-  use {
-    'preservim/nerdtree',
-    event = 'VimEnter',
-    config = function()
-      vim.cmd [[
-          " nerdtree configuration
-          let NERDTreeShowHidden = 1
-          let NERDTreeShowLineNumbers = 1
-
-          nnoremap \t :NERDTreeToggle<CR>
-          nnoremap \f :NERDTreeFind<CR>
-
-          fun! s:QuitIfNERDTreeIsOnlyThingOpen()
-            if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree())
-              quit
-            endif
-          endfun
-
-          aug fred#nerdtree
-            au!
-            au BufEnter * call s:QuitIfNERDTreeIsOnlyThingOpen()
-          aug end
-        ]]
-    end
   }
 
   use {
@@ -233,19 +205,6 @@ require('packer').startup({ function(use)
     config = function() require 'cfg.plugins.lualine' end,
     requires = { 'kyazdani42/nvim-web-devicons' }
   }
-
-  -- use {
-  --   'uga-rosa/cmp-dictionary',
-  --   config = function()
-  --     require("cmp_dictionary").setup {
-  --       async = true,
-  --       dic = {
-  --         ["*"] = { "/usr/share/dict/words" },
-  --       }
-  --     }
-  --   end,
-  --   after = 'nvim-cmp',
-  -- }
 
   use {
     'kyazdani42/nvim-tree.lua',
