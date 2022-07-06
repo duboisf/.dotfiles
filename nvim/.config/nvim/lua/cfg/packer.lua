@@ -207,11 +207,19 @@ require('packer').startup({ function(use)
   -- nvim-cmp
   --
   for _, source in ipairs({
+    -- complete words from other buffers
     'hrsh7th/cmp-buffer',
+    -- completion when in nvim commandline
     'hrsh7th/cmp-cmdline',
+    -- complete emojis like :tada:
     'hrsh7th/cmp-emoji',
+    -- show current function signature, need to find a better alternative
+    -- because as soon as there are other suggested completions, the signature
+    -- disapears
     'hrsh7th/cmp-nvim-lsp-signature-help',
+    -- completion for filesystem paths
     'hrsh7th/cmp-path',
+    -- completion for luasnip snippets
     'saadparwaiz1/cmp_luasnip',
   }) do
     use { source, after = 'nvim-cmp' }
@@ -224,9 +232,7 @@ require('packer').startup({ function(use)
       'onsails/lspkind.nvim',
       'hrsh7th/cmp-nvim-lsp',
     },
-    after = {
-      'nvim-autopairs',
-    }
+    after = { 'nvim-autopairs' }
   }
 
   use 'williamboman/nvim-lsp-installer'
@@ -247,14 +253,14 @@ require('packer').startup({ function(use)
     }
   }
 
+  -- snippets written in lua
   use {
     'L3MON4D3/LuaSnip',
-    after = {
-      'nvim-cmp'
-    },
+    after = { 'nvim-cmp' },
     config = function() require 'cfg.plugins.luasnip' end,
   }
 
+  -- colorscheme
   use {
     'rakr/vim-one',
     config = function()
@@ -270,6 +276,12 @@ require('packer').startup({ function(use)
   use {
     'mickael-menu/zk-nvim',
     config = function() require('cfg.plugins.zk') end
+  }
+
+  -- Dim inactive windows
+  use {
+    'sunjon/shade.nvim',
+    config = function() require('shade').setup {} end
   }
 
   -- Render markdown files directly inside a buffer using glow
