@@ -43,20 +43,19 @@ require('packer').startup({ function(use)
   }
 
   use {
-    'junegunn/fzf',
-    cond = notStartedByFirenvim,
-    event = "VimEnter",
-  }
-
-  use {
-    'junegunn/fzf.vim',
-    cond = notStartedByFirenvim,
-    event = "VimEnter",
-  }
-
-  use {
     'mhinz/vim-startify',
     cond = notStartedByFirenvim,
+  }
+
+  use {
+    "folke/twilight.nvim",
+    config = function()
+      require("twilight").setup {
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+      }
+    end
   }
 
   use { 'tpope/vim-eunuch', event = "VimEnter" }
@@ -258,15 +257,9 @@ require('packer').startup({ function(use)
     }
   }
 
-  -- use {
-  --   'rafamadriz/friendly-snippets',
-  --   event = 'VimEnter',
-  -- }
-
   use {
     'L3MON4D3/LuaSnip',
     after = {
-      -- 'friendly-snippets',
       'nvim-cmp'
     },
     config = function() require 'cfg.plugins.luasnip' end,
