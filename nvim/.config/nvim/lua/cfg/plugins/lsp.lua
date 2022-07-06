@@ -79,12 +79,12 @@ local on_attach = function(client, bufnr)
     vim.keymap.set(mode, '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
   end
 
-  if client.resolved_capabilities.code_lens then
+  if client.server_capabilities.code_lens then
     vim.api.nvim_exec("autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh()", false)
     vim.api.nvim_command [[autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh()]]
   end
 
-  if client.resolved_capabilities.document_highlight then
+  if client.server_capabilities.document_highlight then
     vim.api.nvim_command [[autocmd CursorHold  <buffer> lua vim.lsp.buf.document_highlight()]]
     vim.api.nvim_command [[autocmd CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()]]
     vim.api.nvim_command [[autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()]]
@@ -236,7 +236,7 @@ end
 
 local function safe_formatting_sync()
   local id, client = next(vim.lsp.buf_get_clients())
-  if id ~= nil and client.resolved_capabilities.document_formatting then
+  if id ~= nil and client.server_capabilities.document_formatting then
     if vim.lsp.buf.format then
       vim.lsp.buf.format(nil, 1000)
     else
