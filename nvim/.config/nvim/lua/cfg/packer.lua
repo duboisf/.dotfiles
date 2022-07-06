@@ -49,13 +49,8 @@ require('packer').startup({ function(use)
 
   use {
     "folke/twilight.nvim",
-    config = function()
-      require("twilight").setup {
-        -- your configuration comes here
-        -- or leave it empty to use the default settings
-        -- refer to the configuration section below
-      }
-    end
+    event = 'VimEnter',
+    config = function() require("twilight").setup {} end
   }
 
   use { 'tpope/vim-eunuch', event = "VimEnter" }
@@ -140,11 +135,6 @@ require('packer').startup({ function(use)
     'fatih/vim-go',
     ft = { 'go', 'gomod' },
     config = function() require 'cfg.plugins.go' end
-  }
-
-  use {
-    'junegunn/limelight.vim',
-    event = 'VimEnter',
   }
 
   use {
