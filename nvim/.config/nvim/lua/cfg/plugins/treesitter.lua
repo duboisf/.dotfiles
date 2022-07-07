@@ -49,7 +49,7 @@ require('nvim-treesitter.configs').setup {
     }
   },
   textobjects = { -- syntax-aware textobjects
-    enable = false,
+    enable = true,
     lookahead = true,
     disable = {},
     keymaps = {

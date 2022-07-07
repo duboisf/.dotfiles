@@ -172,6 +172,11 @@ require('packer').startup({ function(use)
   }
 
   use {
+    'nvim-treesitter/nvim-treesitter-textobjects',
+    after = 'nvim-treesitter',
+  }
+
+  use {
     'p00f/nvim-ts-rainbow',
     after = 'nvim-treesitter',
   }
