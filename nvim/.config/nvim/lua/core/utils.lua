@@ -31,5 +31,10 @@ function M.notStartedByFirenvim()
   return not M.startedByFirenvim()
 end
 
+function M.get_short_cwd()
+  local home = vim.fn.getenv('HOME')
+  local cwd = vim.fn.getcwd()
+  return string.gsub(cwd, home, '~')
+end
 
 return M

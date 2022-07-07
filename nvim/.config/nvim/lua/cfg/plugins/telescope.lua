@@ -1,5 +1,5 @@
 local builtin = require 'telescope.builtin'
-local themes = require 'telescope.themes'
+local utils = require 'core.utils'
 
 local nmap = function(lhs, rhs)
   vim.keymap.set("n", lhs, rhs, {
@@ -8,47 +8,21 @@ local nmap = function(lhs, rhs)
   })
 end
 
-local function get_cwd()
+local function get_buffer_dir()
   local cwd = vim.fn.expand('%:h')
   if cwd == "" then
     cwd = vim.fn.getcwd()
   end
-  return cwd
+  local home = vim.fn.getenv('HOME')
+  return string.gsub(cwd, home, '~')
 end
 
---
---
--- Custom pickers
---
---
-
--- Searches for files under the directory of the current buffer
-local function cwd_files()
-  local cwd = get_cwd()
-  builtin.find_files({
-    cwd = cwd, hidden = true,
-    prompt_title = "Find Files under " .. cwd,
-  })
+local function set_prompt_border_color(color)
+  vim.api.nvim_set_hl(0, 'TelescopePromptBorder', { fg = color })
 end
 
--- Searches for all files, including hidden and git ignored files. Useful when
--- I'm working on my dotfiles for example, since sometimes I want to open a
--- file that's in an external vim plugin which is under a path that's in a
--- .gitignore.
-local function find_all_files()
-  builtin.find_files {
-    find_command = { "fd", "--type", "f", "--hidden", "--no-ignore-vcs" },
-    prompt_title = "Find files [all the things]"
-  }
-end
-
--- Searches by using the builtin git_files picker but falling back to
--- find_files if we aren't in a git repo
-local function project_files()
-  local ok = pcall(builtin.git_files, { prompt_title = "[Git] Project Files" })
-  if not ok then
-    builtin.find_files({ prompt_title = "[Find] Project Files" })
-  end
+local function prompt_with_cwd(prompt)
+  return prompt .. ' 📁 ' .. utils.get_short_cwd()
 end
 
 -- returns true if the current buffer has an LSP client attached to it
@@ -59,6 +33,60 @@ local function has_lsp_client_attached()
     return false
   end
   return true
+end
+
+--
+-- Restore TelescopePromptBorder highlight
+--
+local group = vim.api.nvim_create_augroup('cfg#plugin#telescope', { clear = true })
+
+local function restore_original_prompt_border()
+  if vim.o.filetype == 'TelescopePrompt' then
+    -- reset the telescope prompt border color once we close telescope
+    vim.api.nvim_set_hl(0, 'TelescopePromptBorder', { link = 'TelescopeBorder' })
+  end
+end
+
+vim.api.nvim_create_autocmd('BufLeave', {
+  group = group,
+  desc = 'Restore original telescope prompt border',
+  callback = restore_original_prompt_border,
+})
+
+--
+-- Custom pickers
+--
+
+-- Searches for files under the directory of the current buffer
+local function cwd_files()
+  set_prompt_border_color('#22ee22')
+  local cwd = get_buffer_dir()
+  builtin.find_files({
+    cwd = cwd, hidden = true,
+    prompt_title = "Find Files 📁 " .. cwd,
+  })
+end
+
+-- Searches for all files, including hidden and git ignored files. Useful when
+-- I'm working on my dotfiles for example, since sometimes I want to open a
+-- file that's in an external vim plugin which is under a path that's in a
+-- .gitignore.
+local function find_all_files()
+  set_prompt_border_color('#bb2222')
+  builtin.find_files {
+    find_command = { "fd", "--type", "f", "--hidden", "--no-ignore-vcs" },
+    prompt_title = prompt_with_cwd("Find files [no ignore vcs]")
+  }
+end
+
+-- Searches by using the builtin git_files picker but falling back to
+-- find_files if we aren't in a git repo
+local function project_files()
+  set_prompt_border_color('#eeff00')
+  local ok = pcall(builtin.git_files, { prompt_title = prompt_with_cwd("[Git] Project Files") })
+  if not ok then
+    builtin.find_files({ prompt_title = prompt_with_cwd("[Find] Project Files") })
+  end
 end
 
 -- Searche workspace LSP symbols but checks if there's an LSP client attached
@@ -81,28 +109,31 @@ end
 nmap('gr', lsp_references)
 nmap('<leader>ff', ':Telescope<CR>')
 nmap('<leader>fa', find_all_files)
-nmap('<leader>fc', builtin.commands)
 nmap('<leader>fe', project_files)
 nmap('<leader>fd', cwd_files)
 nmap('<leader>fs', builtin.lsp_document_symbols)
 nmap('<leader>fw', lsp_dynamic_workspace_symbols)
 nmap('<leader>f*', builtin.current_buffer_fuzzy_find)
 nmap('<leader>fga', function()
+  -- set telescope prompt border to red
+  set_prompt_border_color('#bb2222')
   builtin.live_grep {
-    prompt_title = "Workspace Live Grep of all the things",
+    prompt_title = prompt_with_cwd("Live Grep [all the things]"),
     additional_args = function() return { "--no-ignore-vcs" } end
   }
 end)
 nmap('<leader>fgd', function()
-  local cwd = get_cwd()
+  set_prompt_border_color('#22ee22')
+  local cwd = get_buffer_dir()
   builtin.live_grep {
     cwd = cwd,
-    prompt_title = "Live Grep under " .. cwd,
+    prompt_title = "Live Grep 📁 " .. cwd,
   }
 end)
 nmap('<leader>fgw', function()
+  set_prompt_border_color('#eeff00')
   builtin.live_grep {
-    prompt_title = "Workspace Live Grep"
+    prompt_title = "Live Grep 📁 " .. short_cwd
   }
 end)
 nmap('<leader>fb', builtin.buffers)
@@ -124,6 +155,7 @@ require('telescope').setup {
     prompt_prefix = "🔎 ",
     selection_caret = "👉 ",
     entry_prefix = "   ",
+    dynamic_preview_title = true,
     initial_mode = "insert",
     selection_strategy = "reset",
     sorting_strategy = "descending",
@@ -155,7 +187,7 @@ require('telescope').setup {
   }
 }
 
-require 'telescope'.load_extension 'fzf'
+require('telescope').load_extension('fzf')
 
 -- do
 --   local curl = require 'plenary.curl'
