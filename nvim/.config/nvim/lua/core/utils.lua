@@ -32,9 +32,15 @@ function M.notStartedByFirenvim()
 end
 
 function M.get_short_cwd()
-  local home = vim.fn.getenv('HOME')
+  local home = vim.fn.getenv("HOME")
   local cwd = vim.fn.getcwd()
   return string.gsub(cwd, home, '~')
+end
+
+function M.reload_module(module)
+  package.loaded[module] = nil
+  require(module)
+  vim.notify('Reloaded lua module ' .. module)
 end
 
 return M
