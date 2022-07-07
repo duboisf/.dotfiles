@@ -4,7 +4,7 @@ local types = require 'luasnip.util.types'
 local higroup = vim.api.nvim_create_augroup('cfg#plugins#luasnip', { clear = true })
 
 local function setup_highlights()
-    vim.cmd [[
+  vim.cmd [[
       hi LuaSnipChoiceNode guifg=#d65d0e
       hi LuaSnipInsertNode guifg=#fabd2f
     ]]
@@ -72,10 +72,14 @@ ls.add_snippets('all', {
 })
 
 ls.add_snippets('lua', {
-  s("ll", fmt("local {var} = {something}", {
-    var = i(1, ""),
-    something = i(2, ""),
-  })),
+  s(
+    {
+      trig = "ll",
+      name = "Local variable",
+      desc = "Create a local variable",
+    },
+    { t("local "), i(1, ""), t(" = ")}
+  ),
 
   s({
     trig = 'lf',
@@ -85,7 +89,7 @@ ls.add_snippets('lua', {
     t("function() "), i(1, ""), t(" end"),
   }),
 
-  s('f', {i(1, ''), t(' = '), i(2, ''), t(',')})
+  s('f', { i(1, ''), t(' = '), i(2, ''), t(',') })
 })
 
 ls.add_snippets('go', {
