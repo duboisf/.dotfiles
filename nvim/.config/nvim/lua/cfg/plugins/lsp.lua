@@ -236,7 +236,7 @@ end
 
 local function safe_formatting_sync()
   local id, client = next(vim.lsp.buf_get_clients())
-  if id ~= nil and client.server_capabilities.document_formatting then
+  if id ~= nil and client.server_capabilities.documentFormattingProvider then
     if vim.lsp.buf.format then
       vim.lsp.buf.format(nil, 1000)
     else
