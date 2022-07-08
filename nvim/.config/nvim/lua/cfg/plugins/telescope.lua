@@ -1,6 +1,7 @@
 local actions = require "telescope.actions"
 local builtin = require 'telescope.builtin'
 local utils = require 'core.utils'
+local tutils = require "telescope.utils"
 
 local nmap = function(lhs, rhs)
   vim.keymap.set("n", lhs, rhs, {
@@ -64,7 +65,7 @@ local function cwd_files()
   local cwd = get_buffer_dir()
   builtin.find_files({
     cwd = cwd, hidden = true,
-    prompt_title = "Find Files   " .. cwd,
+    prompt_title = "Files   " .. cwd,
   })
 end
 
@@ -76,18 +77,26 @@ local function find_all_files()
   set_prompt_border_color('#bb2222')
   builtin.find_files {
     find_command = { "fd", "--type", "f", "--hidden", "--no-ignore-vcs" },
-    prompt_title = prompt_with_cwd("Find files [no ignore vcs]")
+    prompt_title = prompt_with_cwd("Files [no ignore]")
   }
 end
 
--- Searches by using the builtin git_files picker but falling back to
--- find_files if we aren't in a git repo
-local function project_files()
+-- Searches by using the builtin find_files picker
+local function git_files()
   set_prompt_border_color('#eeff00')
-  local ok = pcall(builtin.git_files, { prompt_title = prompt_with_cwd("[Git] Project Files") })
-  if not ok then
-    builtin.find_files({ prompt_title = prompt_with_cwd("[Find] Project Files") })
+  local git_root, ret = tutils.get_os_command_output({ "git", "rev-parse", "--show-toplevel" }, vim.fn.getcwd())
+  if ret == 0 and git_root and git_root[1] ~= nil then
+    local path = utils.collapse_home_path_to_tilde(git_root[1])
+    builtin.git_files({ prompt_title = "  files  " .. path })
+  else
+    vim.notify('Not in a git repo', vim.log.levels.WARN, { title = "Telescope" })
   end
+end
+
+-- Searches by using the builtin find_files picker
+local function find_files()
+  set_prompt_border_color('#eeff00')
+  builtin.find_files({ prompt_title = prompt_with_cwd("Files") })
 end
 
 -- Searche workspace LSP symbols but checks if there's an LSP client attached
@@ -110,8 +119,8 @@ end
 local function setup_mappings()
   nmap('gr', lsp_references)
   nmap('<leader>ff', ':Telescope<CR>')
-  nmap('<leader>fa', find_all_files)
-  nmap('<leader>fe', project_files)
+  nmap('<leader>fa', git_files)
+  nmap('<leader>fe', find_files)
   nmap('<leader>fd', cwd_files)
   nmap('<leader>fs', builtin.lsp_document_symbols)
   nmap('<leader>fw', lsp_dynamic_workspace_symbols)
@@ -135,7 +144,7 @@ local function setup_mappings()
   nmap('<leader>fgw', function()
     set_prompt_border_color('#eeff00')
     builtin.live_grep {
-      prompt_title = "Live Grep  " .. short_cwd
+      prompt_title = prompt_with_cwd("Live Grep")
     }
   end)
   nmap('<leader>fb', builtin.buffers)

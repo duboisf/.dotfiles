@@ -31,10 +31,14 @@ function M.notStartedByFirenvim()
   return not M.startedByFirenvim()
 end
 
-function M.get_short_cwd()
+function M.collapse_home_path_to_tilde(path)
   local home = vim.fn.getenv("HOME")
+  return string.gsub(path, home, '~')
+end
+
+function M.get_short_cwd()
   local cwd = vim.fn.getcwd()
-  return string.gsub(cwd, home, '~')
+  return M.collapse_home_path_to_tilde(cwd)
 end
 
 function M.reload_module(module)
