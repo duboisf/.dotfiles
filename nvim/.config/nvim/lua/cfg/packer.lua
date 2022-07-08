@@ -308,7 +308,9 @@ require('packer').startup({ function(use)
   -- Dim inactive windows
   use {
     'sunjon/shade.nvim',
-    config = function() require('shade').setup {} end
+    config = function() require('shade').setup {} end,
+    -- disable for now, seems there are some bugs, like when using tabs it keeps crashing
+    disable = true,
   }
 
   -- Render markdown files directly inside a buffer using glow
