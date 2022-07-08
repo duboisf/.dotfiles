@@ -107,39 +107,43 @@ local function lsp_references()
   end
 end
 
-nmap('gr', lsp_references)
-nmap('<leader>ff', ':Telescope<CR>')
-nmap('<leader>fa', find_all_files)
-nmap('<leader>fe', project_files)
-nmap('<leader>fd', cwd_files)
-nmap('<leader>fs', builtin.lsp_document_symbols)
-nmap('<leader>fw', lsp_dynamic_workspace_symbols)
-nmap('<leader>f*', builtin.current_buffer_fuzzy_find)
-nmap('<leader>fga', function()
-  -- set telescope prompt border to red
-  set_prompt_border_color('#bb2222')
-  builtin.live_grep {
-    prompt_title = prompt_with_cwd("Live Grep [all the things]"),
-    additional_args = function() return { "--no-ignore-vcs" } end
-  }
-end)
-nmap('<leader>fgd', function()
-  set_prompt_border_color('#22ee22')
-  local cwd = get_buffer_dir()
-  builtin.live_grep {
-    cwd = cwd,
-    prompt_title = "Live Grep  " .. cwd,
-  }
-end)
-nmap('<leader>fgw', function()
-  set_prompt_border_color('#eeff00')
-  builtin.live_grep {
-    prompt_title = "Live Grep  " .. short_cwd
-  }
-end)
-nmap('<leader>fb', builtin.buffers)
-nmap('<leader>fh', builtin.help_tags)
-nmap('<leader>fr', builtin.oldfiles)
+local function setup_mappings()
+  nmap('gr', lsp_references)
+  nmap('<leader>ff', ':Telescope<CR>')
+  nmap('<leader>fa', find_all_files)
+  nmap('<leader>fe', project_files)
+  nmap('<leader>fd', cwd_files)
+  nmap('<leader>fs', builtin.lsp_document_symbols)
+  nmap('<leader>fw', lsp_dynamic_workspace_symbols)
+  nmap('<leader>f*', builtin.current_buffer_fuzzy_find)
+  nmap('<leader>fga', function()
+    -- set telescope prompt border to red
+    set_prompt_border_color('#bb2222')
+    builtin.live_grep {
+      prompt_title = prompt_with_cwd("Live Grep [all the things]"),
+      additional_args = function() return { "--no-ignore-vcs" } end
+    }
+  end)
+  nmap('<leader>fgd', function()
+    set_prompt_border_color('#22ee22')
+    local cwd = get_buffer_dir()
+    builtin.live_grep {
+      cwd = cwd,
+      prompt_title = "Live Grep  " .. cwd,
+    }
+  end)
+  nmap('<leader>fgw', function()
+    set_prompt_border_color('#eeff00')
+    builtin.live_grep {
+      prompt_title = "Live Grep  " .. short_cwd
+    }
+  end)
+  nmap('<leader>fb', builtin.buffers)
+  nmap('<leader>fh', builtin.help_tags)
+  nmap('<leader>fr', builtin.oldfiles)
+end
+
+setup_mappings()
 
 require('telescope').setup {
   defaults = {
