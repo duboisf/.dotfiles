@@ -28,16 +28,34 @@ Hydra({
   mode = { 'n', 'x' },
   body = 'gs',
   heads = {
-    { 'j', ":lua require'nvim-treesitter.incremental_selection'.node_incremental()<CR>", { desc = 'Node++', silent = true } },
-    { 'k', ":lua require'nvim-treesitter.incremental_selection'.node_decremental()<CR>", { desc = 'Node--', silent = true } },
-    { 'l', ":lua require'nvim-treesitter.incremental_selection'.scope_incremental()<CR>", { desc = 'Scope++', silent = true } },
+    { 'J', ":lua require'nvim-treesitter.incremental_selection'.node_incremental()<CR>",
+      { desc = 'Node++', silent = true } },
+    { 'K', ":lua require'nvim-treesitter.incremental_selection'.node_decremental()<CR>",
+      { desc = 'Node--', silent = true } },
+    { 'L', ":lua require'nvim-treesitter.incremental_selection'.scope_incremental()<CR>",
+      { desc = 'Scope++', silent = true } },
     -- delete current selection + anything following the selection like a comma
-    { 'd', 'ddd', { desc = 'Delete', exit = true } },
+    { 'd', 'd', { desc = 'Delete', exit = true } },
     { 'y', 'y', { desc = 'Copy', exit = true } },
     { '<C-c>', '<Esc>', { exit = true } },
     { '<Esc>', '<Esc>', { exit = true } },
   }
 })
+
+Hydra {
+  name = '🌳 param swapper ⇄',
+  config = {
+    invoke_on_body = true,
+  },
+  body = '<leader>p',
+  mode = { 'n' },
+  heads = {
+    { 'l', ":lua require'nvim-treesitter.textobjects.swap'.swap_next('@parameter.inner')<CR>",
+      { desc = 'Swap right', silent = true } },
+    { 'h', ":lua require'nvim-treesitter.textobjects.swap'.swap_previous('@parameter.inner')<CR>",
+      { desc = 'Swap left', silent = true } },
+  },
+}
 
 Hydra({
   name = 'Misc utils',
@@ -48,8 +66,8 @@ Hydra({
   mode = { 'n' },
   body = '<leader>u',
   heads = {
-    { 'rs', function() require('core.utils').reload_module('cfg.plugins.luasnip') end, { desc = 'Reload snippets'} },
-    { 'rh', function() require('core.utils').reload_module('cfg.plugins.hydra') end, { desc = 'Reload hydras'} },
+    { 'rs', function() require('core.utils').reload_module('cfg.plugins.luasnip') end, { desc = 'Reload snippets' } },
+    { 'rh', function() require('core.utils').reload_module('cfg.plugins.hydra') end, { desc = 'Reload hydras' } },
   }
 })
 

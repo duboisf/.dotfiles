@@ -53,12 +53,12 @@ require('nvim-treesitter.configs').setup {
     lookahead = true,
     disable = {},
     keymaps = {
-      ["iL"] = { -- you can define your own textobjects directly here
-        python = "(function_definition) @function",
-        cpp = "(function_definition) @function",
-        c = "(function_definition) @function",
-        java = "(method_declaration) @function"
-      },
+      -- ["iL"] = { -- you can define your own textobjects directly here
+      --   python = "(function_definition) @function",
+      --   cpp = "(function_definition) @function",
+      --   c = "(function_definition) @function",
+      --   java = "(method_declaration) @function"
+      -- },
       -- or you use the queries from supported languages with textobjects.scm
       ["af"] = "@function.outer",
       ["if"] = "@function.inner",
@@ -75,7 +75,10 @@ require('nvim-treesitter.configs').setup {
       ["ad"] = "@comment.outer",
       ["am"] = "@call.outer",
       ["im"] = "@call.inner"
-    }
+    },
+    swap = {
+      enable = true,
+    },
   },
   ensure_installed = 'all' -- one of 'all', 'maintained', or a list of languages
 }

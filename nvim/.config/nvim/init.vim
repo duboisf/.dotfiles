@@ -95,8 +95,6 @@ nnoremap <C-Up> ddkP
 nnoremap <C-Down> ddp
 " Toggle wrap
 nnoremap <leader>w :set wrap!<CR>
-" Toggle paste
-nnoremap <leader>p :set paste!<CR>
 " Yank highlighted selection in visual mode to clipboard
 vnoremap <leader>y "+y
 " Yank highlighted lines in visual mode to clipboard
