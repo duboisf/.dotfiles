@@ -31,10 +31,25 @@ Hydra({
     { 'j', ":lua require'nvim-treesitter.incremental_selection'.node_incremental()<CR>", { desc = 'Node++', silent = true } },
     { 'k', ":lua require'nvim-treesitter.incremental_selection'.node_decremental()<CR>", { desc = 'Node--', silent = true } },
     { 'l', ":lua require'nvim-treesitter.incremental_selection'.scope_incremental()<CR>", { desc = 'Scope++', silent = true } },
-    { 'd', 'd', { desc = 'Delete', exit = true } },
+    -- delete current selection + anything following the selection like a comma
+    { 'd', 'ddd', { desc = 'Delete', exit = true } },
     { 'y', 'y', { desc = 'Copy', exit = true } },
     { '<C-c>', '<Esc>', { exit = true } },
     { '<Esc>', '<Esc>', { exit = true } },
+  }
+})
+
+Hydra({
+  name = 'Misc utils',
+  config = {
+    color = 'blue',
+    invoke_on_body = true,
+  },
+  mode = { 'n' },
+  body = '<leader>u',
+  heads = {
+    { 'rs', function() require('core.utils').reload_module('cfg.plugins.luasnip') end, { desc = 'Reload snippets'} },
+    { 'rh', function() require('core.utils').reload_module('cfg.plugins.hydra') end, { desc = 'Reload hydras'} },
   }
 })
 

@@ -150,7 +150,7 @@ require('packer').startup({ function(use)
   use {
     'nvim-telescope/telescope-ui-select.nvim',
     after = 'telescope.nvim',
-    config = function () require('telescope').load_extension 'ui-select' end
+    config = function() require('telescope').load_extension 'ui-select' end
   }
 
   use {
@@ -162,7 +162,7 @@ require('packer').startup({ function(use)
   use {
     'norcalli/nvim-colorizer.lua',
     event = 'VimEnter',
-    config = function() require "colorizer".setup() end
+    config = function() require('colorizer').setup() end
   }
 
   use {
