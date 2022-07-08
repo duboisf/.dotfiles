@@ -17,8 +17,19 @@ require('nvim-tree').setup {
         { key = 'h', action = 'toggle_dotfiles' },
         { key = 'H', action = '' },
       },
-    }
+    },
   },
+  renderer = {
+    icons = {
+      glyphs = {
+        git = {
+          staged = "",
+          unstaged = "",
+          untracked = "",
+        }
+      }
+    }
+  }
 }
 
 vim.cmd [[
