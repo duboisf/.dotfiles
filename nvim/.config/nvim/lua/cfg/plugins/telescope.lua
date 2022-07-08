@@ -96,7 +96,10 @@ end
 -- Searches by using the builtin find_files picker
 local function find_files()
   set_prompt_border_color('#eeff00')
-  builtin.find_files({ prompt_title = prompt_with_cwd("Files") })
+  builtin.find_files {
+    prompt_title = prompt_with_cwd("Files"),
+    hidden = true,
+  }
 end
 
 -- Searche workspace LSP symbols but checks if there's an LSP client attached
