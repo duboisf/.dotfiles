@@ -15,7 +15,7 @@ end
 
 autocmd(group, "BufWritePost", "*/cfg/packer.lua",
   "let b:disable_jump_to_last_position = 1 | source <afile> | PackerCompile", {
-  desc = "Run packer.compile() when the packer.lua config file gets saved",
+  desc = "Run :PackerCompile when the packer.lua config file gets saved",
 })
 
 require('packer').startup({ function(use)
@@ -109,26 +109,42 @@ require('packer').startup({ function(use)
     config = function() require 'cfg.plugins.gitsigns' end,
   }
 
+  --
+  -- telescope
+  --
   use {
     -- Requires git, fzf, python3, ripgrep
-    -- Optional bat(like cat but 10x nicer!), exa(like ls but nicer!)
+    -- Optional: bat(like cat but 10x nicer!), exa(like ls but nicer!)
     'nvim-telescope/telescope.nvim',
     requires = {
       'kyazdani42/nvim-web-devicons',
       'nvim-lua/popup.nvim',
       'nvim-lua/plenary.nvim',
-      use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' },
     },
+    after = 'hydra.nvim',
     config = function() require 'cfg.plugins.telescope' end
   }
 
-  --
-  -- telescope
-  --
+  -- support fzf syntax in the telescope prompt
+  use {
+    'nvim-telescope/telescope-fzf-native.nvim',
+    after = 'telescope.nvim',
+    run = 'make',
+    config = function() require('telescope').load_extension 'fzf' end
+  }
+
   use {
     'nvim-telescope/telescope-github.nvim',
     after = 'telescope.nvim',
-    config = function() require 'telescope'.load_extension 'gh' end
+    config = function() require('telescope').load_extension 'gh' end
+  }
+
+  -- set vim.ui.select to telescope for a better picking experience for things
+  -- like lsp code actions
+  use {
+    'nvim-telescope/telescope-ui-select.nvim',
+    after = 'telescope.nvim',
+    config = function () require('telescope').load_extension 'ui-select' end
   }
 
   use {
