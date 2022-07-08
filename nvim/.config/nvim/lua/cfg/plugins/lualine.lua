@@ -1,25 +1,27 @@
-local utils = require('core.utils')
+local utils = require("core.utils")
 
 local function get_cwd()
-  return ' ' .. utils.get_short_cwd()
+  return " " .. utils.get_short_cwd()
 end
 
 -- to show current config, use:
--- dump(require('lualine').get_config())
-require('lualine').setup {
+-- dump(require("lualine").get_config())
+require("lualine").setup {
   options = {
-    theme = 'onedark',
+    theme = "onedark",
     disabled_filetypes = {
-      'startify',
+      "startify",
+      "TelescopePrompt",
     }
   },
   sections = {
-    lualine_c = { { 'filename', path = 1 }, },
+    lualine_b = { {"branch", icon = "" }, "diff", "diagnostics" },
+    lualine_c = { { "filename", path = 1 }, },
     lualine_x = { get_cwd, "encoding", "fileformat", "filetype" },
-    lualine_z = { 'location', '%L' },
+    lualine_z = { "location", "%L" },
   },
   tabline = {
-    lualine_b = { 'buffers' },
-    lualine_z = { 'tabs' },
+    lualine_b = { "buffers" },
+    lualine_z = { "tabs" },
   }
 }
