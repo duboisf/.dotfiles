@@ -8,6 +8,7 @@ require('nvim-treesitter.configs').setup {
   },
   incremental_selection = {
     enable = true,
+    -- mappings are configured using hydra in ~/.config/nvim/lua/cfg/plugins/hydra.lua
     keymaps = {},
     -- keymaps = { -- mappings for incremental selection (visual mappings)
     --   init_selection    = 'gs', -- maps in normal mode to init the node/scope selection
@@ -77,6 +78,7 @@ require('nvim-treesitter.configs').setup {
       ["im"] = "@call.inner"
     },
     swap = {
+      -- mappings are configured using hydra in ~/.config/nvim/lua/cfg/plugins/hydra.lua
       enable = true,
     },
   },
