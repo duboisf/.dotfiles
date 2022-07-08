@@ -4,7 +4,7 @@ My personal dotfiles.
 
 # Installation
 
-```sh
+```bash
 cd ~
 # This repo contains git submodules, so you need the --recursive option
 git clone --recursive https://github.com/duboisf/.dotfiles.git
@@ -18,7 +18,7 @@ stow nvim
 
 GitHub's `hub` is an alias for `git` in my zsh config. It makes cloning repos from GitHub a breeze, among other things. Install with:
 
-```sh
+```bash
 sudo apt install hub
 ```
 
@@ -26,7 +26,7 @@ sudo apt install hub
 
 These fonts are needed to render the terminal and nvim correctly:
 
-```sh
+```bash
 cd ~/Downloads
 wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/FiraCode.zip
 wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/JetBrainsMono.zip
@@ -36,19 +36,11 @@ unzip ~/Downloads/{FiraCode,JetBrainsMono}.zip
 fc-cache -fv
 ```
 
-## Install nvm
-
-nvm stands for Node Version Manager. Node is used by nvim's coc plugin. To install nvm, run:
-
-```sh
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.36.0/install.sh | bash
-```
-
 ## Install nvim
 
 Download nightly build from [here](https://github.com/neovim/neovim/releases/nightly) and then:
 
-```sh
+```bash
 cd ~/Downloads
 chmod +x ./nvim.appimage
 ./nvim.appimage --appimage-extract
