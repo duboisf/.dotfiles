@@ -1,11 +1,15 @@
 require('nvim-tree').setup {
   create_in_closed_folder = true,
+  filters = {
+    dotfiles = false,
+  },
   hijack_cursor = true,
   update_focused_file = {
     enable = false,
-    update_root = true,
+    update_root = false,
   },
   view = {
+    adaptive_size = true,
     centralize_selection = true,
     mappings = {
       list = {
