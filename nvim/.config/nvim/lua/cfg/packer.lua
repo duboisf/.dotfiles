@@ -23,6 +23,12 @@ require('packer').startup({ function(use)
     return vim.g.started_by_firenvim == nil
   end
 
+  -- need to load this first to reap the benefits of the speedup provided by impatient.nvim
+  use {
+    'lewis6991/impatient.nvim',
+    config = function() require('impatient') end
+  }
+
   use 'wbthomason/packer.nvim'
 
   use { 'justinmk/vim-sneak', event = "VimEnter" }
