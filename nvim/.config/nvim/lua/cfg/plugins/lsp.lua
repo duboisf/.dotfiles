@@ -75,19 +75,22 @@ local on_attach = function(client, bufnr)
   for lhs, rhs in pairs(normal_mappings) do
     vim.keymap.set('n', lhs, rhs, opts)
   end
+
   for _, mode in ipairs({ 'n', 'i' }) do
     vim.keymap.set(mode, '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
   end
 
-  if client.server_capabilities.code_lens then
+  local capabilities = client.server_capabilities
+
+  if capabilities.codeLensProvider then
     vim.api.nvim_exec("autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh()", false)
     vim.api.nvim_command [[autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh()]]
   end
 
-  if client.server_capabilities.document_highlight then
-    vim.api.nvim_command [[autocmd CursorHold  <buffer> lua vim.lsp.buf.document_highlight()]]
-    vim.api.nvim_command [[autocmd CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()]]
-    vim.api.nvim_command [[autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()]]
+  if capabilities.documentHighlightProvider then
+    vim.cmd [[ autocmd CursorHold  <buffer> lua vim.lsp.buf.document_highlight() ]]
+    vim.cmd [[ autocmd CursorHoldI <buffer> lua vim.lsp.buf.document_highlight() ]]
+    vim.cmd [[ autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references() ]]
   end
 
   if vim.bo[bufnr].filetype == 'yaml' and string.find(vim.api.nvim_buf_get_name(bufnr), '/templates/') then
