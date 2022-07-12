@@ -290,19 +290,12 @@ require('packer').startup({ function(use)
   -- colorscheme
   use {
     'rakr/vim-one',
-    config = function()
-      vim.cmd 'colorscheme one'
-      vim.g.background = 'dark'
-      vim.cmd [[
-        hi clear Search
-        hi default Search gui=reverse guifg=#ff6d00
-      ]]
-    end
+    config = function() require 'cfg.plugins.color' end,
   }
 
   use {
     'mickael-menu/zk-nvim',
-    config = function() require('cfg.plugins.zk') end
+    config = function() require 'cfg.plugins.zk' end
   }
 
   -- Dim inactive windows
