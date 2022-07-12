@@ -316,6 +316,9 @@ require('packer').startup({ function(use)
   -- Render markdown files directly inside a buffer using glow
   use { 'ellisonleao/glow.nvim' }
 
+  -- This is needed to fix lsp doc highlight
+  use { 'antoinemadec/FixCursorHold.nvim' }
+
   -- Automatically set up your configuration after cloning packer.nvim
   if packer_bootstrap then
     require('packer').sync()
