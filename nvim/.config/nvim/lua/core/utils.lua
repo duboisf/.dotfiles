@@ -10,7 +10,9 @@ end
 function M.autocmd(group, events, pattern, callback, opts)
   opts = opts or {}
   opts.group = group
-  opts.pattern = pattern
+  if opts.buffer == nil then
+    opts.pattern = pattern
+  end
   if type(callback) == 'string' then
     opts.command = callback
 	else
