@@ -290,7 +290,7 @@ require('packer').startup({ function(use)
   -- colorscheme
   use {
     'rakr/vim-one',
-    config = function() require 'cfg.plugins.color' end,
+    config = function() require 'cfg.plugins.colors' end,
   }
 
   use {
