@@ -275,6 +275,7 @@ require('packer').startup({ function(use)
     'neovim/nvim-lspconfig',
     config = function() require 'cfg.plugins.lsp' end,
     after = {
+      'aerial.nvim',
       'nvim-cmp',
       'nvim-lsp-installer',
     }
@@ -293,6 +294,11 @@ require('packer').startup({ function(use)
     config = function() require 'cfg.plugins.colors' end,
   }
 
+  -- code outline
+  use {
+    'stevearc/aerial.nvim',
+    config = function() require('aerial').setup() end
+  }
   use {
     'mickael-menu/zk-nvim',
     config = function() require 'cfg.plugins.zk' end
