@@ -6,7 +6,7 @@ function M.autogroup(name, clear)
   return vim.api.nvim_create_augroup(name, opts)
 end
 
--- Simplicy creating autocmds
+-- Simplify creating autocmds
 function M.autocmd(group, events, pattern, callback, opts)
   opts = opts or {}
   opts.group = group
