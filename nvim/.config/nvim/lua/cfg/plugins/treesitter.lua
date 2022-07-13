@@ -50,32 +50,44 @@ require('nvim-treesitter.configs').setup {
     }
   },
   textobjects = { -- syntax-aware textobjects
-    enable = true,
-    lookahead = true,
-    disable = {},
-    keymaps = {
-      -- ["iL"] = { -- you can define your own textobjects directly here
-      --   python = "(function_definition) @function",
-      --   cpp = "(function_definition) @function",
-      --   c = "(function_definition) @function",
-      --   java = "(method_declaration) @function"
-      -- },
-      -- or you use the queries from supported languages with textobjects.scm
-      ["af"] = "@function.outer",
-      ["if"] = "@function.inner",
-      ["aC"] = "@class.outer",
-      ["iC"] = "@class.inner",
-      ["ac"] = "@conditional.outer",
-      ["ic"] = "@conditional.inner",
-      ["ab"] = "@block.outer",
-      ["ib"] = "@block.inner",
-      ["al"] = "@loop.outer",
-      ["il"] = "@loop.inner",
-      ["is"] = "@statement.inner",
-      ["as"] = "@statement.outer",
-      ["ad"] = "@comment.outer",
-      ["am"] = "@call.outer",
-      ["im"] = "@call.inner"
+    select = {
+      enable = true,
+      lookahead = true,
+      disable = {},
+      keymaps = {
+        -- the queries are in textobjects.scm
+        ["af"] = "@function.outer",
+        ["if"] = "@function.inner",
+        ["aC"] = "@class.outer",
+        ["iC"] = "@class.inner",
+        ["ac"] = "@conditional.outer",
+        ["ic"] = "@conditional.inner",
+        ["ab"] = "@block.outer",
+        ["ib"] = "@block.inner",
+        ["al"] = "@loop.outer",
+        ["il"] = "@loop.inner",
+        ["is"] = "@statement.inner",
+        ["as"] = "@statement.outer",
+        ["ad"] = "@comment.outer",
+        ["am"] = "@call.outer",
+        ["im"] = "@call.inner"
+      },
+    },
+    move = {
+      enable = true,
+      set_jumps = true,
+      goto_next_start = {
+        [']m'] = { '@function.outer', '@class.outer' },
+      },
+      goto_previous_start = {
+        ['[m'] = { '@function.outer', '@class.outer' },
+      },
+      goto_next_end = {
+        ["]M"] = { "@function.outer", "@class.outer" },
+      },
+      goto_previous_end = {
+        ["[M"] = { "@function.outer", "@class.outer" },
+      },
     },
     swap = {
       -- mappings are configured using hydra in ~/.config/nvim/lua/cfg/plugins/hydra.lua
