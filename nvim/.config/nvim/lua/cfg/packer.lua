@@ -316,7 +316,7 @@ require('packer').startup({ function(use)
         code_style = {
           comments = 'italic',
           keywords = 'none',
-          functions = 'italic,bold',
+          functions = 'none',
           strings = 'none',
           variables = 'none'
         },
