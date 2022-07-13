@@ -111,6 +111,31 @@ local function lsp_dynamic_workspace_symbols()
   end
 end
 
+local function live_grep_everything()
+  -- set telescope prompt border to red
+  set_prompt_border_color('#bb2222')
+  builtin.live_grep {
+    prompt_title = prompt_with_cwd("Live Grep [all the things]"),
+    additional_args = function() return { "--no-ignore-vcs" } end
+  }
+end
+
+local function live_grep_dir_of_current_buffer()
+  set_prompt_border_color('#22ee22')
+  local cwd = get_buffer_dir()
+  builtin.live_grep {
+    cwd = cwd,
+    prompt_title = "Live Grep  " .. cwd,
+  }
+end
+
+local function live_grep_workspace()
+  set_prompt_border_color('#eeff00')
+  builtin.live_grep {
+    prompt_title = prompt_with_cwd("Live Grep")
+  }
+end
+
 -- Wrapper to check if there's an LSP client attache to the current buffer
 -- before invoking builtin.lsp_references
 local function lsp_references()
@@ -128,28 +153,9 @@ local function setup_mappings()
   nmap('<leader>fs', builtin.lsp_document_symbols)
   nmap('<leader>fw', lsp_dynamic_workspace_symbols)
   nmap('<leader>f*', builtin.current_buffer_fuzzy_find)
-  nmap('<leader>fga', function()
-    -- set telescope prompt border to red
-    set_prompt_border_color('#bb2222')
-    builtin.live_grep {
-      prompt_title = prompt_with_cwd("Live Grep [all the things]"),
-      additional_args = function() return { "--no-ignore-vcs" } end
-    }
-  end)
-  nmap('<leader>fgd', function()
-    set_prompt_border_color('#22ee22')
-    local cwd = get_buffer_dir()
-    builtin.live_grep {
-      cwd = cwd,
-      prompt_title = "Live Grep  " .. cwd,
-    }
-  end)
-  nmap('<leader>fgw', function()
-    set_prompt_border_color('#eeff00')
-    builtin.live_grep {
-      prompt_title = prompt_with_cwd("Live Grep")
-    }
-  end)
+  nmap('<leader>fga', live_grep_everything)
+  nmap('<leader>fgd', live_grep_dir_of_current_buffer)
+  nmap('<leader>fgw', live_grep_workspace)
   nmap('<leader>fb', builtin.buffers)
   nmap('<leader>fh', builtin.help_tags)
   nmap('<leader>fr', builtin.oldfiles)
