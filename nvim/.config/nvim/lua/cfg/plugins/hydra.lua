@@ -42,6 +42,27 @@ Hydra({
   }
 })
 
+Hydra({
+  name = '🌳 Move',
+  config = {
+    invoke_on_body = true,
+  },
+  mode = { 'n' },
+  body = 'gm',
+  heads = {
+    { 'J', ":lua require'nvim-treesitter.textobjects.move'.goto_next_start({'@function.outer','@class.outer'})<CR>",
+      { desc = '→', silent = true } },
+    { 'H', ":lua require'nvim-treesitter.textobjects.move'.goto_next_end({'@function.outer','@class.outer'})<CR>",
+      { desc = '→', silent = true } },
+    { 'K', ":lua require'nvim-treesitter.textobjects.move'.goto_previous_start({'@function.outer','@class.outer'})<CR>",
+      { desc = '←', silent = true } },
+    { 'L', ":lua require'nvim-treesitter.textobjects.move'.goto_previous_end({'@function.outer','@class.outer'})<CR>",
+      { desc = '←', silent = true } },
+    { '<C-c>', '<Esc>', { exit = true } },
+    { '<Esc>', '<Esc>', { exit = true } },
+  }
+})
+
 Hydra {
   name = '🌳 param swapper ⇄',
   config = {
@@ -64,7 +85,7 @@ Hydra({
     invoke_on_body = true,
   },
   mode = { 'n' },
-  body = '<leader>u',
+  body = '<leader>uu',
   heads = {
     { 'rs', function() require('core.utils').reload_module('cfg.plugins.luasnip') end, { desc = 'Reload snippets' } },
     { 'rh', function() require('core.utils').reload_module('cfg.plugins.hydra') end, { desc = 'Reload hydras' } },
