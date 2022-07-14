@@ -244,10 +244,6 @@ require('packer').startup({ function(use)
     'hrsh7th/cmp-cmdline',
     -- complete emojis like :tada:
     'hrsh7th/cmp-emoji',
-    -- show current function signature, need to find a better alternative
-    -- because as soon as there are other suggested completions, the signature
-    -- disapears
-    'hrsh7th/cmp-nvim-lsp-signature-help',
     -- completion for filesystem paths
     'hrsh7th/cmp-path',
     -- completion for luasnip snippets
