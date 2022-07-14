@@ -323,7 +323,7 @@ require('packer').startup({ function(use)
         colors = {}, -- Override default colors
         highlights = { -- Override highlight groups
           -- some parens were the same color as the background when highlighted
-          MatchParen = { bg = '$orange', fmt = 'bold' },
+          MatchParen = { bg = '$red', fmt = 'bold' },
         },
 
         -- Plugins Config --
