@@ -6,6 +6,23 @@ function M.autogroup(name, clear)
   return vim.api.nvim_create_augroup(name, opts)
 end
 
+function M.curry_autocmd(group, opts)
+  opts = opts or {}
+  opts.group = group
+  return function(events, pattern, callback, desc)
+    opts.desc = desc
+    if opts.buffer == nil then
+      opts.pattern = pattern
+    end
+    if type(callback) == 'string' then
+      opts.command = callback
+    else
+      opts.callback = callback
+    end
+    return M.autocmd(group, events, pattern, callback, opts)
+  end
+end
+
 -- Simplify creating autocmds
 function M.autocmd(group, events, pattern, callback, opts)
   opts = opts or {}
@@ -15,7 +32,7 @@ function M.autocmd(group, events, pattern, callback, opts)
   end
   if type(callback) == 'string' then
     opts.command = callback
-	else
+  else
     opts.callback = callback
   end
   return vim.api.nvim_create_autocmd(events, opts)

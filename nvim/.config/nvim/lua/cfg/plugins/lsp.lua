@@ -16,9 +16,6 @@ vim.cmd [[
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
-  --Enable completion triggered by <c-x><c-o>
-  vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
-
   require('aerial').on_attach(client, bufnr)
 
   -- Mappings.
@@ -27,7 +24,6 @@ local on_attach = function(client, bufnr)
   local normal_mappings = {}
   local nm              = normal_mappings
   nm['gD']              = '<Cmd>lua vim.lsp.buf.declaration()<CR>'
-  -- nm['gd']        = '<Cmd>lua vim.lsp.buf.definition()<CR>'
   nm['gd']              = '<Cmd>Telescope lsp_definitions<CR>'
   nm['K']               = '<Cmd>lua vim.lsp.buf.hover()<CR>'
   nm['gi']              = '<cmd>lua vim.lsp.buf.implementation()<CR>'
@@ -49,17 +45,19 @@ local on_attach = function(client, bufnr)
     vim.keymap.set(mode, '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
   end
 
-  local capabilities = client.server_capabilities
+  local utils = require 'core.utils'
+  local group = utils.autogroup('cfg#plugins#lsp', true)
+  local autocmd = utils.curry_autocmd(group, { buffer = bufnr })
 
-  if capabilities.codeLensProvider then
-    vim.api.nvim_exec("autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh()", false)
-    vim.api.nvim_command [[autocmd BufEnter,CursorHold,InsertLeave <buffer> lua vim.lsp.codelens.refresh()]]
+  local server_capabilities = client.server_capabilities
+
+  if server_capabilities.codeLensProvider then
+    autocmd({ 'BufEnter', 'CursorHold', 'InsertLeave' }, nil, vim.lsp.codelens.refresh, 'Refresh codelens')
   end
 
-  if capabilities.documentHighlightProvider then
-    vim.cmd [[ autocmd CursorHold  <buffer> lua vim.lsp.buf.document_highlight() ]]
-    vim.cmd [[ autocmd CursorHoldI <buffer> lua vim.lsp.buf.document_highlight() ]]
-    vim.cmd [[ autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references() ]]
+  if server_capabilities.documentHighlightProvider then
+    autocmd({ 'CursorHold', 'CursorHoldI' }, nil, vim.lsp.buf.document_highlight, 'highlight symbol under the cursor throughout document')
+    autocmd('CursorMoved', nil, vim.lsp.buf.clear_references, 'Clear highlighted lsp symbol')
   end
 
   if vim.bo[bufnr].filetype == 'yaml' and string.find(vim.api.nvim_buf_get_name(bufnr), '/templates/') then
@@ -78,6 +76,8 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   update_in_insert = false,
 })
 
+
+local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 lspconfig.tsserver.setup { capabilities = capabilities, on_attach = on_attach }
 lspconfig.terraformls.setup { capabilities = capabilities, on_attach = on_attach }
