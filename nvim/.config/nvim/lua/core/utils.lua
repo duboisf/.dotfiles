@@ -11,14 +11,6 @@ function M.curry_autocmd(group, opts)
   opts.group = group
   return function(events, pattern, callback, desc)
     opts.desc = desc
-    if opts.buffer == nil then
-      opts.pattern = pattern
-    end
-    if type(callback) == 'string' then
-      opts.command = callback
-    else
-      opts.callback = callback
-    end
     return M.autocmd(group, events, pattern, callback, opts)
   end
 end
