@@ -31,12 +31,16 @@ require('packer').startup({ function(use)
 
   use 'wbthomason/packer.nvim'
 
-  use { 'justinmk/vim-sneak', event = "VimEnter" }
   use { 'michaeljsmith/vim-indent-object', event = "VimEnter" }
   use { 'tpope/vim-commentary', event = "VimEnter" }
   use { 'tpope/vim-repeat', event = "VimEnter" }
-  use { 'tpope/vim-surround', event = "VimEnter" }
+  use { 'kylechui/nvim-surround', event = 'VimEnter' }
   use { 'tpope/vim-unimpaired', event = "VimEnter" }
+
+  use {
+    'ggandor/leap.nvim',
+    config = function() require('leap').set_default_keymaps() end,
+  }
 
   use {
     'windwp/nvim-autopairs',
