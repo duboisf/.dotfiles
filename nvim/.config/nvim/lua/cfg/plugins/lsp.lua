@@ -6,43 +6,12 @@ require('nvim-lsp-installer').setup {
 
 local lspconfig = require('lspconfig')
 
-do
-  vim.cmd [[
-    sign define DiagnosticSignError text= texthl=DiagnosticSignError
-    sign define DiagnosticSignWarning text= texthl=DiagnosticSignWarning
-    sign define DiagnosticSignInformation text= texthl=DiagnosticSignInformation
-    sign define DiagnosticSignHint text= texthl=DiagnosticSignHint
-  ]]
-
-  local group = vim.api.nvim_create_augroup('cfg#plugins#lsp', { clear = true })
-  local function set_highlights()
-    vim.cmd [[
-      hi LspSignatureActiveParameter guibg=#ff7f00
-      hi LspReferenceText guibg=#1d1e0a
-      hi LspReferenceRead guibg=#007000
-      hi LspReferenceWrite guibg=#ff7f00
-      hi DiagnosticVirtualTextError guifg=Red ctermfg=Red
-      hi DiagnosticVirtualTextWarning guifg=Yellow ctermfg=Yellow
-      hi DiagnosticVirtualTextInformation guifg=White ctermfg=White
-      hi DiagnosticVirtualTextHint guifg=White ctermfg=White
-      hi DiagnosticUnderlineError guifg=Red ctermfg=NONE cterm=undercurl gui=undercurl
-      hi DiagnosticUnderlineWarning guifg=Yellow ctermfg=NONE cterm=underline gui=underline
-      hi DiagnosticUnderlineInformation guifg=NONE ctermfg=NONE cterm=underline gui=underline
-      hi DiagnosticUnderlineHint guifg=Cyan ctermfg=NONE cterm=underline gui=underline
-      hi DiagnosticFloatingError guifg=#E74C3C
-      hi DiagnosticSignError guifg=#E74C3C
-      hi LspCodeLens guifg=Cyan
-    ]]
-  end
-
-  vim.api.nvim_create_autocmd('ColorScheme', {
-    group = group,
-    pattern = "*",
-    callback = set_highlights,
-  })
-
-  set_highlights()
-end
+vim.cmd [[
+  sign define DiagnosticSignError text= texthl=DiagnosticSignError
+  sign define DiagnosticSignWarn text= texthl=DiagnosticSignWarning
+  sign define DiagnosticSignInformation text= texthl=DiagnosticSignInformation
+  sign define DiagnosticSignHint text= texthl=DiagnosticSignHint
+]]
 
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
