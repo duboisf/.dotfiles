@@ -313,7 +313,6 @@ require('packer').startup({ function(use)
         -- toggle theme style ---
         toggle_style_key = '<leader>ts', -- Default keybinding to toggle
         toggle_style_list = { 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer', 'light' }, -- List of styles to toggle between
-
         -- Change code style ---
         -- Options are italic, bold, underline, none
         -- You can configure multiple style with comma seperated, For e.g., keywords = 'italic,bold'
@@ -324,10 +323,12 @@ require('packer').startup({ function(use)
           strings = 'none',
           variables = 'none'
         },
-
         -- Custom Highlights --
         colors = {}, -- Override default colors
-        highlights = {}, -- Override highlight groups
+        highlights = { -- Override highlight groups
+          -- some parens were the same color as the background when highlighted
+          MatchParen = { bg = '$orange', fmt = 'bold' },
+        },
 
         -- Plugins Config --
         diagnostics = {
