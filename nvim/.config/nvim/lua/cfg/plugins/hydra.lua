@@ -78,20 +78,6 @@ Hydra {
   },
 }
 
-Hydra({
-  name = 'Misc utils',
-  config = {
-    color = 'blue',
-    invoke_on_body = true,
-  },
-  mode = { 'n' },
-  body = '<leader>uu',
-  heads = {
-    { 'rs', function() require('core.utils').reload_module('cfg.plugins.luasnip') end, { desc = 'Reload snippets' } },
-    { 'rh', function() require('core.utils').reload_module('cfg.plugins.hydra') end, { desc = 'Reload hydras' } },
-  }
-})
-
 --Hydra({
 --  hint = [[
 -- ^^^^^^     Move     ^^^^^^   ^^     Split         ^^^^    Size
