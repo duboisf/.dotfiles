@@ -180,6 +180,7 @@ require('packer').startup({ function(use)
     config = function() require('colorizer').setup() end
   }
 
+  -- preview markdown in browser with live position synchronization
   use {
     'iamcco/markdown-preview.nvim',
     run = ':call mkdp#util#install()',
@@ -187,18 +188,21 @@ require('packer').startup({ function(use)
     setup = function() vim.g.mkdp_filetypes = { "markdown" } end,
   }
 
+  -- use neovim in any text input in the browser 🤯
   use {
     'glacambre/firenvim',
     run = function() vim.fn['firenvim#install'](0) end,
     config = function() require('cfg.plugins.firenvim') end,
   }
 
+  -- use popup window when using the vim.notify api
   use {
     'rcarriga/nvim-notify',
     after = 'telescope.nvim',
     config = function() require('cfg.plugins.nvim_notify') end,
   }
 
+  -- fast and easily configurable status line written in lua 🌕
   use {
     'nvim-lualine/lualine.nvim',
     cond = notStartedByFirenvim,
@@ -206,6 +210,7 @@ require('packer').startup({ function(use)
     requires = { 'kyazdani42/nvim-web-devicons' }
   }
 
+  -- file browser
   use {
     'kyazdani42/nvim-tree.lua',
     config = function() require('cfg.plugins.nvim-tree') end,
@@ -235,6 +240,7 @@ require('packer').startup({ function(use)
     -- This is needed to fix lsp doc highlight
     use { 'antoinemadec/FixCursorHold.nvim' }
 
+    -- simplify language server configuration
     use {
       'neovim/nvim-lspconfig',
       config = function() require 'cfg.plugins.lsp' end,
@@ -254,7 +260,7 @@ require('packer').startup({ function(use)
 
   --]]
   local function use_completion()
-    -- snippets written in lua
+    -- snippets engine written in lua
     use {
       'L3MON4D3/LuaSnip',
       after = { 'nvim-cmp' },
@@ -275,11 +281,14 @@ require('packer').startup({ function(use)
       use { source, after = 'nvim-cmp' }
     end
 
+    -- fancy completion
     use {
       'hrsh7th/nvim-cmp',
       config = function() require 'cfg.plugins.cmp' end,
       requires = {
+        -- add vscode-line pictograms in completion popup
         'onsails/lspkind.nvim',
+        -- completion suggestions from language server
         'hrsh7th/cmp-nvim-lsp',
       },
       after = { 'nvim-autopairs' }
