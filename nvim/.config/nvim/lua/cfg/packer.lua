@@ -34,8 +34,13 @@ require('packer').startup({ function(use)
   use { 'michaeljsmith/vim-indent-object', event = "VimEnter" }
   use { 'tpope/vim-commentary', event = "VimEnter" }
   use { 'tpope/vim-repeat', event = "VimEnter" }
-  use { 'kylechui/nvim-surround', event = 'VimEnter' }
   use { 'tpope/vim-unimpaired', event = "VimEnter" }
+
+  use {
+    'kylechui/nvim-surround',
+    event = 'VimEnter',
+    config = function () require('nvim-surround').setup {} end
+  }
 
   use {
     'ggandor/leap.nvim',
