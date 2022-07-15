@@ -391,6 +391,7 @@ require('packer').startup({ function(use)
     config = function() require('aerial').setup() end
   }
 
+  -- take notes zettelkasten-style
   use {
     'mickael-menu/zk-nvim',
     config = function() require 'cfg.plugins.zk' end
