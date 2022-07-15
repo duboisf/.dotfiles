@@ -17,11 +17,12 @@ require("lualine").setup {
   sections = {
     lualine_b = { {"branch", icon = "" }, "diff", "diagnostics" },
     lualine_c = { { "filename", path = 1 }, },
-    lualine_x = { get_cwd, "encoding", "fileformat", "filetype" },
+    lualine_x = { "filetype" },
     lualine_z = { "location", "%L" },
   },
   tabline = {
-    lualine_b = { "buffers" },
-    lualine_z = { "tabs" },
+    lualine_a = { "buffers" },
+    lualine_x = { "tabs" },
+    lualine_z = { get_cwd },
   }
 }
