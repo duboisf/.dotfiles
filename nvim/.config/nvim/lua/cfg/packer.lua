@@ -39,7 +39,7 @@ require('packer').startup({ function(use)
   use {
     'kylechui/nvim-surround',
     event = 'VimEnter',
-    config = function () require('nvim-surround').setup {} end
+    config = function() require('nvim-surround').setup {} end
   }
 
   use {
@@ -124,43 +124,49 @@ require('packer').startup({ function(use)
     config = function() require 'cfg.plugins.gitsigns' end,
   }
 
-  --
-  -- telescope
-  --
-  use {
-    -- Requires git, fzf, python3, ripgrep
-    -- Optional: bat(like cat but 10x nicer!), exa(like ls but nicer!)
-    'nvim-telescope/telescope.nvim',
-    requires = {
-      'kyazdani42/nvim-web-devicons',
-      'nvim-lua/popup.nvim',
-      'nvim-lua/plenary.nvim',
-    },
-    after = 'hydra.nvim',
-    config = function() require 'cfg.plugins.telescope' end
-  }
+  --[[
 
-  -- support fzf syntax in the telescope prompt
-  use {
-    'nvim-telescope/telescope-fzf-native.nvim',
-    after = 'telescope.nvim',
-    run = 'make',
-    config = function() require('telescope').load_extension 'fzf' end
-  }
+    dear
+    sweet
+    telescope
 
-  use {
-    'nvim-telescope/telescope-github.nvim',
-    after = 'telescope.nvim',
-    config = function() require('telescope').load_extension 'gh' end
-  }
+  --]]
+  local function use_telescope()
+    use {
+      -- Requires git, fzf, python3, ripgrep
+      -- Optional: bat(like cat but 10x nicer!), exa(like ls but nicer!)
+      'nvim-telescope/telescope.nvim',
+      requires = {
+        'kyazdani42/nvim-web-devicons',
+        'nvim-lua/popup.nvim',
+        'nvim-lua/plenary.nvim',
+      },
+      after = 'hydra.nvim',
+      config = function() require 'cfg.plugins.telescope' end
+    }
 
-  -- set vim.ui.select to telescope for a better picking experience for things
-  -- like lsp code actions
-  use {
-    'nvim-telescope/telescope-ui-select.nvim',
-    after = 'telescope.nvim',
-    config = function() require('telescope').load_extension 'ui-select' end
-  }
+    -- support fzf syntax in the telescope prompt
+    use {
+      'nvim-telescope/telescope-fzf-native.nvim',
+      after = 'telescope.nvim',
+      run = 'make',
+      config = function() require('telescope').load_extension 'fzf' end
+    }
+
+    use {
+      'nvim-telescope/telescope-github.nvim',
+      after = 'telescope.nvim',
+      config = function() require('telescope').load_extension 'gh' end
+    }
+
+    -- set vim.ui.select to telescope for a better picking experience for things
+    -- like lsp code actions
+    use {
+      'nvim-telescope/telescope-ui-select.nvim',
+      after = 'telescope.nvim',
+      config = function() require('telescope').load_extension 'ui-select' end
+    }
+  end
 
   use {
     'fatih/vim-go',
@@ -179,37 +185,6 @@ require('packer').startup({ function(use)
     run = ':call mkdp#util#install()',
     ft = { 'markdown' },
     setup = function() vim.g.mkdp_filetypes = { "markdown" } end,
-  }
-
-  --
-  -- treesitter
-  --
-  use {
-    'nvim-treesitter/nvim-treesitter',
-    event = 'VimEnter',
-    config = function() require 'cfg.plugins.treesitter' end,
-    run = ':TSUpdate',
-  }
-
-  use {
-    'nvim-treesitter/playground',
-    after = 'nvim-treesitter',
-  }
-
-  use {
-    'nvim-treesitter/nvim-treesitter-context',
-    config = function() require 'treesitter-context'.setup {} end,
-    after = 'nvim-treesitter',
-  }
-
-  use {
-    'nvim-treesitter/nvim-treesitter-textobjects',
-    after = 'nvim-treesitter',
-  }
-
-  use {
-    'p00f/nvim-ts-rainbow',
-    after = 'nvim-treesitter',
   }
 
   use {
@@ -239,36 +214,6 @@ require('packer').startup({ function(use)
     },
   }
 
-  --
-  -- nvim-cmp
-  --
-  for _, source in ipairs({
-    -- complete words from other buffers
-    'hrsh7th/cmp-buffer',
-    -- completion when in nvim commandline
-    'hrsh7th/cmp-cmdline',
-    -- complete emojis like :tada:
-    'hrsh7th/cmp-emoji',
-    -- completion for filesystem paths
-    'hrsh7th/cmp-path',
-    -- completion for luasnip snippets
-    'saadparwaiz1/cmp_luasnip',
-  }) do
-    use { source, after = 'nvim-cmp' }
-  end
-
-  use {
-    'hrsh7th/nvim-cmp',
-    config = function() require 'cfg.plugins.cmp' end,
-    requires = {
-      'onsails/lspkind.nvim',
-      'hrsh7th/cmp-nvim-lsp',
-    },
-    after = { 'nvim-autopairs' }
-  }
-
-  use 'williamboman/nvim-lsp-installer'
-
   use {
     'sbdchd/neoformat',
     config = function()
@@ -276,95 +221,177 @@ require('packer').startup({ function(use)
     end
   }
 
-  use {
-    'neovim/nvim-lspconfig',
-    config = function() require 'cfg.plugins.lsp' end,
-    after = {
-      'aerial.nvim',
-      'nvim-cmp',
-      'nvim-lsp-installer',
-    }
-  }
+  --[[
 
-  -- snippets written in lua
-  use {
-    'L3MON4D3/LuaSnip',
-    after = { 'nvim-cmp' },
-    config = function() require 'cfg.plugins.luasnip' end,
-  }
+    dear
+    sweet
+    LSP
 
-  -- colorscheme
-  use {
-    'rakr/vim-one',
-    config = function() require 'cfg.plugins.colors' end,
-    disable = true,
-  }
+  --]]
+  local function use_language_servers()
+    -- don't hunt around the web to install language servers
+    use 'williamboman/nvim-lsp-installer'
 
-  use {
-    'navarasu/onedark.nvim',
-    config = function()
-      local onedark = require 'onedark'
-      onedark.setup {
-        -- Main options --
-        style = 'darker', -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
-        transparent = false, -- Show/hide background
-        term_colors = true, -- Change terminal color as per the selected theme style
-        ending_tildes = true, -- Show the end-of-buffer tildes. By default they are hidden
-        cmp_itemkind_reverse = false, -- reverse item kind highlights in cmp menu
-        -- toggle theme style ---
-        toggle_style_key = '<leader>ts', -- Default keybinding to toggle
-        toggle_style_list = { 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer', 'light' }, -- List of styles to toggle between
-        -- Change code style ---
-        -- Options are italic, bold, underline, none
-        -- You can configure multiple style with comma seperated, For e.g., keywords = 'italic,bold'
-        code_style = {
-          comments = 'italic',
-          keywords = 'none',
-          functions = 'none',
-          strings = 'none',
-          variables = 'none'
-        },
-        -- Custom Highlights --
-        colors = {}, -- Override default colors
-        highlights = { -- Override highlight groups
-          -- some parens were the same color as the background when highlighted
-          MatchParen = { bg = '$red', fmt = 'bold' },
-        },
+    -- This is needed to fix lsp doc highlight
+    use { 'antoinemadec/FixCursorHold.nvim' }
 
-        -- Plugins Config --
-        diagnostics = {
-          darker = true, -- darker colors for diagnostic
-          undercurl = true, -- use undercurl instead of underline for diagnostics
-          background = true, -- use background color for virtual text
-        },
+    use {
+      'neovim/nvim-lspconfig',
+      config = function() require 'cfg.plugins.lsp' end,
+      after = {
+        'aerial.nvim',
+        'nvim-cmp',
+        'nvim-lsp-installer',
       }
-      onedark.load()
+    }
+  end
+
+  --[[
+
+    dear
+    sweet
+    completion
+
+  --]]
+  local function use_completion()
+    -- snippets written in lua
+    use {
+      'L3MON4D3/LuaSnip',
+      after = { 'nvim-cmp' },
+      config = function() require 'cfg.plugins.luasnip' end,
+    }
+    for _, source in ipairs({
+      -- complete words from other buffers
+      'hrsh7th/cmp-buffer',
+      -- completion when in nvim commandline
+      'hrsh7th/cmp-cmdline',
+      -- complete emojis like :tada:
+      'hrsh7th/cmp-emoji',
+      -- completion for filesystem paths
+      'hrsh7th/cmp-path',
+      -- completion for luasnip snippets
+      'saadparwaiz1/cmp_luasnip',
+    }) do
+      use { source, after = 'nvim-cmp' }
     end
-  }
+
+    use {
+      'hrsh7th/nvim-cmp',
+      config = function() require 'cfg.plugins.cmp' end,
+      requires = {
+        'onsails/lspkind.nvim',
+        'hrsh7th/cmp-nvim-lsp',
+      },
+      after = { 'nvim-autopairs' }
+    }
+  end
+
+  --[[
+
+    dear
+    sweet
+    treesitter
+
+  --]]
+  local function use_treesitter()
+
+    use {
+      'nvim-treesitter/nvim-treesitter',
+      event = 'VimEnter',
+      config = function() require 'cfg.plugins.treesitter' end,
+      run = ':TSUpdate',
+    }
+
+    use {
+      'nvim-treesitter/playground',
+      after = 'nvim-treesitter',
+    }
+
+    use {
+      'nvim-treesitter/nvim-treesitter-context',
+      config = function() require 'treesitter-context'.setup {} end,
+      after = 'nvim-treesitter',
+    }
+
+    use {
+      'nvim-treesitter/nvim-treesitter-textobjects',
+      after = 'nvim-treesitter',
+    }
+
+    use {
+      'p00f/nvim-ts-rainbow',
+      after = 'nvim-treesitter',
+    }
+  end
+
+  local function use_colorscheme()
+    -- colorscheme
+    use {
+      'rakr/vim-one',
+      config = function() require 'cfg.plugins.colors' end,
+      disable = true,
+    }
+
+    -- colorscheme
+    use {
+      'navarasu/onedark.nvim',
+      config = function()
+        local onedark = require 'onedark'
+        onedark.setup {
+          -- Main options --
+          style = 'darker', -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
+          transparent = false, -- Show/hide background
+          term_colors = true, -- Change terminal color as per the selected theme style
+          ending_tildes = true, -- Show the end-of-buffer tildes. By default they are hidden
+          cmp_itemkind_reverse = false, -- reverse item kind highlights in cmp menu
+          -- toggle theme style
+          toggle_style_key = '<leader>ts',
+          -- List of styles to toggle between
+          toggle_style_list = { 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer', 'light' },
+          -- Change code style
+          -- Options are italic, bold, underline, none
+          -- You can configure multiple style with comma seperated, For e.g., keywords = 'italic,bold'
+          code_style = {
+            comments = 'italic',
+            keywords = 'none',
+            functions = 'none',
+            strings = 'none',
+            variables = 'none'
+          },
+          -- Custom Highlights --
+          colors = {}, -- Override default colors
+          highlights = { -- Override highlight groups
+            -- some parens were the same color as the background when highlighted
+            MatchParen = { bg = '$red', fmt = 'bold' },
+          },
+          -- Plugins Config --
+          diagnostics = {
+            darker = true, -- darker colors for diagnostic
+            undercurl = true, -- use undercurl instead of underline for diagnostics
+            background = true, -- use background color for virtual text
+          },
+        }
+        onedark.load()
+      end
+    }
+  end
 
   -- code outline
   use {
     'stevearc/aerial.nvim',
     config = function() require('aerial').setup() end
   }
+
   use {
     'mickael-menu/zk-nvim',
     config = function() require 'cfg.plugins.zk' end
   }
 
-  -- Dim inactive windows
-  use {
-    'sunjon/shade.nvim',
-    config = function() require('shade').setup {} end,
-    -- disable for now, seems there are some bugs, like when using tabs it keeps crashing
-    disable = true,
-  }
-
-  -- Render markdown files directly inside a buffer using glow
-  use { 'ellisonleao/glow.nvim' }
-
-  -- This is needed to fix lsp doc highlight
-  use { 'antoinemadec/FixCursorHold.nvim' }
+  use_colorscheme()
+  use_completion()
+  use_language_servers()
+  use_telescope()
+  use_treesitter()
 
   -- Automatically set up your configuration after cloning packer.nvim
   if packer_bootstrap then
