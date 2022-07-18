@@ -78,7 +78,7 @@ ls.add_snippets('lua', {
       name = "Local variable",
       desc = "Create a local variable",
     },
-    { t("local "), i(1, ""), t(" = ")}
+    { t("local "), i(1, ""), t(" = ") }
   ),
 
   s({
@@ -93,13 +93,36 @@ ls.add_snippets('lua', {
 })
 
 ls.add_snippets('go', {
-  s({
-    trig = "fmterr",
-    name = [[fmt.Error("...: %w", err)]],
-    dscr = "Wrap err with fmt.Error's %w formating operand",
-  }, fmt([[fmt.Errorf("{}: %w", {})]],
+  s(
     {
-      i(1, ""), i(2, "err")
+      trig = "fmterr",
+      name = [[fmt.Error("...: %w", err)]],
+      dscr = "Wrap err with fmt.Error's %w formating operand",
+    },
+    fmt(
+      [[fmt.Errorf("{}: %w", {})]],
+      {
+        i(1, ""), i(2, "err")
+      }
+    )
+  ),
+})
+
+ls.add_snippets('markdown', {
+  s(
+    {
+      trig = 'lk',
+      name = 'Markdown link',
+    },
+    {
+      t('['),
+      i(1),
+      t(']('),
+      c(2, {
+        i(nil),
+        f(function () return vim.fn.getreg('+') end, {}),
+      }),
+      t(')'),
     }
-  )),
+  )
 })
