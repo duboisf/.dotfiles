@@ -151,3 +151,7 @@ alias pp='pulumi preview'
 ##########
 alias view-cert='openssl x509 -text -noout -in'
 alias s_connect='openssl s_client -state -debug -connect'
+
+# aws cli
+##########
+alias iaws='aws --cli-auto-prompt'
