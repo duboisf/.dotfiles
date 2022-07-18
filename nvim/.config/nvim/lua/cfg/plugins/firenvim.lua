@@ -21,6 +21,12 @@ local function remove_duplicates_lines(event)
   vim.api.nvim_buf_set_lines(event.buf, 0, -1, false, filtered_lines)
 end
 
+local function setup_abbreviations()
+  vim.cmd [[
+    iabbrev inf infrastructure
+  ]]
+end
+
 local group = vim.api.nvim_create_augroup("cfg#firenvim", { clear = true })
 
 vim.api.nvim_create_autocmd("BufEnter", {
