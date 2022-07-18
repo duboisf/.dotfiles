@@ -17,6 +17,7 @@ vim.cmd [[
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
   require('aerial').on_attach(client, bufnr)
+  require('lsp_signature').on_attach()
 
   -- Mappings.
   local opts = { noremap = true, silent = true, buffer = bufnr }

@@ -98,7 +98,7 @@ require('packer').startup({ function(use)
   use {
     'tpope/vim-fugitive',
     config = function()
-      -- Open :G in a maximized window
+      -- open :G in a maximized window
       vim.cmd 'nnoremap <leader>g :G<CR>'
     end,
   }
@@ -119,6 +119,7 @@ require('packer').startup({ function(use)
     after = { 'keymap-layer.nvim' }
   }
 
+  -- show diff signs in the gutter
   use {
     'lewis6991/gitsigns.nvim',
     config = function() require 'cfg.plugins.gitsigns' end,
@@ -133,8 +134,7 @@ require('packer').startup({ function(use)
   --]]
   local function use_telescope()
     use {
-      -- Requires git, fzf, python3, ripgrep
-      -- Optional: bat(like cat but 10x nicer!), exa(like ls but nicer!)
+      -- requires git, fd, ripgrep
       'nvim-telescope/telescope.nvim',
       requires = {
         'kyazdani42/nvim-web-devicons',
@@ -153,6 +153,7 @@ require('packer').startup({ function(use)
       config = function() require('telescope').load_extension 'fzf' end
     }
 
+    -- search for github resources using telescope
     use {
       'nvim-telescope/telescope-github.nvim',
       after = 'telescope.nvim',
@@ -168,6 +169,7 @@ require('packer').startup({ function(use)
     }
   end
 
+  -- various commands to work with golang
   use {
     'fatih/vim-go',
     ft = { 'go', 'gomod' },
@@ -237,8 +239,11 @@ require('packer').startup({ function(use)
     -- don't hunt around the web to install language servers
     use 'williamboman/nvim-lsp-installer'
 
-    -- This is needed to fix lsp doc highlight
+    -- this is needed to fix lsp doc highlight
     use { 'antoinemadec/FixCursorHold.nvim' }
+
+    -- show function signature when typing
+    use { 'ray-x/lsp_signature.nvim' }
 
     -- simplify language server configuration
     use {
@@ -246,6 +251,7 @@ require('packer').startup({ function(use)
       config = function() require 'cfg.plugins.lsp' end,
       after = {
         'aerial.nvim',
+        'lsp_signature.nvim',
         'nvim-cmp',
         'nvim-lsp-installer',
       }
