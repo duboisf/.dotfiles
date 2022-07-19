@@ -51,7 +51,6 @@ cmp.setup({
         cmp.complete()
       end
     end, { "i", "s" }),
-    ['<CR>'] = cmp.mapping.confirm({ select = true }),
     ['<C-j>'] = cmp.mapping(function(fallback)
       local ls = require("luasnip")
       if ls.expand_or_locally_jumpable() then
@@ -68,20 +67,14 @@ cmp.setup({
         fallback()
       end
     end, { "i", "s" }),
+    ['<CR>'] = cmp.mapping.confirm({ select = false }),
     ['<Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
       else
         fallback()
       end
-    end, { "i", "s" }),
-    ['<S-Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item()
-      else
-        fallback()
-      end
-    end, { "i", "s" }),
+    end)
   }),
   performance = {
     debounce = 300,
@@ -90,7 +83,6 @@ cmp.setup({
   sources = cmp.config.sources({
     { name = 'luasnip' },
     { name = 'nvim_lsp' },
-    { name = 'nvim_lsp_signature_help' },
     { name = 'emoji', option = { insert = true } },
     all_buffers_source,
     { name = 'path' },
