@@ -33,10 +33,10 @@ gitsigns.setup {
     nmap('<leader>hR', gs.reset_buffer)
     nmap('<leader>hp', gs.preview_hunk)
     nmap('<leader>hb', function() gs.blame_line { full = true } end)
-    nmap('<leader>tb', gs.toggle_current_line_blame)
+    nmap('<leader>htb', gs.toggle_current_line_blame)
     nmap('<leader>hd', gs.diffthis)
     nmap('<leader>hD', function() gs.diffthis('~') end)
-    nmap('<leader>td', gs.toggle_deleted)
+    nmap('<leader>htd', gs.toggle_deleted)
 
     -- Text object
     map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
