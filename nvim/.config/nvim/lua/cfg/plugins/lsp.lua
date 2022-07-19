@@ -17,7 +17,6 @@ vim.cmd [[
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
   require('aerial').on_attach(client, bufnr)
-  require('lsp_signature').on_attach()
 
   -- Mappings.
   local opts = { noremap = true, silent = true, buffer = bufnr }
@@ -42,8 +41,8 @@ local on_attach = function(client, bufnr)
     vim.keymap.set('n', lhs, rhs, opts)
   end
 
-  for _, mode in ipairs({ 'n', 'i' }) do
-    vim.keymap.set(mode, '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  for _, mode in ipairs({ 'i' }) do
+    vim.keymap.set(mode, '<C-s>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
   end
 
   local utils = require 'core.utils'

@@ -242,16 +242,12 @@ require('packer').startup({ function(use)
     -- this is needed to fix lsp doc highlight
     use { 'antoinemadec/FixCursorHold.nvim' }
 
-    -- show function signature when typing
-    use { 'ray-x/lsp_signature.nvim' }
-
     -- simplify language server configuration
     use {
       'neovim/nvim-lspconfig',
       config = function() require 'cfg.plugins.lsp' end,
       after = {
         'aerial.nvim',
-        'lsp_signature.nvim',
         'nvim-cmp',
         'nvim-lsp-installer',
       }
