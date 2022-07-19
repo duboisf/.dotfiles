@@ -64,7 +64,7 @@ local function cwd_files()
   set_prompt_border_color('#22ee22')
   local cwd = get_buffer_dir()
   builtin.find_files({
-    cwd = cwd, hidden = true,
+    cwd = cwd,
     prompt_title = "Files   " .. cwd,
   })
 end
@@ -132,7 +132,7 @@ end
 local function live_grep_workspace()
   set_prompt_border_color('#eeff00')
   builtin.live_grep {
-    prompt_title = prompt_with_cwd("Live Grep")
+    prompt_title = prompt_with_cwd("Live Grep"),
   }
 end
 
@@ -146,7 +146,7 @@ end
 
 local function setup_mappings()
   nmap('gr', lsp_references)
-  nmap('<leader>ff', ':Telescope<CR>')
+  nmap('<leader>ft', ':Telescope<CR>')
   nmap('<leader>fa', git_files)
   nmap('<leader>fe', find_files)
   nmap('<leader>fd', cwd_files)
@@ -173,6 +173,7 @@ require('telescope').setup {
       "--line-number",
       "--column",
       "--smart-case",
+      "--hidden"
     },
     prompt_prefix = "  ",
     selection_caret = " ",
