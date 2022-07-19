@@ -20,8 +20,9 @@ local all_buffers_source = {
 
 cmp.setup({
   formatting = {
+    fields = { 'abbr', 'kind', 'menu' },
     format = lspkind.cmp_format({
-      mode = 'symbol_text', -- show only symbol annotations
+      mode = 'symbol', -- show only symbol annotations
       maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
       menu = ({
         buffer = "[Buffer]",
