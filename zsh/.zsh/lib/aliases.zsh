@@ -155,3 +155,7 @@ alias s_connect='openssl s_client -state -debug -connect'
 # aws cli
 ##########
 alias iaws='aws --cli-auto-prompt'
+
+# rg
+#####
+alias rgf='rg --files-with-matches'
