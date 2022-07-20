@@ -67,6 +67,14 @@ cmp.setup({
         fallback()
       end
     end, { "i", "s" }),
+    -- mapping to show completion from all words from all buffers
+    ['<C-x><C-n>'] = cmp.mapping.complete({
+      config = {
+        sources = {
+          all_buffers_source,
+        }
+      }
+    }),
     ['<CR>'] = cmp.mapping.confirm({ select = false }),
     ['<Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
