@@ -175,6 +175,7 @@ require('telescope').setup {
       "--smart-case",
       "--hidden"
     },
+    dynamic_preview_title = true,
     prompt_prefix = "  ",
     selection_caret = " ",
     path_display = { "truncate" },
