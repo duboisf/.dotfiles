@@ -140,8 +140,11 @@ do
   })
 end
 
-cmp.setup.filetype('gitcommit', {
-  sources = { all_buffers_source }
+cmp.setup.filetype({'gitcommit','markdown'}, {
+  sources = {
+    { name = 'luasnip' },
+    all_buffers_source
+  }
 })
 
 -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
