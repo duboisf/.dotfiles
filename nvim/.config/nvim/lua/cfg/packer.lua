@@ -39,8 +39,20 @@ require('packer').startup({ function(use)
   -- show indentation guides
   use {
     'lukas-reineke/indent-blankline.nvim',
-    config = function ()
+    config = function()
       require('indent_blankline').setup {
+        filetype_exclude = {
+          -- defaults
+          "checkhealth",
+          "help",
+          "lspinfo",
+          "man",
+          "packer",
+          "",
+          -- I added these
+          "TelescopePrompt",
+          "startify",
+        },
         show_current_context = true,
         show_current_context_start = true,
         use_treesitter = true,
