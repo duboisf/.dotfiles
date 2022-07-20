@@ -84,9 +84,6 @@ cmp.setup({
       end
     end)
   }),
-  performance = {
-    debounce = 300,
-  },
   preselect = cmp.PreselectMode.None,
   sources = cmp.config.sources({
     { name = 'luasnip' },
