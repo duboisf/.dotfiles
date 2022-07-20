@@ -1,3 +1,5 @@
+export XDG_CONFIG_HOME=$HOME/.config
+
 export ZPLUG_LOG_LOAD_FAILURE=true
 source ~/.zplug/init.zsh
 
