@@ -46,7 +46,7 @@ cmp.setup({
     ['<C-d>'] = cmp.mapping.scroll_docs(4),
     ['<C-Space>'] = cmp.mapping(function()
       if cmp.visible() then
-        cmp.select_next_item()
+        cmp.confirm({ select = true })
       else
         cmp.complete()
       end
@@ -140,7 +140,7 @@ do
   })
 end
 
-cmp.setup.filetype({'gitcommit','markdown'}, {
+cmp.setup.filetype({ 'gitcommit', 'markdown' }, {
   sources = {
     { name = 'luasnip' },
     all_buffers_source
