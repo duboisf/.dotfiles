@@ -54,9 +54,11 @@ require('packer').startup({ function(use)
           "startify",
         },
         show_current_context = true,
-        show_current_context_start = true,
+        -- performance hog
+        show_current_context_start = false,
         use_treesitter = true,
-        use_treesitter_scope = true,
+        -- disabled as often picks a larger context than desired, like function context
+        use_treesitter_scope = false,
       }
     end
   }
