@@ -1,7 +1,8 @@
-local actions = require "telescope.actions"
+local actions = require 'telescope.actions'
 local builtin = require 'telescope.builtin'
+local themes = require 'telescope.themes'
+local tutils = require 'telescope.utils'
 local utils = require 'core.utils'
-local tutils = require "telescope.utils"
 
 local nmap = function(lhs, rhs)
   vim.keymap.set("n", lhs, rhs, {
@@ -136,12 +137,16 @@ local function live_grep_workspace()
   }
 end
 
--- Wrapper to check if there's an LSP client attache to the current buffer
+-- Wrapper to check if there's an LSP client attached to the current buffer
 -- before invoking builtin.lsp_references
 local function lsp_references()
   if has_lsp_client_attached() then
     return builtin.lsp_references()
   end
+end
+
+local function spell_suggestions()
+  builtin.spell_suggest(themes.get_cursor({}))
 end
 
 local function setup_mappings()
@@ -157,6 +162,7 @@ local function setup_mappings()
   nmap('<leader><leader>gd', live_grep_dir_of_current_buffer)
   nmap('<leader><leader>gw', live_grep_workspace)
   nmap('<leader>fr', builtin.oldfiles)
+  nmap('z=', spell_suggestions)
 end
 
 setup_mappings()
