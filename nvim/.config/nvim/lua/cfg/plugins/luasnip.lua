@@ -107,7 +107,7 @@ local function define_lua_snippets()
         else
           return ''
         end
-      end, {1}),
+      end, { 1 }),
       i(1)
     })),
   })
@@ -125,40 +125,27 @@ define_go_snippets()
 
 local function asana_task()
   return s('at', {
-      t("["), c(1, {
-        t("Asana Task"),
-        t("Change Management Task"),
-        i(nil, ""),
-      }), t("]("), f(function() return vim.fn.getreg('+') end, {}), t(")")
-    })
-end
-
-local define_markdown_snippets = function()
-  ls.add_snippets('markdown', {
-    asana_task(),
-    s(
-      {
-        trig = 'lk',
-        name = 'Markdown link',
-      },
-      {
-        t('['),
-        i(1),
-        t(']('),
-        c(2, {
-          i(nil),
-          f(function() return vim.fn.getreg('+') end, {}),
-        }),
-        t(')'),
-      }
-    )
+    t("["), c(1, {
+      t("Asana Task"),
+      t("Change Management Task"),
+      i(nil, ""),
+    }), t("]("), f(function() return vim.fn.getreg('+') end, {}), t(")")
   })
 end
 
-define_markdown_snippets()
+local function markdown_link()
+  return s('lk', fmt('[{}]({})', {
+    i(1),
+    c(2, {
+      i(nil),
+      f(function() return vim.fn.getreg('+') end, {}),
+    }),
+  }))
+end
 
-local gitcommit_snippets = {
+local markdown_snippets = {
   asana_task(),
+  markdown_link(),
 }
-
-ls.add_snippets('gitcommit', gitcommit_snippets)
+ls.add_snippets('markdown', markdown_snippets)
+ls.add_snippets('gitcommit', markdown_snippets)
