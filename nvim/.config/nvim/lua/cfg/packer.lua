@@ -411,6 +411,12 @@ require('packer').startup({ function(use)
     end
   }
 
+  -- color picker, use the PickColor command
+  use {
+    'ziontee113/color-picker.nvim',
+    config = function() require 'color-picker' end,
+  }
+
   -- code outline
   use {
     'stevearc/aerial.nvim',
