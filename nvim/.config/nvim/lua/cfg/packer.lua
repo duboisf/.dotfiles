@@ -19,6 +19,14 @@ autocmd(group, "BufWritePost", "*/cfg/packer.lua",
 })
 
 require('packer').startup({ function(use)
+  -- wrapper for use function to require our custom plugin configuration from the lua/cfg/plugins dir
+  local function use_with_cfg(opts)
+    local full_plugin_name = opts[1]
+    local plugin_name = utils.packer.short_plugin_name(full_plugin_name)
+    opts.config = "require 'cfg.plugins." .. plugin_name .. "'"
+    use(opts)
+  end
+
   local function notStartedByFirenvim()
     return vim.g.started_by_firenvim == nil
   end
@@ -270,9 +278,8 @@ require('packer').startup({ function(use)
     use { 'antoinemadec/FixCursorHold.nvim' }
 
     -- simplify language server configuration
-    use {
+    use_with_cfg {
       'neovim/nvim-lspconfig',
-      config = function() require 'cfg.plugins.lsp' end,
       after = {
         'aerial.nvim',
         'nvim-cmp',
