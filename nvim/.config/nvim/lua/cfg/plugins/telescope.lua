@@ -67,6 +67,7 @@ local function cwd_files()
   local cwd = get_buffer_dir()
   builtin.find_files({
     cwd = cwd,
+    hidden = true,
     prompt_title = "Files   " .. cwd,
   })
 end
