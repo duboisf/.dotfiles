@@ -13,6 +13,17 @@ vim.cmd [[
   sign define DiagnosticSignHint text= texthl=DiagnosticSignHint
 ]]
 
+local function safe_formatting_sync()
+  local id, client = next(vim.lsp.buf_get_clients())
+  if id ~= nil and client.server_capabilities.documentFormattingProvider then
+    if vim.lsp.buf.format then
+      vim.lsp.buf.format(nil, 1000)
+    else
+      vim.lsp.buf.formatting_sync(nil, 1000)
+    end
+  end
+end
+
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
@@ -35,7 +46,7 @@ local on_attach = function(client, bufnr)
   nm['[d']              = '<cmd>lua vim.diagnostic.goto_prev()<CR>'
   nm[']d']              = '<cmd>lua vim.diagnostic.goto_next()<CR>'
   nm['<leader>l']       = '<cmd>lua vim.lsp.codelens.run()<CR>'
-  nm['<leader>F']       = '<cmd>lua require"cfg.plugins.lsp".safe_formatting_sync()<CR>'
+  nm['<leader>F']       = function() safe_formatting_sync() end
 
   for lhs, rhs in pairs(normal_mappings) do
     vim.keymap.set('n', lhs, rhs, opts)
@@ -56,7 +67,8 @@ local on_attach = function(client, bufnr)
   end
 
   if server_capabilities.documentHighlightProvider then
-    autocmd({ 'CursorHold', 'CursorHoldI' }, nil, vim.lsp.buf.document_highlight, 'highlight symbol under the cursor throughout document')
+    autocmd({ 'CursorHold', 'CursorHoldI' }, nil, vim.lsp.buf.document_highlight,
+      'highlight symbol under the cursor throughout document')
     autocmd('CursorMoved', nil, vim.lsp.buf.clear_references, 'Clear highlighted lsp symbol')
   end
 
@@ -204,17 +216,6 @@ do
       return lastRootPath
     end,
   }
-end
-
-local function safe_formatting_sync()
-  local id, client = next(vim.lsp.buf_get_clients())
-  if id ~= nil and client.server_capabilities.documentFormattingProvider then
-    if vim.lsp.buf.format then
-      vim.lsp.buf.format(nil, 1000)
-    else
-      vim.lsp.buf.formatting_sync(nil, 1000)
-    end
-  end
 end
 
 -- local configs = require 'lspconfig/configs'
