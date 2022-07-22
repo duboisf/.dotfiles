@@ -116,12 +116,12 @@ require('packer').startup({ function(use)
     end,
   }
 
+  use { 'tpope/vim-rhubarb', after = 'vim-fugitive' }
+
   use {
     'rafcamlet/nvim-luapad',
     cmd = { 'Luapad' },
   }
-
-  use { 'tpope/vim-rhubarb', after = 'vim-fugitive' }
 
   use { 'anuvyklack/keymap-layer.nvim' }
 
