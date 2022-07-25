@@ -67,7 +67,7 @@ local function setup_keymaps()
   vim.keymap.set('i', '<C-l>', function() ls.change_choice(1) end, {})
   vim.keymap.set('s', '<C-l>', function() ls.change_choice(1) end, {})
   vim.keymap.set('i', '<C-u>', select_choice, {})
-  vim.keymap.set('n', '<leader><leader>s', reload_luasnip, {})
+  vim.keymap.set('n', '<leader><leader>s', reload_luasnip, { desc = 'Reload luasnip' })
 end
 
 setup_keymaps()
@@ -77,39 +77,88 @@ setup_keymaps()
 
 local function define_lua_snippets()
   ls.add_snippets('lua', {
+    s('lv',
+      fmt(
+        [[local {} = {}]], {
+        i(1),
+        i(2)
+      }
+      )),
     s(
-      {
-        trig = 'lv',
-        name = 'Local variable',
-        desc = 'Create a local variable',
-      },
-      { t('local '), i(1, ''), t(' = ') }
-    ),
-
-    s({
-      trig = 'fa',
-      name = 'inline function without parameters',
-      dscr = 'Creates an inline, no parameter function used to pass as a parameter',
-    }, {
-      t('function() '), i(1, ''), t(' end'),
-    }),
-
-    s('req', fmt([[local {} = require '{}']], {
-      f(function(args)
-        -- local old_state = old_state or {}
-        if args then
-          local module = args[1][1]
-          if module == '' then
-            return ''
+      'lf',
+      fmt(
+        [[
+          local function {}()
+            {}
           end
-          local parts = vim.split(module, '.', { plain = true })
-          return parts[#parts]
-        else
-          return ''
-        end
-      end, { 1 }),
-      i(1)
-    })),
+        ]],
+        {
+          i(1),
+          i(2)
+        }
+      )
+    ),
+    s(
+      'fi',
+      fmt(
+        [[function() {} end]],
+        {
+          i(1)
+        }
+      )
+    ),
+    s(
+      'req',
+      fmt(
+        [[local {} = require '{}']],
+        {
+          f(function(args)
+            if args then
+              local module = args[1][1]
+              if module == '' then
+                return ''
+              end
+              local parts = vim.split(module, '.', { plain = true })
+              return parts[#parts]
+            else
+              return ''
+            end
+          end, { 1 }),
+          i(1)
+        }
+      )
+    ),
+    s(
+      'aug',
+      fmt(
+        [[local group = vim.api.nvim_create_augroup('{}', {{ clear = true }})]],
+        {
+          i(1)
+        }
+      )
+    ),
+    s(
+      'au',
+      fmt(
+        [[
+          vim.api.nvim_create_autocmd({{ '{}' }}, {{
+            group = group,
+            pattern = '{}',
+            {},
+            desc = '{}',
+          }})
+        ]],
+        {
+          i(1),
+          i(2),
+          c(3, {
+            sn(nil, fmt([[callback = {}]], { i(1, 'func') })),
+            sn(nil, fmt([[command = '{}']], { i(1) })),
+          }),
+          i(4),
+        }
+      )
+    )
   })
 end
 
