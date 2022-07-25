@@ -1,3 +1,6 @@
+local core = require 'core'
+local utils = require 'core.utils'
+
 -- This needs to be called first
 require('nvim-lsp-installer').setup {
   -- install language servers that are configured with lspconfig automatically
@@ -29,47 +32,49 @@ end
 local on_attach = function(client, bufnr)
   require('aerial').on_attach(client, bufnr)
 
-  -- Mappings.
-  local opts = { noremap = true, silent = true, buffer = bufnr }
+  do
+    -- Mappings.
+    local opts = { noremap = true, silent = true, buffer = bufnr }
 
-  local normal_mappings = {}
-  local nm              = normal_mappings
-  nm['gD']              = '<Cmd>lua vim.lsp.buf.declaration()<CR>'
-  nm['gd']              = '<Cmd>Telescope lsp_definitions<CR>'
-  nm['K']               = '<Cmd>lua vim.lsp.buf.hover()<CR>'
-  nm['gi']              = '<cmd>lua vim.lsp.buf.implementation()<CR>'
-  nm['<space>D']        = '<cmd>lua vim.lsp.buf.type_definition()<CR>'
-  nm['<space>rn']       = '<cmd>lua vim.lsp.buf.rename()<CR>'
-  nm['<space>a']        = '<cmd>lua vim.lsp.buf.code_action()<CR>'
-  nm['gr']              = '<cmd>Telescope lsp_references<CR>'
-  nm['<space>d']        = '<cmd>lua vim.diagnostic.open_float()<CR>'
-  nm['[d']              = '<cmd>lua vim.diagnostic.goto_prev()<CR>'
-  nm[']d']              = '<cmd>lua vim.diagnostic.goto_next()<CR>'
-  nm['<leader>l']       = '<cmd>lua vim.lsp.codelens.run()<CR>'
-  nm['<leader>F']       = function() safe_formatting_sync() end
+    local normal_mappings = {}
+    local nm              = normal_mappings
+    nm['gD']              = '<Cmd>lua vim.lsp.buf.declaration()<CR>'
+    nm['gd']              = '<Cmd>Telescope lsp_definitions<CR>'
+    nm['K']               = '<Cmd>lua vim.lsp.buf.hover()<CR>'
+    nm['gi']              = '<cmd>lua vim.lsp.buf.implementation()<CR>'
+    nm['<space>D']        = '<cmd>lua vim.lsp.buf.type_definition()<CR>'
+    nm['<space>rn']       = '<cmd>lua vim.lsp.buf.rename()<CR>'
+    nm['<space>a']        = '<cmd>lua vim.lsp.buf.code_action()<CR>'
+    nm['gr']              = '<cmd>Telescope lsp_references<CR>'
+    nm['<space>d']        = '<cmd>lua vim.diagnostic.open_float()<CR>'
+    nm['[d']              = '<cmd>lua vim.diagnostic.goto_prev()<CR>'
+    nm[']d']              = '<cmd>lua vim.diagnostic.goto_next()<CR>'
+    nm['<leader>l']       = '<cmd>lua vim.lsp.codelens.run()<CR>'
+    nm['<leader>F']       = function() safe_formatting_sync() end
 
-  for lhs, rhs in pairs(normal_mappings) do
-    vim.keymap.set('n', lhs, rhs, opts)
+    for lhs, rhs in pairs(normal_mappings) do
+      vim.keymap.set('n', lhs, rhs, opts)
+    end
+
+    for _, mode in ipairs({ 'i' }) do
+      vim.keymap.set(mode, '<C-s>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+    end
   end
 
-  for _, mode in ipairs({ 'i' }) do
-    vim.keymap.set(mode, '<C-s>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-  end
+  do
+    local autocmd = utils.autogroup('cfg#plugins#lsp', true)
+    local opts = { buffer = bufnr }
 
-  local utils = require 'core.utils'
-  local group = utils.autogroup('cfg#plugins#lsp', true)
-  local autocmd = utils.curry_autocmd(group, { buffer = bufnr })
+    local server_capabilities = client.server_capabilities
 
-  local server_capabilities = client.server_capabilities
+    if server_capabilities.codeLensProvider then
+      autocmd({ 'BufEnter', 'CursorHold', 'InsertLeave' }, nil, vim.lsp.codelens.refresh, 'Refresh codelens', opts)
+    end
 
-  if server_capabilities.codeLensProvider then
-    autocmd({ 'BufEnter', 'CursorHold', 'InsertLeave' }, nil, vim.lsp.codelens.refresh, 'Refresh codelens')
-  end
-
-  if server_capabilities.documentHighlightProvider then
-    autocmd({ 'CursorHold', 'CursorHoldI' }, nil, vim.lsp.buf.document_highlight,
-      'highlight symbol under the cursor throughout document')
-    autocmd('CursorMoved', nil, vim.lsp.buf.clear_references, 'Clear highlighted lsp symbol')
+    if server_capabilities.documentHighlightProvider then
+      autocmd({ 'CursorHold', 'CursorHoldI' }, nil, vim.lsp.buf.document_highlight, 'Highlight symbol under the cursor throughout document', opts)
+      autocmd('CursorMoved', nil, vim.lsp.buf.clear_references, 'Clear highlighted lsp symbol', opts)
+    end
   end
 
   if vim.bo[bufnr].filetype == 'yaml' and string.find(vim.api.nvim_buf_get_name(bufnr), '/templates/') then

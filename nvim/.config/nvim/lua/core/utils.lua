@@ -3,29 +3,26 @@ local M = {}
 -- Simplify creating autogroups
 function M.autogroup(name, clear)
   local opts = { clear = clear or false }
-  return vim.api.nvim_create_augroup(name, opts)
-end
-
-function M.curry_autocmd(group, opts)
-  opts = opts or {}
-  opts.group = group
-  return function(events, pattern, callback, desc)
-    opts.desc = desc
-    return M.autocmd(group, events, pattern, callback, opts)
+  local group = vim.api.nvim_create_augroup(name, opts)
+  return function (events, pattern, callback, desc, o)
+    return M.autocmd(group, events, pattern, callback, desc, o)
   end
 end
 
 -- Simplify creating autocmds
-function M.autocmd(group, events, pattern, callback, opts)
+function M.autocmd(group, events, pattern, callback, desc, opts)
   opts = opts or {}
+  opts.desc = desc
   opts.group = group
   if opts.buffer == nil then
     opts.pattern = pattern
   end
   if type(callback) == 'string' then
     opts.command = callback
-  else
+  elseif type(callback) == 'function' then
     opts.callback = callback
+  else
+    error('core.utils#autocmd: callback param must be either string or function, got: ' .. type(callback))
   end
   return vim.api.nvim_create_autocmd(events, opts)
 end

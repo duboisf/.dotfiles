@@ -1,3 +1,5 @@
+local utils = require 'core.utils'
+
 local gitsigns = require('gitsigns')
 
 gitsigns.setup {
@@ -49,11 +51,7 @@ local function fix_highlights()
   vim.cmd 'highlight link GitSignsDeleteLn DiffDelete'
 end
 
-local group = vim.api.nvim_create_augroup('cfg#plugins#lsp', { clear = true })
-vim.api.nvim_create_autocmd('ColorScheme', {
-  group = group,
-  pattern = "*",
-  callback = fix_highlights,
-})
+local autocmd = utils.autogroup('cfg#plugins#lsp', true)
+autocmd('ColorScheme', '*', fix_highlights, 'Tweak gitsigns highlights')
 
 fix_highlights()

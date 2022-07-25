@@ -1,20 +1,25 @@
 local fn = vim.fn
 local utils = require("core.utils")
-local autogroup = utils.autogroup
-local autocmd = utils.autocmd
 
--- Jump to last position when reopening a buffer
-local group = autogroup('cfg#autojump', true)
-
-local disabledFiletypes = {'gitcommit', 'help', 'startify'}
--- Disable jumping to last position when writting git commit messages
-autocmd(group, 'FileType', disabledFiletypes, function()
+-- disable jumping to last position
+local function disable_jump_to_last_position()
   vim.b.disable_jump_to_last_position = true
-end)
+end
+
+local autocmd = utils.autogroup('plugin#autojump', true)
+
+local disabled_filetypes = { 'gitcommit', 'help', 'startify' }
+
+-- Disable jumping to last position when writting git commit messages
+autocmd(
+  'FileType',
+  disabled_filetypes,
+  disable_jump_to_last_position,
+  'Disable jump to last position for certain filetypes'
+)
 
 -- when opening a file, jump to the last position we were in that file (if there was one)
 autocmd(
-  group,
   'BufReadPost',
   "*",
   function()
@@ -24,10 +29,6 @@ autocmd(
     if fn.line("'\"") > 0 and fn.line("'\"") <= fn.line("$") then
       fn.execute('normal! g`\"')
     end
-  end
-  ,
-  {
-    desc = 'Jump to last position when reopening a buffer'
-  }
+  end,
+  'Jump to last position when reopening a buffer'
 )
-

@@ -1,10 +1,5 @@
 local fn = vim.fn
 local utils = require("core.utils")
-local autogroup = utils.autogroup
-local autocmd = utils.autocmd
-
--- define a bunch of autocommands to help with lazy loading
-local group = autogroup('cfg#packer', true)
 
 local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
 local packer_bootstrap = false
@@ -13,10 +8,11 @@ if fn.empty(fn.glob(install_path)) > 0 then
     install_path })
 end
 
-autocmd(group, "BufWritePost", "*/cfg/packer.lua",
-  "let b:disable_jump_to_last_position = 1 | source <afile> | PackerCompile", {
-  desc = "Run :PackerCompile when the packer.lua config file gets saved",
-})
+local autocmd = utils.autogroup('cfg#packer', true)
+autocmd("BufWritePost", "*/cfg/packer.lua",
+  "let b:disable_jump_to_last_position = 1 | source <afile> | PackerCompile",
+  "Run :PackerCompile when the packer.lua config file gets saved"
+)
 
 require('packer').startup({ function(use)
   -- wrapper for use function to require our custom plugin configuration from the lua/cfg/plugins dir

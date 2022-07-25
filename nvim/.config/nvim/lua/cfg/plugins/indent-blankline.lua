@@ -1,3 +1,5 @@
+local utils = require 'core.utils'
+
 require('indent_blankline').setup {
   filetype_exclude = {
     -- defaults
@@ -18,3 +20,12 @@ require('indent_blankline').setup {
   -- disabled as often picks a larger context than desired, like function context
   use_treesitter_scope = false,
 }
+
+local function setup_highlights()
+  vim.cmd 'hi IndentBlanklineChar cterm=nocombine gui=nocombine guifg=#292f3b'
+end
+
+setup_highlights()
+
+local autocmd = utils.autogroup('cfg#plugins#indent-blankline', true)
+autocmd('ColorScheme', '*', setup_highlights, 'tweak IndentBlanklineChar highlight')
