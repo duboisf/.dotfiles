@@ -49,6 +49,16 @@ function M.get_short_cwd()
   return M.collapse_home_path_to_tilde(cwd)
 end
 
+function M.filepath_to_lua_module(filepath)
+  local runtimepath_striped_filepath = string.gsub(filepath, '^.*/lua/', '')
+  return string.gsub(string.gsub(runtimepath_striped_filepath, '%.lua$', ''), '/', '.')
+end
+
+function M.reload_module_file(filepath)
+  local module = M.filepath_to_lua_module(filepath)
+  M.reload_module(module)
+end
+
 function M.reload_module(module)
   package.loaded[module] = nil
   require(module)
