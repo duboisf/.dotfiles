@@ -1,4 +1,4 @@
 setlocal spell
 
-iabbr pr pull request
-iabbrev af ## Afternoon*
+iabbrev <buffer> pr pull request
+iabbrev <buffer> af ## Afternoon*
