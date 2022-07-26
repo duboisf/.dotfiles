@@ -1,4 +1,3 @@
-local core = require 'core'
 local utils = require 'core.utils'
 
 -- This needs to be called first
