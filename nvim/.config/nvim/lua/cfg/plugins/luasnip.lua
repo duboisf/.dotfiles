@@ -58,8 +58,7 @@ local lambda = require("luasnip.extras").l
 
 local function reload_luasnip()
   ls.cleanup()
-  local utils = require('core.utils')
-  utils.reload_module 'cfg.plugins.luasnip'
+  require('core.utils').reload_module 'cfg.plugins.luasnip'
 end
 
 local function setup_keymaps()
