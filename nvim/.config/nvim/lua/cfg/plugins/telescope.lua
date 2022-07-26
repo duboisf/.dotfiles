@@ -3,6 +3,7 @@ local builtin = require 'telescope.builtin'
 local themes = require 'telescope.themes'
 local tutils = require 'telescope.utils'
 local utils = require 'core.utils'
+local which_key = require 'which-key'
 
 local function nmap(lhs, rhs, desc)
   vim.keymap.set("n", lhs, rhs, {
@@ -152,18 +153,38 @@ local function spell_suggestions()
 end
 
 local function setup_mappings()
+  which_key.register({
+    f = {
+      name = 'Telescope',
+      t = { '<cmd>Telescope<CR>', 'Show available pickers' },
+      a = { git_files, '  files' },
+      e = { find_files, 'Workspace files' },
+      d = { cwd_files, 'Dir of current buffer' },
+      r = { builtin.oldfiles, 'Old files' },
+      s = { builtin.lsp_document_symbols, 'LSP document symbols' },
+      w = { lsp_dynamic_workspace_symbols, 'LSP dynamic workspace symbols' },
+      ['*'] = { builtin.current_buffer_fuzzy_find, 'current buffer fuzzy find' },
+      g = {
+        name = 'Live Grep',
+        a = { live_grep_everything, 'All the things' },
+        d = { live_grep_dir_of_current_buffer, 'Dir of current buffer' },
+        w = { live_grep_workspace, 'Workspace' },
+      }
+    }
+  }, { prefix = '<leader>' })
+
   nmap('gr', lsp_references, 'LSP references')
-  nmap('<leader>ft', ':Telescope<CR>', 'show available pickers')
-  nmap('<leader>fa', git_files, 'git files')
-  nmap('<leader>fe', find_files, 'find files')
-  nmap('<leader>fd', cwd_files, 'find files from current buffer')
-  nmap('<leader>fs', builtin.lsp_document_symbols, 'LSP document symbols')
-  nmap('<leader>fw', lsp_dynamic_workspace_symbols, 'LSP dynamic workspace symbols')
-  nmap('<leader>f*', builtin.current_buffer_fuzzy_find, 'current buffer fuzzy find')
-  nmap('<leader>fga', live_grep_everything, 'live grep everything')
-  nmap('<leader>fgd', live_grep_dir_of_current_buffer, 'live grep dir of current buffer')
-  nmap('<leader>fgw', live_grep_workspace, 'live grep workspace')
-  nmap('<leader>fr', builtin.oldfiles, 'old files')
+  -- nmap('<leader>ft', ':Telescope<CR>', 'show available pickers')
+  -- nmap('<leader>fa', git_files, 'git files')
+  -- nmap('<leader>fe', find_files, 'find files')
+  -- nmap('<leader>fd', cwd_files, 'find files from current buffer')
+  -- nmap('<leader>fs', builtin.lsp_document_symbols, 'LSP document symbols')
+  -- nmap('<leader>fw', lsp_dynamic_workspace_symbols, 'LSP dynamic workspace symbols')
+  -- nmap('<leader>f*', builtin.current_buffer_fuzzy_find, 'current buffer fuzzy find')
+  -- nmap('<leader>fga', live_grep_everything, 'live grep everything')
+  -- nmap('<leader>fgd', live_grep_dir_of_current_buffer, 'live grep dir of current buffer')
+  -- nmap('<leader>fgw', live_grep_workspace, 'live grep workspace')
+  -- nmap('<leader>fr', builtin.oldfiles, 'old files')
   nmap('z=', spell_suggestions, 'show spelling suggestions for word under cursor')
 end
 
