@@ -17,7 +17,15 @@ autocmd("BufWritePost", "*/cfg/packer.lua",
 require('packer').startup({ function(use)
   -- wrapper for use function to require our custom plugin configuration from the lua/cfg/plugins dir
   local function use_with_cfg(opts)
-    local full_plugin_name = opts[1]
+    local full_plugin_name = ''
+    if type(opts) == 'string' then
+      full_plugin_name = opts
+      opts = { full_plugin_name }
+    elseif type(opts) == 'table' then
+      full_plugin_name = opts[1]
+    else
+      error('must supply either string or table with first element being the full plugin name')
+    end
     local plugin_name = utils.packer.short_plugin_name(full_plugin_name)
     opts.config = "require 'cfg.plugins." .. plugin_name .. "'"
     use(opts)
@@ -119,20 +127,16 @@ require('packer').startup({ function(use)
     cmd = { 'Luapad' },
   }
 
-  use { 'anuvyklack/keymap-layer.nvim' }
+  use 'anuvyklack/keymap-layer.nvim'
 
-  use {
+  use_with_cfg {
     'anuvyklack/hydra.nvim',
+    after = { 'keymap-layer.nvim' },
     event = 'VimEnter',
-    config = function() require('cfg.plugins.hydra') end,
-    after = { 'keymap-layer.nvim' }
   }
 
   -- show diff signs in the gutter
-  use {
-    'lewis6991/gitsigns.nvim',
-    config = function() require 'cfg.plugins.gitsigns' end,
-  }
+  use_with_cfg 'lewis6991/gitsigns.nvim'
 
   --[[
 
@@ -142,16 +146,18 @@ require('packer').startup({ function(use)
 
   --]]
   local function use_telescope()
-    use {
+    use_with_cfg {
       -- requires git, fd, ripgrep
       'nvim-telescope/telescope.nvim',
+      after = {
+        'hydra.nvim',
+        'which-key.nvim'
+      },
       requires = {
         'kyazdani42/nvim-web-devicons',
         'nvim-lua/popup.nvim',
         'nvim-lua/plenary.nvim',
       },
-      after = 'hydra.nvim',
-      config = function() require 'cfg.plugins.telescope' end
     }
 
     -- support fzf syntax in the telescope prompt
@@ -179,10 +185,9 @@ require('packer').startup({ function(use)
   end
 
   -- various commands to work with golang
-  use {
+  use_with_cfg {
     'fatih/vim-go',
     ft = { 'go', 'gomod' },
-    config = function() require 'cfg.plugins.go' end
   }
 
   use {
@@ -200,41 +205,33 @@ require('packer').startup({ function(use)
   }
 
   -- use neovim in any text input in the browser 🤯
-  use {
+  use_with_cfg {
     'glacambre/firenvim',
     run = function() vim.fn['firenvim#install'](0) end,
-    config = function() require('cfg.plugins.firenvim') end,
   }
 
   -- use popup window when using the vim.notify api
-  use {
+  use_with_cfg {
     'rcarriga/nvim-notify',
     after = 'telescope.nvim',
-    config = function() require('cfg.plugins.nvim_notify') end,
   }
 
   -- fast and easily configurable status line written in lua 🌕
-  use {
+  use_with_cfg {
     'nvim-lualine/lualine.nvim',
     cond = notStartedByFirenvim,
-    config = function() require 'cfg.plugins.lualine' end,
     requires = { 'kyazdani42/nvim-web-devicons' }
   }
 
   -- file browser
-  use {
+  use_with_cfg {
     'kyazdani42/nvim-tree.lua',
-    config = function() require('cfg.plugins.nvim-tree') end,
-    requires = {
-      'kyazdani42/nvim-web-devicons',
-    },
+    requires = { 'kyazdani42/nvim-web-devicons' },
   }
 
   use {
     'sbdchd/neoformat',
-    config = function()
-      vim.g.neoformat_try_node_exe = 1
-    end
+    config = function() vim.g.neoformat_try_node_exe = 1 end
   }
 
   --[[
@@ -249,7 +246,7 @@ require('packer').startup({ function(use)
     use 'williamboman/nvim-lsp-installer'
 
     -- this is needed to fix lsp doc highlight
-    use { 'antoinemadec/FixCursorHold.nvim' }
+    use 'antoinemadec/FixCursorHold.nvim'
 
     -- simplify language server configuration
     use_with_cfg {
@@ -292,9 +289,8 @@ require('packer').startup({ function(use)
     end
 
     -- fancy completion
-    use {
+    use_with_cfg {
       'hrsh7th/nvim-cmp',
-      config = function() require 'cfg.plugins.cmp' end,
       requires = {
         -- add vscode-line pictograms in completion popup
         'onsails/lspkind.nvim',
@@ -314,10 +310,9 @@ require('packer').startup({ function(use)
   --]]
   local function use_treesitter()
 
-    use {
+    use_with_cfg {
       'nvim-treesitter/nvim-treesitter',
       event = 'VimEnter',
-      config = function() require 'cfg.plugins.treesitter' end,
       run = ':TSUpdate',
     }
 
@@ -328,7 +323,7 @@ require('packer').startup({ function(use)
 
     use {
       'nvim-treesitter/nvim-treesitter-context',
-      config = function() require 'treesitter-context'.setup {} end,
+      config = function() require('treesitter-context').setup {} end,
       after = 'nvim-treesitter',
     }
 
@@ -352,47 +347,7 @@ require('packer').startup({ function(use)
     }
 
     -- colorscheme
-    use {
-      'navarasu/onedark.nvim',
-      config = function()
-        local onedark = require 'onedark'
-        onedark.setup {
-          -- Main options --
-          style = 'darker', -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
-          transparent = false, -- Show/hide background
-          term_colors = true, -- Change terminal color as per the selected theme style
-          ending_tildes = true, -- Show the end-of-buffer tildes. By default they are hidden
-          cmp_itemkind_reverse = false, -- reverse item kind highlights in cmp menu
-          -- toggle theme style
-          toggle_style_key = '<leader>ts',
-          -- List of styles to toggle between
-          toggle_style_list = { 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer', 'light' },
-          -- Change code style
-          -- Options are italic, bold, underline, none
-          -- You can configure multiple style with comma seperated, For e.g., keywords = 'italic,bold'
-          code_style = {
-            comments = 'italic',
-            keywords = 'none',
-            functions = 'none',
-            strings = 'none',
-            variables = 'none'
-          },
-          -- Custom Highlights --
-          colors = {}, -- Override default colors
-          highlights = { -- Override highlight groups
-            -- some parens were the same color as the background when highlighted
-            MatchParen = { bg = '$red', fmt = 'bold' },
-          },
-          -- Plugins Config --
-          diagnostics = {
-            darker = true, -- darker colors for diagnostic
-            undercurl = true, -- use undercurl instead of underline for diagnostics
-            background = true, -- use background color for virtual text
-          },
-        }
-        onedark.load()
-      end
-    }
+    use_with_cfg 'navarasu/onedark.nvim'
   end
 
   -- show the available mappings when pressing part of a multi-key mapping
@@ -423,6 +378,82 @@ require('packer').startup({ function(use)
   use {
     'mickael-menu/zk-nvim',
     config = function() require 'cfg.plugins.zk' end
+  }
+
+  -- manage github from the comfort of neovim
+  use {
+    'pwntester/octo.nvim',
+    config = 'require"octo".setup()',
+    after = {
+      'telescope.nvim',
+    }
+  }
+
+  use {
+    'ldelossa/litee.nvim',
+    config = function() require('litee.lib').setup() end,
+  }
+
+  use {
+    'ldelossa/gh.nvim',
+    config = function()
+      require('litee/gh').setup()
+      local wk = require("which-key")
+      wk.register({
+        g = {
+          name = "+Git",
+          h = {
+            name = "+Github",
+            c = {
+              name = "+Commits",
+              c = { "<cmd>GHCloseCommit<cr>", "Close" },
+              e = { "<cmd>GHExpandCommit<cr>", "Expand" },
+              o = { "<cmd>GHOpenToCommit<cr>", "Open To" },
+              p = { "<cmd>GHPopOutCommit<cr>", "Pop Out" },
+              z = { "<cmd>GHCollapseCommit<cr>", "Collapse" },
+            },
+            i = {
+              name = "+Issues",
+              p = { "<cmd>GHPreviewIssue<cr>", "Preview" },
+            },
+            l = {
+              name = "+Litee",
+              t = { "<cmd>LTPanel<cr>", "Toggle Panel" },
+            },
+            r = {
+              name = "+Review",
+              b = { "<cmd>GHStartReview<cr>", "Begin" },
+              c = { "<cmd>GHCloseReview<cr>", "Close" },
+              d = { "<cmd>GHDeleteReview<cr>", "Delete" },
+              e = { "<cmd>GHExpandReview<cr>", "Expand" },
+              s = { "<cmd>GHSubmitReview<cr>", "Submit" },
+              z = { "<cmd>GHCollapseReview<cr>", "Collapse" },
+            },
+            p = {
+              name = "+Pull Request",
+              c = { "<cmd>GHClosePR<cr>", "Close" },
+              d = { "<cmd>GHPRDetails<cr>", "Details" },
+              e = { "<cmd>GHExpandPR<cr>", "Expand" },
+              o = { "<cmd>GHOpenPR<cr>", "Open" },
+              p = { "<cmd>GHPopOutPR<cr>", "PopOut" },
+              r = { "<cmd>GHRefreshPR<cr>", "Refresh" },
+              t = { "<cmd>GHOpenToPR<cr>", "Open To" },
+              z = { "<cmd>GHCollapsePR<cr>", "Collapse" },
+            },
+            t = {
+              name = "+Threads",
+              c = { "<cmd>GHCreateThread<cr>", "Create" },
+              n = { "<cmd>GHNextThread<cr>", "Next" },
+              t = { "<cmd>GHToggleThread<cr>", "Toggle" },
+            },
+          },
+        },
+      }, { prefix = "<leader><leader>" })
+    end,
+    after = {
+      'litee.nvim',
+      'which-key.nvim',
+    },
   }
 
   use_colorscheme()

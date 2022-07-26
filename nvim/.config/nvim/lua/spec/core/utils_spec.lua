@@ -98,7 +98,9 @@ describe('short_plugin_name', function()
     { 'github_owner/plugin-name.nvim', 'plugin-name' },
     { 'github_owner/plugin-name.vim', 'plugin-name' },
     { 'github_owner/nvim-plugin-name', 'plugin-name' },
+    { 'github_owner/nvim-plugin-name.lua', 'plugin-name' },
     { 'github_owner/vim-plugin-name', 'plugin-name' },
+    { 'kyazdani42/nvim-tree.lua', 'tree' },
   }
   -- when
   for _, test_case in ipairs(test_cases) do
