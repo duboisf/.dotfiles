@@ -118,7 +118,7 @@ local function define_lua_snippets()
                 return ''
               end
               local parts = vim.split(module, '.', { plain = true })
-              return parts[#parts]
+              return string.gsub(parts[#parts], '-', '_')
             else
               return ''
             end
