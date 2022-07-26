@@ -94,13 +94,20 @@ describe('filepath_to_lua_module', function()
 end)
 
 describe('short_plugin_name', function()
-  it('should take the fully qualified plugin name and return the short plugin name', function()
-    -- given
-    local full_plugin_name = 'github_owner/plugin-name.nvim'
-    -- when
-    local plugin_name = utils.packer.short_plugin_name(full_plugin_name)
-    -- then
-    assert.are.equal('plugin-name', plugin_name)
-  end)
+  local test_cases = {
+    { 'github_owner/plugin-name.nvim', 'plugin-name' },
+    { 'github_owner/plugin-name.vim', 'plugin-name' },
+    { 'github_owner/nvim-plugin-name', 'plugin-name' },
+    { 'github_owner/vim-plugin-name', 'plugin-name' },
+  }
+  -- when
+  for _, test_case in ipairs(test_cases) do
+    local full_plugin_name = test_case[1]
+    local expected_short_plugin_name = test_case[2]
+    it('should return the short plugin name ' ..
+      expected_short_plugin_name .. ' for the full plugin name ' .. full_plugin_name, function()
+      local actual_short_plugin_name = utils.packer.short_plugin_name(full_plugin_name)
+      assert.are.equal(expected_short_plugin_name, actual_short_plugin_name)
+    end)
+  end
 end)
-
