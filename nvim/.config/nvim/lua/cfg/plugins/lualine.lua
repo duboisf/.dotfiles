@@ -22,7 +22,8 @@ require("lualine").setup {
   },
   tabline = {
     lualine_a = { "buffers" },
-    lualine_x = { "tabs" },
+    -- by default the x section shows tabs, disable that
+    lualine_x = {},
     lualine_z = { get_cwd },
   }
 }
