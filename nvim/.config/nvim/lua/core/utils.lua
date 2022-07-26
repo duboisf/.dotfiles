@@ -27,6 +27,21 @@ function M.autocmd(group, events, pattern, callback, desc, opts)
   return vim.api.nvim_create_autocmd(events, opts)
 end
 
+-- Curry allows, as it's name implies, to curry a function
+function M.curry(f, ...)
+  local n = select("#", ...)
+  local args = { ... }
+  return function(...)
+    local n2 = select("#", ...)
+    local args2 = {...}
+    for i = 1, n2 do
+      n = n + 1
+      args[n] = args2[i]
+    end
+    return f(unpack(args, 1, n + n2))
+  end
+end
+
 -- Check if neovim was started by firenvim
 function M.startedByFirenvim()
   return vim.g.started_by_firenvim == nil
