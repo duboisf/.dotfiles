@@ -82,6 +82,17 @@ describe('curry', function()
   end)
 end)
 
+describe('filepath_to_lua_module', function()
+  it('should convert the full filepath to a lua module', function()
+    -- given
+    local filepath = 'nvim/.config/nvim/lua/core/utils.lua'
+    -- when
+    local module = utils.filepath_to_lua_module(filepath)
+    -- then
+    assert.are.equal('core.utils', module)
+  end)
+end)
+
 describe('short_plugin_name', function()
   it('should take the fully qualified plugin name and return the short plugin name', function()
     -- given
@@ -93,13 +104,3 @@ describe('short_plugin_name', function()
   end)
 end)
 
-describe('filepath_to_lua_module', function()
-  it('should convert the full filepath to a lua module', function()
-    -- given
-    local filepath = 'nvim/.config/nvim/lua/core/utils.lua'
-    -- when
-    local module = utils.filepath_to_lua_module(filepath)
-    -- then
-    assert.are.equal('core.utils', module)
-  end)
-end)

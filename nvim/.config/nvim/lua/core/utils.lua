@@ -69,15 +69,25 @@ function M.filepath_to_lua_module(filepath)
   return string.gsub(string.gsub(runtimepath_striped_filepath, '%.lua$', ''), '/', '.')
 end
 
-function M.reload_module_file(filepath)
-  local module = M.filepath_to_lua_module(filepath)
-  M.reload_module(module)
-end
-
-function M.reload_module(module)
+local function reload_module(module)
   package.loaded[module] = nil
   require(module)
   vim.notify('Reloaded lua module ' .. module)
+end
+
+local function reload_module_file(filepath)
+  local module = M.filepath_to_lua_module(filepath)
+  reload_module(module)
+end
+
+function M.reload_module(module)
+  if vim.fn.filereadable(module) then
+    reload_module_file(module)
+  elseif package.loaded[module] then
+    reload_module(module)
+  else
+    error('could not detect current file')
+  end
 end
 
 M.packer = {}
