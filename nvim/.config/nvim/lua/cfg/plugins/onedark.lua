@@ -25,7 +25,7 @@ onedark.setup {
   colors = {}, -- Override default colors
   highlights = { -- Override highlight groups
     -- some parens were the same color as the background when highlighted
-    MatchParen = { bg = '$red', fmt = 'bold' },
+    MatchParen = { bg = '$dark_red' },
   },
   -- Plugins Config --
   diagnostics = {
