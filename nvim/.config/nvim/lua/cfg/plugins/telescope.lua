@@ -1,4 +1,5 @@
 local actions = require 'telescope.actions'
+local action_state = require 'telescope.actions.state'
 local builtin = require 'telescope.builtin'
 local themes = require 'telescope.themes'
 local tutils = require 'telescope.utils'
@@ -66,11 +67,24 @@ vim.api.nvim_create_autocmd('BufLeave', {
 local function cwd_files()
   set_prompt_border_color('#22ee22')
   local cwd = get_buffer_dir()
-  builtin.find_files({
+  builtin.find_files {
     cwd = cwd,
     hidden = true,
     prompt_title = "Files   " .. cwd,
-  })
+  }
+end
+
+local function change_cwd()
+  builtin.find_files {
+    attach_mappings = function(prompt_bufnr, _)
+      actions.select_default:replace(function()
+        actions.close(prompt_bufnr)
+        vim.cmd('lcd ' .. action_state.get_selected_entry()[1])
+      end)
+      return true
+    end,
+    find_command = { "fd", "--type", "d", "--hidden" },
+  }
 end
 
 -- Searches for all files, including hidden and git ignored files. Useful when
@@ -158,6 +172,7 @@ local function setup_mappings()
       name = 'Telescope',
       t = { '<cmd>Telescope<CR>', 'Show available pickers' },
       a = { git_files, '  files' },
+      c = { change_cwd, 'Change working directory of the current window' },
       e = { find_files, 'Workspace files' },
       d = { cwd_files, 'Dir of current buffer' },
       r = { builtin.oldfiles, 'Old files' },
@@ -174,17 +189,6 @@ local function setup_mappings()
   }, { prefix = '<leader>' })
 
   nmap('gr', lsp_references, 'LSP references')
-  -- nmap('<leader>ft', ':Telescope<CR>', 'show available pickers')
-  -- nmap('<leader>fa', git_files, 'git files')
-  -- nmap('<leader>fe', find_files, 'find files')
-  -- nmap('<leader>fd', cwd_files, 'find files from current buffer')
-  -- nmap('<leader>fs', builtin.lsp_document_symbols, 'LSP document symbols')
-  -- nmap('<leader>fw', lsp_dynamic_workspace_symbols, 'LSP dynamic workspace symbols')
-  -- nmap('<leader>f*', builtin.current_buffer_fuzzy_find, 'current buffer fuzzy find')
-  -- nmap('<leader>fga', live_grep_everything, 'live grep everything')
-  -- nmap('<leader>fgd', live_grep_dir_of_current_buffer, 'live grep dir of current buffer')
-  -- nmap('<leader>fgw', live_grep_workspace, 'live grep workspace')
-  -- nmap('<leader>fr', builtin.oldfiles, 'old files')
   nmap('z=', spell_suggestions, 'show spelling suggestions for word under cursor')
 end
 
