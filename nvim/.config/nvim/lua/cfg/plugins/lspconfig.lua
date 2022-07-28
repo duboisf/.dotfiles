@@ -20,61 +20,69 @@ local function safe_formatting_sync()
   end
 end
 
+-- Setup autocmds for buffer
+local function setup_autocmds(client, bufnr)
+  local autocmd, group_id = utils.autogroup('cfg#plugins#lsp', false)
+  local opts = { buffer = bufnr }
+
+  local server_capabilities = client.server_capabilities
+
+  if server_capabilities.codeLensProvider then
+    autocmd({ 'BufEnter', 'CursorHold', 'InsertLeave' }, nil, vim.lsp.codelens.refresh, 'Refresh codelens', opts)
+  end
+
+  if server_capabilities.documentHighlightProvider then
+    autocmd({ 'CursorHold', 'CursorHoldI' }, nil, vim.lsp.buf.document_highlight,
+      'Highlight symbol under the cursor throughout document', opts)
+    autocmd('CursorMoved', nil, vim.lsp.buf.clear_references, 'Clear highlighted lsp symbol', opts)
+  end
+
+  local function clear_buffer_autocmds()
+    vim.api.nvim_clear_autocmds { buffer = bufnr, group = group_id }
+  end
+
+  autocmd('BufUnload', nil, clear_buffer_autocmds, 'Delete buffer autocmds to prevent duplicates', opts)
+end
+
+-- Setup mappings
+local function setup_mappings(bufnr)
+  local opts = { noremap = true, silent = true, buffer = bufnr }
+
+  local normal_mappings = {
+    ['gD']        = '<Cmd>lua vim.lsp.buf.declaration()<CR>',
+    ['gd']        = '<Cmd>Telescope lsp_definitions<CR>',
+    ['K']         = '<Cmd>lua vim.lsp.buf.hover()<CR>',
+    ['gi']        = '<cmd>Telescope lsp_implementations<CR>',
+    ['<space>D']  = '<cmd>lua vim.lsp.buf.type_definition()<CR>',
+    ['<space>rn'] = '<cmd>lua vim.lsp.buf.rename()<CR>',
+    ['<space>a']  = '<cmd>lua vim.lsp.buf.code_action()<CR>',
+    ['gr']        = '<cmd>Telescope lsp_references<CR>',
+    ['<space>d']  = '<cmd>lua vim.diagnostic.open_float()<CR>',
+    ['[d']        = '<cmd>lua vim.diagnostic.goto_prev()<CR>',
+    [']d']        = '<cmd>lua vim.diagnostic.goto_next()<CR>',
+    ['<leader>l'] = '<cmd>lua vim.lsp.codelens.run()<CR>',
+    ['<leader>F'] = safe_formatting_sync,
+  }
+
+  for lhs, rhs in pairs(normal_mappings) do
+    vim.keymap.set('n', lhs, rhs, opts)
+  end
+
+  for _, mode in ipairs({ 'i' }) do
+    -- TODO: check if the language server supports signature help before adding this mapping
+    vim.keymap.set(mode, '<C-s>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  end
+end
+
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
   require('aerial').on_attach(client, bufnr)
 
-  do
-    -- Mappings.
-    local opts = { noremap = true, silent = true, buffer = bufnr }
+  setup_autocmds(client, bufnr)
+  setup_mappings(bufnr)
 
-    local normal_mappings = {}
-    local nm              = normal_mappings
-    nm['gD']              = '<Cmd>lua vim.lsp.buf.declaration()<CR>'
-    nm['gd']              = '<Cmd>Telescope lsp_definitions<CR>'
-    nm['K']               = '<Cmd>lua vim.lsp.buf.hover()<CR>'
-    nm['gi']              = '<cmd>Telescope lsp_implementations<CR>'
-    nm['<space>D']        = '<cmd>lua vim.lsp.buf.type_definition()<CR>'
-    nm['<space>rn']       = '<cmd>lua vim.lsp.buf.rename()<CR>'
-    nm['<space>a']        = '<cmd>lua vim.lsp.buf.code_action()<CR>'
-    nm['gr']              = '<cmd>Telescope lsp_references<CR>'
-    nm['<space>d']        = '<cmd>lua vim.diagnostic.open_float()<CR>'
-    nm['[d']              = '<cmd>lua vim.diagnostic.goto_prev()<CR>'
-    nm[']d']              = '<cmd>lua vim.diagnostic.goto_next()<CR>'
-    nm['<leader>l']       = '<cmd>lua vim.lsp.codelens.run()<CR>'
-    nm['<leader>F']       = function() safe_formatting_sync() end
-
-    for lhs, rhs in pairs(normal_mappings) do
-      vim.keymap.set('n', lhs, rhs, opts)
-    end
-
-    for _, mode in ipairs({ 'i' }) do
-      vim.keymap.set(mode, '<C-s>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-    end
-  end
-
-  do
-    local autocmd, group_id = utils.autogroup('cfg#plugins#lsp', false)
-    local opts = { buffer = bufnr }
-
-    local server_capabilities = client.server_capabilities
-
-    if server_capabilities.codeLensProvider then
-      autocmd({ 'BufEnter', 'CursorHold', 'InsertLeave' }, nil, vim.lsp.codelens.refresh, 'Refresh codelens', opts)
-    end
-
-    if server_capabilities.documentHighlightProvider then
-      autocmd({ 'CursorHold', 'CursorHoldI' }, nil, vim.lsp.buf.document_highlight, 'Highlight symbol under the cursor throughout document', opts)
-      autocmd('CursorMoved', nil, vim.lsp.buf.clear_references, 'Clear highlighted lsp symbol', opts)
-    end
-
-    local function clear_buffer_autocmds()
-      vim.api.nvim_clear_autocmds { buffer = bufnr, group = group_id }
-    end
-    autocmd('BufUnload', nil, clear_buffer_autocmds, 'Delete buffer autocmds to prevent duplicates', opts)
-  end
-
+  -- disable diagnostics for helm templates
   if vim.bo[bufnr].filetype == 'yaml' and string.find(vim.api.nvim_buf_get_name(bufnr), '/templates/') then
     vim.diagnostic.disable()
   end
