@@ -51,7 +51,7 @@ local function fix_highlights()
   vim.cmd 'highlight link GitSignsDeleteLn DiffDelete'
 end
 
-local autocmd = utils.autogroup('cfg#plugins#lsp', true)
+local autocmd = utils.autogroup('cfg#plugins#gitsigns', true)
 autocmd('ColorScheme', '*', fix_highlights, 'Tweak gitsigns highlights')
 
 fix_highlights()
