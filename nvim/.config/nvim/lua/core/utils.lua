@@ -1,12 +1,12 @@
 local M = {}
 
--- Simplify creating autogroups
+-- Simplify creating autogroups, returns autocmd func with augroup already bound + augroup id
 function M.autogroup(name, clear)
   local opts = { clear = clear or false }
   local group = vim.api.nvim_create_augroup(name, opts)
   return function (events, pattern, callback, desc, o)
     return M.autocmd(group, events, pattern, callback, desc, o)
-  end
+  end, group
 end
 
 -- Simplify creating autocmds

@@ -61,7 +61,7 @@ local on_attach = function(client, bufnr)
   end
 
   do
-    local autocmd = utils.autogroup('cfg#plugins#lsp', true)
+    local autocmd, group_id = utils.autogroup('cfg#plugins#lsp', false)
     local opts = { buffer = bufnr }
 
     local server_capabilities = client.server_capabilities
@@ -74,6 +74,11 @@ local on_attach = function(client, bufnr)
       autocmd({ 'CursorHold', 'CursorHoldI' }, nil, vim.lsp.buf.document_highlight, 'Highlight symbol under the cursor throughout document', opts)
       autocmd('CursorMoved', nil, vim.lsp.buf.clear_references, 'Clear highlighted lsp symbol', opts)
     end
+
+    local function clear_buffer_autocmds()
+      vim.api.nvim_clear_autocmds { buffer = bufnr, group = group_id }
+    end
+    autocmd('BufUnload', nil, clear_buffer_autocmds, 'Delete buffer autocmds to prevent duplicates', opts)
   end
 
   if vim.bo[bufnr].filetype == 'yaml' and string.find(vim.api.nvim_buf_get_name(bufnr), '/templates/') then
