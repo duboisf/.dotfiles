@@ -1,11 +1,5 @@
 local utils = require 'core.utils'
 
--- This needs to be called first
-require('nvim-lsp-installer').setup {
-  -- install language servers that are configured with lspconfig automatically
-  automatic_installation = true,
-}
-
 local lspconfig = require('lspconfig')
 
 vim.cmd [[

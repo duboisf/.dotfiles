@@ -243,7 +243,10 @@ require('packer').startup({ function(use)
   --]]
   local function use_language_servers()
     -- don't hunt around the web to install language servers
-    use 'williamboman/nvim-lsp-installer'
+    use {
+      'williamboman/mason.nvim',
+      config = function() require('mason').setup() end,
+    }
 
     -- this is needed to fix lsp doc highlight
     use 'antoinemadec/FixCursorHold.nvim'
@@ -253,8 +256,8 @@ require('packer').startup({ function(use)
       'neovim/nvim-lspconfig',
       after = {
         'aerial.nvim',
+        'mason.nvim',
         'nvim-cmp',
-        'nvim-lsp-installer',
       }
     }
   end
