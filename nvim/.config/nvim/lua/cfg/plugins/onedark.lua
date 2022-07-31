@@ -24,6 +24,10 @@ onedark.setup {
   -- Custom Highlights --
   colors = {}, -- Override default colors
   highlights = { -- Override highlight groups
+    LspReferenceRead = { fg = '$black', bg = '$green' },
+    LspReferenceText = { bg = '$black' },
+    LspReferenceWrite = { fg = '$black', bg = '$dark_red' },
+    Search = { fg = '$black', bg = '#ff6d00' },
     -- some parens were the same color as the background when highlighted
     MatchParen = { bg = '$dark_red' },
   },
