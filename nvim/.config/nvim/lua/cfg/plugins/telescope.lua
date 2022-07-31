@@ -84,6 +84,7 @@ local function change_cwd()
       return true
     end,
     find_command = { "fd", "--type", "d", "--hidden" },
+    prompt_title = 'Change cwd of window',
   }
 end
 
