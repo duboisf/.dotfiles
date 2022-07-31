@@ -27,7 +27,12 @@ require('packer').startup({ function(use)
       error('must supply either string or table with first element being the full plugin name')
     end
     local plugin_name = utils.packer.short_plugin_name(full_plugin_name)
-    opts.config = "require 'cfg.plugins." .. plugin_name .. "'"
+    local config_module = 'cfg.plugins.' .. plugin_name
+    local config_string = string.format([[
+      local ok, _ = pcall(require, '%s')
+      if not ok then print('cfg/packer.lua: missing lua module "%s"') end
+    ]], config_module, config_module)
+    opts.config = config_string
     use(opts)
   end
 
