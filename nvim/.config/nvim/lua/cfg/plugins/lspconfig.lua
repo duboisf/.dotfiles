@@ -32,9 +32,9 @@ local function setup_autocmds(client, bufnr)
   end
 
   if server_capabilities.documentHighlightProvider then
-    autocmd({ 'CursorHold', 'CursorHoldI' }, nil, vim.lsp.buf.document_highlight,
+    autocmd({ 'CursorHold' }, nil, vim.lsp.buf.document_highlight,
       'Highlight symbol under the cursor throughout document', opts)
-    autocmd('CursorMoved', nil, vim.lsp.buf.clear_references, 'Clear highlighted lsp symbol', opts)
+    autocmd({ 'CursorMoved' }, nil, vim.lsp.buf.clear_references, 'Clear highlighted lsp symbol', opts)
   end
 
   local function clear_buffer_autocmds()
