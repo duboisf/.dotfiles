@@ -102,13 +102,19 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
-lspconfig.tsserver.setup { capabilities = capabilities, on_attach = on_attach }
-lspconfig.terraformls.setup { capabilities = capabilities, on_attach = on_attach }
--- lspconfig.solargraph.setup { capabilities = capabilities, on_attach = on_attach }
+--[[
+
+  LSP server configs
+
+--]]
+
 -- lspconfig.pyright.setup { capabilities = capabilities, on_attach = on_attach }
-lspconfig.jsonls.setup { capabilities = capabilities, on_attach = on_attach }
-lspconfig.dockerls.setup { capabilities = capabilities, on_attach = on_attach }
+-- lspconfig.solargraph.setup { capabilities = capabilities, on_attach = on_attach }
 lspconfig.bashls.setup { capabilities = capabilities, on_attach = on_attach }
+lspconfig.dockerls.setup { capabilities = capabilities, on_attach = on_attach }
+lspconfig.jsonls.setup { capabilities = capabilities, on_attach = on_attach }
+lspconfig.terraformls.setup { capabilities = capabilities, on_attach = on_attach }
+lspconfig.tsserver.setup { capabilities = capabilities, on_attach = on_attach }
 
 do
   -- local runtime_path = vim.split(package.path, ';')
@@ -135,7 +141,7 @@ do
         },
         workspace = {
           checkThirdParty = false,
-          library = vim.api.nvim_get_runtime_file('', true),
+          -- library = vim.api.nvim_get_runtime_file('', true),
           maxPreload = 1000,
         },
       }
