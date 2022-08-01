@@ -41,10 +41,8 @@ require('packer').startup({ function(use)
   end
 
   -- need to load this first to reap the benefits of the speedup provided by impatient.nvim
-  use {
-    'lewis6991/impatient.nvim',
-    config = function() require('impatient') end
-  }
+  -- we need to do require('impatient') as early as possible, like the top of init.vim
+  use 'lewis6991/impatient.nvim'
 
   use 'wbthomason/packer.nvim'
 

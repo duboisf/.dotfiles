@@ -1,3 +1,5 @@
+" improve startup time
+lua pcall(require, 'impatient')
 
 " load plugins using packer
 lua require("cfg.packer")
