@@ -4,6 +4,9 @@ endif
 
 setlocal spell
 
+" Hide things like triple backticks
+setlocal conceallevel=2
+
 iabbrev <buffer> pr pull request
 iabbrev <buffer> af ## Afternoon*
 
