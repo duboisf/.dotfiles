@@ -117,23 +117,28 @@ lspconfig.terraformls.setup { capabilities = capabilities, on_attach = on_attach
 lspconfig.tsserver.setup { capabilities = capabilities, on_attach = on_attach }
 
 do
-  -- local runtime_path = vim.split(package.path, ';')
-  local runtime_path = {}
-  table.insert(runtime_path, 'lua/?.lua')
-  table.insert(runtime_path, 'lua/?/init.lua')
   lspconfig.sumneko_lua.setup {
     capabilities = capabilities,
     on_attach = on_attach,
     settings = {
+      -- Ref: https://github.com/sumneko/lua-language-server/wiki/Settings
       Lua = {
+        completion = {
+          callSnippet = 'Both',
+          displayContext = 1,
+        },
         diagnostics = {
           globals = {
             'vim',
           },
-          -- disable = {'lowercase-global'},
+          libraryFiles = 'Disable',
+        },
+        hint = {
+          setType = true,
         },
         runtime = {
-          path = runtime_path,
+          -- prevent suggesting paths like '.config.nvim.lua.core.utils' when we really want 'core.utils'
+          path = { 'lua/?.lua', 'lua/?/init.lua' },
           version = 'LuaJIT',
         },
         telemetry = {
@@ -141,7 +146,7 @@ do
         },
         workspace = {
           checkThirdParty = false,
-          -- library = vim.api.nvim_get_runtime_file('', true),
+          library = vim.api.nvim_get_runtime_file('', true),
           maxPreload = 1000,
         },
       }
