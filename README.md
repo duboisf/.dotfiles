@@ -62,7 +62,7 @@ We also need to install some binaries like [bat](https://github.com/sharkdp/bat/
 
 ## Install kitty
 
-```sh
+```bash
 mkdir ~/.local/stow
 curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin \
   dest=~/.local/stow
@@ -74,7 +74,7 @@ sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emula
 
 ## Install keybase
 
-```sh
+```bash
 curl --remote-name https://prerelease.keybase.io/keybase_amd64.deb
 sudo apt install ./keybase_amd64.deb
 run_keybase
@@ -82,7 +82,7 @@ run_keybase
 
 ### Import keybase pgp key into gpg
 
-```
+```bash
 keybase pgp export | gpg --import
 keybase pgp export --secret | gpg --import --allow-secret-key-import
 ```
