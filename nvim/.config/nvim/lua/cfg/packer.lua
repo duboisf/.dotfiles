@@ -351,13 +351,6 @@ require('packer').startup({ function(use)
 
   local function use_colorscheme()
     -- colorscheme
-    use {
-      'rakr/vim-one',
-      config = function() require 'cfg.plugins.colors' end,
-      disable = true,
-    }
-
-    -- colorscheme
     use_with_cfg 'navarasu/onedark.nvim'
   end
 
