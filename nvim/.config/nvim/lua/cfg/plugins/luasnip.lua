@@ -66,8 +66,9 @@ local function setup_keymaps()
   vim.keymap.set('i', '<C-l>', function() ls.change_choice(1) end, {})
   vim.keymap.set('s', '<C-l>', function() ls.change_choice(1) end, {})
   vim.keymap.set('i', '<C-u>', select_choice, {})
-  vim.keymap.set('n', '<leader><leader>s', reload_luasnip, { desc = 'Reload luasnip' })
 end
+
+vim.api.nvim_create_user_command('ReloadSnippets', reload_luasnip, {})
 
 setup_keymaps()
 
