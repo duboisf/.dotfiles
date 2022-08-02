@@ -2,9 +2,11 @@ if exists("b:cfg_markdown_ft_done")
   finish
 endif
 
-setlocal spell
+if expand("%:p") =~ "/notes/"
+  setlocal spell
+endif
 
-" Hide things like triple backticks
+" Hide things like triple backticks and urls
 setlocal conceallevel=2
 
 iabbrev <buffer> pr pull request
