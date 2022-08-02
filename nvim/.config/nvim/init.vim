@@ -161,4 +161,6 @@ let g:startify_lists = [
 
 au TextYankPost * lua vim.highlight.on_yank { higroup="IncSearch", timeout=300, on_visual=true }
 
+lua require('onedark').load()
+
 " vim: sts=2 sw=2 ts=2 et

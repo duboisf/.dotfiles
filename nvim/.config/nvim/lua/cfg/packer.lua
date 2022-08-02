@@ -40,16 +40,17 @@ require('packer').startup({ function(use)
     return vim.g.started_by_firenvim == nil
   end
 
-  -- need to load this first to reap the benefits of the speedup provided by impatient.nvim
-  -- we need to do require('impatient') as early as possible, like the top of init.vim
-  use 'lewis6991/impatient.nvim'
-
-  use 'wbthomason/packer.nvim'
-
-  use { 'michaeljsmith/vim-indent-object', event = "VimEnter" }
-  use { 'tpope/vim-commentary', event = "VimEnter" }
-  use { 'tpope/vim-repeat', event = "VimEnter" }
-  use { 'tpope/vim-unimpaired', event = "VimEnter" }
+  use {
+    -- need to load this first to reap the benefits of the speedup provided by impatient.nvim
+    -- we need to do require('impatient') as early as possible, like the top of init.vim
+    'lewis6991/impatient.nvim',
+    'michaeljsmith/vim-indent-object',
+    'tpope/vim-commentary',
+    'tpope/vim-eunuch',
+    'tpope/vim-repeat',
+    'tpope/vim-unimpaired',
+    'wbthomason/packer.nvim',
+  }
 
   -- show indentation guides
   use_with_cfg {
@@ -58,7 +59,6 @@ require('packer').startup({ function(use)
 
   use {
     'kylechui/nvim-surround',
-    event = 'VimEnter',
     config = function() require('nvim-surround').setup {} end
   }
 
@@ -84,17 +84,14 @@ require('packer').startup({ function(use)
 
   use {
     "folke/twilight.nvim",
-    event = 'VimEnter',
     config = function() require("twilight").setup {} end
   }
 
-  use { 'tpope/vim-eunuch', event = "VimEnter" }
-
   -- vim-sensible sets things like ruler and laststatus which we don't want when we are using firenvim
-  use {
-    'tpope/vim-sensible',
-    cond = notStartedByFirenvim,
-  }
+  -- use {
+  --   'tpope/vim-sensible',
+  --   cond = notStartedByFirenvim,
+  -- }
 
   use {
     'tsandall/vim-rego',
@@ -130,12 +127,11 @@ require('packer').startup({ function(use)
     cmd = { 'Luapad' },
   }
 
-  use 'anuvyklack/keymap-layer.nvim'
 
   use_with_cfg {
     'anuvyklack/hydra.nvim',
     after = { 'keymap-layer.nvim' },
-    event = 'VimEnter',
+    requires = { 'anuvyklack/keymap-layer.nvim' },
   }
 
   -- show diff signs in the gutter
@@ -195,7 +191,6 @@ require('packer').startup({ function(use)
 
   use {
     'norcalli/nvim-colorizer.lua',
-    event = 'VimEnter',
     config = function() require('colorizer').setup() end
   }
 
@@ -264,6 +259,14 @@ require('packer').startup({ function(use)
       }
     }
 
+    --     use_with_cfg {
+    --       'jose-elias-alvarez/null-ls.nvim',
+    --       after = 'nvim-lspconfig',
+    --       requires = {
+    --         'nvim-lua/plenary.nvim',
+    --       }
+    --     }
+
     use {
       'j-hui/fidget.nvim',
       config = function() require('fidget').setup {} end
@@ -323,7 +326,6 @@ require('packer').startup({ function(use)
 
     use_with_cfg {
       'nvim-treesitter/nvim-treesitter',
-      event = 'VimEnter',
       run = ':TSUpdate',
     }
 

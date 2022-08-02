@@ -77,7 +77,10 @@ end
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
-  require('aerial').on_attach(client, bufnr)
+  local ok, aerial = pcall(require, 'aerial')
+  if ok then
+    aerial.on_attach(client, bufnr)
+  end
 
   setup_autocmds(client, bufnr)
   setup_mappings(bufnr)
