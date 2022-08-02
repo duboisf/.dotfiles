@@ -25,6 +25,7 @@ ls.config.setup({
   -- since history is on, we need to sometimes remove snippets from the history
   -- that were expanded in the curent session but were subsequently deleted
   delete_check_events = 'TextChanged',
+  store_selection_keys = '<TAB>',
   -- show updates to all types of dynamic nodes as you type
   updateevents = 'TextChanged,TextChangedI',
   ext_opts = {
@@ -184,11 +185,15 @@ end
 
 local function markdown_link()
   return s('lk', fmt('[{}]({})', {
-    i(1),
-    c(2, {
-      i(nil),
-      f(function() return vim.fn.getreg('+') end, {}),
-    }),
+    d(1, function(_, parent)
+      if parent.env and parent.env.SELECT_RAW then
+        return sn(nil, { t(parent.env.SELECT_RAW) })
+      end
+      return sn(nil, { i(1) })
+    end),
+    d(2, function()
+      return sn(nil, { i(1, vim.fn.getreg('+')) })
+    end)
   }))
 end
 
