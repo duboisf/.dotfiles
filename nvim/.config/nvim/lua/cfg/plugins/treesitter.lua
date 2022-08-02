@@ -94,5 +94,5 @@ require('nvim-treesitter.configs').setup {
       enable = true,
     },
   },
-  ensure_installed = 'all' -- one of 'all', 'maintained', or a list of languages
+  -- ensure_installed = 'all' -- one of 'all', 'maintained', or a list of languages
 }

@@ -1,8 +1,15 @@
-" improve startup time
+" Improve startup time
 lua pcall(require, 'impatient')
 
-" load plugins using packer
+" Load plugins using packer
 lua require("cfg.packer")
+
+" Don't source syntax files automatically since we use Tree-sitter for syntax
+" highlighting. For filetypes that don't have Tree-sitter parsers, use 'set
+" syntax=ON' to turn on the classic mechanism of syntax highlighting for the
+" current buffer. There is an autocommand that does this for us, see
+" plugin/syntax.lua
+syntax manual
 
 " Check if we started nvim in pager mode
 let g:pager_mode = get(g:, 'pager_mode', v:false)
@@ -47,13 +54,15 @@ set cmdheight=2
 set updatetime=100
 " don't give |ins-completion-menu| messages.
 set shortmess+=c
-
 " always show signcolumns
 set signcolumn=yes:2
-
 " show interactive substitute
 set inccommand=nosplit
-
+" Prevent long, single lines from slowing down the redraw speed. In my case
+" this often happens when viewing kubernetes resources as the
+" kubectl.kubernetes.io/last-applied-configuration is a single line that
+" contains the whole previous version of the resource.
+set synmaxcol=300
 " highlight lua code in .vim files
 let g:vimsyn_embed = 'l'
 
