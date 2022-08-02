@@ -67,7 +67,20 @@ cmp.setup({
         fallback()
       end
     end, { "i", "s" }),
-    -- mapping to show completion from all words from all buffers
+    -- mapping to show completion from all words from all buffers if completion menu isn't open
+    ['<C-n>'] = cmp.mapping(function()
+      if cmp.visible() then
+        cmp.select_next_item()
+      else
+        cmp.complete({
+          config = {
+            sources = {
+              all_buffers_source,
+            }
+          }
+        })
+      end
+    end),
     ['<C-x><C-n>'] = cmp.mapping.complete({
       config = {
         sources = {
@@ -143,7 +156,7 @@ end
 cmp.setup.filetype({ 'gitcommit', 'markdown' }, {
   sources = {
     { name = 'luasnip' },
-    all_buffers_source
+    { name = 'buffer' },
   }
 })
 
