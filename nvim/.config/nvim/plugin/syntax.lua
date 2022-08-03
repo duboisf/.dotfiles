@@ -16,7 +16,7 @@ local function missing_treesitter_parser_fallback()
   local lang = parsers.ft_to_lang(vim.o.filetype)
   if not parsers.has_parser(lang) then
     -- Turn on the classic vim syntax highlighting mechanism
-    vim.o.syntax = 'ON'
+    vim.o.syntax = vim.o.filetype
   end
 end
 
