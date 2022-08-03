@@ -239,7 +239,7 @@ require('packer').startup({ function(use)
     LSP
 
   --]]
-  local function use_language_servers()
+  local function use_lsp()
     -- don't hunt around the web to install language servers
     use {
       'williamboman/mason.nvim',
@@ -472,7 +472,7 @@ require('packer').startup({ function(use)
 
   use_colorscheme()
   use_completion()
-  use_language_servers()
+  use_lsp()
   use_telescope()
   use_treesitter()
 
