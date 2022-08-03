@@ -271,6 +271,14 @@ require('packer').startup({ function(use)
       'j-hui/fidget.nvim',
       config = function() require('fidget').setup {} end
     }
+
+    use({
+      "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+      config = function()
+        require("lsp_lines").setup()
+      end,
+      after = { 'nvim-lspconfig' }
+    })
   end
 
   --[[
