@@ -1,6 +1,6 @@
 require('notify').setup {
-  fps = 60,
-  max_width = 80
+  fps = 120,
+  max_width = 120
 }
 
 vim.notify = require('notify')
