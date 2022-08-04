@@ -1,7 +1,11 @@
-.git/
-/go/pkg
 **/pkg/mod/
 **/python*/site-packages
-.cache/yarn/
+.cache/
+.gem/
+.git/
+.npm/
 .nvm/
+.volta/
+go/pkg/
+go/src/
 node_modules/
