@@ -259,23 +259,25 @@ require('packer').startup({ function(use)
       }
     }
 
-    --     use_with_cfg {
-    --       'jose-elias-alvarez/null-ls.nvim',
-    --       after = 'nvim-lspconfig',
-    --       requires = {
-    --         'nvim-lua/plenary.nvim',
-    --       }
-    --     }
+    use_with_cfg {
+      'jose-elias-alvarez/null-ls.nvim',
+      after = 'nvim-lspconfig',
+      requires = {
+        'nvim-lua/plenary.nvim',
+      }
+    }
 
     use {
       'j-hui/fidget.nvim',
       config = function() require('fidget').setup {} end
     }
 
+    -- Don't use this yet, has potential but still buggy
     use({
+      cond = false,
       "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
       config = function()
-        require("lsp_lines").setup()
+        require('lsp_lines').setup()
       end,
       after = { 'nvim-lspconfig' }
     })
