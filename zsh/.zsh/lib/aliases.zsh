@@ -1,9 +1,9 @@
 # The basic stuff
+alias du='du -h'
 alias l='exa -l --color=auto'
 alias la='l -a'
-alias s='cd ..'
 alias open=xdg-open
-alias vim=nvim
+alias s='cd ..'
 
 # open vim in dotfiles folder
 alias edot='cd $(git -C ~/.zshrc(:A:h) rev-parse --show-toplevel) && vim'
