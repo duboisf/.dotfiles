@@ -116,7 +116,7 @@ require('packer').startup({ function(use)
     'tpope/vim-fugitive',
     config = function()
       -- open :G in a maximized window
-      vim.cmd 'nnoremap <leader>g :G<CR>'
+      vim.cmd 'nnoremap ,g :G<CR>'
     end,
   }
 
