@@ -148,6 +148,7 @@ require('packer').startup({ function(use)
     use_with_cfg {
       -- requires git, fd, ripgrep
       'nvim-telescope/telescope.nvim',
+      cond = notStartedByFirenvim,
       after = {
         'hydra.nvim',
         'which-key.nvim'
@@ -274,8 +275,8 @@ require('packer').startup({ function(use)
 
     -- Don't use this yet, has potential but still buggy
     use({
-      cond = false,
       "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+      cond = false,
       config = function()
         require('lsp_lines').setup()
       end,
@@ -315,6 +316,7 @@ require('packer').startup({ function(use)
     -- fancy completion
     use_with_cfg {
       'hrsh7th/nvim-cmp',
+      cond = notStartedByFirenvim,
       requires = {
         -- add vscode-line pictograms in completion popup
         'onsails/lspkind.nvim',
