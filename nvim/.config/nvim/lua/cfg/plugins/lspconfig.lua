@@ -61,19 +61,20 @@ local function setup_mappings(bufnr)
   local opts = { noremap = true, silent = true, buffer = bufnr }
 
   local normal_mappings = {
-    ['gD']        = '<Cmd>lua vim.lsp.buf.declaration()<CR>',
-    ['gd']        = '<Cmd>Telescope lsp_definitions<CR>',
+    [',s']        = '<cmd>Telescope lsp_document_symbols<CR>',
+    [',w']        = '<cmd>Telescope lsp_workspace_symbols<CR>',
+    ['<leader>F'] = safe_formatting_sync,
+    ['<leader>cl'] = '<cmd>lua vim.lsp.codelens.run()<CR>',
+    ['<leader>ca']  = '<cmd>lua vim.lsp.buf.code_action()<CR>',
+    ['<leader>d']  = '<cmd>lua vim.diagnostic.open_float()<CR>',
+    ['<leader>rn'] = '<cmd>lua vim.lsp.buf.rename()<CR>',
     ['K']         = '<Cmd>lua vim.lsp.buf.hover()<CR>',
-    ['gi']        = '<cmd>Telescope lsp_implementations<CR>',
-    ['<space>D']  = '<cmd>lua vim.lsp.buf.type_definition()<CR>',
-    ['<space>rn'] = '<cmd>lua vim.lsp.buf.rename()<CR>',
-    ['<space>a']  = '<cmd>lua vim.lsp.buf.code_action()<CR>',
-    ['gr']        = '<cmd>Telescope lsp_references<CR>',
-    ['<space>d']  = '<cmd>lua vim.diagnostic.open_float()<CR>',
     ['[d']        = '<cmd>lua vim.diagnostic.goto_prev()<CR>',
     [']d']        = '<cmd>lua vim.diagnostic.goto_next()<CR>',
-    ['<leader>l'] = '<cmd>lua vim.lsp.codelens.run()<CR>',
-    ['<leader>F'] = safe_formatting_sync,
+    ['gD']        = '<Cmd>lua vim.lsp.buf.type_definition()<CR>',
+    ['gd']        = '<Cmd>Telescope lsp_definitions<CR>',
+    ['gi']        = '<cmd>Telescope lsp_implementations<CR>',
+    ['gr']        = '<cmd>Telescope lsp_references<CR>',
   }
 
   for lhs, rhs in pairs(normal_mappings) do
