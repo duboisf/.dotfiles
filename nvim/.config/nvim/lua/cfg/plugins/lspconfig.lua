@@ -20,6 +20,18 @@ local function safe_formatting_sync()
   end
 end
 
+vim.diagnostic.config {
+  underline = {
+    severity = vim.diagnostic.severity.WARN,
+  },
+  virtual_text = {
+    spacing = 2,
+    severity = vim.diagnostic.severity.WARN,
+  },
+  signs = true,
+  update_in_insert = false,
+}
+
 -- Setup autocmds for buffer
 local function setup_autocmds(client, bufnr)
   local autocmd, group_id = utils.autogroup('cfg#plugins#lsp', false)
@@ -97,6 +109,7 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   virtual_text = {
     spacing = 2,
     severity_limit = "Hint",
+    severity = vim.diagnostic.severity.WARN,
   },
   signs = true,
   update_in_insert = false,
@@ -117,7 +130,30 @@ lspconfig.bashls.setup { capabilities = capabilities, on_attach = on_attach }
 lspconfig.dockerls.setup { capabilities = capabilities, on_attach = on_attach }
 lspconfig.jsonls.setup { capabilities = capabilities, on_attach = on_attach }
 lspconfig.terraformls.setup { capabilities = capabilities, on_attach = on_attach }
-lspconfig.tsserver.setup { capabilities = capabilities, on_attach = on_attach }
+lspconfig.tsserver.setup {
+  capabilities = capabilities,
+  handlers = {
+    ["textDocument/publishDiagnostics"] = vim.lsp.with(
+      vim.lsp.diagnostic.on_publish_diagnostics, {
+      underline = {
+        severity = {
+          -- don't know why but with typescript language server I need to use this min key to get it to work, same for virtual_text
+          min = vim.diagnostic.severity.WARN,
+        },
+      },
+      virtual_text = {
+        spacing = 2,
+        -- severity_limit = "Hint",
+        severity = {
+          min = vim.diagnostic.severity.WARN,
+        },
+      },
+      signs = true,
+      update_in_insert = false,
+    }),
+  },
+  on_attach = on_attach
+}
 
 do
   lspconfig.sumneko_lua.setup {
