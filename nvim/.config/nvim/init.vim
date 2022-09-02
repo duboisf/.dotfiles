@@ -4,6 +4,11 @@ lua pcall(require, 'impatient')
 " Load plugins using packer
 lua require("cfg.packer")
 
+" Enable new lua filetype detection
+let g:do_filetype_lua = 1
+" Disable filetype.vim
+let g:did_load_filetypes = 1
+
 " Don't source syntax files automatically since we use Tree-sitter for syntax
 " highlighting. For filetypes that don't have Tree-sitter parsers, use 'set
 " syntax=ON' to turn on the classic mechanism of syntax highlighting for the
