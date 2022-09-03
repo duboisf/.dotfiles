@@ -112,7 +112,7 @@ end
 -- Searches by using the builtin find_files picker
 local function git_files()
   set_prompt_border_color('#eeff00')
-  local git_root = with_git_root(function (git_root)
+  with_git_root(function (git_root)
     local path = utils.collapse_home_path_to_tilde(git_root)
     builtin.git_files({ prompt_title = "  files  " .. path })
   end)
