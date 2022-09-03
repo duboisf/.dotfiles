@@ -100,16 +100,22 @@ local function find_all_files()
   }
 end
 
+local function with_git_root(callback)
+  local git_root, ret = tutils.get_os_command_output({ "git", "rev-parse", "--show-toplevel" }, vim.fn.getcwd())
+  if ret == 0 and git_root and git_root[1] ~= nil then
+    return callback(git_root[1])
+  end
+  vim.notify('Not in a git repo', vim.log.levels.WARN, { title = "Telescope" })
+  return nil
+end
+
 -- Searches by using the builtin find_files picker
 local function git_files()
   set_prompt_border_color('#eeff00')
-  local git_root, ret = tutils.get_os_command_output({ "git", "rev-parse", "--show-toplevel" }, vim.fn.getcwd())
-  if ret == 0 and git_root and git_root[1] ~= nil then
-    local path = utils.collapse_home_path_to_tilde(git_root[1])
+  local git_root = with_git_root(function (git_root)
+    local path = utils.collapse_home_path_to_tilde(git_root)
     builtin.git_files({ prompt_title = "  files  " .. path })
-  else
-    vim.notify('Not in a git repo', vim.log.levels.WARN, { title = "Telescope" })
-  end
+  end)
 end
 
 -- Searches by using the builtin find_files picker
@@ -118,6 +124,11 @@ local function find_files()
   builtin.find_files {
     prompt_title = prompt_with_cwd("Files"),
     hidden = true,
+    on_complete = {
+      function(picker)
+        print(string.format('results: %d', picker.manager.linked_states.size))
+      end
+    }
   }
 end
 
@@ -155,6 +166,17 @@ local function live_grep_workspace()
   }
 end
 
+local function live_grep_git_root()
+  set_prompt_border_color('#bb2222')
+  with_git_root(function (git_root)
+    local path = utils.collapse_home_path_to_tilde(git_root)
+    builtin.live_grep({
+      cwd = git_root,
+      prompt_title = "   Live Grep  " .. path
+    })
+  end)
+end
+
 -- Wrapper to check if there's an LSP client attached to the current buffer
 -- before invoking builtin.lsp_references
 local function lsp_references()
@@ -168,28 +190,43 @@ local function spell_suggestions()
 end
 
 local function setup_mappings()
+  local file_mappings = {
+    name = 'Files',
+    d = { cwd_files, 'Dir of current buffer' },
+    e = { find_files, 'Workspace' },
+    g = { git_files, '  files' },
+    r = { builtin.oldfiles, 'Recent files' },
+  }
+  local grep_mappings = {
+    name = 'Live Grep',
+    a = { live_grep_everything, 'Workspace (all, without ignore)' },
+    d = { live_grep_dir_of_current_buffer, 'Dir of current buffer' },
+    e = { live_grep_workspace, 'Workspace' },
+    g = { live_grep_git_root, 'Git root' }
+  }
+  local lsp_mappings = {
+    name = 'LSP',
+    l = { lsp_dynamic_workspace_symbols, 'LSP dynamic workspace symbols' },
+    s = { builtin.lsp_document_symbols, 'LSP document symbols' },
+  }
+
   which_key.register({
-    f = {
+    -- I use these so often that they have their dedicated keys
+    f = file_mappings,
+    g = grep_mappings,
+    -- We group all other telescope mappings under <leader>t
+    t = {
       name = 'Telescope',
+      ['*'] = { builtin.current_buffer_fuzzy_find, 'Current buffer fuzzy find' },
+      c = { change_cwd, 'Change CWD of current window' },
+      -- For consistency, we also have all the file mappings repeated here
+      f = file_mappings,
+      g = grep_mappings,
+      l = lsp_mappings,
       t = { '<cmd>Telescope<CR>', 'Show available pickers' },
-      a = { git_files, '  files' },
-      c = { change_cwd, 'Change working directory of the current window' },
-      e = { find_files, 'Workspace files' },
-      d = { cwd_files, 'Dir of current buffer' },
-      r = { builtin.oldfiles, 'Old files' },
-      s = { builtin.lsp_document_symbols, 'LSP document symbols' },
-      w = { lsp_dynamic_workspace_symbols, 'LSP dynamic workspace symbols' },
-      ['*'] = { builtin.current_buffer_fuzzy_find, 'current buffer fuzzy find' },
-      g = {
-        name = 'Live Grep',
-        a = { live_grep_everything, 'All the things' },
-        d = { live_grep_dir_of_current_buffer, 'Dir of current buffer' },
-        w = { live_grep_workspace, 'Workspace' },
-      }
     }
   }, { prefix = '<leader>' })
 
-  nmap('gr', lsp_references, 'LSP references')
   nmap('z=', spell_suggestions, 'show spelling suggestions for word under cursor')
 end
 
