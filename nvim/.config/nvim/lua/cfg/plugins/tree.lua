@@ -1,15 +1,28 @@
 require('nvim-tree').setup {
+  auto_reload_on_write = true,
+  hijack_netrw = true,
   create_in_closed_folder = true,
   filters = {
     dotfiles = false,
   },
+  diagnostics = {
+    enable = true,
+    show_on_dirs = false,
+    debounce_delay = 50,
+    icons = {
+      hint = "",
+      info = "",
+      warning = "",
+      error = "",
+    },
+  },
   hijack_cursor = true,
   update_focused_file = {
-    enable = false,
+    enable = true,
     update_root = false,
   },
   view = {
-    adaptive_size = true,
+    adaptive_size = false,
     centralize_selection = true,
     mappings = {
       list = {
@@ -27,8 +40,17 @@ require('nvim-tree').setup {
           unstaged = "",
           untracked = "",
         }
-      }
-    }
+      },
+      show = {
+        file = true,
+        folder = true,
+        folder_arrow = false,
+        git = true,
+      },
+    },
+    indent_markers = {
+      enable = true
+    },
   }
 }
 
