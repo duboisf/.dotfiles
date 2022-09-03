@@ -228,11 +228,6 @@ require('packer').startup({ function(use)
     requires = { 'kyazdani42/nvim-web-devicons' },
   }
 
-  use {
-    'sbdchd/neoformat',
-    config = function() vim.g.neoformat_try_node_exe = 1 end
-  }
-
   --[[
 
     dear
@@ -396,82 +391,6 @@ require('packer').startup({ function(use)
   use {
     'mickael-menu/zk-nvim',
     config = function() require 'cfg.plugins.zk' end
-  }
-
-  -- manage github from the comfort of neovim
-  use {
-    'pwntester/octo.nvim',
-    config = 'require"octo".setup()',
-    after = {
-      'telescope.nvim',
-    }
-  }
-
-  use {
-    'ldelossa/litee.nvim',
-    config = function() require('litee.lib').setup() end,
-  }
-
-  use {
-    'ldelossa/gh.nvim',
-    config = function()
-      require('litee/gh').setup()
-      local wk = require("which-key")
-      wk.register({
-        g = {
-          name = "+Git",
-          h = {
-            name = "+Github",
-            c = {
-              name = "+Commits",
-              c = { "<cmd>GHCloseCommit<cr>", "Close" },
-              e = { "<cmd>GHExpandCommit<cr>", "Expand" },
-              o = { "<cmd>GHOpenToCommit<cr>", "Open To" },
-              p = { "<cmd>GHPopOutCommit<cr>", "Pop Out" },
-              z = { "<cmd>GHCollapseCommit<cr>", "Collapse" },
-            },
-            i = {
-              name = "+Issues",
-              p = { "<cmd>GHPreviewIssue<cr>", "Preview" },
-            },
-            l = {
-              name = "+Litee",
-              t = { "<cmd>LTPanel<cr>", "Toggle Panel" },
-            },
-            r = {
-              name = "+Review",
-              b = { "<cmd>GHStartReview<cr>", "Begin" },
-              c = { "<cmd>GHCloseReview<cr>", "Close" },
-              d = { "<cmd>GHDeleteReview<cr>", "Delete" },
-              e = { "<cmd>GHExpandReview<cr>", "Expand" },
-              s = { "<cmd>GHSubmitReview<cr>", "Submit" },
-              z = { "<cmd>GHCollapseReview<cr>", "Collapse" },
-            },
-            p = {
-              name = "+Pull Request",
-              c = { "<cmd>GHClosePR<cr>", "Close" },
-              d = { "<cmd>GHPRDetails<cr>", "Details" },
-              e = { "<cmd>GHExpandPR<cr>", "Expand" },
-              o = { "<cmd>GHOpenPR<cr>", "Open" },
-              p = { "<cmd>GHPopOutPR<cr>", "PopOut" },
-              r = { "<cmd>GHRefreshPR<cr>", "Refresh" },
-              t = { "<cmd>GHOpenToPR<cr>", "Open To" },
-              z = { "<cmd>GHCollapsePR<cr>", "Collapse" },
-            },
-            t = {
-              name = "+Threads",
-              c = { "<cmd>GHCreateThread<cr>", "Create" },
-              n = { "<cmd>GHNextThread<cr>", "Next" },
-              t = { "<cmd>GHToggleThread<cr>", "Toggle" },
-            },
-          },
-        },
-      }, { prefix = "<leader><leader>" })
-    end,
-    after = {
-      'litee.nvim',
-      'which-key.nvim',
-    },
   }
 
   use_colorscheme()
