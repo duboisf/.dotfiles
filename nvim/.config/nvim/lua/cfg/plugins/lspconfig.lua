@@ -91,20 +91,20 @@ local function setup_mappings(bufnr)
   local opts = { noremap = true, silent = true, buffer = bufnr }
 
   local normal_mappings = {
-    [',s']        = '<cmd>Telescope lsp_document_symbols<CR>',
-    [',w']        = '<cmd>Telescope lsp_workspace_symbols<CR>',
-    ['<leader>F'] = safe_formatting_sync,
+    [',s']         = '<cmd>Telescope lsp_document_symbols<CR>',
+    [',w']         = '<cmd>Telescope lsp_workspace_symbols<CR>',
+    ['<leader>F']  = safe_formatting_sync,
     ['<leader>cl'] = '<cmd>lua vim.lsp.codelens.run()<CR>',
-    ['<leader>ca']  = '<cmd>lua vim.lsp.buf.code_action()<CR>',
+    ['<leader>ca'] = '<cmd>lua vim.lsp.buf.code_action()<CR>',
     ['<leader>d']  = '<cmd>lua vim.diagnostic.open_float()<CR>',
     ['<leader>rn'] = '<cmd>lua vim.lsp.buf.rename()<CR>',
-    ['K']         = '<Cmd>lua vim.lsp.buf.hover()<CR>',
-    ['[d']        = '<cmd>lua vim.diagnostic.goto_prev()<CR>',
-    [']d']        = '<cmd>lua vim.diagnostic.goto_next()<CR>',
-    ['gD']        = '<Cmd>lua vim.lsp.buf.type_definition()<CR>',
-    ['gd']        = '<Cmd>Telescope lsp_definitions<CR>',
-    ['gi']        = '<cmd>Telescope lsp_implementations<CR>',
-    ['gr']        = '<cmd>Telescope lsp_references<CR>',
+    ['K']          = '<Cmd>lua vim.lsp.buf.hover()<CR>',
+    ['[d']         = '<cmd>lua vim.diagnostic.goto_prev()<CR>',
+    [']d']         = '<cmd>lua vim.diagnostic.goto_next()<CR>',
+    ['gD']         = '<Cmd>lua vim.lsp.buf.type_definition()<CR>',
+    ['gd']         = '<Cmd>Telescope lsp_definitions<CR>',
+    ['gi']         = '<cmd>Telescope lsp_implementations<CR>',
+    ['gr']         = '<cmd>Telescope lsp_references<CR>',
   }
 
   for lhs, rhs in pairs(normal_mappings) do
@@ -169,7 +169,7 @@ lspconfig.tsserver.setup {
       underline = {
         severity = {
           -- don't know why but with typescript language server I need to use this min key to get it to work, same for virtual_text
-          min = vim.diagnostic.severity.WARN,
+          min = vim.diagnostic.severity.INFO,
         },
       },
       virtual_text = {
