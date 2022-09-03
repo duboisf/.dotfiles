@@ -155,8 +155,9 @@ end
 
 cmp.setup.filetype({ 'gitcommit', 'markdown' }, {
   sources = {
-    { name = 'luasnip' },
     { name = 'buffer' },
+    { name = 'emoji', option = { insert = true } },
+    { name = 'luasnip' },
   }
 })
 
