@@ -32,6 +32,32 @@ vim.diagnostic.config {
   update_in_insert = false,
 }
 
+-- Setup floating preview border
+local function setup_highlights()
+  vim.cmd [[
+    highlight NormalFloat guibg=#1f2335
+    highlight FloatBorder guifg=white guibg=#1f2335
+  ]]
+end
+
+local border = {
+      {"🭽", "FloatBorder"},
+      {"▔", "FloatBorder"},
+      {"🭾", "FloatBorder"},
+      {"▕", "FloatBorder"},
+      {"🭿", "FloatBorder"},
+      {"▁", "FloatBorder"},
+      {"🭼", "FloatBorder"},
+      {"▏", "FloatBorder"},
+}
+
+local orig_open_floating_preview = vim.lsp.util.open_floating_preview
+function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
+  opts = opts or {}
+  opts.border = opts.border or border
+  return orig_open_floating_preview(contents, syntax, opts, ...)
+end
+
 -- Setup autocmds for buffer
 local function setup_autocmds(client, bufnr)
   local autocmd, group_id = utils.autogroup('cfg#plugins#lsp', false)
