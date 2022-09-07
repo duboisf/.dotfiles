@@ -1,8 +1,10 @@
-" Improve startup time
-lua pcall(require, 'impatient')
+lua << EOL
+-- Improve startup time
+pcall(require, 'impatient')
 
-" Load plugins using packer
-lua require("cfg.packer")
+-- Load plugins using packer
+pcall(require, 'cfg.packer')
+EOL
 
 " Enable new lua filetype detection
 let g:do_filetype_lua = 1

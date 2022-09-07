@@ -12,7 +12,8 @@ create a FileType autocommand to do this for us.
 
 -- Turn on classic vim syntax highlighting for filetypes that don't have a Tree-sitter parser.
 local function missing_treesitter_parser_fallback()
-  local parsers = require 'nvim-treesitter.parsers'
+  local ok, parsers = pcall(require, 'nvim-treesitter.parsers')
+  if not ok then return end
   local lang = parsers.ft_to_lang(vim.o.filetype)
   if not parsers.has_parser(lang) then
     -- Turn on the classic vim syntax highlighting mechanism

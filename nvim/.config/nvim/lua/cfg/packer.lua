@@ -4,8 +4,9 @@ local utils = require("core.utils")
 local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
 local packer_bootstrap = false
 if fn.empty(fn.glob(install_path)) > 0 then
-  packer_bootstrap = fn.system({ 'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim',
-    install_path })
+  vim.notify('packer not installed, cloning...')
+  packer_bootstrap = fn.system({ 'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path })
+  vim.cmd 'packadd packer.nvim'
 end
 
 local autocmd = utils.autogroup('cfg#packer', true)
@@ -333,7 +334,9 @@ require('packer').startup({ function(use)
 
     use_with_cfg {
       'nvim-treesitter/nvim-treesitter',
-      run = ':TSUpdate',
+      run = function ()
+        require('nvim-treesitter.install').update()
+      end
     }
 
     use {
