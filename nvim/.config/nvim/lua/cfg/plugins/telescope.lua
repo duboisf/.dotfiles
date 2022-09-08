@@ -218,7 +218,9 @@ local function setup_mappings()
     t = {
       name = 'Telescope',
       ['*'] = { builtin.current_buffer_fuzzy_find, 'Current buffer fuzzy find' },
+      b = { builtin.buffers, 'Buffers' },
       c = { change_cwd, 'Change CWD of current window' },
+      h = { builtin.highlights, 'Highlights' },
       -- For consistency, we also have all the file mappings repeated here
       f = file_mappings,
       g = grep_mappings,
