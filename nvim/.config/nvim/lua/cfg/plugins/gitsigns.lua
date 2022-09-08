@@ -44,14 +44,3 @@ gitsigns.setup {
     map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
   end
 }
-
-local function fix_highlights()
-  -- used to display git blames with gitsigns
-  vim.cmd 'highlight FloatBorder guifg=white guibg=#282c34'
-  vim.cmd 'highlight link GitSignsDeleteLn DiffDelete'
-end
-
-local autocmd = utils.autogroup('cfg#plugins#gitsigns', true)
-autocmd('ColorScheme', '*', fix_highlights, 'Tweak gitsigns highlights')
-
-fix_highlights()
