@@ -16,14 +16,18 @@ onedark.setup {
   -- You can configure multiple style with comma seperated, For e.g., keywords = 'italic,bold'
   code_style = {
     comments = 'italic',
-    keywords = 'none',
+    keywords = 'bold',
     functions = 'none',
     strings = 'none',
     variables = 'none'
   },
+  -- Override default colors
+  colors = {
+		diff_add = '#0f2703',
+		diff_delete = '#370a02',
+  },
   -- Custom Highlights --
-  colors = {}, -- Override default colors
-  highlights = { -- Override highlight groups
+  highlights = {
     LspReferenceRead = { fg = '$black', bg = '$green' },
     LspReferenceText = { bg = '$black' },
     LspReferenceWrite = { fg = '$black', bg = '$dark_red' },
