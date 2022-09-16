@@ -36,8 +36,8 @@ require('packer').startup({ function(use)
     local plugin_name = utils.packer.short_plugin_name(full_plugin_name)
     local config_module = 'cfg.plugins.' .. plugin_name
     local config_string = string.format([[
-      local ok, _ = pcall(require, '%s')
-      if not ok then print('cfg/packer.lua: missing lua module "%s"') end
+      local ok, maybe_error = pcall(require, '%s')
+      if not ok then vim.notify('cfg/packer.lua: problem with module "%s":\n' .. maybe_error) end
     ]], config_module, config_module)
     opts.config = config_string
     use(opts)
@@ -198,7 +198,7 @@ require('packer').startup({ function(use)
   }
 
   use {
-    'Akianonymus/nvim-colorizer.lua',
+    'NvChad/nvim-colorizer.lua',
     config = function() require('colorizer').setup {} end
   }
 
@@ -234,6 +234,9 @@ require('packer').startup({ function(use)
     'kyazdani42/nvim-tree.lua',
     requires = { 'kyazdani42/nvim-web-devicons' },
   }
+
+  -- show fancy cursor line movement
+  use_with_cfg 'gen740/SmoothCursor.nvim'
 
   --[[
 
@@ -305,6 +308,8 @@ require('packer').startup({ function(use)
       'hrsh7th/cmp-buffer',
       -- completion when in nvim commandline
       'hrsh7th/cmp-cmdline',
+      -- complete words from the dictionary
+      'uga-rosa/cmp-dictionary',
       -- complete emojis like :tada:
       'hrsh7th/cmp-emoji',
       -- completion for filesystem paths
