@@ -5,7 +5,8 @@ local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
 local packer_bootstrap = false
 if fn.empty(fn.glob(install_path)) > 0 then
   vim.notify('packer not installed, cloning...')
-  packer_bootstrap = fn.system({ 'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path })
+  packer_bootstrap = fn.system({ 'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim',
+    install_path })
   vim.cmd 'packadd packer.nvim'
 end
 
@@ -14,6 +15,11 @@ autocmd("BufWritePost", "*/cfg/packer.lua",
   "let b:disable_jump_to_last_position = 1 | source <afile> | PackerCompile",
   "Run :PackerCompile when the packer.lua config file gets saved"
 )
+
+local packer_config = {
+  preview_updates = true,
+  profile = { enable = true, threshold = 1 }
+}
 
 require('packer').startup({ function(use)
   -- wrapper for use function to require our custom plugin configuration from the lua/cfg/plugins dir
@@ -334,7 +340,7 @@ require('packer').startup({ function(use)
 
     use_with_cfg {
       'nvim-treesitter/nvim-treesitter',
-      run = function ()
+      run = function()
         require('nvim-treesitter.install').update()
       end
     }
@@ -406,4 +412,4 @@ require('packer').startup({ function(use)
   if packer_bootstrap then
     require('packer').sync()
   end
-end, config = { profile = { enable = true, threshold = 1 } } })
+end, config = packer_config })
