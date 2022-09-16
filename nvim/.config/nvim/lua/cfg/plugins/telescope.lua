@@ -192,6 +192,7 @@ end
 local function setup_mappings()
   local file_mappings = {
     name = 'Files',
+    a = { find_all_files, 'All files (including hidden)' },
     d = { cwd_files, 'Dir of current buffer' },
     e = { find_files, 'Workspace' },
     g = { git_files, '  files' },
