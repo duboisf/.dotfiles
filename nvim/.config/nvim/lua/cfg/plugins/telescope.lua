@@ -1,4 +1,4 @@
-local actions = require 'telescope.actions'
+local action_set = require 'telescope.actions.set'
 local action_state = require 'telescope.actions.state'
 local builtin = require 'telescope.builtin'
 local themes = require 'telescope.themes'
@@ -112,7 +112,7 @@ end
 -- Searches by using the builtin find_files picker
 local function git_files()
   set_prompt_border_color('#eeff00')
-  with_git_root(function (git_root)
+  with_git_root(function(git_root)
     local path = utils.collapse_home_path_to_tilde(git_root)
     builtin.git_files({ prompt_title = "  files  " .. path })
   end)
@@ -168,7 +168,7 @@ end
 
 local function live_grep_git_root()
   set_prompt_border_color('#bb2222')
-  with_git_root(function (git_root)
+  with_git_root(function(git_root)
     local path = utils.collapse_home_path_to_tilde(git_root)
     builtin.live_grep({
       cwd = git_root,
@@ -220,7 +220,7 @@ local function setup_mappings()
       ['*'] = { builtin.current_buffer_fuzzy_find, 'Current buffer fuzzy find' },
       b = { builtin.buffers, 'Buffers' },
       c = { change_cwd, 'Change CWD of current window' },
-      h = { builtin.highlights, 'Highlights' },
+      h = { builtin.help_tags, 'Help tags' },
       -- For consistency, we also have all the file mappings repeated here
       f = file_mappings,
       g = grep_mappings,
