@@ -1,3 +1,4 @@
+-- Use the command 'PlenaryBustedDirectory %' to run tests in this file
 local utils = require 'core.utils'
 
 describe('curry', function()
@@ -101,6 +102,7 @@ describe('short_plugin_name', function()
     { 'github_owner/nvim-plugin-name.lua', 'plugin-name' },
     { 'github_owner/vim-plugin-name', 'plugin-name' },
     { 'kyazdani42/nvim-tree.lua', 'tree' },
+    { 'github_owner/SomePlugin.nvim', 'someplugin' },
   }
   -- when
   for _, test_case in ipairs(test_cases) do

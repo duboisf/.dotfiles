@@ -94,7 +94,7 @@ M.packer = {}
 
 function M.packer.short_plugin_name(plugin_name)
   for _, pattern in ipairs({ '.+/', '^nvim%-', '^vim%-', '%.nvim$', '%.vim$', '%.lua$' }) do
-    plugin_name = string.gsub(plugin_name, pattern, '')
+    plugin_name = string.lower(string.gsub(plugin_name, pattern, ''))
   end
   return plugin_name
 end
