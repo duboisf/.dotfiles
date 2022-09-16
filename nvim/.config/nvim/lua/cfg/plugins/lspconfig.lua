@@ -226,7 +226,7 @@ end
 
 do
   local schemas = {}
-  schemas["http://json.schemastore.org/github-workflow"] = "/.github/workflows/*.yml"
+  schemas["https://json.schemastore.org/github-workflow"] = "/.github/workflows/*.yml"
   lspconfig.yamlls.setup {
     capabilities = capabilities,
     on_attach = on_attach,
