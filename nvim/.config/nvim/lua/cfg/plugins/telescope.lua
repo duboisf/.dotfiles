@@ -1,5 +1,6 @@
 local action_set = require 'telescope.actions.set'
 local action_state = require 'telescope.actions.state'
+local actions = require 'telescope.actions'
 local builtin = require 'telescope.builtin'
 local themes = require 'telescope.themes'
 local tutils = require 'telescope.utils'
@@ -124,6 +125,21 @@ local function find_files()
   builtin.find_files {
     prompt_title = prompt_with_cwd("Files"),
     hidden = true,
+    attach_mappings = function()
+      action_set.select:enhance {
+        post = function(_, type)
+          if type == 'tab' then
+            -- when opening a file in a new tab, change the cwd of the tab to the folder containing the selected file
+            local selection = action_state.get_selected_entry()
+            local parent_dir = vim.fn.fnamemodify(selection[1], ':h')
+            vim.cmd('tcd ' .. parent_dir)
+          end
+        end
+      }
+      -- needs to return true if you want to map default_mappings and
+      -- false if not
+      return true
+    end,
     on_complete = {
       function(picker)
         print(string.format('results: %d', picker.manager.linked_states.size))
