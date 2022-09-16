@@ -192,8 +192,8 @@ require('packer').startup({ function(use)
   }
 
   use {
-    'norcalli/nvim-colorizer.lua',
-    config = function() require('colorizer').setup() end
+    'Akianonymus/nvim-colorizer.lua',
+    config = function() require('colorizer').setup {} end
   }
 
   -- preview markdown in browser with live position synchronization
