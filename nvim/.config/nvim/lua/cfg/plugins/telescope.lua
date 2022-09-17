@@ -119,27 +119,41 @@ local function git_files()
   end)
 end
 
+local function action_post_change_cwd(change_win_cwd)
+  if change_win_cwd then
+    local selection = action_state.get_selected_entry()
+    local file_dir = vim.fn.fnamemodify(selection[1], ':h')
+    vim.cmd('lcd ' .. file_dir)
+  end
+end
+
+local function change_win_cwd_mappings(_, map)
+  local change_win_cwd = false
+  map('i', '<M-c>', function(_prompt_bufnr)
+    local picker = action_state.get_current_picker(_prompt_bufnr)
+    local original_title = picker.prompt_title
+    change_win_cwd = not change_win_cwd
+    if change_win_cwd then
+      picker.prompt_border:change_title(picker.prompt_title .. '   ')
+    else
+      picker.prompt_border:change_title(original_title)
+    end
+  end)
+  action_set.select:enhance {
+    post = function() action_post_change_cwd(change_win_cwd) end,
+  }
+  -- needs to return true if you want to map default_mappings and
+  -- false if not
+  return true
+end
+
 -- Searches by using the builtin find_files picker
 local function find_files()
   set_prompt_border_color('#eeff00')
   builtin.find_files {
     prompt_title = prompt_with_cwd("Files"),
     hidden = true,
-    attach_mappings = function()
-      action_set.select:enhance {
-        post = function(_, type)
-          if type == 'tab' then
-            -- when opening a file in a new tab, change the cwd of the tab to the folder containing the selected file
-            local selection = action_state.get_selected_entry()
-            local parent_dir = vim.fn.fnamemodify(selection[1], ':h')
-            vim.cmd('tcd ' .. parent_dir)
-          end
-        end
-      }
-      -- needs to return true if you want to map default_mappings and
-      -- false if not
-      return true
-    end,
+    attach_mappings = change_win_cwd_mappings,
   }
 end
 
