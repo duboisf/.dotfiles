@@ -110,11 +110,6 @@ require('packer').startup({ function(use)
         let g:formatters_rego = ['rego']
         let g:autoformat_autoindent = 0
         let g:autoformat_retab = 0
-
-        aug fred#rego
-          au!
-          au BufWritePre *.rego Autoformat
-        aug end
       ]]
     end
   }
