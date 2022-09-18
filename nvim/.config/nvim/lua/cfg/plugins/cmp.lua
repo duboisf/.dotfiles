@@ -161,6 +161,14 @@ cmp.setup.filetype({ 'gitcommit', 'markdown' }, {
   }
 })
 
+cmp.setup.filetype({ 'rego' }, {
+  sources = cmp.config.sources({
+    all_buffers_source,
+    { name = 'luasnip' },
+    { name = 'path' },
+  }),
+})
+
 -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
 cmp.setup.cmdline('/', {
   mapping = cmp.mapping.preset.cmdline(),
