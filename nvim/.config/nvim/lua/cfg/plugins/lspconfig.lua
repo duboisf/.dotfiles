@@ -160,6 +160,7 @@ local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protoco
 lspconfig.bashls.setup { capabilities = capabilities, on_attach = on_attach }
 lspconfig.dockerls.setup { capabilities = capabilities, on_attach = on_attach }
 lspconfig.jsonls.setup { capabilities = capabilities, on_attach = on_attach }
+lspconfig.pylsp.setup { capabilities = capabilities, on_attach = on_attach }
 lspconfig.terraformls.setup { capabilities = capabilities, on_attach = on_attach }
 lspconfig.tsserver.setup {
   capabilities = capabilities,
