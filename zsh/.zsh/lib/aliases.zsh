@@ -8,6 +8,11 @@ alias s='cd ..'
 # open vim in dotfiles folder
 alias edot='cd $(git -C ~/.zshrc(:A:h) rev-parse --show-toplevel) && nvim'
 
+alias fj=firejail
+
+# secure nvim for general usage
+alias nvim='firejail nvim'
+
 # Super useful global aliases
 _C() {
     # USAGE: _C COLUMN
