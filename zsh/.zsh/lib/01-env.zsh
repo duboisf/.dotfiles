@@ -19,7 +19,7 @@ fi
 export DOCKER_BUILDKIT=1
 export EDITOR=nvim
 export GPG_TTY=$(tty)
-export MANPAGER='nvim --cmd "let g:pager_mode = 1" +Man!'
+export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
 export MANWIDTH=999
 export NVM_DIR=~/.nvm
 export ZK_NOTEBOOK_DIR=~/notes
