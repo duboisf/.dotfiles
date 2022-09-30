@@ -52,3 +52,6 @@ DBs
 firejail
 apparmor
 linux
+ECR
+circleci
+KMS
