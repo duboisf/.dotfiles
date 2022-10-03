@@ -247,9 +247,6 @@ require('packer').startup({ function(use)
       config = function() require('mason').setup() end,
     }
 
-    -- this is needed to fix lsp doc highlight
-    use 'antoinemadec/FixCursorHold.nvim'
-
     -- simplify language server configuration
     use_with_cfg {
       'neovim/nvim-lspconfig',
