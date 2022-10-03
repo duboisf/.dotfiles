@@ -6,11 +6,6 @@ pcall(require, 'impatient')
 pcall(require, 'cfg.packer')
 EOL
 
-" Enable new lua filetype detection
-let g:do_filetype_lua = 1
-" Disable filetype.vim
-let g:did_load_filetypes = 1
-
 " Don't source syntax files automatically since we use Tree-sitter for syntax
 " highlighting. For filetypes that don't have Tree-sitter parsers, use 'set
 " syntax=ON' to turn on the classic mechanism of syntax highlighting for the
@@ -78,12 +73,6 @@ set noshowcmd
 
 " use only 1 status line for all open windows
 set laststatus=3
-
-" use filetype.lua for filetype detection, it's way faster
-" see https://neovim.io/news/2022/04#filetypelua
-let g:do_filetype_lua = 1 
-" don't use filetype.vim for filetype detection
-let g:did_load_filetypes = 0
 
 " tweak settings if we are using nvim as a pager, we know this because
 " we set the pager_mode variable when we do
