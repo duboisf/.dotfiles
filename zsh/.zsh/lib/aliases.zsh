@@ -9,6 +9,9 @@ alias s='cd ..'
 alias edot='cd $(git -C ~/.zshrc(:A:h) rev-parse --show-toplevel) && nvim'
 
 alias fj=firejail
+alias fjl='fj --list'
+alias fjjl='fj --join=$(fj --list | tail -n 1 | cut -d : -f 1)'
+alias fjd='fj --debug'
 
 # secure nvim for general usage
 alias nvim='firejail nvim'
