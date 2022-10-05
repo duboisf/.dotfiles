@@ -1,3 +1,4 @@
+; extends
 ; highlight function names
 ; (
 ; [
