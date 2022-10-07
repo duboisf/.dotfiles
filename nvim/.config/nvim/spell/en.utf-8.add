@@ -55,3 +55,9 @@ linux
 ECR
 circleci
 KMS
+OIDC
+JSON
+hostname
+CRDs
+json
+jq
