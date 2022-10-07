@@ -8,10 +8,14 @@ alias s='cd ..'
 # open vim in dotfiles folder
 alias edot='cd $(git -C ~/.zshrc(:A:h) rev-parse --show-toplevel) && nvim'
 
+# firejail
 alias fj=firejail
 alias fjl='fj --list'
 alias fjjl='fj --join=$(fj --list | tail -n 1 | cut -d : -f 1)'
 alias fjd='fj --debug'
+
+# need this sometimes
+alias whatismyip='curl -s "https://api.ipify.org?format=json" | jq -r .ip'
 
 # secure nvim for general usage
 alias nvim='firejail nvim'
@@ -50,6 +54,7 @@ alias kctx=kubectx
 
 # kubectl
 #########
+alias k='kubectl'
 alias kc='kubectl'
 alias skc='kubectl --as=$USER --as-group=system:masters'
 alias rpo='kc get po --field-selector=status.phase=Running'
@@ -168,3 +173,5 @@ alias iaws='aws --cli-auto-prompt'
 # rg
 #####
 alias rgf='rg --files-with-matches'
+
+alias ic=istioctl
