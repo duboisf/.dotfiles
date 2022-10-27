@@ -41,14 +41,14 @@ local function setup_highlights()
 end
 
 local border = {
-      {"🭽", "FloatBorder"},
-      {"▔", "FloatBorder"},
-      {"🭾", "FloatBorder"},
-      {"▕", "FloatBorder"},
-      {"🭿", "FloatBorder"},
-      {"▁", "FloatBorder"},
-      {"🭼", "FloatBorder"},
-      {"▏", "FloatBorder"},
+  { "🭽", "FloatBorder" },
+  { "▔", "FloatBorder" },
+  { "🭾", "FloatBorder" },
+  { "▕", "FloatBorder" },
+  { "🭿", "FloatBorder" },
+  { "▁", "FloatBorder" },
+  { "🭼", "FloatBorder" },
+  { "▏", "FloatBorder" },
 }
 
 local orig_open_floating_preview = vim.lsp.util.open_floating_preview
@@ -160,7 +160,22 @@ local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protoco
 lspconfig.bashls.setup { capabilities = capabilities, on_attach = on_attach }
 lspconfig.dockerls.setup { capabilities = capabilities, on_attach = on_attach }
 lspconfig.jsonls.setup { capabilities = capabilities, on_attach = on_attach }
-lspconfig.pylsp.setup { capabilities = capabilities, on_attach = on_attach }
+lspconfig.pylsp.setup {
+  capabilities = capabilities,
+  on_attach = on_attach,
+  settings = {
+    pylsp = {
+      plugins = {
+        pycodestyle = {
+          ignore = {
+            'E501',
+          }
+        }
+      }
+    }
+  }
+}
+lspconfig.sqls.setup { capabilities = capabilities, on_attach = on_attach }
 lspconfig.terraformls.setup { capabilities = capabilities, on_attach = on_attach }
 lspconfig.tsserver.setup {
   capabilities = capabilities,
