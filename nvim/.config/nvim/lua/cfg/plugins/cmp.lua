@@ -21,18 +21,23 @@ local all_buffers_source = {
 cmp.setup({
   formatting = {
     fields = { 'abbr', 'kind', 'menu' },
-    format = lspkind.cmp_format({
-      mode = 'symbol', -- show only symbol annotations
-      maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
-      menu = ({
-        buffer = "[Buffer]",
-        dictionary = "[Dict]",
-        luasnip = "[LuaSnip]",
-        path = "[Path]",
-        emoji = "[Emoji]",
-        nvim_lsp = "[LSP]",
+    format = function(entry, vim_item)
+      local format = lspkind.cmp_format({
+        mode = 'symbol', -- show only symbol annotations
+        maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+        menu = ({
+          buffer = "[Buffer]",
+          dictionary = "[Dict]",
+          luasnip = "[LuaSnip]",
+          path = "[Path]",
+          emoji = "[Emoji]",
+          nvim_lsp = "[LSP]",
+        })
       })
-    })
+      local item = format(entry, vim_item)
+      item.dup = 0
+      return item
+    end
   },
   snippet = {
     expand = function(args) require('luasnip').lsp_expand(args.body) end,
