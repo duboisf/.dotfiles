@@ -278,19 +278,17 @@ require('telescope').setup {
     path_display = { "truncate" },
     winblend = 20,
     color_devicons = true,
-    layout_strategy = "horizontal",
+    layout_strategy = "flex",
     layout_config = {
-      horizontal = {
-        prompt_position = "bottom",
-        preview_width = 0.55,
-        results_width = 0.8,
-      },
-      vertical = {
-        mirror = false,
-      },
       width = 0.87,
       height = 0.80,
-      preview_cutoff = 120,
+      flex = {
+        flip_columns = 160,
+        horizontal = {
+          prompt_position = "bottom",
+          preview_width = 0.45,
+        },
+      }
     },
     border = {},
     borderchars = {
