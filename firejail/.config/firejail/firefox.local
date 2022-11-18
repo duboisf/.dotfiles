@@ -1,0 +1,10 @@
+ignore apparmor
+ignore noexec ${HOME}/.local/share/firenvim/firenvim
+ignore noexec ${HOME}
+ignore blacklist ${HOME}/.config/nvim
+whitelist ${HOME}/.config/nvim
+whitelist ${HOME}/.dotfiles/nvim/.config/nvim
+whitelist ${HOME}/.local/share/firenvim
+ignore blacklist-nolog ${HOME}/.local/share/nvim
+whitelist ${HOME}/.local/share/nvim
+whitelist /usr/share/nvim
