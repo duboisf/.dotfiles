@@ -1,0 +1,25 @@
+# I created an apparmor profile for nvim that extends firejail-default apparmor profile.
+# Don't load apparmor in firejail, that will use the firejail-default profile
+# instead of the usr.bin.nvim one.
+ignore apparmor
+
+# Needed as go is installed in /usr/local/go/
+noblacklist ${PATH}/go
+noblacklist ${PATH}/gofmt
+#noblacklist ${PATH}/gpg
+#noblacklist ${PATH}/gpg-agent
+
+# Allow committing with fugitive and signing commits with gpg
+noblacklist ${HOME}/.gitconfig
+#noblacklist ${HOME}/.gnupg
+#noblacklist ${RUNUSER}
+#writable-run-user
+#whitelist ${RUNUSER}/gnupg
+
+# Needed to be able to access clipboard with xclip
+ignore x11 none
+
+# Close jail when first child process exists
+deterministic-shutdown
+
+ignore net none

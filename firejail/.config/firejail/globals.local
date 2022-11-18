@@ -1,0 +1,2 @@
+# enable apparmor for all profiles
+apparmor
