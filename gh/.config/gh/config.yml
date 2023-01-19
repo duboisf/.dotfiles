@@ -8,11 +8,25 @@ prompt: enabled
 pager:
 # Aliases allow you to create nicknames for gh commands
 aliases:
-    merge-and-delete-pr: pr merge --delete-branch
     create-pr: |
       !gh pr create && gh pr merge --auto --merge
+    download-latest-release: |
+        !repo=${1:-cli/cli}; picked_asset=$(gh release view -R $repo --json assets -q ".assets[].name" \
+            | fzf --prompt="Pick an asset to download: "); \
+          test -n $picked_asset && echo "Downloading asset $picked_asset..." && gh release download -R $repo -p $picked_asset
     fclone: repo clone Flatbook/$1
-    clone: repo clone
+    merge-and-delete-pr: pr merge --delete-branch
+    show-branch-protection: |
+      !gh api graphql \
+        -f query="$(curl -s https://gist.githubusercontent.com/duboisf/68fb6e22ac0a2165ca298074f0e3b553/raw/23c22a0f3922b812581684e2fbd7c6d5bb8f9532/operations.graphql)" \
+        -f operationName=showBranchProtection \
+        -F owner=:owner \
+        -F repo=:repo
+    switch-branch: |
+        !picked_branch="$(git branch --list \
+          | fzf --preview='echo; git log -20 --color --decorate ${-1}'
+          )"
+        test -n "$picked_branch" && git switch "$(echo "$picked_branch" | cut -c 3-)"
     view-latest-release: |
         !repo=${1:-cli/cli}
         gh release view --repo $repo --json assets,body,publishedAt,tagName,name,url --template '
@@ -33,19 +47,4 @@ aliases:
         {{- end }}
         {{- end }}
         ' | glow -p -
-    download-latest-release: |
-        !repo=${1:-cli/cli}; picked_asset=$(gh release view -R $repo --json assets -q ".assets[].name" \
-            | fzf --prompt="Pick an asset to download: "); \
-          test -n $picked_asset && echo "Downloading asset $picked_asset..." && gh release download -R $repo -p $picked_asset
-    switch-branch: |
-        !picked_branch="$(git branch --list \
-          | fzf --preview='echo; git log -20 --color --decorate ${-1}'
-          )"
-        test -n "$picked_branch" && git switch "$(echo "$picked_branch" | cut -c 3-)"
-    bors-merge: pr comment --body "bors merge"
-    show-branch-protection: |
-      !gh api graphql \
-        -f query="$(curl -s https://gist.githubusercontent.com/duboisf/68fb6e22ac0a2165ca298074f0e3b553/raw/23c22a0f3922b812581684e2fbd7c6d5bb8f9532/operations.graphql)" \
-        -f operationName=showBranchProtection \
-        -F owner=:owner \
-        -F repo=:repo
+    watch-checks: pr checks --watch
