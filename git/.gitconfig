@@ -1,7 +1,3 @@
-[color]
-	pager = no
-[core]
-	pager = nvim -R --cmd 'let g:pager_mode = 1'
 [push]
 	default = simple
 [user]
@@ -42,3 +38,5 @@
 # vim: noet
 [init]
 	defaultBranch = main
+[core]
+	pager = less -F -X
