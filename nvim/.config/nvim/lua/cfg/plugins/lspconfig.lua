@@ -37,6 +37,7 @@ local function setup_highlights()
   vim.cmd [[
     highlight NormalFloat guibg=#1f2335
     highlight FloatBorder guifg=white guibg=#1f2335
+    highlight default link LspSignatureActiveParameter Search
   ]]
 end
 
@@ -120,14 +121,8 @@ end
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
-  local ok, aerial = pcall(require, 'aerial')
-  if ok then
-    aerial.on_attach(client, bufnr)
-  end
-
   setup_autocmds(client, bufnr)
   setup_mappings(bufnr)
-
   -- disable diagnostics for helm templates
   if vim.bo[bufnr].filetype == 'yaml' and string.find(vim.api.nvim_buf_get_name(bufnr), '/templates/') then
     vim.diagnostic.disable()
@@ -147,7 +142,7 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 })
 
 
-local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 --[[
 
@@ -275,28 +270,13 @@ do
   local gopathmod = gopath .. '/pkg/mod'
   lspconfig.gopls.setup {
     on_attach = on_attach,
-    capabilities = (function()
-      -- local capabilities = vim.lsp.protocol.make_client_capabilities()
-      local caps = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-      -- caps.textDocument.completion.completionItem.snippetSupport = true
-      -- caps.textDocument.completion.completionItem.resolveSupport = {
-      --   properties = {
-      --     'documentation',
-      --     'detail',
-      --     'additionalTextEdits',
-      --   }
-      -- }
-      return caps
-    end)(),
-    -- flags = {
-    --   allow_incremental_sync = true
-    -- },
+    capabilities = capabilities,
     init_options = {
       allExperiments = true,
       -- allowImplicitNetworkAccess = true,
       -- templateExtensions = { "yaml" },
       -- staticcheck = false,
-      usePlaceholders = true,
+      usePlaceholders = false,
       -- analyses = {
       --   nilness = true,
       --   unusedparams = true,
@@ -342,15 +322,6 @@ end
 -- end
 
 -- lspconfig.golangcilsp.setup()
-
-function _G.signature_help()
-  local req = vim.lsp.util.make_position_params(0, 'utf-16')
-  req.context = {
-    triggerKind = 1,
-    isRetrigger = false,
-  }
-  dump(vim.lsp.buf_get_clients()[1].request_sync('textDocument/signatureHelp', req))
-end
 
 return {
   safe_formatting_sync = safe_formatting_sync

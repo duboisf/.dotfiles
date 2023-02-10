@@ -4,7 +4,7 @@ local utils = require("core.utils")
 local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
 local packer_bootstrap = false
 if fn.empty(fn.glob(install_path)) > 0 then
-  vim.notify('packer not installed, cloning...')
+  vim.notify('packer not installed, cloning...', vim.log.levels.INFO)
   packer_bootstrap = fn.system({ 'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim',
     install_path })
   vim.cmd 'packadd packer.nvim'
@@ -202,7 +202,12 @@ require('packer').startup({ function(use)
     'iamcco/markdown-preview.nvim',
     run = ':call mkdp#util#install()',
     ft = { 'markdown' },
-    setup = function() vim.g.mkdp_filetypes = { "markdown" } end,
+    setup = function()
+      vim.g.mkdp_auto_close = 0
+      vim.g.mkdp_browserfunc = 'EchoMarkdownPreviewUrl'
+      vim.g.mkdp_echo_preview_url = 1
+      vim.g.mkdp_filetypes = { "markdown" }
+    end,
   }
 
   -- use neovim in any text input in the browser 🤯
@@ -265,11 +270,6 @@ require('packer').startup({ function(use)
       }
     }
 
-    use {
-      'j-hui/fidget.nvim',
-      config = function() require('fidget').setup {} end
-    }
-
     -- Don't use this yet, has potential but still buggy
     use({
       "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
@@ -315,15 +315,31 @@ require('packer').startup({ function(use)
     -- fancy completion
     use_with_cfg {
       'hrsh7th/nvim-cmp',
-      cond = notStartedByFirenvim,
       requires = {
         -- add vscode-line pictograms in completion popup
         'onsails/lspkind.nvim',
         -- completion suggestions from language server
         'hrsh7th/cmp-nvim-lsp',
+        'nvim-lua/plenary.nvim',
       },
       after = { 'nvim-autopairs' }
     }
+
+    use {
+      'ray-x/lsp_signature.nvim',
+      config = function()
+        require("lsp_signature").setup {
+          bind = true, -- This is mandatory, otherwise border config won't get registered.
+          cursorhold_update = false,
+          handler_opts = {
+            border = "rounded"
+          },
+          hint_enable = false, -- no virtual text with a panda
+          noice = false,
+        }
+      end
+    }
+
   end
 
   --[[
@@ -397,6 +413,37 @@ require('packer').startup({ function(use)
   use {
     'mickael-menu/zk-nvim',
     config = function() require 'cfg.plugins.zk' end
+  }
+
+  use {
+    "folke/noice.nvim",
+    config = function()
+      require("noice").setup {
+        popupmenu = {
+          backend = 'cmp',
+        },
+        lsp = {
+          override = {
+            ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+            -- override the lsp markdown formatter with Noice
+            ["vim.lsp.util.stylize_markdown"] = true,
+            ["cmp.entry.get_documentation"] = false, -- this doesn't work currently
+          },
+          signature = {
+            enabled = false,
+          }
+        },
+        presets = {
+          lsp_doc_border = true,
+        }
+      }
+    end,
+    after = {
+      'nvim-notify',
+      'nvim-treesitter',
+      'nvim-cmp',
+    },
+    requires = { 'MunifTanjim/nui.nvim' }
   }
 
   use_colorscheme()
