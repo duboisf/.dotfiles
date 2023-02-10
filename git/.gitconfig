@@ -32,8 +32,8 @@
 [diff]
 	compactionHeuristic = true
 	submodule = log
-[url "git@github.com:"]
-	insteadOf = https://github.com/
+[url "git@github.com:Flatbook/"]
+	insteadOf = https://github.com/Flatbook/
 
 # vim: noet
 [init]
