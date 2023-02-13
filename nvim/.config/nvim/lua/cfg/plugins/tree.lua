@@ -1,7 +1,7 @@
 require('nvim-tree').setup {
   auto_reload_on_write = true,
   hijack_netrw = true,
-  create_in_closed_folder = true,
+  create_in_closed_folder = false,
   filters = {
     dotfiles = false,
   },
