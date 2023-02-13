@@ -1,5 +1,7 @@
 local wezterm = require 'wezterm';
 
+local wezterm = require 'wezterm'
+
 return {
   colors = {
     tab_bar = {
@@ -17,7 +19,7 @@ return {
         -- Specify whether you want "Half", "Normal" or "Bold" intensity for the
         -- label shown for this tab.
         -- The default is "Normal"
-        intensity = 'Normal',
+        intensity = 'Bold',
 
         -- Specify whether you want "None", "Single" or "Double" underline for
         -- label shown for this tab.
@@ -86,6 +88,33 @@ return {
   -- keys = {
   --   { key = 'a', 'CTRL', action = wezterm.action.ActivateCommandPalette }
   -- },
+  keys = {
+    {
+      key = 'e',
+      mods = 'CTRL|SHIFT',
+      action = wezterm.action.QuickSelectArgs {
+        alphabet = '1234567890',
+        label = 'open url',
+        patterns = {
+          'https?://\\S+',
+        },
+        action = wezterm.action_callback(function(window, pane)
+          local url = window:get_selection_text_for_pane(pane)
+          wezterm.log_info('opening: ' .. url)
+          wezterm.open_with(url)
+        end),
+      },
+    },
+    {
+      key = 'Enter',
+      mods = 'CTRL|SHIFT',
+      action = wezterm.action.SplitPane {
+        direction = 'Right',
+        size = { Percent = 50 },
+      },
+    }
+  },
+
   use_fancy_tab_bar = false,
   tab_bar_at_bottom = true,
   window_padding = {
