@@ -11,7 +11,7 @@ EOL
 " syntax=ON' to turn on the classic mechanism of syntax highlighting for the
 " current buffer. There is an autocommand that does this for us, see
 " plugin/syntax.lua
-syntax manual
+syntax &loadplugins ? manual : on
 
 " Check if we started nvim in pager mode
 let g:pager_mode = get(g:, 'pager_mode', v:false)
@@ -165,5 +165,10 @@ let g:startify_lists = [
 """""""""""""""""""""
 
 au TextYankPost * lua vim.highlight.on_yank { higroup="IncSearch", timeout=300, on_visual=true }
+
+if ! &loadplugins
+  " when loading without plugins, use built-in colorscheme
+  color habamax
+endif
 
 " vim: sts=2 sw=2 ts=2 et
