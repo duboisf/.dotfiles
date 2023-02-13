@@ -7,8 +7,6 @@ local types = require 'cmp.types'
 --   return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
 -- end
 
-vim.o.completeopt = "menuone,noselect"
-
 local all_buffers_source = {
   name = 'buffer',
   option = {
@@ -19,6 +17,9 @@ local all_buffers_source = {
 }
 
 cmp.setup({
+  completion = {
+    completeopt = "menu,menuone,noselect",
+  },
   formatting = {
     fields = { 'abbr', 'kind', 'menu' },
     format = function(entry, vim_item)
@@ -28,9 +29,9 @@ cmp.setup({
         menu = ({
           buffer = "[Buffer]",
           dictionary = "[Dict]",
-          luasnip = "[LuaSnip]",
+          luasnip = "✂️ ",
           path = "[Path]",
-          emoji = "[Emoji]",
+          emoji = "",
           nvim_lsp = "[LSP]",
         })
       })
@@ -93,6 +94,13 @@ cmp.setup({
         }
       }
     }),
+    ['<M-e>'] = cmp.mapping(function()
+      cmp.complete({
+        config = {
+          sources = { { name = 'emoji' } }
+        }
+      })
+    end),
     ['<CR>'] = cmp.mapping.confirm({ select = false }),
     ['<Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
@@ -106,7 +114,6 @@ cmp.setup({
   sources = cmp.config.sources({
     { name = 'luasnip' },
     { name = 'nvim_lsp' },
-    { name = 'emoji', option = { insert = true } },
     { name = 'path' },
   }),
 })
@@ -152,8 +159,6 @@ do
     sources = cmp.config.sources({
       { name = 'luasnip' },
       { name = 'nvim_lsp' },
-      all_buffers_source,
-      { name = 'emoji', option = { insert = true } },
     }),
   })
 end

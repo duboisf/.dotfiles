@@ -25,3 +25,5 @@ local autocmd = utils.autogroup('user#plugin#syntax', true)
 
 autocmd('FileType', '*', missing_treesitter_parser_fallback,
   "Turn on classic vim highlighting when filetype does't have a treesitter parser")
+
+missing_treesitter_parser_fallback()

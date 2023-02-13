@@ -61,3 +61,9 @@ hostname
 CRDs
 json
 jq
+env
+OCI
+socat
+GHA
+dependabot
+#eting

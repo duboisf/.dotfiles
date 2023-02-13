@@ -141,7 +141,6 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   update_in_insert = false,
 })
 
-
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 --[[

@@ -19,6 +19,7 @@ alias whatismyip='curl -s "https://api.ipify.org?format=json" | jq -r .ip'
 
 # secure nvim for general usage
 alias nvim='firejail nvim'
+alias safe-nvim='\nvim --noplugin'
 
 # Super useful global aliases
 _C() {
@@ -64,7 +65,7 @@ alias dpo='kc describe po'
 alias deploy='kc get deploy'
 alias ddeploy='kc describe deploy'
 alias logs='kc logs'
-alias no='kc get no -L karpenter.sh/provisioner-name -L beta.kubernetes.io/instance-type -L purpose'
+alias no='kc get no -L karpenter.sh/provisioner-name -L kubernetes.io/arch -L node.kubernetes.io/instance-type -L dedicated'
 alias dno='kc describe no'
 alias svc='kc get svc'
 alias dsvc='kc describe svc'
