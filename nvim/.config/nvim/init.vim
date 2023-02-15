@@ -6,13 +6,6 @@ pcall(require, 'impatient')
 pcall(require, 'cfg.packer')
 EOL
 
-" Don't source syntax files automatically since we use Tree-sitter for syntax
-" highlighting. For filetypes that don't have Tree-sitter parsers, use 'set
-" syntax=ON' to turn on the classic mechanism of syntax highlighting for the
-" current buffer. There is an autocommand that does this for us, see
-" plugin/syntax.lua
-syntax &loadplugins ? manual : on
-
 " Check if we started nvim in pager mode
 let g:pager_mode = get(g:, 'pager_mode', v:false)
 
