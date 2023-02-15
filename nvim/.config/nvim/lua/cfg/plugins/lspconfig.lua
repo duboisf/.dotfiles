@@ -88,13 +88,36 @@ autocmd('ColorScheme', nil, setup_highlights, 'Setup LSP highlights')
 setup_highlights()
 
 -- Setup mappings
-local function setup_mappings(bufnr)
+local function setup_mappings(client, bufnr)
   local opts = { noremap = true, silent = true, buffer = bufnr }
+
+  if client.supports_method("textDocument/formatting") then
+    vim.keymap.set("n", "<Leader>F", function()
+      vim.lsp.buf.format({ bufnr = vim.api.nvim_get_current_buf() })
+    end, { buffer = bufnr, desc = "[lsp] format" })
+
+    -- -- format on save
+    -- vim.api.nvim_clear_autocmds({ buffer = bufnr, group = group })
+    -- vim.api.nvim_create_autocmd(event, {
+    --   buffer = bufnr,
+    --   group = group,
+    --   callback = function()
+    --     vim.lsp.buf.format({ bufnr = bufnr, async = async })
+    --   end,
+    --   desc = "[lsp] format on save",
+    -- })
+  end
+
+  if client.supports_method("textDocument/rangeFormatting") then
+    vim.keymap.set("x", "<Leader>F", function()
+      vim.lsp.buf.format({ bufnr = vim.api.nvim_get_current_buf() })
+    end, { buffer = bufnr, desc = "[lsp] format" })
+  end
 
   local normal_mappings = {
     [',s']         = '<cmd>Telescope lsp_document_symbols<CR>',
     [',w']         = '<cmd>Telescope lsp_workspace_symbols<CR>',
-    ['<leader>F']  = safe_formatting_sync,
+    -- ['<leader>F']  = safe_formatting_sync,
     ['<leader>cl'] = '<cmd>lua vim.lsp.codelens.run()<CR>',
     ['<leader>ca'] = '<cmd>lua vim.lsp.buf.code_action()<CR>',
     ['<leader>d']  = '<cmd>lua vim.diagnostic.open_float()<CR>',
@@ -122,7 +145,7 @@ end
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
   setup_autocmds(client, bufnr)
-  setup_mappings(bufnr)
+  setup_mappings(client, bufnr)
   -- disable diagnostics for helm templates
   if vim.bo[bufnr].filetype == 'yaml' and string.find(vim.api.nvim_buf_get_name(bufnr), '/templates/') then
     vim.diagnostic.disable()
@@ -226,7 +249,7 @@ do
         },
         workspace = {
           checkThirdParty = false,
-          library = vim.api.nvim_get_runtime_file('', true),
+          -- library = vim.api.nvim_get_runtime_file('', true),
           maxPreload = 1000,
         },
       }
@@ -274,21 +297,17 @@ do
       allExperiments = true,
       -- allowImplicitNetworkAccess = true,
       -- templateExtensions = { "yaml" },
-      -- staticcheck = false,
-      usePlaceholders = false,
-      -- analyses = {
-      --   nilness = true,
-      --   unusedparams = true,
-      -- },
-      -- codelenses = {
-      --   gc_details = false,
-      --   test = true,
-      --   generate = true,
-      --   regenerate_cgo = true,
-      --   tidy = true,
-      --   upgrade_dependency = true,
-      --   vendor = false,
-      -- },
+      staticcheck = true,
+      usePlaceholders = true,
+      analyses = {
+        nilness = true,
+        unusedparams = true,
+      },
+      codelenses = {
+        test = true,
+        tidy = true,
+        upgrade_dependency = true,
+      },
     },
     -- don't spawn a new gopls instance if we are jumping to definitions of
     -- functions in dependencies that are in the $GOPATH. Without this, a new
@@ -321,7 +340,3 @@ end
 -- end
 
 -- lspconfig.golangcilsp.setup()
-
-return {
-  safe_formatting_sync = safe_formatting_sync
-}
