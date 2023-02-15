@@ -83,19 +83,29 @@ zstyle ':chpwd:*' recent-dirs-prune pattern:"^$HOME$" pattern:'^/$'
 cdr-widget() {
     emulate -L zsh
     setopt err_return localoptions pipefail
-    local reply selected_dir
-    # store recently visited dirs in the reply variable
-    cdr -r
-    local selected_dir="$(print ${(F)${(D)reply}} \
-        | fzf --height='20%' --layout=reverse --info=hidden --header='Recently visited directories')"
-    if [[ -z $selected_dir ]]; then
-        zle redisplay
-        return 0
-    fi
-    cd $~selected_dir
-    local result=$?
-    zle redraw-prompt
-    return $result
+    local reply selected_dir_choice
+    while true; do
+        # store recently visited dirs in the reply variable
+        cdr -r
+        local selected_dir_choice=("${(@f)$(print ${(F)${(D)reply}} \
+            | fzf --height='20%' --layout=reverse --info=hidden \
+                --header='Recently visited directories (ctrl-d to delete an entry)' \
+                --expect=ctrl-d
+                )}")
+        if [[ -z $selected_dir_choice ]]; then
+            zle redisplay
+            return 0
+        fi
+        if [[ $selected_dir_choice[1] == ctrl-d ]]; then
+            # we want to delete the selected entry
+            cdr -P $selected_dir_choice[2]
+        else
+            cd $~selected_dir_choice[2]
+            local result=$?
+            zle redraw-prompt
+            return $result
+        fi
+    done
 }
 # define the cdr-widget
 zle -N cdr-widget
