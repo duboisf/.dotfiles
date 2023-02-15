@@ -1,2 +1,13 @@
 # enable apparmor for all profiles
 apparmor
+
+blacklist ~/.argocd/
+blacklist ~/.circleci/
+blacklist ~/.config/gh/hosts.yml
+blacklist ~/.datadog
+blacklist ~/.jfrog/
+blacklist ~/.oci-fred
+blacklist ~/.oci/
+blacklist ~/.pulumi/
+
+quiet

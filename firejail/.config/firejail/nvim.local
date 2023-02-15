@@ -16,6 +16,9 @@ noblacklist ${HOME}/.gitconfig
 #writable-run-user
 #whitelist ${RUNUSER}/gnupg
 
+
+noblacklist ${HOME}/.npm
+
 # Needed to be able to access clipboard with xclip
 ignore x11 none
 
