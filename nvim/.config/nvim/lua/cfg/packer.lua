@@ -270,6 +270,31 @@ require('packer').startup({ function(use)
       }
     }
 
+    use {
+      'MunifTanjim/prettier.nvim',
+      after = { 'null-ls.nvim' },
+      config = function()
+        local prettier = require 'prettier'
+        prettier.setup({
+          bin = 'prettier', -- or `'prettierd'` (v0.22+)
+          filetypes = {
+            "css",
+            "graphql",
+            "html",
+            "javascript",
+            "javascriptreact",
+            "json",
+            "less",
+            "markdown",
+            "scss",
+            "typescript",
+            "typescriptreact",
+            "yaml",
+          },
+        })
+      end
+    }
+
     -- Don't use this yet, has potential but still buggy
     use({
       "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
