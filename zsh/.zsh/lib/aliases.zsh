@@ -6,7 +6,7 @@ alias open=xdg-open
 alias s='cd ..'
 
 # open vim in dotfiles folder
-alias edot='cd $(git -C ~/.zshrc(:A:h) rev-parse --show-toplevel) && nvim'
+alias edot='cd $(git -C ~/.zshrc(:A:h) rev-parse --show-toplevel) && firejail --net=none  --blacklist=/home/fred/.aws --blacklist=/home/fred/.ssh --noprofile nvim'
 
 # firejail
 alias fj=firejail
