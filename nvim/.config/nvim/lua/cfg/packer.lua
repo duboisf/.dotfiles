@@ -442,6 +442,7 @@ require('packer').startup({ function(use)
 
   use {
     "folke/noice.nvim",
+    cond = true,
     config = function()
       require("noice").setup {
         popupmenu = {
