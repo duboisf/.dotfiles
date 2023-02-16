@@ -445,6 +445,10 @@ require('packer').startup({ function(use)
     cond = true,
     config = function()
       require("noice").setup {
+        messages = {
+          enabled = true,
+          view = 'mini',
+        },
         popupmenu = {
           backend = 'cmp',
         },
