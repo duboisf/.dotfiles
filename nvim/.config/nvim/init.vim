@@ -29,7 +29,7 @@ set list
 " specify the characters to use for tabs and trailing spaces
 set listchars=tab:→\ ,trail:·
 " minimum num of screenlines to keep aboe and below the cursor
-set scrolloff=3
+set scrolloff=7
 set cursorline
 if !&diff
   set cursorcolumn
