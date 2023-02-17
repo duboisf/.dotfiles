@@ -130,14 +130,13 @@ setopt share_history
 # ctrl-e, it puts the history entry on the command line to
 # edit it; when pressing ctrl-i, it inserts the history entry
 # after the cursor
-#   when pressing ctrl-e, put
 fzf-history-widget () {
     emulate -L zsh
     local selected num
     setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2> /dev/null
     selected=($(fc -rl 1 | perl -ne 'print if !$seen{(/^\s*[0-9]+\s+(.*)/, $1)}++' |
-    FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --expect=ctrl-e,ctrl-i --tiebreak=index --bind=ctrl-r:toggle-sort $FZF_CTRL_R_OPTS --query=${(qqq)LBUFFER} +m" $(__fzfcmd))) 
-    local ret=$? 
+    FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --expect=ctrl-e,ctrl-i --tiebreak=index --bind=ctrl-r:toggle-sort $FZF_CTRL_R_OPTS --query=${(qqq)LBUFFER} +m" $(__fzfcmd)))
+    local ret=$?
     if [[ -n "$selected" ]]; then
         local -i execute_directly=1
         local pressed_key
@@ -147,7 +146,7 @@ fzf-history-widget () {
             shift selected
         fi
         # selected history entry
-        num=$selected[1] 
+        num=$selected[1]
         if [[ -n "$num" ]]; then
             if [[ $pressed_key == ctrl-i ]]; then
                 # ctrl-i to insert the selected history entry
@@ -170,13 +169,41 @@ if (( $+commands[fzf] )); then
         # In debian based distributions, the fd binary is named fdfind
         local fd_bin_path=${commands[fd]:-$commands[fdfind]}
         if [[ -n $fd_bin_path ]]; then
+            # Ensure precmds are run after cd.
+            # Copied from junegunn/fzf's repo.
+            original-fzf-redraw-prompt() {
+              local precmd
+              for precmd in $precmd_functions; do
+                $precmd
+              done
+              zle reset-prompt
+            }
+            zle -N original-fzf-redraw-prompt
+            # revert the fzf-cd-widget in junegunn/fzf's repo to changing the
+            # directory without printing the cd command on the command line.
+            modified-fzf-cd-widget () {
+                local cmd="${FZF_ALT_C_COMMAND:-"command find -L . -mindepth 1 \\( -path '*/\\.*' -o -fstype 'sysfs' -o -fstype 'devfs' -o -fstype 'devtmpfs' -o -fstype 'proc' \\) -prune     -o -type d -print 2> /dev/null | cut -b3-"}"
+                setopt localoptions pipefail no_aliases 2> /dev/null
+                local dir="$(eval "$cmd" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse --bind=ctrl-z:ignore ${FZF_DEFAULT_OPTS-} ${FZF_ALT_C_OPTS-}" $(__fzfcmd) +m)"
+                if [[ -z "$dir" ]]; then
+                    zle redisplay
+                    return 0
+                fi
+                builtin cd -- ${(q)dir}
+                local ret=$?
+                unset dir
+                zle original-fzf-redraw-prompt
+                return $ret
+            }
+            zle -N modified-fzf-cd-widget
+
             # this wrapper is use to set force_chpwd_recent_dirs to
             # 1 so that the custom_chpwd_recent_dirs isn't skipped
             # so that the directories jumped to with fzf-cd-widget
             # are recorded in the recently visited directories
             fzf-cd-widget-wrapper() {
                 force_chpwd_recent_dirs=1
-                zle fzf-cd-widget
+                zle modified-fzf-cd-widget
             }
             zle -N fzf-cd-widget-wrapper
             bindkey '\ec' fzf-cd-widget-wrapper
