@@ -45,11 +45,11 @@ local border = {
   { "🭽", "FloatBorder" },
   { "▔", "FloatBorder" },
   { "🭾", "FloatBorder" },
-  { "▕", "FloatBorder" },
+  { "▕",  "FloatBorder" },
   { "🭿", "FloatBorder" },
-  { "▁", "FloatBorder" },
+  { "▁",  "FloatBorder" },
   { "🭼", "FloatBorder" },
-  { "▏", "FloatBorder" },
+  { "▏",  "FloatBorder" },
 }
 
 local orig_open_floating_preview = vim.lsp.util.open_floating_preview
@@ -88,58 +88,64 @@ autocmd('ColorScheme', nil, setup_highlights, 'Setup LSP highlights')
 setup_highlights()
 
 -- Setup mappings
-local function setup_mappings(client, bufnr)
-  local opts = { noremap = true, silent = true, buffer = bufnr }
+local setup_mappings = (function()
+      local group = vim.api.nvim_create_augroup("lsp_format_on_save", { clear = false })
+      local event = 'BufWritePost'
+      local async = event == 'BufWritePost'
 
-  if client.supports_method("textDocument/formatting") then
-    vim.keymap.set("n", "<Leader>F", function()
-      vim.lsp.buf.format({ bufnr = vim.api.nvim_get_current_buf() })
-    end, { buffer = bufnr, desc = "[lsp] format" })
+      return function(client, bufnr)
+        local opts = { noremap = true, silent = true, buffer = bufnr }
 
-    -- -- format on save
-    -- vim.api.nvim_clear_autocmds({ buffer = bufnr, group = group })
-    -- vim.api.nvim_create_autocmd(event, {
-    --   buffer = bufnr,
-    --   group = group,
-    --   callback = function()
-    --     vim.lsp.buf.format({ bufnr = bufnr, async = async })
-    --   end,
-    --   desc = "[lsp] format on save",
-    -- })
-  end
+        if client.supports_method("textDocument/formatting") then
+          vim.keymap.set("n", "<Leader>F", function()
+            vim.lsp.buf.format({ bufnr = vim.api.nvim_get_current_buf() })
+          end, { buffer = bufnr, desc = "[lsp] format" })
 
-  if client.supports_method("textDocument/rangeFormatting") then
-    vim.keymap.set("x", "<Leader>F", function()
-      vim.lsp.buf.format({ bufnr = vim.api.nvim_get_current_buf() })
-    end, { buffer = bufnr, desc = "[lsp] format" })
-  end
+          -- format on save
+          vim.api.nvim_clear_autocmds({ buffer = bufnr, group = group })
+          vim.api.nvim_create_autocmd(event, {
+            buffer = bufnr,
+            group = group,
+            callback = function()
+              vim.lsp.buf.format({ bufnr = bufnr, async = async })
+            end,
+            desc = "[lsp] format on save",
+          })
+        end
 
-  local normal_mappings = {
-    [',s']         = '<cmd>Telescope lsp_document_symbols<CR>',
-    [',w']         = '<cmd>Telescope lsp_workspace_symbols<CR>',
-    -- ['<leader>F']  = safe_formatting_sync,
-    ['<leader>cl'] = '<cmd>lua vim.lsp.codelens.run()<CR>',
-    ['<leader>ca'] = '<cmd>lua vim.lsp.buf.code_action()<CR>',
-    ['<leader>d']  = '<cmd>lua vim.diagnostic.open_float()<CR>',
-    ['<leader>rn'] = '<cmd>lua vim.lsp.buf.rename()<CR>',
-    ['K']          = '<Cmd>lua vim.lsp.buf.hover()<CR>',
-    ['[d']         = '<cmd>lua vim.diagnostic.goto_prev()<CR>',
-    [']d']         = '<cmd>lua vim.diagnostic.goto_next()<CR>',
-    ['gD']         = '<Cmd>lua vim.lsp.buf.type_definition()<CR>',
-    ['gd']         = '<Cmd>Telescope lsp_definitions<CR>',
-    ['gi']         = '<cmd>Telescope lsp_implementations<CR>',
-    ['gr']         = '<cmd>Telescope lsp_references<CR>',
-  }
+        if client.supports_method("textDocument/rangeFormatting") then
+          vim.keymap.set("x", "<Leader>F", function()
+            vim.lsp.buf.format({ bufnr = vim.api.nvim_get_current_buf() })
+          end, { buffer = bufnr, desc = "[lsp] format" })
+        end
 
-  for lhs, rhs in pairs(normal_mappings) do
-    vim.keymap.set('n', lhs, rhs, opts)
-  end
+        local normal_mappings = {
+          [',s']         = '<cmd>Telescope lsp_document_symbols<CR>',
+          [',w']         = '<cmd>Telescope lsp_workspace_symbols<CR>',
+          -- ['<leader>F']  = safe_formatting_sync,
+          ['<leader>cl'] = '<cmd>lua vim.lsp.codelens.run()<CR>',
+          ['<leader>ca'] = '<cmd>lua vim.lsp.buf.code_action()<CR>',
+          ['<leader>d']  = '<cmd>lua vim.diagnostic.open_float()<CR>',
+          ['<leader>rn'] = '<cmd>lua vim.lsp.buf.rename()<CR>',
+          ['K']          = '<Cmd>lua vim.lsp.buf.hover()<CR>',
+          ['[d']         = '<cmd>lua vim.diagnostic.goto_prev()<CR>',
+          [']d']         = '<cmd>lua vim.diagnostic.goto_next()<CR>',
+          ['gD']         = '<Cmd>lua vim.lsp.buf.type_definition()<CR>',
+          ['gd']         = '<Cmd>Telescope lsp_definitions<CR>',
+          ['gi']         = '<cmd>Telescope lsp_implementations<CR>',
+          ['gr']         = '<cmd>Telescope lsp_references<CR>',
+        }
 
-  for _, mode in ipairs({ 'i' }) do
-    -- TODO: check if the language server supports signature help before adding this mapping
-    vim.keymap.set(mode, '<C-s>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-  end
-end
+        for lhs, rhs in pairs(normal_mappings) do
+          vim.keymap.set('n', lhs, rhs, opts)
+        end
+
+        for _, mode in ipairs({ 'i' }) do
+          -- TODO: check if the language server supports signature help before adding this mapping
+          vim.keymap.set(mode, '<C-s>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+        end
+      end
+    end)()
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
@@ -171,7 +177,6 @@ local capabilities = require('cmp_nvim_lsp').default_capabilities()
   LSP server configs
 
 --]]
-
 -- lspconfig.pyright.setup { capabilities = capabilities, on_attach = on_attach }
 -- lspconfig.solargraph.setup { capabilities = capabilities, on_attach = on_attach }
 lspconfig.bashls.setup { capabilities = capabilities, on_attach = on_attach }
