@@ -8,7 +8,6 @@ path=(
   ~/go/bin
   /usr/local/go/bin
   ~/.pulumi/bin
-  ~/.poetry/bin
   $path
 )
 
@@ -21,7 +20,6 @@ export EDITOR=nvim
 export GPG_TTY=$(tty)
 export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
 export MANWIDTH=999
-export NVM_DIR=~/.nvm
 export ZK_NOTEBOOK_DIR=~/notes
 
 if [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
