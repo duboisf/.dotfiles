@@ -18,7 +18,7 @@ alias fjd='fj --debug'
 alias whatismyip='curl -s "https://api.ipify.org?format=json" | jq -r .ip'
 
 # secure nvim for general usage
-alias nvim='firejail nvim'
+# alias nvim='firejail nvim'
 alias safe-nvim='\nvim --noplugin'
 
 # Super useful global aliases

@@ -53,3 +53,5 @@ for file in ~/.zsh/lib/*.zsh ~/.zsh.private/lib/*.zsh(N); do
 done
 
 # zprof
+
+if [ -e /home/freddubois/.nix-profile/etc/profile.d/nix.sh ]; then . /home/freddubois/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
