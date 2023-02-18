@@ -4,7 +4,6 @@ local act = wezterm.action
 
 --local selected_theme = 'Solarized Dark (base16)'
 local selected_theme = 'Solar Flare (base16)'
-print(wezterm.color.get_builtin_schemes()[selected_theme])
 
 wezterm.on('update-right-status', function(window, pane)
   local date = wezterm.strftime '%Y-%m-%d %H:%M:%S'
@@ -76,7 +75,6 @@ return {
   scrollback_lines = 10000,
   use_fancy_tab_bar = false,
   tab_bar_at_bottom = false,
-  window_decorations = 'NONE',
   window_padding = {
     left = '0',
     right = '0',
