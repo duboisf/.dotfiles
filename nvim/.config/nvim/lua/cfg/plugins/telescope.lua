@@ -151,6 +151,7 @@ end
 local function find_files()
   set_prompt_border_color('#eeff00')
   builtin.find_files {
+    find_command = { "fd", "--type", "f", "--no-ignore-vcs" },
     prompt_title = prompt_with_cwd("Files"),
     hidden = true,
     attach_mappings = change_win_cwd_mappings,
