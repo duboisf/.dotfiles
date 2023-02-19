@@ -80,11 +80,6 @@ require('packer').startup({ function(use)
   }
 
   use {
-    'gpanders/editorconfig.nvim',
-    cond = notStartedByFirenvim,
-  }
-
-  use {
     'mhinz/vim-startify',
     cond = notStartedByFirenvim,
   }
