@@ -90,6 +90,14 @@ function M.reload_module(module)
   end
 end
 
+function M.head(s)
+  return string.sub(s, 1, 1)
+end
+
+function M.tail(s)
+  return string.sub(s, 2)
+end
+
 M.packer = {}
 
 function M.packer.short_plugin_name(plugin_name)

@@ -121,7 +121,7 @@ local setup_mappings = (function()
 
         local normal_mappings = {
           [',s']         = '<cmd>Telescope lsp_document_symbols<CR>',
-          [',w']         = '<cmd>Telescope lsp_workspace_symbols<CR>',
+          [',w']         = '<cmd>Telescope lsp_dynamic_workspace_symbols<CR>',
           -- ['<leader>F']  = safe_formatting_sync,
           ['<leader>cl'] = '<cmd>lua vim.lsp.codelens.run()<CR>',
           ['<leader>ca'] = '<cmd>lua vim.lsp.buf.code_action()<CR>',
