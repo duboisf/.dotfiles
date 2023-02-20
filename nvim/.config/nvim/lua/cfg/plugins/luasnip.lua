@@ -77,32 +77,37 @@ setup_keymaps()
 
 local function define_lua_snippets()
   ls.add_snippets('lua', {
-      s('lv', fmt([[local {} = {}]], { i(1), i(2) })),
-      s('lf', fmt([[
-          local function {}()
-            {}
-          end
-        ]], {
-          i(1),
-          i(2)
-      })),
-      s('fi', fmt([[function() {} end]], { i(1) })),
-      s('req', fmt(
-          [[local {} = require '{}']], {
-          f(function(args)
-            if args then
-              local module = args[1][1]
-              if module == '' then
-                return ''
-              end
-              local parts = vim.split(module, '.', { plain = true })
-              return string.gsub(parts[#parts], '-', '_')
-            else
-              return ''
+      s(
+          { trig = 'lv', name = 'Local variable', dscr = 'Defina a local variable' },
+          fmt([[local {} = {}]], { i(1), i(2) })
+      ),
+      s(
+          { trig = 'fl', name = 'Local function', dscr = 'Define a local function' },
+          fmt([[
+            local function {}({})
+              {}
             end
-          end, { 1 }),
-          i(1)
-      })),
+          ]], { i(1), i(2), i(0) })),
+      s(
+          { trig = 'fi', name = 'Inline function' },
+          fmt([[function() {} end]], { i(1) })),
+      s(
+          { trig = 'req', name = 'Require a module', dscr = 'Names the module variable with the name of the last dot-separated section of the module' },
+          fmt([[local {} = require '{}']], {
+              f(function(args)
+                if args then
+                  local module = args[1][1]
+                  if module == '' then
+                    return ''
+                  end
+                  local parts = vim.split(module, '.', { plain = true })
+                  return string.gsub(parts[#parts], '-', '_')
+                else
+                  return ''
+                end
+              end, { 1 }),
+              i(1)
+          })),
       s('aug', fmta([[local group = vim.api.nvim_create_augroup('<>', { clear = true })]], { i(1) })),
       s('au', fmt([[
           vim.api.nvim_create_autocmd({{ '{}' }}, {{
@@ -125,9 +130,24 @@ end
 
 define_lua_snippets()
 
+local function space_if_node_not_empty(node)
+  return f(function(args) return args[1][1] == '' and '' or ' ' end, { node })
+end
+
 local function define_go_snippets()
   ls.add_snippets('go', {
       s("fe", fmt([[fmt.Errorf("{}: %w", {})]], { i(1, ""), i(2, "err") })),
+      s("fun", fmta([[
+          func <>(<>) <><>{
+            <>
+          }
+        ]], {
+          i(1),
+          i(2),
+          i(3),
+          space_if_node_not_empty(3),
+          i(0),
+      })),
       s("meth", fmta([[
           func (<><>) <>(<>) <><>{
             <>
@@ -152,10 +172,7 @@ local function define_go_snippets()
           i(2),
           i(3),
           i(4),
-          f(function(args)
-            local return_type = args[1][1]
-            return return_type == '' and '' or ' '
-          end, { 4 }),
+          space_if_node_not_empty(4),
           i(0),
       })),
   })
