@@ -39,6 +39,8 @@ alias -g SU='| sort -u'
 alias -g V='| nvim -n -R --cmd "let g:pager_mode = 1" '
 alias -g X='| xclip -selection clipboard'
 
+# chrome with firejail
+alias chrome='GTK_IM_MODULE=xim firejail google-chrome-stable 2> /dev/null &; disown'
 # debian and derivatives package management aliases
 alias ai='sudo apt install'
 alias as='apt search'
