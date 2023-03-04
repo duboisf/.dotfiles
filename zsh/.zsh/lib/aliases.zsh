@@ -46,6 +46,9 @@ alias ai='sudo apt install'
 alias as='apt search'
 alias af='apt-file search'
 
+# golang
+alias cover='go test -coverprofile=/tmp/coverage.out ./... && go tool cover -html=/tmp/coverage.out -o /tmp/cover.html && open /tmp/cover.html'
+
 # kitty
 alias icat='kitty +kitten icat'
 
