@@ -184,7 +184,16 @@ require('packer').startup({ function(use)
   -- various commands to work with golang
   use_with_cfg {
     'fatih/vim-go',
+    cond = false,
     ft = { 'go', 'gomod' },
+  }
+
+  use {
+    'ray-x/go.nvim',
+    config = function ()
+      require('go').setup()
+    end,
+    requires = {'ray-x/guihua.lua'},
   }
 
   use {
