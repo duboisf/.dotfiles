@@ -271,7 +271,9 @@ require('telescope').setup {
       "--line-number",
       "--column",
       "--smart-case",
-      "--hidden"
+      "--hidden",
+      "--glob",
+      "!.git",
     },
     dynamic_preview_title = true,
     prompt_prefix = "  ",
