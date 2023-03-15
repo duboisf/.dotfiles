@@ -379,6 +379,12 @@ require('telescope').setup {
     -- }
     -- Now the picker_config_key will be applied every time you call this
     -- builtin picker
+    lsp_references = { fname_width = 30 },
+    lsp_document_symbols = { symbol_width = 50 },
+    lsp_dynamic_workspace_symbols = {
+      fname_width = 40,
+      symbol_width = 50,
+    },
   },
   extensions = {
     ["ui-select"] = {
