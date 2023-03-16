@@ -17,7 +17,14 @@ require("lualine").setup {
   sections = {
     lualine_b = { { "branch", icon = "" }, "diff", "diagnostics" },
     lualine_c = { { "filename", path = 1 }, },
-    lualine_x = { "filetype" },
+    lualine_x = {
+      "filetype",
+      -- {
+      --   require("noice").api.statusline.mode.get,
+      --   cond = require("noice").api.statusline.mode.has,
+      --   color = { fg = "#ff9e64" },
+      -- }
+    },
     lualine_z = { "location", "%L" },
   },
   tabline = {

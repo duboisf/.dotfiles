@@ -189,11 +189,69 @@ require('packer').startup({ function(use)
   }
 
   use {
+    'mfussenegger/nvim-dap',
+    config = function ()
+      local dap = require 'dap'
+      vim.keymap.set('n', '<F5>', dap.continue)
+      vim.keymap.set('n', '<F10>', function() require('dap').step_over() end)
+      vim.keymap.set('n', '<F11>', function() require('dap').step_into() end)
+      vim.keymap.set('n', '<F12>', function() require('dap').step_out() end)
+      vim.keymap.set('n', '<F9>', function() require('dap').toggle_breakpoint() end)
+      vim.keymap.set('n', '<Leader>B', function() require('dap').set_breakpoint() end)
+      vim.keymap.set('n', '<Leader>lp', function() require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end)
+      vim.keymap.set('n', '<Leader>dr', function() require('dap').repl.open() end)
+      vim.keymap.set('n', '<Leader>dl', function() require('dap').run_last() end)
+      vim.keymap.set({'n', 'v'}, '<Leader>dh', function()
+        require('dap.ui.widgets').hover()
+      end)
+      vim.keymap.set({'n', 'v'}, '<Leader>dp', function()
+        require('dap.ui.widgets').preview()
+      end)
+      vim.keymap.set('n', '<Leader>df', function()
+        local widgets = require('dap.ui.widgets')
+        widgets.centered_float(widgets.frames)
+      end)
+      vim.keymap.set('n', '<Leader>ds', function()
+        local widgets = require('dap.ui.widgets')
+        widgets.centered_float(widgets.scopes)
+      end)
+    end,
+  }
+
+  use {
+    'theHamsta/nvim-dap-virtual-text',
+    config = function ()
+      require('nvim-dap-virtual-text').setup()
+    end,
+    after = { 'nvim-dap' },
+  }
+
+  use {
     'ray-x/go.nvim',
     config = function ()
       require('go').setup()
     end,
-    requires = {'ray-x/guihua.lua'},
+    requires = {
+      'ray-x/guihua.lua',
+    },
+    after = { 'nvim-dap-ui' }
+  }
+
+  use {
+    'rcarriga/nvim-dap-ui',
+    config = function ()
+      require('dapui').setup()
+    end,
+    after = { 'nvim-dap' }
+  }
+
+  use {
+    'leoluz/nvim-dap-go',
+    config = function ()
+      require('dap-go').setup()
+    end,
+    ft = { 'go' },
+    after = { 'nvim-dap' },
   }
 
   use {
@@ -220,17 +278,18 @@ require('packer').startup({ function(use)
     run = function() vim.fn['firenvim#install'](0) end,
   }
 
-  -- use popup window when using the vim.notify api
-  use_with_cfg {
-    'rcarriga/nvim-notify',
-    after = 'telescope.nvim',
-  }
+  -- -- use popup window when using the vim.notify api
+  -- use_with_cfg {
+  --   'rcarriga/nvim-notify',
+  --   after = 'telescope.nvim',
+  -- }
 
   -- fast and easily configurable status line written in lua 🌕
   use_with_cfg {
     'nvim-lualine/lualine.nvim',
     cond = notStartedByFirenvim,
-    requires = { 'kyazdani42/nvim-web-devicons' }
+    requires = { 'kyazdani42/nvim-web-devicons' },
+    -- after = { 'noice.nvim' }
   }
 
   -- file browser
@@ -444,41 +503,50 @@ require('packer').startup({ function(use)
     config = function() require 'cfg.plugins.zk' end
   }
 
-  use {
-    "folke/noice.nvim",
-    cond = true,
-    config = function()
-      require("noice").setup {
-        messages = {
-          enabled = true,
-          view = 'mini',
-        },
-        popupmenu = {
-          backend = 'cmp',
-        },
-        lsp = {
-          override = {
-            ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-            -- override the lsp markdown formatter with Noice
-            ["vim.lsp.util.stylize_markdown"] = true,
-            ["cmp.entry.get_documentation"] = false, -- this doesn't work currently
-          },
-          signature = {
-            enabled = false,
-          }
-        },
-        presets = {
-          lsp_doc_border = true,
-        }
-      }
-    end,
-    after = {
-      'nvim-notify',
-      'nvim-treesitter',
-      'nvim-cmp',
-    },
-    requires = { 'MunifTanjim/nui.nvim' }
-  }
+  -- use {
+  --   "folke/noice.nvim",
+  --   cond = true,
+  --   config = function()
+  --     require("noice").setup {
+  --       messages = {
+  --         enabled = false,
+  --         view = 'mini',
+  --       },
+  --       popupmenu = {
+  --         backend = 'cmp',
+  --       },
+  --       lsp = {
+  --         override = {
+  --           ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+  --           -- override the lsp markdown formatter with Noice
+  --           ["vim.lsp.util.stylize_markdown"] = true,
+  --           ["cmp.entry.get_documentation"] = false, -- this doesn't work currently
+  --         },
+  --         signature = {
+  --           enabled = false,
+  --         }
+  --       },
+  --       presets = {
+  --         lsp_doc_border = true,
+  --       },
+  --       routes = {
+  --         -- avoid search messages since we use virtual text for this purpose
+  --         {
+  --           filter = {
+  --             event = "msg_show",
+  --             kind = "search_count",
+  --           },
+  --           opts = { skip = true },
+  --         }
+  --       },
+  --     }
+  --   end,
+  --   after = {
+  --     'nvim-treesitter',
+  --     'nvim-cmp',
+  --   },
+  --   requires = { 'MunifTanjim/nui.nvim' }
+  -- }
 
   use_colorscheme()
   use_completion()
