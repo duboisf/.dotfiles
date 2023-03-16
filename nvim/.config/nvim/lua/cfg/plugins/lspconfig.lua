@@ -312,6 +312,15 @@ do
         tidy = true,
         upgrade_dependency = true,
       },
+      hints = {
+        assignVariableTypes = true,
+        compositeLiteralFields = true,
+        compositeLiteralTypes = true,
+        constantValues = true,
+        functionTypeParameters = true,
+        parameterNames = true,
+        rangeVariableTypes = true,
+      },
     },
     -- don't spawn a new gopls instance if we are jumping to definitions of
     -- functions in dependencies that are in the $GOPATH. Without this, a new
