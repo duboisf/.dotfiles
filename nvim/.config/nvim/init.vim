@@ -1,10 +1,15 @@
-lua << EOL
--- Improve startup time
-pcall(require, 'impatient')
+" Use the spacebar as the key for <leader> mappings
+" This needs to be set _before_ loading lazy!
+let mapleader=' '
 
--- Load plugins using packer
-pcall(require, 'cfg.packer')
-EOL
+" lazy.nvim sets loadplugins to false to control
+" the whole loading process, capture it's value
+" before calling lazy. I use a safe-nvim alias
+" to disable loading all plugins when opening
+" sensitive files like credentials.
+let original_loadplugins = &loadplugins
+
+lua pcall(require, 'cfg.lazy')
 
 " Check if we started nvim in pager mode
 let g:pager_mode = get(g:, 'pager_mode', v:false)
@@ -24,12 +29,9 @@ set softtabstop=4
 set shiftwidth=4
 set expandtab
 set encoding=utf-8
-" show tabs, newlines and trailing spaces
-set list
+set nolist
 " specify the characters to use for tabs and trailing spaces
 set listchars=tab:→\ ,trail:·
-" minimum num of screenlines to keep aboe and below the cursor
-set scrolloff=7
 set cursorline
 if !&diff
   set cursorcolumn
@@ -75,9 +77,6 @@ if g:pager_mode
   " use q in normal mode to quit, like in less
   nnoremap q :q<CR>
 endif
-
-" Use the spacebar as the key for <leader> mappings
-let mapleader=' '
 
 " Miscellaneous mappings
 nnoremap <leader>q :q<CR>
@@ -141,27 +140,17 @@ aug end
 " editorconfig configuration
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
-" startify configuration
-" don't change cwd when jumping to a file
-let g:startify_change_to_dir = 0
-
-let g:startify_lists = [
-      \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
-      \ { 'type': 'files',     'header': ['   MRU']            },
-      \ { 'type': 'sessions',  'header': ['   Sessions']       },
-      \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
-      \ { 'type': 'commands',  'header': ['   Commands']       },
-      \ ]
-
 """""""""""""""""""""
 " Misc autocommands "
 """""""""""""""""""""
 
 au TextYankPost * lua vim.highlight.on_yank { higroup="IncSearch", timeout=300, on_visual=true }
 
-if ! &loadplugins
+if ! original_loadplugins
   " when loading without plugins, use built-in colorscheme
   color habamax
+else
+  color onedark
 endif
 
 " vim: sts=2 sw=2 ts=2 et

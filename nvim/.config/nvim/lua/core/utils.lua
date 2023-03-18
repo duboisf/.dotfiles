@@ -44,7 +44,7 @@ end
 
 -- Check if neovim was started by firenvim
 function M.startedByFirenvim()
-  return vim.g.started_by_firenvim == nil
+  return vim.g.started_by_firenvim ~= nil
 end
 
 -- Check if nvim was not started by firenvim. This function is useful in the
