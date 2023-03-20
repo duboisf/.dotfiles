@@ -367,11 +367,42 @@ local function config()
       -- }
       -- Now the picker_config_key will be applied every time you call this
       -- builtin picker
-      lsp_references = { fname_width = 50 },
-      lsp_document_symbols = { symbol_width = 50 },
+      lsp_definitions = {
+        fname_width = 100,
+        layout_strategy = 'vertical',
+      },
+      lsp_document_symbols = {
+        layout_strategy = 'vertical',
+        symbol_width = 50
+      },
       lsp_dynamic_workspace_symbols = {
-        fname_width = 40,
-        symbol_width = 50,
+        layout_strategy = 'vertical',
+        fname_width = 100,
+        symbol_width = 70,
+      },
+      lsp_implementations = {
+        fname_width = 100,
+        layout_strategy = 'vertical',
+      },
+      lsp_incoming_calls = {
+        fname_width = 100,
+        layout_strategy = 'vertical',
+      },
+      lsp_outgoing_calls = {
+        fname_width = 100,
+        layout_strategy = 'vertical',
+      },
+      lsp_references = {
+        fname_width = 60,
+        layout_strategy = 'vertical',
+      },
+      lsp_type_definitions = {
+        fname_width = 60,
+        layout_strategy = 'vertical',
+      },
+      lsp_workspace_symbols = {
+        fname_width = 60,
+        layout_strategy = 'vertical',
       },
     },
     extensions = {
