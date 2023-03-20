@@ -132,7 +132,7 @@ local function config()
         ['[d']         = '<cmd>lua vim.diagnostic.goto_prev()<CR>',
         [']d']         = '<cmd>lua vim.diagnostic.goto_next()<CR>',
         ['gD']         = '<Cmd>lua vim.lsp.buf.type_definition()<CR>',
-        ['gd']         = '<Cmd>Telescope lsp_definitions<CR>',
+        ['gd']         = '<Cmd>Telescope lsp_definitions layout_strategy=vertical<CR>',
         ['gi']         = '<cmd>Telescope lsp_implementations layout_strategy=vertical<CR>',
         ['gr']         = '<cmd>Telescope lsp_references layout_strategy=vertical<CR>',
       }
