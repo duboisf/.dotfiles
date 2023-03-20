@@ -121,8 +121,8 @@ local function config()
       end
 
       local normal_mappings = {
-        [',s']         = '<cmd>Telescope lsp_document_symbols<CR>',
-        [',w']         = '<cmd>Telescope lsp_dynamic_workspace_symbols<CR>',
+        [',s']         = '<cmd>Telescope lsp_document_symbols layout_strategy=vertical<CR>',
+        [',w']         = '<cmd>Telescope lsp_dynamic_workspace_symbols layout_strategy=vertical<CR>',
         ['<leader>F']  = safe_formatting_sync,
         ['<leader>cl'] = '<cmd>lua vim.lsp.codelens.run()<CR>',
         ['<leader>ca'] = '<cmd>lua vim.lsp.buf.code_action()<CR>',
@@ -133,8 +133,8 @@ local function config()
         [']d']         = '<cmd>lua vim.diagnostic.goto_next()<CR>',
         ['gD']         = '<Cmd>lua vim.lsp.buf.type_definition()<CR>',
         ['gd']         = '<Cmd>Telescope lsp_definitions<CR>',
-        ['gi']         = '<cmd>Telescope lsp_implementations<CR>',
-        ['gr']         = '<cmd>Telescope lsp_references<CR>',
+        ['gi']         = '<cmd>Telescope lsp_implementations layout_strategy=vertical<CR>',
+        ['gr']         = '<cmd>Telescope lsp_references layout_strategy=vertical<CR>',
       }
 
       for lhs, rhs in pairs(normal_mappings) do
