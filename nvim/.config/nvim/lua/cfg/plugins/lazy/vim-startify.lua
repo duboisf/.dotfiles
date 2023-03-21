@@ -1,6 +1,6 @@
 return {
   'mhinz/vim-startify',
-  enable = require('core.utils').notStartedByFirenvim,
+  enabled = require('core.utils').notStartedByFirenvim,
   config = function()
     -- don't change cwd when jumping to a file
     vim.g.startify_change_to_dir = 0

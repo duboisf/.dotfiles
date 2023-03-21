@@ -53,7 +53,7 @@ end
 
 return {
   'nvim-lualine/lualine.nvim',
-  enable = require('core.utils').notStartedByFirenvim,
+  enabled = require('core.utils').notStartedByFirenvim,
   config = config,
   dependencies = {
     'kyazdani42/nvim-web-devicons'

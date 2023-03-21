@@ -325,7 +325,7 @@ local function config()
           compositeLiteralTypes = true,
           constantValues = true,
           functionTypeParameters = true,
-          parameterNames = false,
+          parameterNames = true,
           rangeVariableTypes = true,
         },
       },

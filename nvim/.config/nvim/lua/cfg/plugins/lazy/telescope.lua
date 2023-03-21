@@ -450,7 +450,7 @@ return {
   {
     -- requires git, fd, ripgrep
     'nvim-telescope/telescope.nvim',
-    enable = require('core.utils').notStartedByFirenvim,
+    enabled = require('core.utils').notStartedByFirenvim,
     config = config,
     dependencies = {
       'folke/which-key.nvim',
