@@ -1,5 +1,5 @@
 return {
-  'tpope/vim-commentary',
+  -- 'tpope/vim-commentary',
   'tpope/vim-eunuch',
   {
     'tpope/vim-fugitive',
@@ -15,5 +15,4 @@ return {
     },
   },
   'tpope/vim-repeat',
-  'tpope/vim-unimpaired',
 }
