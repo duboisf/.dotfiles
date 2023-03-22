@@ -72,50 +72,50 @@ if g:pager_mode
   set nolist
   set nowrap
   " use q in normal mode to quit, like in less
-  nnoremap q :q<CR>
+  nnoremap <silent>q :q<CR>
 endif
 
 " Miscellaneous mappings
-nnoremap <leader>q :q<CR>
-nnoremap <leader>s :w<CR>
-nnoremap <leader>b :bd<CR>
-nnoremap <leader>m <C-W>_
-nnoremap <leader>= <C-W>=
-nnoremap <leader>. 10<C-W>>
-nnoremap <leader>, 10<C-W><
+nnoremap <silent><leader>q :q<CR>
+nnoremap <silent><leader>s :w<CR>
+nnoremap <silent><leader>b :bd<CR>
+nnoremap <silent><leader>m <C-W>_
+nnoremap <silent><leader>= <C-W>=
+nnoremap <silent><leader>. 10<C-W>>
+nnoremap <silent><leader>, 10<C-W><
 " Move selection up or down
-xnoremap <C-Up> xkP`[V`]
-xnoremap <C-Down> xp`[V`]
+xnoremap <silent><C-Up> xkP`[V`]
+xnoremap <silent><C-Down> xp`[V`]
 " Move current line up or down
-nnoremap <C-Up> ddkP
-nnoremap <C-Down> ddp
+nnoremap <silent><C-Up> ddkP
+nnoremap <silent><C-Down> ddp
 " Toggle wrap
-nnoremap <leader>w :set wrap!<CR>
+nnoremap <silent><leader>w :set wrap!<CR>
 " Yank highlighted selection in visual mode to clipboard
-vnoremap <leader>y "+y
+vnoremap <silent><leader>y "+y
 " Yank highlighted lines in visual mode to clipboard
-vnoremap <leader>Y "+Y
+vnoremap <silent><leader>Y "+Y
 " Tab and Shift-Tab keys cycle through buffers
-nnoremap <Tab> :bn<CR>
-nnoremap <S-Tab> :bp<CR>
+nnoremap <silent><Tab> :bn<CR>
+nnoremap <silent><S-Tab> :bp<CR>
 
 " in insert mode, make ctrl-e jump to the end of the line, staying in insert
 " mode
-inoremap <C-e> <C-O>$
+inoremap <silent><C-e> <C-O>$
 
 " Navigate windows in any mode
-tnoremap <A-h> <C-\><C-N><C-w>h
-tnoremap <A-j> <C-\><C-N><C-w>j
-tnoremap <A-k> <C-\><C-N><C-w>k
-tnoremap <A-l> <C-\><C-N><C-w>l
-inoremap <A-h> <C-\><C-N><C-w>h
-inoremap <A-j> <C-\><C-N><C-w>j
-inoremap <A-k> <C-\><C-N><C-w>k
-inoremap <A-l> <C-\><C-N><C-w>l
-nnoremap <A-h> <C-w>h
-nnoremap <A-j> <C-w>j
-nnoremap <A-k> <C-w>k
-nnoremap <A-l> <C-w>l
+tnoremap <silent><A-h> <C-\><C-N><C-w>h
+tnoremap <silent><A-j> <C-\><C-N><C-w>j
+tnoremap <silent><A-k> <C-\><C-N><C-w>k
+tnoremap <silent><A-l> <C-\><C-N><C-w>l
+inoremap <silent><A-h> <C-\><C-N><C-w>h
+inoremap <silent><A-j> <C-\><C-N><C-w>j
+inoremap <silent><A-k> <C-\><C-N><C-w>k
+inoremap <silent><A-l> <C-\><C-N><C-w>l
+nnoremap <silent><A-h> <C-w>h
+nnoremap <silent><A-j> <C-w>j
+nnoremap <silent><A-k> <C-w>k
+nnoremap <silent><A-l> <C-w>l
 
 " tweak man mode
 aug fred#man
@@ -125,8 +125,8 @@ aug fred#man
     echo "TweakManSettings"
     set nocursorline
     set nocursorcolumn
-    nnoremap f <C-f>
-    nnoremap d <C-b>
+    nnoremap <silent>f <C-f>
+    nnoremap <silent>d <C-b>
   endfu
 aug end
 
