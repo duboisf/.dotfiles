@@ -14,7 +14,7 @@ return {
           ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
           -- override the lsp markdown formatter with Noice
           ["vim.lsp.util.stylize_markdown"] = true,
-          ["cmp.entry.get_documentation"] = true, -- this doesn't work currently
+          ["cmp.entry.get_documentation"] = false,
         },
         signature = {
           enabled = true,
