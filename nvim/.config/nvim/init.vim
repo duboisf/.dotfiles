@@ -18,6 +18,7 @@ let g:pager_mode = get(g:, 'pager_mode', v:false)
 " vim configuration "
 """""""""""""""""""""
 
+set clipboard+=unnamedplus
 " Enable 24-bit RGB color in the Terminal UI
 set termguicolors
 set mouse=a
