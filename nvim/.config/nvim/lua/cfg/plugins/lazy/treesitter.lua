@@ -25,7 +25,7 @@ local config = function()
     },
     indent = {
       enable = true,
-      disable = {'yaml'}
+      disable = { 'yaml' }
     },
     playground = {
       enable = true,
@@ -63,8 +63,12 @@ local config = function()
         disable = {},
         keymaps = {
           -- the queries are in textobjects.scm
+          ["aa"] = "@assignment.outer",
+          ["ia"] = "@assignment.inner",
           ["af"] = "@function.outer",
           ["if"] = "@function.inner",
+          ["ap"] = "@parameter.outer",
+          ["ip"] = "@parameter.inner",
           ["aC"] = "@class.outer",
           ["iC"] = "@class.inner",
           ["ac"] = "@conditional.outer",
@@ -110,10 +114,7 @@ return {
     config = true,
   },
   'nvim-treesitter/nvim-treesitter-textobjects',
-  {
-    'nvim-treesitter/playground',
-    cmd = 'TSPlaygroundToggle',
-  },
+  'nvim-treesitter/playground',
   'p00f/nvim-ts-rainbow',
   {
     'nvim-treesitter/nvim-treesitter',
