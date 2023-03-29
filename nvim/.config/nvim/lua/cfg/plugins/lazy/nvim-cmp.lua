@@ -104,7 +104,10 @@ local function config()
       end),
       ['<CR>'] = cmp.mapping.confirm({ select = false }),
       ['<Tab>'] = cmp.mapping(function(fallback)
-        if cmp.visible() then
+        local copilot_suggestion = vim.fn['copilot#GetDisplayedSuggestion']()
+        if copilot_suggestion.text ~= '' then
+          vim.api.nvim_feedkeys(vim.fn['copilot#Accept'](vim.api.nvim_replace_termcodes('<Tab>', true, true, true)), 'n', true)
+        elseif cmp.visible() then
           cmp.select_next_item()
         else
           fallback()
@@ -295,6 +298,7 @@ return {
     'hrsh7th/nvim-cmp',
     config = config,
     dependencies = {
+      'github/copilot.vim',
       -- add vscode-line pictograms in completion popup
       'onsails/lspkind.nvim',
       -- completion suggestions from language server
