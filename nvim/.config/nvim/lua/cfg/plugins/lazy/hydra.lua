@@ -52,6 +52,7 @@ end
 
 return {
   'anuvyklack/hydra.nvim',
+  config = config,
   dependencies = {
     'anuvyklack/keymap-layer.nvim',
     'nvim-treesitter/nvim-treesitter',
