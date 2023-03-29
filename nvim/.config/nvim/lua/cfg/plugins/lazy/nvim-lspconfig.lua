@@ -91,8 +91,6 @@ local function config()
   -- Setup mappings
   local setup_mappings = (function()
     local group = vim.api.nvim_create_augroup("lsp_format_on_save", { clear = false })
-    local event = 'BufWritePost'
-    local async = event == 'BufWritePost'
 
     return function(client, bufnr)
       local opts = { noremap = true, silent = true, buffer = bufnr }
@@ -103,15 +101,15 @@ local function config()
         end, { buffer = bufnr, desc = "[lsp] format" })
 
         -- format on save
-        -- vim.api.nvim_clear_autocmds({ buffer = bufnr, group = group })
-        -- vim.api.nvim_create_autocmd(event, {
-        --   buffer = bufnr,
-        --   group = group,
-        --   callback = function()
-        --     vim.lsp.buf.format({ bufnr = bufnr, async = async })
-        --   end,
-        --   desc = "[lsp] format on save",
-        -- })
+        vim.api.nvim_clear_autocmds({ buffer = bufnr, group = group })
+        vim.api.nvim_create_autocmd("BufWritePre", {
+          buffer = bufnr,
+          group = group,
+          callback = function()
+            vim.lsp.buf.format({ bufnr = bufnr, async = false })
+          end,
+          desc = "[lsp] format on save",
+        })
       end
 
       if client.supports_method("textDocument/rangeFormatting") then
@@ -180,6 +178,7 @@ local function config()
   lspconfig.bashls.setup { capabilities = capabilities, on_attach = on_attach }
   lspconfig.dockerls.setup { capabilities = capabilities, on_attach = on_attach }
   lspconfig.jsonls.setup { capabilities = capabilities, on_attach = on_attach }
+  lspconfig.jdtls.setup { capabilities = capabilities, on_attach = on_attach }
   lspconfig.pylsp.setup {
     capabilities = capabilities,
     on_attach = on_attach,
