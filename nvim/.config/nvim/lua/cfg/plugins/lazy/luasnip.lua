@@ -16,34 +16,34 @@ local function config()
   end
 
   vim.api.nvim_create_autocmd('ColorScheme', {
-      group = higroup,
-      pattern = "*",
-      callback = setup_highlights,
+    group = higroup,
+    pattern = "*",
+    callback = setup_highlights,
   })
 
   setup_highlights()
 
   ls.config.setup({
-      -- allow jumping back into a snippet if you moved outside of it
-      history = true,
-      -- since history is on, we need to sometimes remove snippets from the history
-      -- that were expanded in the curent session but were subsequently deleted
-      delete_check_events = 'TextChanged',
-      store_selection_keys = '<TAB>',
-      -- show updates to all types of dynamic nodes as you type
-      update_events = { 'TextChanged', 'TextChangedI' },
-      ext_opts = {
-          [types.choiceNode] = {
-              active = {
-                  virt_text = { { '<- Choose', 'LuaSnipChoiceNode' } }
-              },
-          },
-          [types.insertNode] = {
-              active = {
-                  virt_text = { { '<- Write', 'LuaSnipInsertNode' } }
-              }
-          }
+    -- allow jumping back into a snippet if you moved outside of it
+    history = true,
+    -- since history is on, we need to sometimes remove snippets from the history
+    -- that were expanded in the curent session but were subsequently deleted
+    delete_check_events = 'TextChanged',
+    store_selection_keys = '<TAB>',
+    -- show updates to all types of dynamic nodes as you type
+    update_events = { 'TextChanged', 'TextChangedI' },
+    ext_opts = {
+      [types.choiceNode] = {
+        active = {
+          virt_text = { { '<- Choose', 'LuaSnipChoiceNode' } }
+        },
+      },
+      [types.insertNode] = {
+        active = {
+          virt_text = { { '<- Write', 'LuaSnipInsertNode' } }
+        }
       }
+    }
   })
 
   local s = ls.snippet
@@ -78,39 +78,39 @@ local function config()
 
   local function define_lua_snippets()
     ls.add_snippets('lua', {
-        s(
-            { trig = 'lv', name = 'Local variable', dscr = 'Defina a local variable' },
-            fmt([[local {} = {}]], { i(1), i(2) })
-        ),
-        s(
-            { trig = 'fl', name = 'Local function', dscr = 'Define a local function' },
-            fmt([[
+      s(
+        { trig = 'lv', name = 'Local variable', dscr = 'Defina a local variable' },
+        fmt([[local {} = {}]], { i(1), i(2) })
+      ),
+      s(
+        { trig = 'fl', name = 'Local function', dscr = 'Define a local function' },
+        fmt([[
               local function {}({})
                 {}
               end
             ]], { i(1), i(2), i(0) })),
-        s(
-            { trig = 'fi', name = 'Inline function' },
-            fmt([[function() {} end]], { i(1) })),
-        s(
-            { trig = 'req', name = 'Require a module', dscr = 'Names the module variable with the name of the last dot-separated section of the module' },
-            fmt([[local {} = require '{}']], {
-                f(function(args)
-                  if args then
-                    local module = args[1][1]
-                    if module == '' then
-                      return ''
-                    end
-                    local parts = vim.split(module, '.', { plain = true })
-                    return string.gsub(parts[#parts], '-', '_')
-                  else
-                    return ''
-                  end
-                end, { 1 }),
-                i(1)
-            })),
-        s('aug', fmta([[local group = vim.api.nvim_create_augroup('<>', { clear = true })]], { i(1) })),
-        s('au', fmt([[
+      s(
+        { trig = 'fi', name = 'Inline function' },
+        fmt([[function() {} end]], { i(1) })),
+      s(
+        { trig = 'req', name = 'Require a module', dscr = 'Names the module variable with the name of the last dot-separated section of the module' },
+        fmt([[local {} = require '{}']], {
+          f(function(args)
+            if args then
+              local module = args[1][1]
+              if module == '' then
+                return ''
+              end
+              local parts = vim.split(module, '.', { plain = true })
+              return string.gsub(parts[#parts], '-', '_')
+            else
+              return ''
+            end
+          end, { 1 }),
+          i(1)
+        })),
+      s('aug', fmta([[local group = vim.api.nvim_create_augroup('<>', { clear = true })]], { i(1) })),
+      s('au', fmt([[
             vim.api.nvim_create_autocmd({{ '{}' }}, {{
               group = group,
               pattern = '{}',
@@ -118,14 +118,14 @@ local function config()
               desc = '{}',
             }})
           ]], {
-            i(1),
-            i(2),
-            c(3, {
-                sn(nil, fmt([[callback = {}]], { i(1, 'func') })),
-                sn(nil, fmt([[command = '{}']], { i(1) })),
-            }),
-            i(4),
-        }))
+        i(1),
+        i(2),
+        c(3, {
+          sn(nil, fmt([[callback = {}]], { i(1, 'func') })),
+          sn(nil, fmt([[command = '{}']], { i(1) })),
+        }),
+        i(4),
+      }))
     })
   end
 
@@ -137,45 +137,46 @@ local function config()
 
   local function define_go_snippets()
     ls.add_snippets('go', {
-        s("fe", fmt([[fmt.Errorf("{}: %w", {})]], { i(1, ""), i(2, "err") })),
-        s("fun", fmta([[
+      s("rne", fmt("require.NoError(t, {})", { i(1, "err") })),
+      s("fe", fmt([[fmt.Errorf("{}: %w", {})]], { i(1, ""), i(2, "err") })),
+      s("fun", fmta([[
             func <>(<>) <><>{
               <>
             }
           ]], {
-            i(1),
-            i(2),
-            i(3),
-            space_if_node_not_empty(3),
-            i(0),
-        })),
-        s("meth", fmta([[
+        i(1),
+        i(2),
+        i(3),
+        space_if_node_not_empty(3),
+        i(0),
+      })),
+      s("meth", fmta([[
             func (<><>) <>(<>) <><>{
               <>
             }
           ]], {
-            f(function(args)
-              local struct_name = args[1][1]
-              if struct_name == '' then
-                return ''
-              end
-              local receiver_name = head(struct_name)
-              if receiver_name == '*' then
-                receiver_name = head(tail(struct_name))
-                if receiver_name == '' then
-                  return ''
-                end
-              end
-              return string.lower(receiver_name) .. ' '
-            end, { 1 }
-            ),
-            i(1),
-            i(2),
-            i(3),
-            i(4),
-            space_if_node_not_empty(4),
-            i(0),
-        })),
+        f(function(args)
+          local struct_name = args[1][1]
+          if struct_name == '' then
+            return ''
+          end
+          local receiver_name = head(struct_name)
+          if receiver_name == '*' then
+            receiver_name = head(tail(struct_name))
+            if receiver_name == '' then
+              return ''
+            end
+          end
+          return string.lower(receiver_name) .. ' '
+        end, { 1 }
+        ),
+        i(1),
+        i(2),
+        i(3),
+        i(4),
+        space_if_node_not_empty(4),
+        i(0),
+      })),
     })
   end
 
@@ -183,35 +184,35 @@ local function config()
 
   local function asana_task()
     return s('at', {
-            t("["),
-            c(1, {
-                t("Asana Task"),
-                t("Change Management Task"),
-                i(nil, ""),
-            }),
-            t("]("),
-            f(function() return vim.fn.getreg('+') end, {}),
-            t(")")
-        })
+      t("["),
+      c(1, {
+        t("Asana Task"),
+        t("Change Management Task"),
+        i(nil, ""),
+      }),
+      t("]("),
+      f(function() return vim.fn.getreg('+') end, {}),
+      t(")")
+    })
   end
 
   local function markdown_link()
     return s('lk', fmt('[{}]({})', {
-            d(1, function(_, parent)
-              if parent.env and parent.env.SELECT_RAW then
-                return sn(nil, { t(parent.env.SELECT_RAW) })
-              end
-              return sn(nil, { i(1) })
-            end),
-            d(2, function()
-              return sn(nil, { i(1, vim.fn.getreg('+')) })
-            end)
-        }))
+      d(1, function(_, parent)
+        if parent.env and parent.env.SELECT_RAW then
+          return sn(nil, { t(parent.env.SELECT_RAW) })
+        end
+        return sn(nil, { i(1) })
+      end),
+      d(2, function()
+        return sn(nil, { i(1, vim.fn.getreg('+')) })
+      end)
+    }))
   end
 
   local markdown_snippets = {
-      asana_task(),
-      markdown_link(),
+    asana_task(),
+    markdown_link(),
   }
   ls.add_snippets('markdown', markdown_snippets)
   ls.add_snippets('gitcommit', markdown_snippets)
