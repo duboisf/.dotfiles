@@ -48,7 +48,6 @@ postgres
 psql
 postgresql
 DBs
-#ritting
 firejail
 apparmor
 linux
@@ -69,3 +68,8 @@ dependabot
 #eting
 fzf
 gh
+kubectl
+struct
+ansi
+unmarshal
+yaml
