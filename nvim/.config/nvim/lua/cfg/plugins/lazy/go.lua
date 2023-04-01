@@ -23,13 +23,13 @@
 --     'ray-x/guihua.lua',
 --   },
 -- }
-return {
-  'fatih/vim-go',
-  config = function()
-    local g = vim.g
-    g.go_fmt_autosave = 0
-    g.go_imports_autosave = 0
-    g.go_code_completion_enabled = 0
-    g.go_mod_fmt_autosave = 0
-  end,
-}
+-- return {
+--   'fatih/vim-go',
+--   config = function()
+--     local g = vim.g
+--     g.go_fmt_autosave = 0
+--     g.go_imports_autosave = 0
+--     g.go_code_completion_enabled = 0
+--     g.go_mod_fmt_autosave = 0
+--   end,
+-- }
