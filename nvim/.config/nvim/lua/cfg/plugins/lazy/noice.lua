@@ -1,10 +1,10 @@
 return {
   "folke/noice.nvim",
+  enabled = true,
   config = function()
     require("noice").setup {
       messages = {
         enabled = true,
-        view = 'mini',
       },
       popupmenu = {
         backend = 'cmp',
@@ -17,6 +17,9 @@ return {
           ["cmp.entry.get_documentation"] = false,
         },
         signature = {
+          enabled = true,
+        },
+        progress = {
           enabled = true,
         }
       },

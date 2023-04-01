@@ -3,15 +3,24 @@ return {
   cmd = 'Copilot',
   enabled = true,
   event = 'InsertEnter',
-  config = true,
-  opts = {
-    panel = {
-      enabled = true,
-      auto_refresh = true,
-    },
-    suggestion = {
-      enabled = true,
-      auto_trigger = true,
+  config = function()
+    local copilot = require 'copilot'
+    copilot.setup {
+      panel = {
+        enabled = true,
+        auto_refresh = true,
+      },
+      suggestion = {
+        enabled = true,
+        auto_trigger = true,
+        keymap = {
+          accept = false,
+          accept_word = '<M-l>',
+        }
+      }
     }
-  }
+
+    local suggestion = require 'copilot.suggestion'
+    vim.keymap.set('i', '<C-CR>', suggestion.accept, { noremap = true, silent = true })
+  end,
 }
