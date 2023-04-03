@@ -11,6 +11,8 @@
   "copilot.lua": { "branch": "master", "commit": "f0b41fb89ef2ed7ab4e8cd5208a30755aa638fc4" },
   "firenvim": { "branch": "master", "commit": "ee4ef314bd990b2b05b7fbd95b857159e444a2fe" },
   "gitsigns.nvim": { "branch": "main", "commit": "f412f51d0eaf0905a2759c8087090071689bb8fb" },
+  "go.nvim": { "branch": "master", "commit": "e49597d0d12bb1840e12fa89cbd0f1bf61ce6482" },
+  "guihua.lua": { "branch": "master", "commit": "0ad2612cd85457402005e252c39ca7b7c215dda0" },
   "hydra.nvim": { "branch": "master", "commit": "3ced42c0b6a6c85583ff0f221635a7f4c1ab0dd0" },
   "keymap-layer.nvim": { "branch": "master", "commit": "e46840f9f377766e856964a49d7f351de3188a38" },
   "lazy.nvim": { "branch": "main", "commit": "57cce98dfdb2f2dd05a0567d89811e6d0505e13b" },
