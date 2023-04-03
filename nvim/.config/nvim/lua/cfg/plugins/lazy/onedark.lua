@@ -29,9 +29,9 @@ local config = function()
     },
     -- Custom Highlights --
     highlights = {
-      LspReferenceRead = { fg = '$black', bg = '$green' },
-      LspReferenceText = { bg = '$black' },
-      LspReferenceWrite = { fg = '$black', bg = '$dark_red' },
+      LspReferenceRead = { sp = '$green', fmt = 'underdashed' },
+      LspReferenceText = { sp = '$cyan', fmt = 'underdashed' },
+      LspReferenceWrite = { sp = '$dark_red', fmt = 'underdashed' },
       Search = { fg = '$black', bg = '#ff6d00' },
       -- some parens were the same color as the background when highlighted
       MatchParen = { bg = '$dark_red' },
