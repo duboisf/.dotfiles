@@ -12,10 +12,11 @@ local function config()
       disabled_filetypes = {
         "startify",
         "TelescopePrompt",
-      }
+      },
+      globalstatus = true,
     },
     sections = {
-      lualine_b = { { "branch", icon = "" }, "diff", "diagnostics" },
+      lualine_b = { { "branch", icon = "" }, "diagnostics" },
       lualine_c = { { "filename", path = 1 }, },
       lualine_x = {
         "filetype",
@@ -32,22 +33,6 @@ local function config()
       lualine_x = { "tabs" },
       lualine_z = { get_cwd },
     },
-    -- winbar = {
-    --   lualine_a = {},
-    --   lualine_b = {},
-    --   lualine_c = { 'filename' },
-    --   lualine_x = {},
-    --   lualine_y = {},
-    --   lualine_z = {}
-    -- },
-    -- inactive_winbar = {
-    --   lualine_a = {},
-    --   lualine_b = {},
-    --   lualine_c = { 'filename' },
-    --   lualine_x = {},
-    --   lualine_y = {},
-    --   lualine_z = {}
-    -- }
   }
 end
 
