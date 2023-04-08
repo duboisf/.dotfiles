@@ -194,7 +194,7 @@ local function config()
       }
     }
   }
-  lspconfig.sqls.setup { capabilities = capabilities, on_attach = on_attach }
+  lspconfig.sqlls.setup { capabilities = capabilities, on_attach = on_attach }
   lspconfig.terraformls.setup { capabilities = capabilities, on_attach = on_attach }
   lspconfig.tsserver.setup {
     capabilities = capabilities,
