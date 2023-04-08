@@ -67,6 +67,14 @@ set noshowcmd
 " use only 1 status line for all open windows
 set laststatus=3
 
+" display the buffer name of each window using the winbar
+" since we do not have a status line in every window
+set winbar=\ %t
+
+" Set the title of the terminal window
+set title
+set titlelen=30
+
 " tweak settings if we are using nvim as a pager, we know this because
 " we set the pager_mode variable when we do
 if g:pager_mode
