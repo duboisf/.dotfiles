@@ -4,6 +4,10 @@ return {
     local go = require 'go'
     local alternate = require 'go.alternate'
     go.setup {
+      lsp_inlay_hints = {
+        enabled = true,
+        only_current_line = true,
+      },
       -- Make sure that the coverage signs always appear at the left most position
       sign_priority = 0,
     }

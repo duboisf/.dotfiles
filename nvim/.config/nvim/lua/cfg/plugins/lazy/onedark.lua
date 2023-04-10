@@ -48,5 +48,6 @@ end
 return {
   'navarasu/onedark.nvim',
   config = config,
+  lazy = true,
   priority = 1000, -- load first since this is a colorscheme
 }

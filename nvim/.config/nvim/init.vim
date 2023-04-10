@@ -155,8 +155,6 @@ au TextYankPost * lua vim.highlight.on_yank { higroup="IncSearch", timeout=300, 
 if ! original_loadplugins
   " when loading without plugins, use built-in colorscheme
   color habamax
-else
-  color onedark
 endif
 
 " vim: sts=2 sw=2 ts=2 et
