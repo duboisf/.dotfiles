@@ -6,6 +6,9 @@ return {
   config = function()
     local copilot = require 'copilot'
     copilot.setup {
+      filetypes = {
+        yaml = true,
+      },
       panel = {
         enabled = true,
         auto_refresh = true,
