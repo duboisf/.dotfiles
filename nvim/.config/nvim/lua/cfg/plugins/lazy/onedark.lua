@@ -32,6 +32,7 @@ local config = function()
       Search = { fg = '$black', bg = '#ff6d00' },
       -- some parens were the same color as the background when highlighted
       MatchParen = { bg = '$dark_red' },
+      goCoverageUncovered = { fg = '$dark_red' },
     },
     -- Plugins Config --
     diagnostics = {
