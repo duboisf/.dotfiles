@@ -51,6 +51,24 @@ local function config()
     mapping = cmp.mapping.preset.insert({
       ['<C-b>'] = cmp.mapping.scroll_docs( -4),
       ['<C-d>'] = cmp.mapping.scroll_docs(4),
+      ['<C-CR>'] = cmp.mapping(function()
+        if cmp.visible() then
+          cmp.confirm({ select = true })
+        else
+          cmp.complete()
+        end
+      end, { "i", "s" }),
+      ['<C-l>'] = cmp.mapping(function(fallback)
+        local luasnip = require 'luasnip'
+        local suggestion = require 'copilot.suggestion'
+        if luasnip.choice_active() then
+          luasnip.change_choice(1)
+        elseif suggestion.is_visible() then
+          suggestion.accept_word()
+        else
+          fallback()
+        end
+      end, { "i", "s" }),
       ['<C-Space>'] = cmp.mapping(function()
         local suggestion = require 'copilot.suggestion'
         if suggestion.is_visible() then
