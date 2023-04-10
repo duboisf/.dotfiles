@@ -1,6 +1,4 @@
 local config = function()
-  local utils = require 'core.utils'
-
   local gitsigns = require('gitsigns')
 
   gitsigns.setup {
