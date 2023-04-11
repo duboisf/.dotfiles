@@ -69,11 +69,13 @@ local colorscheme_plugins = {
   {
     'uloco/bluloco.nvim',
     dependencies = { 'rktjmp/lush.nvim' },
-    opts = {
-      italics = true,
-      -- when transparent, it uses the terminal's background color
-      transparent = false,
-    }
+    config = function()
+      require('bluloco').setup {
+        italics = true,
+        -- when transparent, it uses the terminal's background color
+        transparent = false,
+      }
+    end,
   },
 }
 

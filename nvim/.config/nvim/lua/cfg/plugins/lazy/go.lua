@@ -11,6 +11,7 @@ return {
       -- Make sure that the coverage signs always appear at the left most position
       sign_priority = 0,
     }
+    vim.cmd [[highlight link goCoverageCovered Function]]
     vim.keymap.set('n', '<C-6>', function() alternate.switch(true, '') end)
   end,
   ft = 'go',
