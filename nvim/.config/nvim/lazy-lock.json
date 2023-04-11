@@ -1,5 +1,6 @@
 {
   "LuaSnip": { "branch": "master", "commit": "225ef9a02c44dac1f52a53886980553765ceb537" },
+  "bluloco.nvim": { "branch": "main", "commit": "29b73b9138032ee86c1299c8afcfc06d1565b3ed" },
   "cmp-buffer": { "branch": "main", "commit": "3022dbc9166796b644a841a02de8dd1cc1d311fa" },
   "cmp-cmdline": { "branch": "main", "commit": "8fcc934a52af96120fe26358985c10c035984b53" },
   "cmp-dictionary": { "branch": "main", "commit": "f479a71c6bb164217ceca2ddec26f852abba9ddd" },
@@ -18,9 +19,11 @@
   "lazy.nvim": { "branch": "main", "commit": "57cce98dfdb2f2dd05a0567d89811e6d0505e13b" },
   "lspkind.nvim": { "branch": "master", "commit": "c68b3a003483cf382428a43035079f78474cd11e" },
   "lualine.nvim": { "branch": "master", "commit": "84ffb80e452d95e2c46fa29a98ea11a240f7843e" },
+  "lush.nvim": { "branch": "main", "commit": "39d91f09cde4c96f09015716fce6f91bca1eaa9a" },
   "markdown-preview.nvim": { "branch": "master", "commit": "02cc3874738bc0f86e4b91f09b8a0ac88aef8e96" },
   "mason.nvim": { "branch": "main", "commit": "2311d9d883eb709ad9979a726a38c5ce1343b63c" },
   "mini.nvim": { "branch": "main", "commit": "d42d1e5b5394f1a34763dc630f70dffe2470ef84" },
+  "moonfly": { "branch": "master", "commit": "665587879a2f1602002e1618fd35c4c745d632cb" },
   "nightfox.nvim": { "branch": "main", "commit": "b9a3385d4814d7c8aa6a9a68f42c6a8bc05282f4" },
   "noice.nvim": { "branch": "main", "commit": "1da4edfba3e9278e98fc9723d7235d9ab3889744" },
   "nui.nvim": { "branch": "main", "commit": "bf5900f1b60bf6499755ac92315181a24a87a577" },

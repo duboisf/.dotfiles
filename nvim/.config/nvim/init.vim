@@ -33,7 +33,6 @@ set encoding=utf-8
 set nolist
 " specify the characters to use for tabs and trailing spaces
 set listchars=tab:→\ ,trail:·
-set cursorline
 set wildignore+=*/.git/*,*/.hg/*,*/.svn/*
 set dictionary+=/usr/share/dict/american-english
 " Remove = from isfname so that completing a filename with <C-x><C-f>
@@ -155,6 +154,8 @@ au TextYankPost * lua vim.highlight.on_yank { higroup="IncSearch", timeout=300, 
 if ! original_loadplugins
   " when loading without plugins, use built-in colorscheme
   color habamax
+else
+  color bluloco
 endif
 
 " vim: sts=2 sw=2 ts=2 et
