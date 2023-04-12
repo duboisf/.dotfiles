@@ -45,47 +45,15 @@ local onedark_config = function()
   onedark.load()
 end
 
-local colorscheme_plugins = {
-  { 'catppuccin/nvim', },
-  { 'EdenEast/nightfox.nvim', },
+return {
   {
     'navarasu/onedark.nvim',
+    lazy = true,
     config = onedark_config,
   },
   {
-    'folke/tokyonight.nvim',
-    config = function()
-      require('tokyonight').setup({
-        style = 'storm',
-      })
-      vim.cmd [[colorscheme tokyonight]]
-    end,
-  },
-  { "bluz71/vim-moonfly-colors", name = "moonfly" },
-  {
     'uloco/bluloco.nvim',
     dependencies = { 'rktjmp/lush.nvim' },
-    config = function()
-      require('bluloco').setup {
-        italics = true,
-        -- when transparent, it uses the terminal's background color
-        transparent = false,
-      }
-    end,
-  },
-  { 'rebelot/kanagawa.nvim' },
-  { 'jacoborus/tender.vim' },
-  {
-    'ellisonleao/gruvbox.nvim',
-    opt = {
-      contrast = 'soft',
-    }
+    lazy = true,
   },
 }
-
-for _, plugin in ipairs(colorscheme_plugins) do
-  plugin.lazy = true
-  plugin.priority = 1000
-end
-
-return colorscheme_plugins

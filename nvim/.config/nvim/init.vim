@@ -151,7 +151,7 @@ if ! original_loadplugins
   " when loading without plugins, use built-in colorscheme
   color habamax
 else
-  color bluloco
+  lua require 'core.colorscheme'
 endif
 
 " vim: sts=2 sw=2 ts=2 et
