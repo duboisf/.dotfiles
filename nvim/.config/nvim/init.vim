@@ -66,10 +66,6 @@ set noshowcmd
 " use only 1 status line for all open windows
 set laststatus=3
 
-" display the buffer name of each window using the winbar
-" since we do not have a status line in every window
-set winbar=\ %t
-
 " Set the title of the terminal window
 set title
 set titlelen=30

@@ -46,12 +46,8 @@ local onedark_config = function()
 end
 
 local colorscheme_plugins = {
-  {
-    'catppuccin/nvim',
-  },
-  {
-    'EdenEast/nightfox.nvim',
-  },
+  { 'catppuccin/nvim', },
+  { 'EdenEast/nightfox.nvim', },
   {
     'navarasu/onedark.nvim',
     config = onedark_config,
@@ -76,6 +72,14 @@ local colorscheme_plugins = {
         transparent = false,
       }
     end,
+  },
+  { 'rebelot/kanagawa.nvim' },
+  { 'jacoborus/tender.vim' },
+  {
+    'ellisonleao/gruvbox.nvim',
+    opt = {
+      contrast = 'soft',
+    }
   },
 }
 
