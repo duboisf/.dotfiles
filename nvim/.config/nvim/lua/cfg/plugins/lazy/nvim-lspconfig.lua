@@ -323,7 +323,7 @@ local function config()
         -- allowImplicitNetworkAccess = true,
         -- templateExtensions = { "yaml" },
         staticcheck = true,
-        usePlaceholders = true,
+        usePlaceholders = false, -- don't add parameter placeholders when completing a function
         analyses = {
           nilness = true,
           unusedparams = true,
