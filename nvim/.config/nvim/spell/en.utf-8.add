@@ -76,3 +76,6 @@ yaml
 ctrl
 api
 configmap
+Okta
+IAM
+minikube
