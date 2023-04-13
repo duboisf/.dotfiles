@@ -46,14 +46,19 @@ local onedark_config = function()
 end
 
 return {
+  'rktjmp/lush.nvim',
   {
     'navarasu/onedark.nvim',
     lazy = true,
     config = onedark_config,
+    priority = 1000,
   },
   {
     'uloco/bluloco.nvim',
-    dependencies = { 'rktjmp/lush.nvim' },
-    lazy = true,
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require('core.colorscheme').load()
+    end
   },
 }

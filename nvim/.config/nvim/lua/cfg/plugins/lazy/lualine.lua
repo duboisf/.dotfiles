@@ -8,7 +8,7 @@ local function config()
   -- to show current config, use:
   require("lualine").setup {
     options = {
-      theme = "onedark",
+      theme = 'bluloco',
       disabled_filetypes = {
         "startify",
         "TelescopePrompt",
