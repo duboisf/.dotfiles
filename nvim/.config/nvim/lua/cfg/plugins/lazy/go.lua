@@ -16,16 +16,11 @@ return {
       local set = vim.keymap.set
       set('n', '<C-6>', function() alternate.switch(true, '') end, { buffer = true })
       set('n', 'gtt', ':GoTestFile<CR>', { buffer = true, silent = true })
+      set('n', 'gtc', ':GoCoverage -p<CR>', { buffer = true, silent = true })
     end
 
-    local group = vim.api.nvim_create_augroup('cfg#plugin#lazy#go', { clear = true })
-
-    vim.api.nvim_create_autocmd('FileType', {
-      pattern = 'go',
-      group = group,
-      desc = 'Setup mappings for working in go',
-      callback = mappings,
-    })
+    local autocmd = require('core.utils').autogroup('cfg#plugin#lazy#go', true)
+    autocmd('FileType', 'go', mappings, 'Setup mappings for working in go')
   end,
   ft = 'go',
   dependencies = {
