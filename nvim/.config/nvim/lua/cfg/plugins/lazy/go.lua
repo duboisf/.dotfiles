@@ -11,8 +11,21 @@ return {
       -- Make sure that the coverage signs always appear at the left most position
       sign_priority = 0,
     }
-    vim.cmd [[highlight link goCoverageCovered Function]]
-    vim.keymap.set('n', '<C-6>', function() alternate.switch(true, '') end)
+
+    local function mappings()
+      local set = vim.keymap.set
+      set('n', '<C-6>', function() alternate.switch(true, '') end, { buffer = true })
+      set('n', 'gtt', ':GoTestFile<CR>', { buffer = true, silent = true })
+    end
+
+    local group = vim.api.nvim_create_augroup('cfg#plugin#lazy#go', { clear = true })
+
+    vim.api.nvim_create_autocmd('FileType', {
+      pattern = 'go',
+      group = group,
+      desc = 'Setup mappings for working in go',
+      callback = mappings,
+    })
   end,
   ft = 'go',
   dependencies = {
