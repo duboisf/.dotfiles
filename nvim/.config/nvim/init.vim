@@ -42,6 +42,8 @@ set dictionary+=/usr/share/dict/american-english
 set isfname-==
 " Don't show the current mode (insert, visual, etc.)
 set noshowmode
+" Do not use swapfiles
+set noswapfile
 " Better display for messages
 set cmdheight=2
 " Smaller updatetime for CursorHold & CursorHoldI
