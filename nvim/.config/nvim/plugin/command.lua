@@ -24,3 +24,17 @@ local function telescope_find_data()
 end
 
 vim.api.nvim_create_user_command('Plugins', telescope_find_data, {})
+
+vim.api.nvim_create_user_command('EditTheme', function()
+  local paths = vim.api.nvim_get_runtime_file('lua/core/colorscheme/theme.lua', false)
+  if #paths ~= 1 then
+    vim.notify('Could not find location of the theme file', vim.log.levels.ERROR, {
+      timeout = 500,
+      title = 'EditTheme',
+    })
+    return
+  end
+  local theme_path = paths[1]
+  vim.cmd.vsplit(theme_path)
+  vim.cmd.Lushify()
+end, {})

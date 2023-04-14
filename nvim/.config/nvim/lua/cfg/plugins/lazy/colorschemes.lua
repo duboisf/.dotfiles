@@ -58,7 +58,7 @@ return {
     lazy = false,
     priority = 1000,
     config = function()
-      require('core.colorscheme').load()
+      vim.cmd.colorscheme 'fred-bluloco'
     end
   },
 }
