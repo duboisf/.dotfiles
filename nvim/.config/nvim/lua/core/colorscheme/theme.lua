@@ -35,7 +35,7 @@ return lush.extends({ theme }).with(function(injected_functions)
 
     sym('@text.reference') { theme['@text.uri'] },
 
-    -- LspReferenceRead { fg = lush.hsl(0, 0, 0), bg = lush.hsl(100, 100, 50) },
-    -- LspReferenceWrite { fg = lush.hsl(0, 0, 0), bg = lush.hsl(10, 100, 50) },
+    LspReferenceRead { diffAdded },
+    LspReferenceWrite { diffRemoved },
   }
 end)

@@ -26,7 +26,7 @@ local function config()
       format = function(entry, vim_item)
         local format = lspkind.cmp_format({
           mode = 'symbol', -- show only symbol annotations
-          maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+          maxwidth = 50,   -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
           menu = ({
             buffer = "[Buffer]",
             dictionary = "[Dict]",
@@ -49,7 +49,7 @@ local function config()
       documentation = cmp.config.window.bordered(),
     },
     mapping = cmp.mapping.preset.insert({
-      ['<C-b>'] = cmp.mapping.scroll_docs( -4),
+      ['<C-b>'] = cmp.mapping.scroll_docs(-4),
       ['<C-d>'] = cmp.mapping.scroll_docs(4),
       ['<C-CR>'] = cmp.mapping(function()
         if cmp.visible() then
@@ -188,7 +188,7 @@ local function config()
   cmp.setup.filetype({ 'gitcommit', 'markdown' }, {
     sources = {
       { name = 'buffer' },
-      { name = 'emoji', option = { insert = true } },
+      { name = 'emoji',  option = { insert = true } },
       { name = 'luasnip' },
     }
   })
@@ -222,7 +222,7 @@ local function config()
     formatting = {
       format = function(_, vim_item)
         -- remove duplicates
-        vim_item.dup = 0
+        vim_item.dup = nil
         return vim_item
       end
     },
