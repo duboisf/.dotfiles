@@ -284,14 +284,18 @@ local function config()
       color_devicons = true,
       layout_strategy = "flex",
       layout_config = {
-        width = 0.87,
-        height = 0.80,
+        width = 0.90,
+        height = 0.90,
         flex = {
           flip_columns = 160,
-          horizontal = {
-            prompt_position = "bottom",
-            preview_width = 0.45,
-          },
+        },
+        horizontal = {
+          prompt_position = "bottom",
+          preview_width = 0.45,
+        },
+        vertical = {
+          preview_height = 0.25,
+          preview_cutoff = 1,
         }
       },
       border = {},
