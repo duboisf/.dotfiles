@@ -16,7 +16,10 @@ return {
       local set = vim.keymap.set
       set('n', '<C-6>', function() alternate.switch(true, '') end, { buffer = true })
       set('n', 'gtt', ':GoTestFile<CR>', { buffer = true, silent = true })
-      set('n', 'gtc', ':GoCoverage -p<CR>', { buffer = true, silent = true })
+      set('n', 'gtc', function()
+        vim.cmd.GoCoverage('-R') -- remove all coverage
+        vim.cmd.GoCoverage('-p') -- show coverage
+      end, { buffer = true, silent = true })
     end
 
     local autocmd = require('core.utils').autogroup('cfg#plugin#lazy#go', true)
