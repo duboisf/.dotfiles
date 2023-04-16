@@ -13,9 +13,9 @@ return lush.extends({ theme }).with(function(injected_functions)
     Statement { theme.Statement, gui = 'italic' },
     Boolean { theme.Boolean, gui = 'italic' },
     Comment { theme.Comment, gui = 'italic' },
-    LineNr { fg = theme.LineNr.fg.darken(20) },
-    LineNrAbove { fg = LineNr.fg.darken(36) },
-    LineNrBelow { fg = LineNr.fg.darken(36) },
+    LineNr { fg = theme.LineNr.fg.darken(30) },
+    LineNrAbove { fg = LineNr.fg.darken(15) },
+    LineNrBelow { fg = LineNr.fg.darken(15) },
     TelescopeBorder { theme.TelescopeBorder, fg = theme.Statement.fg, bg = 'none' },
     TelescopeNormal { theme.Normal, blend = 15 },
     sym('@tag.attribute') { theme['@tag.attribute'], gui = 'italic' },
@@ -24,11 +24,18 @@ return lush.extends({ theme }).with(function(injected_functions)
     goCoverageCovered { theme.Function },
     sym('@lsp.mod.global') { fg = lush.hsl(20, 100, 50) }, -- global variables
     MiniIndentscopeSymbol { fg = lush.hsl(20, 100, 50) },
-    -- diff
-    sym('@text.diff.add') { fg = lush.hsl(100, 100, 50) }, -- diff delete
-    sym('@text.diff.delete') { fg = lush.hsl(0, 100, 50) }, -- diff delete
+
+    -- Treesitter diff
+    sym('@text.diff.add') { theme.DiffAdd },
+    sym('@text.diff.delete') { theme.DiffDelete },
+
+    -- Fugitive diff
+    diffAdded { theme.DiffAdd },
+    diffRemoved { theme.DiffDelete },
+
     sym('@text.reference') { theme['@text.uri'] },
-    LspReferenceRead { fg = lush.hsl(0, 0, 0), bg = lush.hsl(100, 100, 50) },
-    LspReferenceWrite { fg = lush.hsl(0, 0, 0), bg = lush.hsl(10, 100, 50) },
+
+    -- LspReferenceRead { fg = lush.hsl(0, 0, 0), bg = lush.hsl(100, 100, 50) },
+    -- LspReferenceWrite { fg = lush.hsl(0, 0, 0), bg = lush.hsl(10, 100, 50) },
   }
 end)
