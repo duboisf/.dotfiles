@@ -1,4 +1,6 @@
 local function config()
+  require('neodev').setup {}
+
   local utils = require 'core.utils'
 
   local lspconfig = require('lspconfig')
@@ -90,61 +92,61 @@ local function config()
 
   -- Setup mappings
   local setup_mappings = (function()
-        local group = vim.api.nvim_create_augroup("lsp_format_on_save", { clear = false })
+    local group = vim.api.nvim_create_augroup("lsp_format_on_save", { clear = false })
 
-        return function(client, bufnr)
-          local opts = { noremap = true, silent = true, buffer = bufnr }
+    return function(client, bufnr)
+      local opts = { noremap = true, silent = true, buffer = bufnr }
 
-          if client.supports_method("textDocument/formatting") then
-            vim.keymap.set("n", "<Leader>F", function()
-              vim.lsp.buf.format({ bufnr = vim.api.nvim_get_current_buf() })
-            end, { buffer = bufnr, desc = "[lsp] format" })
+      if client.supports_method("textDocument/formatting") then
+        vim.keymap.set("n", "<Leader>F", function()
+          vim.lsp.buf.format({ bufnr = vim.api.nvim_get_current_buf() })
+        end, { buffer = bufnr, desc = "[lsp] format" })
 
-            -- format on save
-            vim.api.nvim_clear_autocmds({ buffer = bufnr, group = group })
-            vim.api.nvim_create_autocmd("BufWritePre", {
-              buffer = bufnr,
-              group = group,
-              callback = function()
-                vim.lsp.buf.format({ bufnr = bufnr, async = false })
-              end,
-              desc = "[lsp] format on save",
-            })
-          end
+        -- format on save
+        vim.api.nvim_clear_autocmds({ buffer = bufnr, group = group })
+        vim.api.nvim_create_autocmd("BufWritePre", {
+          buffer = bufnr,
+          group = group,
+          callback = function()
+            vim.lsp.buf.format({ bufnr = bufnr, async = false })
+          end,
+          desc = "[lsp] format on save",
+        })
+      end
 
-          if client.supports_method("textDocument/rangeFormatting") then
-            vim.keymap.set("x", "<Leader>F", function()
-              vim.lsp.buf.format({ bufnr = vim.api.nvim_get_current_buf() })
-            end, { buffer = bufnr, desc = "[lsp] format" })
-          end
+      if client.supports_method("textDocument/rangeFormatting") then
+        vim.keymap.set("x", "<Leader>F", function()
+          vim.lsp.buf.format({ bufnr = vim.api.nvim_get_current_buf() })
+        end, { buffer = bufnr, desc = "[lsp] format" })
+      end
 
-          local normal_mappings = {
-            [',s']         = '<cmd>Telescope lsp_document_symbols<CR>',
-            [',w']         = '<cmd>Telescope lsp_dynamic_workspace_symbols<CR>',
-            ['<leader>F']  = safe_formatting_sync,
-            ['<leader>cl'] = '<cmd>lua vim.lsp.codelens.run()<CR>',
-            ['<leader>ca'] = '<cmd>lua vim.lsp.buf.code_action()<CR>',
-            ['<leader>d']  = '<cmd>lua vim.diagnostic.open_float()<CR>',
-            ['<leader>rn'] = '<cmd>lua vim.lsp.buf.rename()<CR>',
-            ['K']          = '<Cmd>lua vim.lsp.buf.hover()<CR>',
-            ['[d']         = '<cmd>lua vim.diagnostic.goto_prev()<CR>',
-            [']d']         = '<cmd>lua vim.diagnostic.goto_next()<CR>',
-            ['gD']         = '<Cmd>lua vim.lsp.buf.type_definition()<CR>',
-            ['gd']         = '<Cmd>Telescope lsp_definitions<CR>',
-            ['gi']         = '<cmd>Telescope lsp_implementations<CR>',
-            ['gr']         = '<cmd>Telescope lsp_references<CR>',
-          }
+      local normal_mappings = {
+        [',s']         = '<cmd>Telescope lsp_document_symbols<CR>',
+        [',w']         = '<cmd>Telescope lsp_dynamic_workspace_symbols<CR>',
+        ['<leader>F']  = safe_formatting_sync,
+        ['<leader>cl'] = '<cmd>lua vim.lsp.codelens.run()<CR>',
+        ['<leader>ca'] = '<cmd>lua vim.lsp.buf.code_action()<CR>',
+        ['<leader>d']  = '<cmd>lua vim.diagnostic.open_float()<CR>',
+        ['<leader>rn'] = '<cmd>lua vim.lsp.buf.rename()<CR>',
+        ['K']          = '<Cmd>lua vim.lsp.buf.hover()<CR>',
+        ['[d']         = '<cmd>lua vim.diagnostic.goto_prev()<CR>',
+        [']d']         = '<cmd>lua vim.diagnostic.goto_next()<CR>',
+        ['gD']         = '<Cmd>lua vim.lsp.buf.type_definition()<CR>',
+        ['gd']         = '<Cmd>Telescope lsp_definitions<CR>',
+        ['gi']         = '<cmd>Telescope lsp_implementations<CR>',
+        ['gr']         = '<cmd>Telescope lsp_references<CR>',
+      }
 
-          for lhs, rhs in pairs(normal_mappings) do
-            vim.keymap.set('n', lhs, rhs, opts)
-          end
+      for lhs, rhs in pairs(normal_mappings) do
+        vim.keymap.set('n', lhs, rhs, opts)
+      end
 
-          for _, mode in ipairs({ 'i' }) do
-            -- TODO: check if the language server supports signature help before adding this mapping
-            vim.keymap.set(mode, '<C-s>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-          end
-        end
-      end)()
+      for _, mode in ipairs({ 'i' }) do
+        -- TODO: check if the language server supports signature help before adding this mapping
+        vim.keymap.set(mode, '<C-s>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+      end
+    end
+  end)()
 
   -- Use an on_attach function to only map the following keys
   -- after the language server attaches to the current buffer
@@ -216,22 +218,22 @@ local function config()
     handlers = {
       ["textDocument/publishDiagnostics"] = vim.lsp.with(
         vim.lsp.diagnostic.on_publish_diagnostics, {
-        underline = {
-          severity = {
-            -- don't know why but with typescript language server I need to use this min key to get it to work, same for virtual_text
-            min = vim.diagnostic.severity.INFO,
+          underline = {
+            severity = {
+              -- don't know why but with typescript language server I need to use this min key to get it to work, same for virtual_text
+              min = vim.diagnostic.severity.INFO,
+            },
           },
-        },
-        virtual_text = {
-          spacing = 2,
-          -- severity_limit = "Hint",
-          severity = {
-            min = vim.diagnostic.severity.WARN,
+          virtual_text = {
+            spacing = 2,
+            -- severity_limit = "Hint",
+            severity = {
+              min = vim.diagnostic.severity.WARN,
+            },
           },
-        },
-        signs = true,
-        update_in_insert = false,
-      }),
+          signs = true,
+          update_in_insert = false,
+        }),
     },
     on_attach = on_attach
   }
@@ -244,7 +246,7 @@ local function config()
         -- Ref: https://github.com/sumneko/lua-language-server/wiki/Settings
         Lua = {
           completion = {
-            callSnippet = 'Both',
+            callSnippet = 'Replace',
             displayContext = 1,
           },
           diagnostics = {
