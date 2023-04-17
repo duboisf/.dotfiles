@@ -33,21 +33,36 @@ return {
         -- Show :Inspect result in a popup
         {
           filter = {
-            find = "Treesitter",
+            find = "^Treesitter\n",
           },
           view = "popup",
           opts = {
+            border = { text = { top = " :Inspect " } },
             size = {
-              height = "20%",
+              height = 10,
             }
           }
         },
-        -- Show highlight as virtualtext
+        -- Show result of a single highlight command as virtualtext
         {
           filter = {
-            find = " xxx ",
+            event = "msg_show",
+            kind = "",
+            find = "^(@?%w-%.?%w*)%s*xxx %w+[^\n]+$",
           },
           view = "virtualtext",
+        },
+        -- Show output of multiple highlights in a popup
+        {
+          filter = {
+            event = "msg_show",
+            kind = "",
+            find = "^%w-%s*xxx [^\n]+\n",
+          },
+          view = "popup",
+          opts = {
+            border = { text = { top = " Highlights " } },
+          }
         },
         -- Hide the "written" message when saving a file
         {
@@ -57,6 +72,14 @@ return {
             find = "written",
           },
           opts = { hide = true },
+        },
+        -- Use mini to show undo/redo message
+        {
+          filter = {
+            event = "msg_show",
+            find = "%d+ %a+ ?%a*; %a+ #%d+",
+          },
+          view = "mini",
         }
       }
     }
