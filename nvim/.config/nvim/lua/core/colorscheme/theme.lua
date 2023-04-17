@@ -35,9 +35,9 @@ return lush.extends({ theme }).with(function(injected_functions)
 
     LspReferenceRead { diffAdded },
     LspReferenceWrite { diffRemoved },
-
-    -- sym('@text.bold') { Bold, strikethrough = true, underline = true },
+    sym('@text.strong') { theme.Bold, fg = theme.Normal.fg.li(50) },
     sym('@text.emphasis') { gui = 'italic' },
     sym('@text.reference') { theme['@text.uri'] },
+    sym('@text.title') { theme.String },
   }
 end)
