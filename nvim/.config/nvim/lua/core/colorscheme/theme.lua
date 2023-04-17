@@ -39,5 +39,6 @@ return lush.extends({ theme }).with(function(injected_functions)
     sym('@text.emphasis') { gui = 'italic' },
     sym('@text.reference') { theme['@text.uri'] },
     sym('@text.title') { theme.String },
+    sym('@text.danger') { theme.ErrorMsg },
   }
 end)
