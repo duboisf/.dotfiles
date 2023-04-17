@@ -1,6 +1,4 @@
 local function config()
-  require('neodev').setup {}
-
   local utils = require 'core.utils'
 
   local lspconfig = require('lspconfig')
@@ -13,13 +11,9 @@ local function config()
   ]]
 
   local function safe_formatting_sync()
-    local id, client = next(vim.lsp.buf_get_clients())
+    local id, client = next(vim.lsp.get_active_clients())
     if id ~= nil and client.server_capabilities.documentFormattingProvider then
-      if vim.lsp.buf.format then
-        vim.lsp.buf.format(nil, 1000)
-      else
-        vim.lsp.buf.formatting_sync(nil, 1000)
-      end
+      vim.lsp.buf.format({ async = false, timeout_ms = 1000 })
     end
   end
 
@@ -56,6 +50,7 @@ local function config()
   }
 
   local orig_open_floating_preview = vim.lsp.util.open_floating_preview
+  ---@diagnostic disable-next-line: duplicate-set-field
   function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
     opts = opts or {}
     opts.border = opts.border or border
@@ -351,8 +346,7 @@ local function config()
       -- gopls instance will spawn and the root dir will be the $GOPATH and it
       -- can't jump to symbols because it can't find a go.mod.
       root_dir = function(fname)
-        local fullpath = vim.fn.expand(fname, ':p')
-        if string.find(fullpath, gopathmod) and lastRootPath ~= nil then
+        if string.find(fname, gopathmod) and lastRootPath ~= nil then
           return lastRootPath
         end
         lastRootPath = util.root_pattern("go.mod", ".git")(fname)
@@ -382,4 +376,7 @@ end
 return {
   'neovim/nvim-lspconfig',
   config = config,
+  dependencies = {
+    'folke/neodev.nvim',
+  }
 }

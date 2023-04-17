@@ -4,7 +4,7 @@ local M = {}
 function M.autogroup(name, clear)
   local opts = { clear = clear or false }
   local group = vim.api.nvim_create_augroup(name, opts)
-  return function (events, pattern, callback, desc, o)
+  return function(events, pattern, callback, desc, o)
     return M.autocmd(group, events, pattern, callback, desc, o)
   end, group
 end
@@ -33,7 +33,7 @@ function M.curry(f, ...)
   local args = { ... }
   return function(...)
     local n2 = select("#", ...)
-    local args2 = {...}
+    local args2 = { ... }
     for i = 1, n2 do
       n = n + 1
       args[n] = args2[i]
@@ -92,6 +92,24 @@ end
 
 function M.head(s)
   return string.sub(s, 1, 1)
+end
+
+--- Check if the current working directory is inside the dotfiles directory
+--- @return boolean
+function M.cwd_in_dotfiles()
+  return vim.fn.getcwd():match('%.dotfiles')
+end
+
+function M.inspect_highlight()
+  -- if inside a noice popup, show the highlight group under the cursor
+  if vim.o.ft == 'noice' then
+    local hilight_name = vim.fn.expand('<cWORD>')
+    pcall(vim.cmd, 'hi ' .. hilight_name)
+  else
+    -- Inspect the TreeSitter node under the cursor.
+    -- Because of a noice route, it will open in a nui popup.
+    vim.cmd('Inspect')
+  end
 end
 
 function M.tail(s)
