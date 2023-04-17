@@ -100,15 +100,17 @@ function M.cwd_in_dotfiles()
   return vim.fn.getcwd():match('%.dotfiles')
 end
 
+--- Inspect highlight group / Treesitter node under cursor
+--- @return nil
 function M.inspect_highlight()
   -- if inside a noice popup, show the highlight group under the cursor
   if vim.o.ft == 'noice' then
     local hilight_name = vim.fn.expand('<cWORD>')
-    pcall(vim.cmd, 'hi ' .. hilight_name)
+    pcall(vim.cmd.highlight, hilight_name)
   else
     -- Inspect the TreeSitter node under the cursor.
-    -- Because of a noice route, it will open in a nui popup.
-    vim.cmd('Inspect')
+    -- Because of a custom noice route, it will open in a nui popup.
+    vim.cmd.Inspect()
   end
 end
 
