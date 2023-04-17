@@ -10,6 +10,31 @@ local config = function()
   }
 
   require('nvim-treesitter.configs').setup {
+    ensure_installed = {
+      'bash',
+      'comment',
+      'diff',
+      'git_config',
+      'git_rebase',
+      'gitattributes',
+      'gitcommit',
+      'gitignore',
+      'go',
+      'gomod',
+      'gosum',
+      'gotmpl',
+      'lua',
+      'make',
+      'markdown',
+      'markdown_inline',
+      'query',
+      'regex',
+      'terraform',
+      'typescript',
+      'vim',
+      'vimdoc',
+      'yaml',
+    },
     highlight = {
       enable = true, -- false will disable the whole extension
     },
