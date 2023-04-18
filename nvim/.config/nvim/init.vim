@@ -61,16 +61,14 @@ set inccommand=nosplit
 set synmaxcol=300
 " highlight lua code in .vim files
 let g:vimsyn_embed = 'l'
-
 " Don't show the last command in the last line
 set noshowcmd
-
 " use only 1 status line for all open windows
 set laststatus=3
-
 " Set the title of the terminal window
 set title
 set titlelen=30
+set scrolloff=3
 
 " tweak settings if we are using nvim as a pager, we know this because
 " we set the pager_mode variable when we do
