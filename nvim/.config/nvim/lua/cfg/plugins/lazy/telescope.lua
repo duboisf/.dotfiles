@@ -296,7 +296,6 @@ local function config()
         vertical = {
           preview_height = 0.25,
           preview_cutoff = 1,
-          prompt_position = 'top'
         }
       },
       border = {},
