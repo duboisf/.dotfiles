@@ -27,6 +27,7 @@ local config = function()
       'make',
       'markdown',
       'markdown_inline',
+      'mermaid',
       'query',
       'regex',
       'terraform',
