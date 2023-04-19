@@ -1,8 +1,8 @@
 return {
-  "folke/noice.nvim",
+  'folke/noice.nvim',
   enabled = true,
   config = function()
-    require("noice").setup {
+    require('noice').setup {
       messages = {
         enabled = true,
       },
@@ -11,9 +11,9 @@ return {
       },
       lsp = {
         override = {
-          ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-          ["vim.lsp.util.stylize_markdown"] = true,
-          ["cmp.entry.get_documentation"] = false,
+          ['vim.lsp.util.convert_input_to_markdown_lines'] = true,
+          ['vim.lsp.util.stylize_markdown'] = true,
+          ['cmp.entry.get_documentation'] = false,
         },
         signature = {
           enabled = true,
@@ -32,55 +32,53 @@ return {
       routes = {
         -- Show :Inspect result in a popup
         {
-          filter = {
-            find = "^Treesitter\n",
-          },
-          view = "popup",
+          filter = { find = '^Treesitter\n' },
+          view = 'popup',
           opts = {
-            border = { text = { top = " :Inspect " } },
-            size = {
-              height = 10,
-            }
-          }
+            border = { text = { top = ' :Inspect ' } },
+            size = { height = 10 }
+          },
         },
         -- Show result of a single highlight command as virtualtext
         {
           filter = {
-            event = "msg_show",
-            kind = "",
-            find = "^(@?%w-%.?%w*)%s*xxx %w+[^\n]+$",
+            event = 'msg_show',
+            kind = '',
+            find = '^(@?%w-%.?%w*)%s*xxx %w+[^\n]+$',
           },
-          view = "virtualtext",
+          view = 'virtualtext',
         },
         -- Show output of multiple highlights in a popup
         {
           filter = {
-            event = "msg_show",
-            kind = "",
-            find = "^%w-%s*xxx [^\n]+\n",
+            event = 'msg_show',
+            kind = '',
+            find = '^%w-%s*xxx [^\n]+\n',
           },
-          view = "popup",
+          view = 'popup',
           opts = {
-            border = { text = { top = " Highlights " } },
+            border = { text = { top = ' Highlights ' } },
           }
         },
-        -- Hide the "written" message when saving a file
+        -- Hide the "E486: Pattern not found" message
         {
           filter = {
-            event = "msg_show",
-            kind = "",
-            find = "written",
+            event = 'msg_show',
+            kind = 'emsg',
+            find = '^E486:',
           },
-          opts = { hide = true },
+          opts = { hide = true }
         },
-        -- Use mini to show undo/redo message
+        -- Always route any messages with more than 20 lines to the split view
         {
-          filter = {
-            event = "msg_show",
-            find = "%d+ %a+ ?%a*; %a+ #%d+",
-          },
-          view = "mini",
-        }
+          filter = { event = 'msg_show', min_height = 20 },
+          view = 'split',
+        },
+        -- Hide all messages with empty kind
+        {
+          filter = { event = 'msg_show', kind = '' },
+          opts = { hide = true }
+        },
       }
     }
   end,

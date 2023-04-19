@@ -48,8 +48,8 @@ set noswapfile
 set cmdheight=2
 " Smaller updatetime for CursorHold & CursorHoldI
 set updatetime=100
-" don't give |ins-completion-menu| messages.
-set shortmess+=c
+" Set _almost_ all shortmess options
+set shortmess=filnxtoOsTWAIcCF
 " always show signcolumns
 set signcolumn=yes:2
 " show interactive substitute
