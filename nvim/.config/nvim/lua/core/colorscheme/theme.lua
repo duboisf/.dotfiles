@@ -43,5 +43,6 @@ return lush.extends({ theme }).with(function(injected_functions)
 
     -- Don't use comment semantic highlighting, it hides treesitter comment highlighting like TODO/FIXME
     sym('@lsp.type.comment') {},
+    sym('@lsp.mod.readonly') { theme.Constant },
   }
 end)
