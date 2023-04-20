@@ -1,3 +1,22 @@
+local utils = require 'core.utils'
+
+local copilot = {}
+
+function copilot.has_suggestion()
+  if not utils.has_network() then
+    return false
+  end
+  return require('copilot.suggestion').is_visible()
+end
+
+function copilot.accept_word()
+  return require('copilot.suggestion').accept_word()
+end
+
+function copilot.accept()
+  return require('copilot.suggestion').accept()
+end
+
 local function config()
   local cmp = require 'cmp'
   local lspkind = require 'lspkind'
@@ -60,19 +79,17 @@ local function config()
       end, { "i", "s" }),
       ['<C-l>'] = cmp.mapping(function(fallback)
         local luasnip = require 'luasnip'
-        local suggestion = require 'copilot.suggestion'
         if luasnip.choice_active() then
           luasnip.change_choice(1)
-        elseif suggestion.is_visible() then
-          suggestion.accept_word()
+        elseif copilot.has_suggestion() then
+          copilot.accept_word()
         else
           fallback()
         end
       end, { "i", "s" }),
       ['<C-Space>'] = cmp.mapping(function()
-        local suggestion = require 'copilot.suggestion'
-        if suggestion.is_visible() then
-          suggestion.accept()
+        if copilot.has_suggestion() then
+          copilot.accept()
         elseif cmp.visible() then
           cmp.confirm({ select = true })
         else

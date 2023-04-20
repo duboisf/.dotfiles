@@ -1,7 +1,7 @@
 return {
   "zbirenbaum/copilot.lua",
   cmd = 'Copilot',
-  enabled = true,
+  cond = require('core.utils').has_network,
   event = 'InsertEnter',
   config = function()
     local copilot = require 'copilot'

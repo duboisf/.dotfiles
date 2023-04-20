@@ -127,4 +127,10 @@ function M.packer.short_plugin_name(plugin_name)
   return plugin_name
 end
 
+--- Check if we have networking
+--- @return boolean
+function M.has_network()
+  return vim.g.no_network ~= true
+end
+
 return M
