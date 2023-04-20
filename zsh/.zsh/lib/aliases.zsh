@@ -5,8 +5,30 @@ alias la='l -a'
 alias open=xdg-open
 alias s='cd ..'
 
-# open vim in dotfiles folder
-alias edot='cd $(git -C ~/.zshrc(:A:h) rev-parse --show-toplevel) && firejail --net=none --deterministic-shutdown --blacklist=/home/fred/.aws --blacklist=/home/fred/.ssh --noprofile nvim'
+# open nvim in dotfiles folder
+alias edot='
+    cd $(git -C ~/.zshrc(:A:h) rev-parse --show-toplevel) && \
+        nonet-nvim'
+# secure nvim for general usage
+alias nvim='firejail nvim'
+alias safe-nvim='\nvim --noplugin'
+alias nonet-nvim='
+    firejail \
+        --net=none \
+        --deterministic-shutdown \
+        --blacklist=~/.argocd/ \
+        --blacklist=~/.aws/ \
+        --blacklist=~/.circleci/ \
+        --blacklist=~/.config/gh/hosts.yml \
+        --blacklist=~/.datadog \
+        --blacklist=~/.jfrog/ \
+        --blacklist=~/.gnupg/ \
+        --blacklist=~/.oci-fred \
+        --blacklist=~/.oci/ \
+        --blacklist=~/.pulumi/ \
+        --blacklist=~/.ssh/ \
+        --noprofile \
+        nvim --cmd "lua vim.g.no_network = true"'
 
 # firejail
 alias fj=firejail
@@ -16,10 +38,6 @@ alias fjd='fj --debug'
 
 # need this sometimes
 alias whatismyip='curl -s "https://api.ipify.org?format=json" | jq -r .ip'
-
-# secure nvim for general usage
-alias nvim='firejail nvim'
-alias safe-nvim='\nvim --noplugin'
 
 # Super useful global aliases
 _C() {
