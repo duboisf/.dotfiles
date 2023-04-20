@@ -31,6 +31,7 @@ return lush.extends({ theme }).with(function(injected_functions)
 
     -- Fugitive diff
     diffAdded { theme.DiffAdd },
+    darkDiffAdded { bg = theme.DiffAdd.bg.darken(30) },
     diffRemoved { theme.DiffDelete },
 
     LspReferenceRead { diffAdded },
@@ -38,7 +39,13 @@ return lush.extends({ theme }).with(function(injected_functions)
     sym('@text.strong') { theme.Bold, fg = theme.Normal.fg.li(50) },
     sym('@text.emphasis') { gui = 'italic' },
     sym('@text.reference') { theme['@text.uri'] },
-    sym('@text.title') { theme.String },
+    TextTitle { fg = theme.Statement.fg.lighten(10), italic = true },
+    sym('@text.title.h1') { TextTitle },
+    sym('@text.title.h2') { TextTitle, fg = TextTitle.fg.darken(10) },
+    sym('@text.title.h3') { TextTitle, fg = TextTitle.fg.darken(20) },
+    sym('@text.title.h4') { TextTitle, fg = TextTitle.fg.darken(30) },
+    sym('@text.title.h5') { TextTitle, fg = TextTitle.fg.darken(40) },
+    sym('@text.title.h6') { TextTitle, fg = TextTitle.fg.darken(50) },
     sym('@text.danger') { theme.ErrorMsg },
 
     -- Don't use comment semantic highlighting, it hides treesitter comment highlighting like TODO/FIXME
