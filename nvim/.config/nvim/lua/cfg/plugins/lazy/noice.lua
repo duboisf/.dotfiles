@@ -40,27 +40,6 @@ return {
             size = { height = 10 }
           },
         },
-        -- Show result of a single highlight command as virtualtext
-        {
-          filter = {
-            event = 'msg_show',
-            kind = '',
-            find = '^(@?%w-%.?%w*)%s*xxx %w+[^\n]+$',
-          },
-          view = 'virtualtext',
-        },
-        -- Show output of multiple highlights in a popup
-        {
-          filter = {
-            event = 'msg_show',
-            kind = '',
-            find = '^%w-%s*xxx [^\n]+\n',
-          },
-          view = 'popup',
-          opts = {
-            border = { text = { top = ' Highlights ' } },
-          }
-        },
         -- Hide the "E486: Pattern not found" message
         {
           filter = {
@@ -75,10 +54,10 @@ return {
           filter = { event = 'msg_show', min_height = 20 },
           view = 'split',
         },
-        -- Hide all messages with empty kind
+        -- Use mini view for all messages with empty kind
         {
           filter = { event = 'msg_show', kind = '' },
-          opts = { hide = true }
+          view = 'mini',
         },
       }
     }
