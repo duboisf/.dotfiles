@@ -2,12 +2,15 @@
 apparmor
 
 blacklist ~/.argocd/
+blacklist ~/.aws/
 blacklist ~/.circleci/
 blacklist ~/.config/gh/hosts.yml
 blacklist ~/.datadog
 blacklist ~/.jfrog/
+blacklist ~/.gnupg/
 blacklist ~/.oci-fred
 blacklist ~/.oci/
 blacklist ~/.pulumi/
+blacklist ~/.ssh/
 
 quiet
