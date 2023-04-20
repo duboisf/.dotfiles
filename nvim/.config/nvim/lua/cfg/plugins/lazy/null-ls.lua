@@ -1,7 +1,16 @@
 return {
   {
     'jose-elias-alvarez/null-ls.nvim',
-    config = true,
+    config = function()
+      local null_ls = require 'null-ls'
+      null_ls.setup {
+        sources = {
+          null_ls.builtins.formatting.prettier.with {
+            filetypes = { 'typescript' }
+          },
+        }
+      }
+    end,
     dependencies = {
       'neovim/nvim-lspconfig',
       'nvim-lua/plenary.nvim',
