@@ -378,5 +378,6 @@ return {
   config = config,
   dependencies = {
     'folke/neodev.nvim',
+    'SmiteshP/nvim-navbuddy',
   }
 }
