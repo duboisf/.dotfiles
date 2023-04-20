@@ -1,0 +1,10 @@
+readonly nvim_plugins_dir=~/.local/share/nvim/lazy
+
+local dir=$(cd ${nvim_plugins_dir} && ls -1d *(/) | sort | fzf)
+
+if [[ -n $dir ]]; then
+    cd ${nvim_plugins_dir}/$dir
+    nvim
+fi
+
+# vim: ft=bash
