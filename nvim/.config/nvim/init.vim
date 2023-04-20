@@ -45,7 +45,7 @@ set noshowmode
 " Do not use swapfiles
 set noswapfile
 " Better display for messages
-set cmdheight=2
+set cmdheight=0
 " Smaller updatetime for CursorHold & CursorHoldI
 set updatetime=100
 " Set _almost_ all shortmess options
