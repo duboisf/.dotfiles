@@ -1,6 +1,6 @@
 return {
   'folke/neodev.nvim',
-  enabled = require('core.utils').cwd_in_dotfiles,
+  cond = require('core.utils').cwd_in_dotfiles,
   config = function()
     require('neodev').setup {
       library = {
