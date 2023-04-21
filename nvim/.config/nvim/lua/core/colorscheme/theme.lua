@@ -41,15 +41,15 @@ return lush.extends({ theme }).with(function(injected_functions)
     sym('@text.emphasis') { gui = 'italic' },
     sym('@text.reference') { theme['@text.uri'] },
 
-    TextTitle { fg = theme.Statement.fg.lighten(10) },
-    sym('@text.title.h1') { TextTitle, bold = true, underdouble = true, sp = TextTitle.fg },
-    sym('@marker.h1') { underdouble = true, sp = TextTitle.fg },
-    sym('@text.title.h2') { underline = true, fg = TextTitle.fg },
-    sym('@marker.h2') { underline = true, sp = TextTitle.fg },
+    TextTitle { fg = theme.Statement.fg.li(10) },
+    sym('@text.title.h1') { TextTitle, bold = true, standout = true },
+    sym('@marker.h1') { bold = true, standout = true },
+    sym('@text.title.h2') { bold = true, underline = true, fg = TextTitle.fg.li(10) },
+    sym('@marker.h2') { bold = true, underline = true, sp = TextTitle.fg.li(10) },
     sym('@text.title.h3') { TextTitle, italic = true },
-    sym('@text.title.h4') { TextTitle, fg = TextTitle.fg.darken(20) },
-    sym('@text.title.h5') { TextTitle, fg = TextTitle.fg.darken(30) },
-    sym('@text.title.h6') { TextTitle, fg = TextTitle.fg.darken(40) },
+    sym('@text.title.h4') { TextTitle, fg = TextTitle.fg.da(20) },
+    sym('@text.title.h5') { TextTitle, fg = TextTitle.fg.da(30) },
+    sym('@text.title.h6') { TextTitle, fg = TextTitle.fg.da(40) },
 
     sym('@text.danger') { theme.ErrorMsg },
 
