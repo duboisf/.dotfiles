@@ -17,7 +17,6 @@ fi
 
 export DOCKER_BUILDKIT=1
 export EDITOR='firejail \
-    --net=none \
     --deterministic-shutdown \
     --blacklist=~/.argocd/ \
     --blacklist=~/.aws/ \
@@ -31,7 +30,7 @@ export EDITOR='firejail \
     --blacklist=~/.pulumi/ \
     --blacklist=~/.ssh/ \
     --noprofile \
-    nvim --cmd "lua vim.g.no_network = true"'
+    nvim'
 export GPG_TTY=$(tty)
 export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
 export MANWIDTH=999
