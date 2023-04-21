@@ -191,6 +191,7 @@ local function config()
   lspconfig.dockerls.setup { capabilities = capabilities, on_attach = on_attach }
   lspconfig.jsonls.setup { capabilities = capabilities, on_attach = on_attach }
   lspconfig.jdtls.setup { capabilities = capabilities, on_attach = on_attach }
+  lspconfig.marksman.setup { capabilities = capabilities, on_attach = on_attach }
   lspconfig.pylsp.setup {
     capabilities = capabilities,
     on_attach = on_attach,
