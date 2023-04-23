@@ -1,7 +1,7 @@
 return {
   'folke/noice.nvim',
   enabled = true,
-  cond = true,
+  cond = false,
   config = function()
     require('noice').setup {
       messages = {
