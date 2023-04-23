@@ -19,7 +19,6 @@ end
 
 local function config()
   local cmp = require 'cmp'
-  local lspkind = require 'lspkind'
   local types = require 'cmp.types'
 
   -- local has_words_before = function()
@@ -36,28 +35,50 @@ local function config()
     }
   }
 
+  local CompletionItemKinds = {
+    Text = '',
+    Method = '',
+    Function = '',
+    Constructor = '',
+    Field = 'ﰠ',
+    Variable = '',
+    Class = 'ﴯ',
+    Interface = '',
+    Module = '',
+    Property = 'ﰠ',
+    Unit = '塞',
+    Value = '',
+    Enum = '',
+    Keyword = '',
+    Snippet = '',
+    Color = '',
+    File = '',
+    Reference = '',
+    Folder = '',
+    EnumMember = '',
+    Constant = '',
+    Struct = '',
+    Event = '',
+    Operator = '',
+    TypeParameter = '',
+  }
+
   cmp.setup({
     completion = {
       completeopt = "menu,menuone,noselect",
     },
     formatting = {
-      fields = { 'abbr', 'kind', 'menu' },
       format = function(entry, vim_item)
-        local format = lspkind.cmp_format({
-          mode = 'symbol', -- show only symbol annotations
-          maxwidth = 50,   -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
-          menu = ({
-            buffer = "[Buffer]",
-            dictionary = "[Dict]",
-            luasnip = "✂️ ",
-            path = "[Path]",
-            emoji = "",
-            nvim_lsp = "[LSP]",
-          })
-        })
-        local item = format(entry, vim_item)
-        item.dup = 0
-        return item
+        vim_item.kind = string.format("%s %s", CompletionItemKinds[vim_item.kind], vim_item.kind)
+        vim_item.menu = ({
+          buffer = "[Buffer]",
+          dictionary = "[Dict]",
+          luasnip = "✂️ ",
+          path = "[Path]",
+          emoji = "",
+          nvim_lsp = "[LSP]",
+        })[entry.source.name]
+        return vim_item
       end
     },
     snippet = {
@@ -149,11 +170,13 @@ local function config()
         end
       end)
     }),
-    preselect = cmp.PreselectMode.None,
+    -- preselect = cmp.PreselectMode.None,
     sources = cmp.config.sources({
-      { name = 'luasnip' },
       { name = 'nvim_lsp' },
+      { name = 'luasnip' },
       { name = 'path' },
+      { name = 'emoji' },
+      { name = 'buffer',  max_items = 5 },
     }),
   })
 
@@ -210,22 +233,6 @@ local function config()
     }
   })
 
-  cmp.setup.filetype({ 'lua' }, {
-    sources = cmp.config.sources({
-      { name = 'nvim_lua' },
-      { name = 'luasnip' },
-      { name = 'path' },
-    }),
-  })
-
-  cmp.setup.filetype({ 'rego' }, {
-    sources = cmp.config.sources({
-      all_buffers_source,
-      { name = 'luasnip' },
-      { name = 'path' },
-    }),
-  })
-
   -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
   cmp.setup.cmdline('/', {
     mapping = cmp.mapping.preset.cmdline(),
@@ -256,35 +263,6 @@ local function config()
       { name = 'cmdline' }
     })
   })
-
-  local function fix_highlights()
-    local c = vim.cmd
-    -- gray
-    c 'highlight! CmpItemAbbrDeprecated guibg=NONE gui=strikethrough guifg=#808080'
-    -- blue
-    c 'highlight! CmpItemAbbrMatch guibg=NONE guifg=#569CD6'
-    c 'highlight! CmpItemAbbrMatchFuzzy guibg=NONE guifg=#569CD6'
-    -- light blue
-    c 'highlight! CmpItemKindVariable guibg=NONE guifg=#9CDCFE'
-    c 'highlight! CmpItemKindInterface guibg=NONE guifg=#9CDCFE'
-    c 'highlight! CmpItemKindText guibg=NONE guifg=#9CDCFE'
-    -- pink
-    c 'highlight! CmpItemKindFunction guibg=NONE guifg=#C586C0'
-    c 'highlight! CmpItemKindMethod guibg=NONE guifg=#C586C0'
-    -- front
-    c 'highlight! CmpItemKindKeyword guibg=NONE guifg=#D4D4D4'
-    c 'highlight! CmpItemKindProperty guibg=NONE guifg=#D4D4D4'
-    c 'highlight! CmpItemKindUnit guibg=NONE guifg=#D4D4D4'
-  end
-
-  local group = vim.api.nvim_create_augroup('cfg#plugins#cmp', { clear = true })
-  vim.api.nvim_create_autocmd('ColorScheme', {
-    group = group,
-    pattern = "*",
-    callback = fix_highlights,
-  })
-
-  fix_highlights()
 end
 
 return {
@@ -292,8 +270,6 @@ return {
     'hrsh7th/nvim-cmp',
     config = config,
     dependencies = {
-      -- add vscode-line pictograms in completion popup
-      'onsails/lspkind.nvim',
       -- completion suggestions from language server
       'hrsh7th/cmp-nvim-lsp',
       'nvim-lua/plenary.nvim',
