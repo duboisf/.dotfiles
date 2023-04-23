@@ -18,6 +18,8 @@ let g:pager_mode = get(g:, 'pager_mode', v:false)
 " vim configuration "
 """""""""""""""""""""
 
+set guicursor=
+set updatetime=50
 set clipboard=unnamed
 " Enable 24-bit RGB color in the Terminal UI
 set termguicolors
@@ -45,7 +47,7 @@ set noshowmode
 " Do not use swapfiles
 set noswapfile
 " Better display for messages
-set cmdheight=0
+set cmdheight=1
 " Smaller updatetime for CursorHold & CursorHoldI
 set updatetime=100
 " Set _almost_ all shortmess options
