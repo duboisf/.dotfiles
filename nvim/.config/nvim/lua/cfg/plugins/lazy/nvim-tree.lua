@@ -85,6 +85,7 @@ end
 
 return {
   'kyazdani42/nvim-tree.lua',
+  cond = false,
   opts = {
     auto_reload_on_write = true,
     on_attach = on_attach,
