@@ -23,10 +23,15 @@ local function config()
     return " " .. utils.get_short_cwd()
   end
 
-  -- to show current config, use:
+  local theme = require 'core.colorscheme.theme'
+  local bluloco = require 'lualine.themes.bluloco'
+  bluloco.insert.a.bg = theme.Attribute.fg.hex
+  bluloco.insert.b.fg = bluloco.insert.a.bg
+  bluloco.normal.b.fg = bluloco.normal.a.bg
+
   local cfg = {
     options = {
-      theme = 'bluloco',
+      theme = bluloco,
       disabled_filetypes = {
         "startify",
         "TelescopePrompt",
