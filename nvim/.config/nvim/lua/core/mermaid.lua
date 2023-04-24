@@ -52,7 +52,6 @@ div.mermaid[data-processed="true"] {
   <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
     mermaid.initialize({ startOnLoad: true });
-    setTimeout(() => window.location.reload(), 5000);
   </script>
 %s
 </body>
