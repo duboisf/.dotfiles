@@ -410,20 +410,7 @@ local function config()
       },
     },
     extensions = {
-      ["ui-select"] = {
-        require("telescope.themes").get_dropdown {
-          -- even more opts
-          width = 0.8,
-          previewer = false,
-          prompt_title = false,
-          borderchars = {
-            { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
-            prompt = { "─", "│", " ", "│", "┌", "┐", "│", "│" },
-            results = { "─", "│", "─", "│", "├", "┤", "┘", "└" },
-            preview = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
-          },
-        }
-      },
+      ["ui-select"] = { require("telescope.themes").get_dropdown() },
       fzf = {
         --[[
         | Token     | Match type                 | Description                          |
@@ -436,10 +423,10 @@ local function config()
         | `!^music` | inverse-prefix-exact-match | Items that do not start with `music` |
         | `!.mp3$`  | inverse-suffix-exact-match | Items that do not end with `.mp3`    |
         ]]
-        fuzzy = true, -- false will only do exact matching
+        fuzzy = true,                   -- false will only do exact matching
         override_generic_sorter = true, -- override the generic sorter
-        override_file_sorter = true, -- override the file sorter
-        case_mode = "smart_case", -- or "ignore_case" or "respect_case"
+        override_file_sorter = true,    -- override the file sorter
+        case_mode = "smart_case",       -- or "ignore_case" or "respect_case"
         -- the default case_mode is "smart_case"
       },
       themes = {},
@@ -473,7 +460,7 @@ return {
   {
     'nvim-telescope/telescope-ui-select.nvim',
     config = function()
-      require('telescope').load_extension 'ui-select'
+      require('telescope').load_extension('ui-select')
     end,
   }
 }
