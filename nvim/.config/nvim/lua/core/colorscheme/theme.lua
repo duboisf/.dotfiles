@@ -18,6 +18,7 @@ return lush.extends({ theme }).with(function(injected_functions)
     LineNrBelow { fg = LineNr.fg.darken(15) },
     TelescopeBorder { theme.TelescopeBorder, fg = theme.Statement.fg, bg = 'none' },
     TelescopeNormal { theme.Normal, blend = 15 },
+    TelescopePromptNormal { TelescopeNormal, blend = 0 },
     sym('@tag.attribute') { theme['@tag.attribute'], gui = 'italic' },
     sym('@annotation') { theme['@annotation'], gui = 'italic' },
     -- goCoverageCovered is defined in the go.nvim plugin
