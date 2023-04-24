@@ -36,16 +36,16 @@ local function config()
   }
 
   local CompletionItemKinds = {
-    Text = '',
+    Text = '',
     Method = '',
     Function = '',
     Constructor = '',
-    Field = 'ﰠ',
+    Field = '',
     Variable = '',
-    Class = 'ﴯ',
+    Class = '',
     Interface = '',
     Module = '',
-    Property = 'ﰠ',
+    Property = '',
     Unit = '塞',
     Value = '',
     Enum = '',
@@ -58,25 +58,30 @@ local function config()
     EnumMember = '',
     Constant = '',
     Struct = '',
-    Event = '',
+    Event = '',
     Operator = '',
     TypeParameter = '',
   }
 
   cmp.setup({
     completion = {
+      autocomplete = {
+        cmp.TriggerEvent.InsertEnter,
+        cmp.TriggerEvent.TextChanged,
+      },
       completeopt = "menu,menuone,noselect",
     },
     formatting = {
       format = function(entry, vim_item)
         vim_item.kind = string.format("%s %s", CompletionItemKinds[vim_item.kind], vim_item.kind)
         vim_item.menu = ({
-          buffer = "[Buffer]",
-          dictionary = "[Dict]",
-          luasnip = "✂️ ",
-          path = "[Path]",
+          buffer = "﬘",
+          dictionary = "",
           emoji = "",
-          nvim_lsp = "[LSP]",
+          luasnip = "",
+          nvim_lsp = "",
+          nvim_lua = "󰢱",
+          path = "",
         })[entry.source.name]
         return vim_item
       end
@@ -140,20 +145,11 @@ local function config()
         else
           cmp.complete({
             config = {
-              sources = {
-                all_buffers_source,
-              }
+              sources = { all_buffers_source }
             }
           })
         end
       end),
-      ['<C-x><C-n>'] = cmp.mapping.complete({
-        config = {
-          sources = {
-            all_buffers_source,
-          }
-        }
-      }),
       ['<M-e>'] = cmp.mapping(function()
         cmp.complete({
           config = {
@@ -172,11 +168,12 @@ local function config()
     }),
     -- preselect = cmp.PreselectMode.None,
     sources = cmp.config.sources({
-      { name = 'nvim_lsp' },
-      { name = 'luasnip' },
-      { name = 'path' },
-      { name = 'emoji' },
-      { name = 'buffer',  max_items = 5 },
+      { name = 'nvim_lsp', max_items = 10 },
+      { name = 'nvim_lua', max_items = 10 },
+      { name = 'luasnip',  max_items = 5 },
+      { name = 'path',     max_items = 5 },
+      { name = 'emoji',    max_items = 5 },
+      { name = 'buffer',   max_items = 5, keyword_length = 3 },
     }),
   })
 
