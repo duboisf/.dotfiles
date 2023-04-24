@@ -40,13 +40,20 @@ local function create_html(divs)
   local html_template = [[
 <!DOCTYPE html>
 <html>
-<head>
-<script type="module">
-  import mermaid from https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs;
-  mermaid.initialize({ startOnLoad: true });
-</script>
-</head>
+<style>
+div.mermaid {
+  visibility: hidden;
+}
+div.mermaid[data-processed="true"] {
+  visibility: visible;
+}
+</style>
 <body>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true });
+    setTimeout(() => window.location.reload(), 5000);
+  </script>
 %s
 </body>
 </html>
@@ -78,13 +85,16 @@ function M.preview(bufnr)
   local divs = create_divs(mermaid_diagrams)
   local html = create_html(divs)
   local lines = vim.split(html, '\n')
-  local html_filename = vim.fn.expand('/tmp/mermaid.html')
+  local html_filename = vim.fn.expand('~/Downloads/mermaid.html')
   local html_bufid = vim.fn.bufadd(html_filename)
   vim.fn.bufload(html_bufid)
   vim.api.nvim_buf_set_lines(html_bufid, 0, -1, false, lines)
-  print('Mermaid preview: file://' .. html_filename)
+  print('Mermaid preview: ' .. html_filename)
   -- save the html file
-  vim.api.nvim_buf_call(html_bufid, function() vim.api.nvim_cmd({ cmd = 'write' }, { output = false }) end)
+  local cur_bufnr = vim.fn.bufnr()
+  vim.cmd(html_bufid .. 'buffer')
+  vim.cmd('silent write')
+  vim.cmd(cur_bufnr .. 'buffer')
 end
 
 return M
