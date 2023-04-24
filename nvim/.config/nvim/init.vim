@@ -18,60 +18,6 @@ let g:pager_mode = get(g:, 'pager_mode', v:false)
 " vim configuration "
 """""""""""""""""""""
 
-set guicursor=
-set updatetime=50
-set clipboard=unnamed
-" Enable 24-bit RGB color in the Terminal UI
-set termguicolors
-set mouse=a
-set relativenumber
-set number
-set textwidth=0
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
-set expandtab
-set encoding=utf-8
-set nolist
-" specify the characters to use for tabs and trailing spaces
-set listchars=tab:→\ ,trail:·
-set wildignore+=*/.git/*,*/.hg/*,*/.svn/*
-set dictionary+=/usr/share/dict/american-english
-" Remove = from isfname so that completing a filename with <C-x><C-f>
-" works even in an assignment like SOME_VAR=/foo/bar. The side effect of this
-" will be that gf won't work with filenames with = in them... I don't think
-" this will cause a lot of problems...
-set isfname-==
-" Don't show the current mode (insert, visual, etc.)
-set noshowmode
-" Do not use swapfiles
-set noswapfile
-" Better display for messages
-set cmdheight=1
-" Smaller updatetime for CursorHold & CursorHoldI
-set updatetime=100
-" Set _almost_ all shortmess options
-set shortmess=filnxtoOsTWAIcCF
-" always show signcolumns
-set signcolumn=yes:2
-" show interactive substitute
-set inccommand=nosplit
-" Prevent long, single lines from slowing down the redraw speed. In my case
-" this often happens when viewing kubernetes resources as the
-" kubectl.kubernetes.io/last-applied-configuration is a single line that
-" contains the whole previous version of the resource.
-set synmaxcol=300
-" highlight lua code in .vim files
-let g:vimsyn_embed = 'l'
-" Don't show the last command in the last line
-set noshowcmd
-" use only 1 status line for all open windows
-set laststatus=3
-" Set the title of the terminal window
-set title
-set titlelen=30
-set scrolloff=3
-
 " tweak settings if we are using nvim as a pager, we know this because
 " we set the pager_mode variable when we do
 if g:pager_mode
