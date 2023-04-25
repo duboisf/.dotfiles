@@ -7,6 +7,7 @@ return {
     local copilot = require 'copilot'
     copilot.setup {
       filetypes = {
+        markdown = true,
         yaml = true,
       },
       panel = {
