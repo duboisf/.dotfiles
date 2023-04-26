@@ -8,6 +8,10 @@ return {
         enabled = true,
         only_current_line = true,
       },
+      -- disable lsp mappings, I'm setting them up in the ./nvim-lspconfig.lua
+      lsp_keymaps = false,
+      -- disable textobject mappings, they are setup in ./nvim-treesitter-textobjects.lua
+      textobjects = false,
       -- Make sure that the coverage signs always appear at the left most position
       sign_priority = 0,
     }
