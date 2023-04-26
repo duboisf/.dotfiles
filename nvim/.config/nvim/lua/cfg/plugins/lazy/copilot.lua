@@ -23,8 +23,5 @@ return {
         }
       }
     }
-
-    local suggestion = require 'copilot.suggestion'
-    vim.keymap.set('i', '<C-CR>', suggestion.accept, { noremap = true, silent = true })
   end,
 }
