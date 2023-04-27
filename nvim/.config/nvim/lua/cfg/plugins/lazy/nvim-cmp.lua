@@ -73,7 +73,7 @@ local function config()
     },
     formatting = {
       format = function(entry, vim_item)
-        vim_item.kind = string.format("%s %s", CompletionItemKinds[vim_item.kind], vim_item.kind)
+        vim_item.kind = string.format("%s", CompletionItemKinds[vim_item.kind])
         vim_item.menu = ({
           buffer = "﬘",
           dictionary = "",
@@ -168,12 +168,12 @@ local function config()
     }),
     -- preselect = cmp.PreselectMode.None,
     sources = cmp.config.sources({
-      { name = 'nvim_lsp', max_items = 10 },
-      { name = 'nvim_lua', max_items = 10 },
-      { name = 'luasnip',  max_items = 5 },
-      { name = 'path',     max_items = 5 },
-      { name = 'emoji',    max_items = 5 },
-      { name = 'buffer',   max_items = 5, keyword_length = 3 },
+      { name = 'nvim_lsp', max_item_count = 10 },
+      { name = 'nvim_lua', max_item_count = 10 },
+      { name = 'luasnip',  max_item_count = 5 },
+      { name = 'path',     max_item_count = 5 },
+      { name = 'emoji',    max_item_count = 5 },
+      { name = 'buffer',   max_item_count = 5, keyword_length = 3 },
     }),
   })
 
