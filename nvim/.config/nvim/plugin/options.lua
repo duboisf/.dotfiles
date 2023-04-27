@@ -1,4 +1,5 @@
 vim.opt.guicursor = nil
+vim.opt.hidden = true
 vim.opt.updatetime = 50
 vim.opt.clipboard = 'unnamed'
 -- Enable 24-bit RGB color in the Terminal UI
