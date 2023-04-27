@@ -16,21 +16,7 @@ if [[ -d ~/.tfenv/bin ]]; then
 fi
 
 export DOCKER_BUILDKIT=1
-export EDITOR='firejail \
-    --deterministic-shutdown \
-    --blacklist=~/.argocd/ \
-    --blacklist=~/.aws/ \
-    --blacklist=~/.circleci/ \
-    --blacklist=~/.config/gh/hosts.yml \
-    --blacklist=~/.datadog \
-    --blacklist=~/.jfrog/ \
-    --blacklist=~/.gnupg/ \
-    --blacklist=~/.oci-fred \
-    --blacklist=~/.oci/ \
-    --blacklist=~/.pulumi/ \
-    --blacklist=~/.ssh/ \
-    --noprofile \
-    nvim'
+export EDITOR=nvim
 export GPG_TTY=$(tty)
 export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
 export MANWIDTH=999
