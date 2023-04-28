@@ -51,44 +51,6 @@ vnoremap <silent><leader>Y "+Y
 nnoremap <silent><Tab> :bn<CR>
 nnoremap <silent><S-Tab> :bp<CR>
 
-" in insert mode, make ctrl-e jump to the end of the line, staying in insert
-" mode
-inoremap <silent><C-e> <C-O>$
-
-" Emacs-style editing on the command-line
-" start of line
-cnoremap <C-A> <Home>
-" back one character
-cnoremap <C-B> <Left>
-" delete character under cursor
-cnoremap <C-D> <Del>
-" end of line
-cnoremap <C-E> <End>
-" forward one character
-cnoremap <C-F> <Right>
-" recall newer command-line
-cnoremap <C-N> <Down>
-" recall previous (older) command-line
-cnoremap <C-P> <Up>
-" back one word
-cnoremap <Esc><C-B> <S-Left>
-" forward one word
-cnoremap <Esc><C-F> <S-Right>
-
-" Navigate windows in any mode
-tnoremap <silent><A-h> <C-\><C-N><C-w>h
-tnoremap <silent><A-j> <C-\><C-N><C-w>j
-tnoremap <silent><A-k> <C-\><C-N><C-w>k
-tnoremap <silent><A-l> <C-\><C-N><C-w>l
-inoremap <silent><A-h> <C-\><C-N><C-w>h
-inoremap <silent><A-j> <C-\><C-N><C-w>j
-inoremap <silent><A-k> <C-\><C-N><C-w>k
-inoremap <silent><A-l> <C-\><C-N><C-w>l
-nnoremap <silent><A-h> <C-w>h
-nnoremap <silent><A-j> <C-w>j
-nnoremap <silent><A-k> <C-w>k
-nnoremap <silent><A-l> <C-w>l
-
 " tweak man mode
 aug fred#man
   au!
