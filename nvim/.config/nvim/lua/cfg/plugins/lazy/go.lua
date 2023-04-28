@@ -26,7 +26,7 @@ return {
       end, { buffer = true, silent = true })
     end
 
-    local autocmd = require('core.utils').autogroup('cfg#plugin#lazy#go', true)
+    local autocmd = require('core.utils').autogroup('duboisf.go', true)
     autocmd('FileType', 'go', mappings, 'Setup mappings for working in go')
   end,
   ft = 'go',

@@ -59,7 +59,7 @@ local function config()
 
   -- Setup autocmds for buffer
   local function setup_autocmds(client, bufnr)
-    local autocmd, group_id = utils.autogroup('cfg#plugins#lsp#on_attach', false)
+    local autocmd, group_id = utils.autogroup('duboisf.lsp.buffer', false)
     local opts = { buffer = bufnr }
 
     local server_capabilities = client.server_capabilities
@@ -81,7 +81,7 @@ local function config()
     autocmd('BufUnload', nil, clear_buffer_autocmds, 'Delete buffer autocmds to prevent duplicates', opts)
   end
 
-  local autocmd = utils.autogroup('cfg#plugins#lsp', true)
+  local autocmd = utils.autogroup('duboisf.lsp', true)
   autocmd('ColorScheme', nil, setup_highlights, 'Setup LSP highlights')
   setup_highlights()
 

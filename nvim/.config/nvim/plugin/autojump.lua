@@ -6,7 +6,7 @@ local function disable_jump_to_last_position()
   vim.b.disable_jump_to_last_position = true
 end
 
-local autocmd = utils.autogroup('plugin#autojump', true)
+local autocmd = utils.autogroup('duboisf.autojump', true)
 
 local disabled_filetypes = { 'gitcommit', 'help', 'startify' }
 
