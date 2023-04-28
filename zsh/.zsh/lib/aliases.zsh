@@ -197,6 +197,14 @@ alias s_connect='openssl s_client -state -debug -connect'
 # aws cli
 ##########
 alias iaws='aws --cli-auto-prompt'
+alias ssogroups='aws --no-cli-pager \
+    --profile $AWS_IDENTITY_CENTER_PROFILE \
+    identitystore list-groups --identity-store-id $IDENTITY_STORE_ID \
+    | jq ".Groups[].DisplayName" -r | sort'
+alias ssousers='aws --no-cli-pager \
+    --profile $AWS_IDENTITY_CENTER_PROFILE \
+    identitystore list-users --identity-store-id $IDENTITY_STORE_ID \
+    | jq ".Users[].UserName" -r | sort'
 
 # rg
 #####
