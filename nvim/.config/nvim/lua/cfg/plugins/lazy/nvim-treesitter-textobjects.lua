@@ -2,7 +2,8 @@ return {
   'nvim-treesitter/nvim-treesitter-textobjects',
   config = function()
     require('nvim-treesitter.configs').setup {
-      textobjects = { -- syntax-aware textobjects
+      textobjects = {
+        -- syntax-aware textobjects
         select = {
           enable = true,
           lookahead = true,
@@ -23,8 +24,8 @@ return {
             ["ib"] = "@block.inner",
             ["al"] = "@loop.outer",
             ["il"] = "@loop.inner",
-            ["is"] = "@statement.inner",
-            ["as"] = "@statement.outer",
+            ["iS"] = "@statement.inner",
+            ["aS"] = "@statement.outer",
             ["ad"] = "@comment.outer",
             ["am"] = "@call.outer",
             ["im"] = "@call.inner"
