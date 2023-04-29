@@ -81,7 +81,7 @@ local function config()
           luasnip = "",
           nvim_lsp = "",
           nvim_lua = "󰢱",
-          path = "",
+          path = "",
         })[entry.source.name]
         return vim_item
       end
@@ -97,7 +97,9 @@ local function config()
       ['<C-b>'] = cmp.mapping.scroll_docs(-4),
       ['<C-d>'] = cmp.mapping.scroll_docs(4),
       ['<C-CR>'] = cmp.mapping(function()
-        if cmp.visible() then
+        if copilot.has_suggestion() then
+          copilot.accept()
+        elseif cmp.visible() then
           cmp.confirm({ select = true })
         else
           cmp.complete()
@@ -114,9 +116,7 @@ local function config()
         end
       end, { "i", "s" }),
       ['<C-Space>'] = cmp.mapping(function()
-        if copilot.has_suggestion() then
-          copilot.accept()
-        elseif cmp.visible() then
+        if cmp.visible() then
           cmp.confirm({ select = true })
         else
           cmp.complete()
@@ -149,6 +149,12 @@ local function config()
             }
           })
         end
+      end),
+      ['<C-x><C-n>'] = cmp.mapping(function()
+        if cmp.visible() then
+          cmp.close()
+        end
+        cmp.complete({ config = { sources = { all_buffers_source } } })
       end),
       ['<M-e>'] = cmp.mapping(function()
         cmp.complete({
