@@ -18,9 +18,6 @@ set('n', '<leader>v', vim.cmd.Explore)
 set('n', '<C-u>', '<C-u>zz')
 set('n', '<C-d>', '<C-d>zz')
 
-set('n', '<A-t>', require('core.utils').inspectTree,
-  { silent = true, desc = 'Calls :InspectTree but keeps cursor in place' })
-
 -- In a terminal buffer, return to normal mode by pressing Esc
 set('t', '<Esc>', [[<C-\><C-n>]], { silent = true })
 
