@@ -14,6 +14,9 @@ vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 vim.opt.encoding = 'utf-8'
 vim.opt.list = false
+-- Open vsplit to the right
+vim.opt.splitright = true
+vim.opt.splitbelow = true
 -- specify the characters to use for tabs and trailing spaces
 vim.opt.listchars = [[tab:→\ ,trail:·]]
 vim.opt.wildignore:append { '*/.git/*', '*/.hg/*', '*/.svn/*' }
