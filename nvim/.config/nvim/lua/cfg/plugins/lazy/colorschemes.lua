@@ -3,10 +3,10 @@ local onedark_config = function()
 
   onedark.setup {
     -- Main options --
-    style = 'darker', -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
-    transparent = false, -- Show/hide background
-    term_colors = true, -- Change terminal color as per the selected theme style
-    ending_tildes = true, -- Show the end-of-buffer tildes. By default they are hidden
+    style = 'darker',             -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
+    transparent = false,          -- Show/hide background
+    term_colors = true,           -- Change terminal color as per the selected theme style
+    ending_tildes = true,         -- Show the end-of-buffer tildes. By default they are hidden
     cmp_itemkind_reverse = false, -- reverse item kind highlights in cmp menu
     -- toggle theme style
     toggle_style_key = '<leader>ts',
@@ -36,8 +36,8 @@ local onedark_config = function()
     },
     -- Plugins Config --
     diagnostics = {
-      darker = true, -- darker colors for diagnostic
-      undercurl = true, -- use undercurl instead of underline for diagnostics
+      darker = true,     -- darker colors for diagnostic
+      undercurl = true,  -- use undercurl instead of underline for diagnostics
       background = true, -- use background color for virtual text
     },
   }
@@ -58,6 +58,15 @@ return {
     lazy = false,
     priority = 1000,
     config = function()
+      vim.opt.background = 'dark'
+      require("bluloco").setup({
+        style       = "auto", -- "auto" | "dark" | "light"
+        transparent = false,
+        italics     = true,
+        guicursor   = true,
+      })
+      vim.opt.termguicolors = true
+      -- vim.cmd.colorscheme('bluloco')
       vim.cmd.colorscheme 'fred-bluloco'
     end
   },
