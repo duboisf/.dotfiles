@@ -256,7 +256,6 @@ local function config()
               'dump',
               'vim',
             },
-            libraryFiles = 'Disable',
           },
           format = {
             enable = true,
@@ -266,6 +265,7 @@ local function config()
             }
           },
           hint = {
+            enable = true,
             setType = true,
           },
           runtime = {
@@ -384,6 +384,11 @@ return {
   'neovim/nvim-lspconfig',
   config = config,
   dependencies = {
+    {
+      -- must be loaded before nvim-lspconfig
+      'folke/neoconf.nvim',
+      config = true,
+    },
     'folke/neodev.nvim',
     'SmiteshP/nvim-navbuddy',
   }
