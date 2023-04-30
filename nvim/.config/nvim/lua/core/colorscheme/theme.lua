@@ -58,6 +58,8 @@ return lush.extends({ theme }).with(function(injected_functions)
     sym('@lsp.type.comment') {},
     sym('@lsp.mod.readonly') { theme.Constant },
 
-    fugitiveStagedModifier { theme.Function }
+    fugitiveStagedModifier { theme.Function },
+
+    CmpItemKindUser { theme.CmpItemKindDefault },
   }
 end)

@@ -61,6 +61,7 @@ local function config()
     Event = '',
     Operator = '',
     TypeParameter = '',
+    User = '',
   }
 
   cmp.setup({
@@ -82,6 +83,7 @@ local function config()
           nvim_lsp = "",
           nvim_lua = "󰢱",
           path = "",
+          gh_org_users = "",
         })[entry.source.name]
         return vim_item
       end
@@ -174,66 +176,14 @@ local function config()
     }),
     -- preselect = cmp.PreselectMode.None,
     sources = cmp.config.sources({
-      { name = 'nvim_lsp', max_item_count = 10 },
-      { name = 'nvim_lua', max_item_count = 10 },
-      { name = 'luasnip',  max_item_count = 5 },
-      { name = 'path',     max_item_count = 5 },
-      { name = 'emoji',    max_item_count = 5 },
-      { name = 'buffer',   max_item_count = 5, keyword_length = 3 },
+      { name = 'gh_org_users', keyword_length = 2 },
+      { name = 'nvim_lsp',     max_item_count = 10 },
+      { name = 'nvim_lua',     max_item_count = 10 },
+      { name = 'luasnip',      max_item_count = 5 },
+      { name = 'path',         max_item_count = 10 },
+      { name = 'emoji',        max_item_count = 5 },
+      { name = 'buffer',       max_item_count = 5, keyword_length = 3 },
     }),
-  })
-
-  local comparators = (function()
-    local function is_lsp_source(entry)
-      return entry.source.name == 'nvim_lsp'
-    end
-
-    -- When proposed by gopls, I want the 'if err != nil { return ... }~' lsp snippet to appear first
-    local function is_iferr_snippet(entry)
-      return is_lsp_source(entry)
-          and entry:get_kind() == types.lsp.CompletionItemKind.Keyword
-          and entry:get_completion_item().label:find("err != nil.*~$")
-    end
-
-    return {
-      gopls_iferr_priority = function(entry1, entry2)
-        if is_iferr_snippet(entry1) then
-          return true
-        elseif is_iferr_snippet(entry2) then
-          return false
-        end
-      end
-    }
-  end)()
-
-  --
-  -- Setup different sources and comparators for golang
-  --
-  do
-    cmp.setup.filetype('go', {
-      sorting = {
-        -- priority_weight = 2,
-        comparators = {
-          comparators.gopls_iferr_priority,
-          -- cmp.config.compare.kind,
-          -- compare_locality uses distance-based sorting, taken from cmp-buffer README.
-          -- It can also improve the accuracy of LSP suggestions too.
-          function(...) return require 'cmp_buffer':compare_locality(...) end,
-        }
-      },
-      sources = cmp.config.sources({
-        { name = 'luasnip' },
-        { name = 'nvim_lsp' },
-      }),
-    })
-  end
-
-  cmp.setup.filetype({ 'gitcommit', 'markdown' }, {
-    sources = {
-      { name = 'buffer' },
-      { name = 'emoji',  option = { insert = true } },
-      { name = 'luasnip' },
-    }
   })
 
   -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
@@ -291,5 +241,9 @@ return {
   -- completion for luasnip snippets
   'saadparwaiz1/cmp_luasnip',
   -- completion for neovim lua api
-  'hrsh7th/cmp-nvim-lua'
+  'hrsh7th/cmp-nvim-lua',
+  {
+    dir = '~/.dotfiles/nvim-plugins/gh-cmp',
+    name = 'gh-cmp',
+  },
 }
