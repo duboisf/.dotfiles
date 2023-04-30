@@ -12,7 +12,6 @@ function M.inspectTree()
 end
 
 function M.setup()
-  print('Setting up inspect-tree')
   vim.keymap.set('n', '<A-t>', M.inspectTree, { silent = true, desc = 'Calls :InspectTree but keeps cursor in place' })
 end
 
