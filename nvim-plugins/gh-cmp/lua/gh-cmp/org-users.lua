@@ -1,5 +1,10 @@
-local Job = require 'plenary.job'
+---@alias BufferNumber number
+
+---@class Source
+---@field private cache table<BufferNumber, lsp.CompletionResponse>
 local source = {}
+
+local Job = require 'plenary.job'
 
 ---@class QueryResult
 ---@field data Data
@@ -17,16 +22,20 @@ local source = {}
 ---@class PageInfo
 ---@field hasNextPage boolean
 ---@field endCursor string
---
+
 ---@class Edge
 ---@field node Node
----@field role string
+---@field role string The role of the user in the organization
 
 ---@class Node
 ---@field login string
 ---@field name string
 ---@field bio string
 ---@field location string
+
+local function log(msg)
+  vim.defer_fn(function() vim.notify(msg) end, 10)
+end
 
 local graphql_query = [[
   query ($org: String!, $endCursor: String) {
@@ -49,13 +58,6 @@ local graphql_query = [[
     }
   }
 ]]
-
---- log a message using a combination of vim.notify and vim.defer_fn
----@param msg string
----@return nil
-local log = function(msg)
-  vim.defer_fn(function() vim.notify(msg) end, 10)
-end
 
 ---Format a single item for nvim-cmp
 ---@param edge Edge
@@ -91,18 +93,22 @@ local function format_item(edge)
   }
 end
 
+--- Return a new instance of this source.
+---@return Source
 function source.new()
   local self = setmetatable({ cache = {} }, { __index = source })
   return self
 end
 
 ---Return whether this source is available in the current context or not (optional).
+---@param self Source
 ---@return boolean
 function source:is_available()
   return true
 end
 
 ---Return the debug name of this source (optional).
+---@param self Source
 ---@return string
 function source:get_debug_name()
   return 'GitHub users'
@@ -110,6 +116,7 @@ end
 
 ---Return LSP's PositionEncodingKind.
 ---@NOTE: If this method is ommited, the default value will be `utf-16`.
+---@param self Source
 ---@return lsp.PositionEncodingKind
 function source:get_position_encoding_kind()
   return 'utf-16'
@@ -117,17 +124,21 @@ end
 
 ---Return the keyword pattern for triggering completion (optional).
 ---If this is ommited, nvim-cmp will use a default keyword pattern. See |cmp-config.completion.keyword_pattern|.
+---@param self Source
 ---@return string
 function source:get_keyword_pattern()
   return [[\k\+]]
 end
 
 ---Return trigger characters for triggering completion (optional).
+---@param self Source
+---@return string[]
 function source:get_trigger_characters()
   return { '@' }
 end
 
 ---Invoke completion (required).
+---@param self Source
 ---@param callback fun(response: lsp.CompletionResponse|nil)
 function source:complete(_, callback)
   local bufnr = vim.api.nvim_get_current_buf()
@@ -145,14 +156,13 @@ function source:complete(_, callback)
         ---@type lsp.CompletionResponse
         local result = { items = {}, isIncomplete = false }
         self.cache[bufnr] = result
+        ---@type boolean, QueryResult|nil
         local ok, parsed = pcall(
           vim.json.decode,
           job:result()[1],
           { luanil = { object = true, array = true } }
         )
-        if not ok then
-          log('Failed to parse JSON result from gh api command')
-        elseif ok and parsed and parsed.data.organization then
+        if ok and parsed and parsed.data.organization then
           local edges = parsed.data.organization.membersWithRole.edges
           for _, edge in ipairs(edges) do
             table.insert(result.items, format_item(edge))
@@ -171,6 +181,7 @@ end
 
 ---Resolve completion item (optional). This is called right before the completion is about to be displayed.
 ---Useful for setting the text shown in the documentation window (`completion_item.documentation`).
+---@param self Source
 ---@param completion_item lsp.CompletionItem
 ---@param callback fun(completion_item: lsp.CompletionItem|nil)
 function source:resolve(completion_item, callback)
@@ -178,6 +189,7 @@ function source:resolve(completion_item, callback)
 end
 
 ---Executed after the item was selected.
+---@param self Source
 ---@param completion_item lsp.CompletionItem
 ---@param callback fun(completion_item: lsp.CompletionItem|nil)
 function source:execute(completion_item, callback)
