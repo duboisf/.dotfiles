@@ -6,34 +6,38 @@ local source = {}
 
 local Job = require 'plenary.job'
 
----@class QueryResult
----@field data Data
+---@class ghcmp.OrgMembersQueryResult
+---@field data ghcmp.OrgMembersQueryResultData
 
----@class Data
----@field organization Organization
+---@class ghcmp.OrgMembersQueryResultData
+---@field organization ghcmp.Organization
 
----@class Organization
+---@class ghcmp.Organization
 ---@field name string The name of the organization
----@field membersWithRole MembersWithRole
+---@field membersWithRole ghcmp.OrgMemberConnection
 
----@class MembersWithRole
----@field edges Edge[]
----@field pageInfo PageInfo
+---@class ghcmp.OrgMemberConnection
+---@field edges ghcmp.OrgMemberEdge[]
+---@field pageInfo ghcmp.PageInfo
 
----@class PageInfo
+---@class ghcmp.PageInfo
 ---@field hasNextPage boolean
----@field endCursor string
+---@field endCursor? string
 
----@class Edge
----@field node Node
----@field role string The role of the user in the organization
+---@alias ghcmp.Role
+---| '"ADMIN"'
+---| '"MEMBER"'
 
----@class Node
+---@class ghcmp.OrgMemberEdge
+---@field node ghcmp.User
+---@field role ghcmp.Role
+
+---@class ghcmp.User
 ---@field login string
----@field name string | nil
----@field bio string | nil
----@field location string | nil
----@field company string | nil
+---@field name? string
+---@field bio? string
+---@field location? string
+---@field company? string
 ---@field socialAccounts SocialAccounts
 
 ---@class SocialAccounts
@@ -121,16 +125,16 @@ function source.format_documentation(data)
   return documentation
 end
 
----@class org-users.CompletionItem: lsp.CompletionItem
+---@class ghcmp.users.org.CompletionItem: lsp.CompletionItem
 ---@field data org-users.CompletionItemData
 
 ---@class org-users.CompletionItemData
 ---@field org_name string
----@field edge Edge
+---@field edge ghcmp.OrgMemberEdge
 
 ---Format a single item for nvim-cmp
----@param edge Edge
----@return org-users.CompletionItem
+---@param edge ghcmp.OrgMemberEdge
+---@return ghcmp.users.org.CompletionItem
 local function format_item(edge)
   local member = edge.node
   local label = member.name or ''
@@ -248,7 +252,7 @@ function source:complete(_, callback)
         ---@type lsp.CompletionResponse
         local result = { items = {}, isIncomplete = false }
         self.cache[bufnr] = result
-        ---@type boolean, QueryResult|nil
+        ---@type boolean, ghcmp.OrgMembersQueryResult|nil
         local ok, parsed = pcall(
           vim.json.decode,
           job:result()[1],
@@ -264,8 +268,6 @@ function source:complete(_, callback)
             }
             table.insert(result.items, completion_item)
           end
-        else
-          log('Failed to parse JSON result from gh api command')
         end
         callback(result)
       end,
@@ -279,7 +281,7 @@ end
 ---Resolve completion item (optional). This is called right before the completion is about to be displayed.
 ---Useful for setting the text shown in the documentation window (`completion_item.documentation`).
 ---@param self Source
----@param completion_item org-users.CompletionItem
+---@param completion_item ghcmp.users.org.CompletionItem
 ---@param callback fun(completion_item: lsp.CompletionItem|nil)
 function source:resolve(completion_item, callback)
   completion_item.documentation = {
