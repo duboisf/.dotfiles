@@ -13,6 +13,7 @@ local Job = require 'plenary.job'
 ---@field organization Organization
 
 ---@class Organization
+---@field name string The name of the organization
 ---@field membersWithRole MembersWithRole
 
 ---@class MembersWithRole
@@ -29,9 +30,19 @@ local Job = require 'plenary.job'
 
 ---@class Node
 ---@field login string
----@field name string
----@field bio string
----@field location string
+---@field name string | nil
+---@field bio string | nil
+---@field location string | nil
+---@field company string | nil
+---@field socialAccounts SocialAccounts
+
+---@class SocialAccounts
+---@field nodes SocialAccount[]
+
+---@class SocialAccount
+---@field displayName string
+---@field provider string
+---@field url string
 
 local function log(msg)
   vim.defer_fn(function() vim.notify(msg) end, 10)
@@ -40,6 +51,7 @@ end
 local graphql_query = [[
   query ($org: String!, $endCursor: String) {
     organization(login: $org) {
+      name
       membersWithRole(first: 100, after: $endCursor) {
         edges {
           node {
@@ -47,6 +59,14 @@ local graphql_query = [[
             name
             bio
             location
+            company
+            socialAccounts(first:20) {
+              nodes {
+                displayName
+                provider
+                url
+              }
+            }
           }
           role
         }
@@ -59,9 +79,58 @@ local graphql_query = [[
   }
 ]]
 
+local social_account_provider_icons = {
+  TWITTER = "",
+}
+
+---@param social_accounts SocialAccount[]
+---@return string
+local function format_social_accounts(social_accounts)
+  local results = {}
+  for _, social_account in ipairs(social_accounts) do
+    local icon = social_account_provider_icons[social_account.provider] or ''
+    if icon ~= '' then
+      icon = icon .. ' '
+    end
+    table.insert(results, string.format('%s[%s](%s)', icon, social_account.displayName, social_account.url))
+  end
+  return table.concat(results, '\n')
+end
+
+---Format documentation for nvim-cmp
+---@param data org-users.CompletionItemData
+---@return string
+function source.format_documentation(data)
+  local edge = data.edge
+  local member = edge.node
+  local role = edge.role:sub(1, 1) .. edge.role:sub(2):lower()
+  local documentation = role .. ' of ' .. data.org_name .. ' org\n'
+  if member.location ~= nil then
+    documentation = documentation .. string.format('Located in %s\n', member.location)
+  end
+  if member.company ~= nil then
+    documentation = documentation .. string.format('Works at %s\n', member.company)
+  end
+  local social_accounts = format_social_accounts(member.socialAccounts.nodes)
+  if social_accounts ~= '' then
+    documentation = documentation .. social_accounts .. '\n'
+  end
+  if member.bio ~= nil then
+    documentation = documentation .. '\n' .. member.bio
+  end
+  return documentation
+end
+
+---@class org-users.CompletionItem: lsp.CompletionItem
+---@field data org-users.CompletionItemData
+
+---@class org-users.CompletionItemData
+---@field org_name string
+---@field edge Edge
+
 ---Format a single item for nvim-cmp
 ---@param edge Edge
----@return lsp.CompletionResponse
+---@return org-users.CompletionItem
 local function format_item(edge)
   local member = edge.node
   local label = member.name or ''
@@ -70,21 +139,10 @@ local function format_item(edge)
   else
     label = label .. ' (@' .. member.login .. ')'
   end
-  local role = edge.role:sub(1, 1) .. edge.role:sub(2):lower()
-  local documentation = role
-  if member.location ~= nil then
-    documentation = documentation .. ', located in ' .. member.location
-  end
-  if member.bio ~= nil then
-    documentation = documentation .. '\n\n' .. member.bio
-  end
   return {
     label = label,
     insertText = '@' .. member.login,
-    documentation = {
-      kind = 'markdown',
-      value = documentation,
-    },
+    data = edge,
     cmp = {
       kind_hl_group = 'CmpItemKindUser',
       kind_text = 'User',
@@ -93,10 +151,44 @@ local function format_item(edge)
   }
 end
 
+local cache_file = vim.fn.stdpath('cache') .. '/nvim/gh-cmp/org-users.json'
+
+--- Load the cache from the cache file
+---@return org-users.Cache
+local function load_cache_from_file()
+  ---@type org-users.Cache
+  local cache = {}
+  local f = io.open(cache_file, 'r')
+  if f ~= nil then
+    local content = f:read('*a')
+    f:close()
+    cache = vim.fn.json_decode(content) or {}
+  end
+  return cache
+end
+
+--- Write the cache to the cache file
+---@param cache org-users.Cache
+local function write_cache_to_file(cache)
+  local f = io.open(cache_file, 'w')
+  if f ~= nil then
+    f:write(vim.fn.json_encode(cache))
+    f:close()
+  end
+end
+
+---@alias org-users.OrgNameCacheKey string
+---@alias org-users.Cache table<org-users.OrgNameCacheKey, org-users.CacheItem>
+
+---@class org-users.CacheItem
+---@field last_fetch number The timestamp of the last fetch in seconds since epoch
+---@field items lsp.CompletionResponse
+
 --- Return a new instance of this source.
 ---@return Source
 function source.new()
-  local self = setmetatable({ cache = {} }, { __index = source })
+  local cache = load_cache_from_file()
+  local self = setmetatable({ cache = cache }, { __index = source })
   return self
 end
 
@@ -165,7 +257,12 @@ function source:complete(_, callback)
         if ok and parsed and parsed.data.organization then
           local edges = parsed.data.organization.membersWithRole.edges
           for _, edge in ipairs(edges) do
-            table.insert(result.items, format_item(edge))
+            local completion_item = format_item(edge)
+            completion_item.data = {
+              org_name = parsed.data.organization.name,
+              edge = edge,
+            }
+            table.insert(result.items, completion_item)
           end
         else
           log('Failed to parse JSON result from gh api command')
@@ -182,9 +279,13 @@ end
 ---Resolve completion item (optional). This is called right before the completion is about to be displayed.
 ---Useful for setting the text shown in the documentation window (`completion_item.documentation`).
 ---@param self Source
----@param completion_item lsp.CompletionItem
+---@param completion_item org-users.CompletionItem
 ---@param callback fun(completion_item: lsp.CompletionItem|nil)
 function source:resolve(completion_item, callback)
+  completion_item.documentation = {
+    kind = 'markdown',
+    value = source.format_documentation(completion_item.data),
+  }
   callback(completion_item)
 end
 
