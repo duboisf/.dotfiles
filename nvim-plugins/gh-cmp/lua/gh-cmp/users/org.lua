@@ -248,7 +248,11 @@ function source:complete(_, callback)
       'org={owner}',
       '-f',
       'query=' .. graphql_query,
-      on_exit = function(job)
+      on_stderr = function(_, data)
+        log('gh_org_users: could not fetch users with gh api: ' .. vim.inspect(data))
+      end,
+      on_exit = function(job, code)
+        if code ~= 0 then return end
         ---@type lsp.CompletionResponse
         local result = { items = {}, isIncomplete = false }
         self.cache[bufnr] = result
