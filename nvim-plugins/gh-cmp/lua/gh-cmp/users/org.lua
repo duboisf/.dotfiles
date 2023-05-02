@@ -34,20 +34,21 @@ local Job = require 'plenary.job'
 
 ---@class ghcmp.User
 ---@field login string
----@field name? string
----@field bio? string
----@field location? string
----@field company? string
----@field socialAccounts SocialAccounts
+---@field name string?
+---@field bio string?
+---@field location string?
+---@field company string?
+---@field socialAccounts ghcmp.SocialAccounts
 
----@class SocialAccounts
----@field nodes SocialAccount[]
+---@class ghcmp.SocialAccounts
+---@field nodes ghcmp.SocialAccount[]
 
----@class SocialAccount
+---@class ghcmp.SocialAccount
 ---@field displayName string
 ---@field provider string
 ---@field url string
 
+---@param msg string
 local function log(msg)
   vim.defer_fn(function() vim.notify(msg) end, 10)
 end
@@ -83,11 +84,12 @@ local graphql_query = [[
   }
 ]]
 
+---@enum ghcmp.SocialAccountProviderIcon
 local social_account_provider_icons = {
   TWITTER = "",
 }
 
----@param social_accounts SocialAccount[]
+---@param social_accounts ghcmp.SocialAccount[]
 ---@return string
 local function format_social_accounts(social_accounts)
   local results = {}
@@ -256,7 +258,7 @@ function source:complete(_, callback)
         ---@type lsp.CompletionResponse
         local result = { items = {}, isIncomplete = false }
         self.cache[bufnr] = result
-        ---@type boolean, ghcmp.OrgMembersQueryResult|nil
+        ---@type boolean, ghcmp.OrgMembersQueryResult?
         local ok, parsed = pcall(
           vim.json.decode,
           job:result()[1],

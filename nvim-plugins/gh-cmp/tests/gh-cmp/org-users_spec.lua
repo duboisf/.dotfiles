@@ -1,9 +1,9 @@
-local source = require 'gh-cmp.org-users'
+local source = require 'gh-cmp.users.org'
 
 describe('format_documentation', function()
   it('should format the documentation correctly (duh)', function()
     local org_name = 'AwesomeOrg'
-    ---@type Edge
+    ---@type ghcmp.OrgMemberEdge
     local edge = {
       node = {
         location = 'Montréal',
