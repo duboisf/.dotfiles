@@ -39,6 +39,12 @@ local Job = require 'plenary.job'
 ---@field location string?
 ---@field company string?
 ---@field socialAccounts ghcmp.SocialAccounts
+---@field status ghcmp.Status
+
+---@class ghcmp.Status
+---@field emojiHTML string?
+---@field indicatesLimitedAvailability boolean
+---@field message string?
 
 ---@class ghcmp.SocialAccounts
 ---@field nodes ghcmp.SocialAccount[]
@@ -72,6 +78,11 @@ local graphql_query = [[
                 url
               }
             }
+            status {
+              emojiHTML
+              indicatesLimitedAvailability
+              message
+            }
           }
           role
         }
@@ -104,7 +115,7 @@ local function format_social_accounts(social_accounts)
 end
 
 ---Format documentation for nvim-cmp
----@param data org-users.CompletionItemData
+---@param data ghcmp.users.org.CompletionItemData
 ---@return string
 function source.format_documentation(data)
   local edge = data.edge
@@ -128,9 +139,9 @@ function source.format_documentation(data)
 end
 
 ---@class ghcmp.users.org.CompletionItem: lsp.CompletionItem
----@field data org-users.CompletionItemData
+---@field data ghcmp.users.org.CompletionItemData
 
----@class org-users.CompletionItemData
+---@class ghcmp.users.org.CompletionItemData
 ---@field org_name string
 ---@field edge ghcmp.OrgMemberEdge
 
