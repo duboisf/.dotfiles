@@ -66,7 +66,6 @@ return {
   enabled = require('core.utils').notStartedByFirenvim,
   config = config,
   dependencies = {
-    'folke/noice.nvim',
     'kyazdani42/nvim-web-devicons'
   },
 }

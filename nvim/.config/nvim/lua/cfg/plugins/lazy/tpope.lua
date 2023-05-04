@@ -8,12 +8,7 @@ return {
       { ',g', ':G<CR>', 'Open fugitive' }
     },
   },
-  {
-    'tpope/vim-rhubarb',
-    dependencies = {
-      'tpope/vim-fugitive',
-    },
-  },
+  'tpope/vim-rhubarb',
   'tpope/vim-repeat',
   'tpope/vim-unimpaired',
 }

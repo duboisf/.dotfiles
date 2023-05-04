@@ -31,8 +31,8 @@ return {
   end,
   ft = 'go',
   dependencies = {
-    'neovim/nvim-lspconfig',
-    'nvim-treesitter/nvim-treesitter',
+    'nvim-lspconfig',
+    'nvim-treesitter',
     'ray-x/guihua.lua',
   },
 }

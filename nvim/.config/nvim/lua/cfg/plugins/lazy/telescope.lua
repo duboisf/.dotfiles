@@ -444,7 +444,7 @@ return {
     enabled = require('core.utils').notStartedByFirenvim,
     config = config,
     dependencies = {
-      'folke/which-key.nvim',
+      'which-key.nvim',
       'kyazdani42/nvim-web-devicons',
       'nvim-lua/popup.nvim',
       'nvim-lua/plenary.nvim',
