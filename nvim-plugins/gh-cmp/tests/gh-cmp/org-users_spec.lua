@@ -1,24 +1,24 @@
-local source = require 'gh-cmp.users.org'
+local source = require "gh-cmp.org_users"
 
-describe('format_documentation', function()
-  it('should format the documentation correctly (duh)', function()
-    local org_name = 'AwesomeOrg'
+describe("format_documentation", function()
+  it("should format the documentation correctly (duh)", function()
+    local org_name = "AwesomeOrg"
     ---@type ghcmp.OrgMemberEdge
     local edge = {
       node = {
-        location = 'Montréal',
-        bio = 'I am a human',
+        location = "Montréal",
+        bio = "I am a human",
         socialAccounts = {
           nodes = {
             {
-              displayName = '@somebody',
-              provider = 'TWITTER',
-              url = 'https://twitter.com/somebody',
+              displayName = "@somebody",
+              provider = "TWITTER",
+              url = "https://twitter.com/somebody",
             },
           },
         },
       },
-      role = 'MEMBER',
+      role = "MEMBER",
     }
     local expected = [[Member of AwesomeOrg org
 Located in Montréal
@@ -29,18 +29,18 @@ I am a human]]
     assert.are.equal(expected, actual)
   end)
 
-  it('should work even if there are missing fields', function()
+  it("should work even if there are missing fields", function()
     -- Given
     ---@type ghcmp.users.org.CompletionItemData
     local data = {
-      org_name = 'AwesomeOrg',
+      org_name = "AwesomeOrg",
       edge = {
         node = {
           socialAccounts = {
             nodes = {},
           },
         },
-        role = 'MEMBER',
+        role = "MEMBER",
       },
     }
 
@@ -48,7 +48,7 @@ I am a human]]
     local documentation = source.format_documentation(data)
 
     -- Then
-    local expected = 'Member of AwesomeOrg org\n'
+    local expected = "Member of AwesomeOrg org\n"
     assert.are.equal(expected, documentation)
   end)
 end)

@@ -1,10 +1,13 @@
+local utils = require "gh-cmp.utils"
+
 ---@alias BufferNumber number
 
 ---@class Source
----@field private cache table<BufferNumber, lsp.CompletionResponse>
+---@field private cache org-users.Cache
+---@field private github_owner string
 local source = {}
 
-local Job = require 'plenary.job'
+local Job = require "plenary.job"
 
 ---@class ghcmp.OrgMembersQueryResult
 ---@field data ghcmp.OrgMembersQueryResultData
@@ -25,8 +28,8 @@ local Job = require 'plenary.job'
 ---@field endCursor? string
 
 ---@alias ghcmp.Role
----| '"ADMIN"'
----| '"MEMBER"'
+---| ""ADMIN""
+---| ""MEMBER""
 
 ---@class ghcmp.OrgMemberEdge
 ---@field node ghcmp.User
@@ -105,13 +108,13 @@ local social_account_provider_icons = {
 local function format_social_accounts(social_accounts)
   local results = {}
   for _, social_account in ipairs(social_accounts) do
-    local icon = social_account_provider_icons[social_account.provider] or ''
-    if icon ~= '' then
-      icon = icon .. ' '
+    local icon = social_account_provider_icons[social_account.provider] or ""
+    if icon ~= "" then
+      icon = icon .. " "
     end
-    table.insert(results, string.format('%s[%s](%s)', icon, social_account.displayName, social_account.url))
+    table.insert(results, string.format("%s[%s](%s)", icon, social_account.displayName, social_account.url))
   end
-  return table.concat(results, '\n')
+  return table.concat(results, "\n")
 end
 
 ---Format documentation for nvim-cmp
@@ -121,19 +124,19 @@ function source.format_documentation(data)
   local edge = data.edge
   local member = edge.node
   local role = edge.role:sub(1, 1) .. edge.role:sub(2):lower()
-  local documentation = role .. ' of ' .. data.org_name .. ' org\n'
+  local documentation = role .. " of " .. data.org_name .. " org\n"
   if member.location ~= nil then
-    documentation = documentation .. string.format('Located in %s\n', member.location)
+    documentation = documentation .. string.format("Located in %s\n", member.location)
   end
   if member.company ~= nil then
-    documentation = documentation .. string.format('Works at %s\n', member.company)
+    documentation = documentation .. string.format("Works at %s\n", member.company)
   end
   local social_accounts = format_social_accounts(member.socialAccounts.nodes)
-  if social_accounts ~= '' then
-    documentation = documentation .. social_accounts .. '\n'
+  if social_accounts ~= "" then
+    documentation = documentation .. social_accounts .. "\n"
   end
   if member.bio ~= nil then
-    documentation = documentation .. '\n' .. member.bio
+    documentation = documentation .. "\n" .. member.bio
   end
   return documentation
 end
@@ -150,47 +153,64 @@ end
 ---@return ghcmp.users.org.CompletionItem
 local function format_item(edge)
   local member = edge.node
-  local label = member.name or ''
-  if label == '' then
-    label = '@' .. member.login
+  local label = member.name or ""
+  if label == "" then
+    label = "@" .. member.login
   else
-    label = label .. ' (@' .. member.login .. ')'
+    label = label .. " (@" .. member.login .. ")"
   end
   return {
     label = label,
-    insertText = '@' .. member.login,
+    insertText = "@" .. member.login,
     data = edge,
     cmp = {
-      kind_hl_group = 'CmpItemKindUser',
-      kind_text = 'User',
+      kind_hl_group = "CmpItemKindUser",
+      kind_text = "User",
     },
     dup = 1,
   }
 end
 
-local cache_file = vim.fn.stdpath('cache') .. '/nvim/gh-cmp/org-users.json'
+---@type string
+local cache_file = vim.fn.stdpath("cache") .. "/gh-cmp/org-users.json"
 
 --- Load the cache from the cache file
----@return org-users.Cache
+---@return org-users.Cache?
 local function load_cache_from_file()
-  ---@type org-users.Cache
-  local cache = {}
-  local f = io.open(cache_file, 'r')
-  if f ~= nil then
-    local content = f:read('*a')
-    f:close()
-    cache = vim.fn.json_decode(content) or {}
+  local data = utils.read_file(cache_file)
+  if not data then
+    return nil
   end
-  return cache
+  ---@type boolean, org-users.Cache?
+  local ok, result = pcall(vim.json.decode, data)
+  if not ok then
+    log("Failed to parse cache file: " .. result)
+    return nil
+  end
+  return result
 end
 
 --- Write the cache to the cache file
 ---@param cache org-users.Cache
 local function write_cache_to_file(cache)
-  local f = io.open(cache_file, 'w')
-  if f ~= nil then
-    f:write(vim.fn.json_encode(cache))
-    f:close()
+  -- Check if directory exists
+  local cache_folder = vim.fs.dirname(cache_file)
+  log("Cache folder: " .. cache_folder)
+  if vim.fn.isdirectory(cache_folder) == 0 then
+    log("Creating cache directory " .. cache_folder)
+    local ok, err = pcall(vim.fn.mkdir, cache_folder, "p", 0700)
+    log("Mkdir result: " .. tostring(ok) .. " " .. tostring(err))
+    if not ok then
+      log("Failed to create cache directory: " .. err)
+      return
+    end
+  end
+  local fd = io.open(cache_file, "w+")
+  if fd ~= nil then
+    fd:write(vim.json.encode(cache))
+    fd:close()
+  else
+    log("Failed to open cache file for writing")
   end
 end
 
@@ -198,14 +218,19 @@ end
 ---@alias org-users.Cache table<org-users.OrgNameCacheKey, org-users.CacheItem>
 
 ---@class org-users.CacheItem
----@field last_fetch number The timestamp of the last fetch in seconds since epoch
+---@field last_fetch_timestamp number The timestamp of the last fetch in seconds since epoch
 ---@field items lsp.CompletionResponse
 
 --- Return a new instance of this source.
+---@param github_owner string
 ---@return Source
-function source.new()
+function source.new(github_owner)
   local cache = load_cache_from_file()
-  local self = setmetatable({ cache = cache }, { __index = source })
+  if not cache then
+    cache = {}
+  end
+  local mt = { cache = cache, github_owner = github_owner }
+  local self = setmetatable(mt, { __index = source })
   return self
 end
 
@@ -220,15 +245,15 @@ end
 ---@param self Source
 ---@return string
 function source:get_debug_name()
-  return 'GitHub users'
+  return "GitHub users"
 end
 
----Return LSP's PositionEncodingKind.
+---Return LSP"s PositionEncodingKind.
 ---@NOTE: If this method is ommited, the default value will be `utf-16`.
 ---@param self Source
 ---@return lsp.PositionEncodingKind
 function source:get_position_encoding_kind()
-  return 'utf-16'
+  return "utf-16"
 end
 
 ---Return the keyword pattern for triggering completion (optional).
@@ -243,32 +268,29 @@ end
 ---@param self Source
 ---@return string[]
 function source:get_trigger_characters()
-  return { '@' }
+  return { "@" }
 end
 
 ---Invoke completion (required).
 ---@param self Source
 ---@param callback fun(response: lsp.CompletionResponse|nil)
 function source:complete(_, callback)
-  local bufnr = vim.api.nvim_get_current_buf()
-  if self.cache[bufnr] == nil then
+  if self.cache[self.github_owner] == nil then
     local job = Job:new({
-      'gh',
-      'api',
-      '--paginate',
-      'graphql',
-      '-F',
-      'org={owner}',
-      '-f',
-      'query=' .. graphql_query,
-      on_stderr = function(_, data)
-        log('gh_org_users: could not fetch users with gh api: ' .. vim.inspect(data))
-      end,
+      "gh",
+      "api",
+      "--paginate",
+      "graphql",
+      "-F",
+      "org=" .. self.github_owner,
+      "-f",
+      "query=" .. graphql_query,
       on_exit = function(job, code)
         if code ~= 0 then return end
         ---@type lsp.CompletionResponse
         local result = { items = {}, isIncomplete = false }
-        self.cache[bufnr] = result
+        local cache_item = { last_fetch_timestamp = os.time(), items = result }
+        self.cache[self.github_owner] = cache_item
         ---@type boolean, ghcmp.OrgMembersQueryResult?
         local ok, parsed = pcall(
           vim.json.decode,
@@ -287,11 +309,12 @@ function source:complete(_, callback)
           end
         end
         callback(result)
+        -- write_cache_to_file(self.cache)
       end,
     })
     job:start()
   else
-    callback(self.cache[bufnr])
+    callback(self.cache[self.github_owner])
   end
 end
 
@@ -302,7 +325,7 @@ end
 ---@param callback fun(completion_item: lsp.CompletionItem|nil)
 function source:resolve(completion_item, callback)
   completion_item.documentation = {
-    kind = 'markdown',
+    kind = "markdown",
     value = source.format_documentation(completion_item.data),
   }
   callback(completion_item)
