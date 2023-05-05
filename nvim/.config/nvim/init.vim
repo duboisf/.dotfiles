@@ -59,8 +59,8 @@ aug fred#man
     echo "TweakManSettings"
     set nocursorline
     set nocursorcolumn
-    nnoremap <silent>f <C-f>
-    nnoremap <silent>d <C-b>
+    nnoremap <buffer><silent>f <C-f>
+    nnoremap <buffer><silent>d <C-b>
   endfu
 aug end
 
