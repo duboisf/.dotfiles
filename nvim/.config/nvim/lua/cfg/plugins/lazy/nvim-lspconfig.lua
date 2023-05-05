@@ -40,15 +40,6 @@ local function config()
     update_in_insert = false,
   }
 
-  -- Setup floating preview border
-  local function setup_highlights()
-    vim.cmd [[
-      highlight NormalFloat guibg=#1f2335
-      highlight FloatBorder guifg=white guibg=#1f2335
-      highlight default link LspSignatureActiveParameter Search
-    ]]
-  end
-
   local border = {
     { "🭽", "FloatBorder" },
     { "▔",  "FloatBorder" },
@@ -91,10 +82,6 @@ local function config()
 
     autocmd('BufUnload', nil, clear_buffer_autocmds, 'Delete buffer autocmds to prevent duplicates', opts)
   end
-
-  local autocmd = utils.autogroup('duboisf.lsp', true)
-  autocmd('ColorScheme', nil, setup_highlights, 'Setup LSP highlights')
-  setup_highlights()
 
   -- Setup mappings
   local setup_mappings = (function()
@@ -372,23 +359,6 @@ local function config()
       end,
     }
   end
-
-  -- local configs = require 'lspconfig/configs'
-
-  -- if not lspconfig.golangcilsp then
-  --     configs.golangcilsp = {
-  --       default_config = {
-  --         cmd = {'golangci-lint-langserver'},
-  --         filetypes = {'go'},
-  --         root_dir = lspconfig.util.root_pattern('.git', 'go.mod'),
-  --         init_options = {
-  --           command = { "golangci-lint", "run", "--out-format", "json" }
-  --         }
-  --       },
-  --     }
-  -- end
-
-  -- lspconfig.golangcilsp.setup()
 end
 
 return {
