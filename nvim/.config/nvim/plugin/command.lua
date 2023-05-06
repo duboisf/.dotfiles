@@ -26,7 +26,7 @@ end
 vim.api.nvim_create_user_command('Plugins', telescope_find_data, {})
 
 vim.api.nvim_create_user_command('EditTheme', function()
-  local paths = vim.api.nvim_get_runtime_file('lua/core/colorscheme/theme.lua', false)
+  local paths = vim.api.nvim_get_runtime_file('lua/core/colors.lua', false)
   if #paths ~= 1 then
     vim.notify('Could not find location of the theme file', vim.log.levels.ERROR, {
       timeout = 500,

@@ -23,7 +23,7 @@ return lush.extends({ theme }).with(function(injected_functions)
     sym('@annotation') { theme['@annotation'], gui = 'italic' },
     -- goCoverageCovered is defined in the go.nvim plugin
     goCoverageCovered { theme.Function },
-    sym('@lsp.mod.global') { fg = lush.hsl(20, 100, 50) }, -- global variables
+    sym('@lsp.mod.global') { fg = lush.hsl(20, 100, 50) },   -- global variables
     MiniIndentscopeSymbol { fg = lush.hsl(20, 100, 50) },
 
     -- Treesitter diff

@@ -1,9 +1,12 @@
+local utils = require("core.utils")
+
 local function get_statusline_mode()
   local ok, noice = pcall(require, "noice")
   if not ok then
     return
   end
-  local ok, theme = pcall(require, "core.colorscheme.theme")
+  local theme
+  ok, theme = pcall(require, "core.colors")
   if not ok then
     return
   end
@@ -17,21 +20,19 @@ local function get_statusline_mode()
 end
 
 local function config()
-  local utils = require("core.utils")
-
   local function get_cwd()
     return " " .. utils.get_short_cwd()
   end
 
-  local theme = require 'core.colorscheme.theme'
-  local bluloco = require 'lualine.themes.bluloco'
-  bluloco.insert.a.bg = theme.Attribute.fg.hex
-  bluloco.insert.b.fg = bluloco.insert.a.bg
-  bluloco.normal.b.fg = bluloco.normal.a.bg
+  local theme = require 'core.colors'
+  local lualine_bluloco = require 'lualine.themes.bluloco'
+  lualine_bluloco.insert.a.bg = theme.Attribute.fg.hex
+  lualine_bluloco.insert.b.fg = lualine_bluloco.insert.a.bg
+  lualine_bluloco.normal.b.fg = lualine_bluloco.normal.a.bg
 
   local cfg = {
     options = {
-      theme = bluloco,
+      theme = lualine_bluloco,
       disabled_filetypes = {
         "startify",
         "TelescopePrompt",
@@ -58,8 +59,16 @@ local function config()
     table.insert(cfg.sections.lualine_x, statusline_mode)
   end
 
-  require("lualine").setup(cfg)
+  local lualine = require 'lualine'
+
+  lualine.setup(cfg)
 end
+
+local autocmd = utils.autogroup('core.colors', false)
+autocmd('ColorScheme', '*', function()
+  package.loaded['lualine.themes.bluloco'] = nil
+  config()
+end, 'Reload lualine on colorscheme change')
 
 return {
   'nvim-lualine/lualine.nvim',
