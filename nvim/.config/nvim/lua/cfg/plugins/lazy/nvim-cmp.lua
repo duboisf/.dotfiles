@@ -243,7 +243,7 @@ return {
   -- completion for neovim lua api
   'hrsh7th/cmp-nvim-lua',
   {
-    dir = '~/.dotfiles/nvim-plugins/gh-cmp',
-    name = 'gh-cmp',
+    'duboisf/cmp-gh-users',
+    branch = 'incoming',
   },
 }
