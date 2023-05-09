@@ -1,4 +1,3 @@
-vim.opt.guicursor = nil
 vim.opt.hidden = true
 vim.opt.updatetime = 50
 vim.opt.clipboard = 'unnamed'
