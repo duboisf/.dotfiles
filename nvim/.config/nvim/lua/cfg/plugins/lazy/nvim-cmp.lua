@@ -245,5 +245,6 @@ return {
   {
     'duboisf/cmp-gh-users',
     branch = 'incoming',
+    dev = true,
   },
 }

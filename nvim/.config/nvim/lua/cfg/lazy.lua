@@ -14,5 +14,8 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup('cfg.plugins.lazy', {
   change_detection = {
     enabled = false,
-  }
+  },
+  dev = {
+    path = "~/git",
+  },
 })
