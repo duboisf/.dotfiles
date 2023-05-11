@@ -186,35 +186,44 @@ local function config()
     }),
   })
 
-  -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
+  local cmdline_mappings = {
+    ['<C-n>'] = {
+      c = function(fallback)
+        if cmp.visible() then
+          cmp.select_next_item()
+        else
+          fallback()
+        end
+      end,
+    },
+    ['<C-p>'] = {
+      c = function(fallback)
+        if cmp.visible() then
+          cmp.select_prev_item()
+        else
+          fallback()
+        end
+      end,
+    },
+    ['<C-e>'] = {
+      c = cmp.mapping.abort(),
+    },
+    ['<C-y>'] = {
+      c = cmp.mapping.confirm({ select = false }),
+    }
+  }
   cmp.setup.cmdline('/', {
-    mapping = cmp.mapping.preset.cmdline(),
+    mapping = cmdline_mappings,
     sources = {
       { name = 'buffer' },
     }
   })
 
-  -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
   cmp.setup.cmdline(':', {
-    formatting = {
-      format = function(_, vim_item)
-        -- remove duplicates
-        vim_item.dup = nil
-        return vim_item
-      end
-    },
-    mapping = cmp.mapping.preset.cmdline({
-      ['<C-f>'] = {
-        c = function(fallback)
-          cmp.abort()
-          fallback()
-        end
-      },
-    }),
-    sources = cmp.config.sources({
-      { name = 'path' },
+    mapping = cmdline_mappings,
+    sources = {
       { name = 'cmdline' }
-    })
+    }
   })
 end
 
