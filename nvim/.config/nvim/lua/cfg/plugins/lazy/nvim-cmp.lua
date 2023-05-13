@@ -176,13 +176,13 @@ local function config()
     }),
     -- preselect = cmp.PreselectMode.None,
     sources = cmp.config.sources({
-      { name = 'nvim_lsp', max_item_count = 20 },
+      { name = 'nvim_lsp' },
       { name = 'nvim_lua', max_item_count = 20 },
       { name = 'luasnip',  max_item_count = 5 },
       { name = 'path',     max_item_count = 20 },
       { name = 'emoji',    max_item_count = 5 },
       { name = 'buffer',   max_item_count = 5, keyword_length = 3 },
-      { name = 'gh-users', keyword_length = 2 },
+      { name = 'gh-users', max_item_count = 3, keyword_length = 3 },
     }),
   })
 
