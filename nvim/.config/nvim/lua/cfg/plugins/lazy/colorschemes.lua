@@ -58,7 +58,6 @@ return {
     lazy = false,
     priority = 1000,
     config = function()
-      vim.opt.background = 'dark'
       require("bluloco").setup({
         style       = "auto", -- "auto" | "dark" | "light"
         transparent = false,
@@ -66,8 +65,13 @@ return {
         guicursor   = true,
       })
       vim.opt.termguicolors = true
-      -- vim.cmd.colorscheme('bluloco')
       vim.cmd.colorscheme 'fred-bluloco'
-    end
+    end,
+    dependencies = {
+      {
+        "duboisf/crepuscule.nvim",
+        config = true,
+      }
+    }
   },
 }
