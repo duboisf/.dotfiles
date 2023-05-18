@@ -11,8 +11,8 @@ local function get_statusline_mode()
     return
   end
   return {
-    noice.api.statusline.mode.get,
-    cond = noice.api.statusline.mode.has,
+    noice.api.status.mode.get,
+    cond = noice.api.status.mode.has,
     color = {
       fg = theme.SpecialKey.fg.hex,
     },

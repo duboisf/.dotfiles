@@ -10,7 +10,6 @@ alias edot='
     cd $(git -C ~/.zshrc(:A:h) rev-parse --show-toplevel) && \
         nonet-nvim'
 # secure nvim for general usage
-alias nvim='firejail nvim'
 alias safe-nvim='\nvim --noplugin'
 alias nonet-nvim='firejail \
         --net=none \
