@@ -83,7 +83,7 @@ local function config()
           nvim_lsp = "",
           nvim_lua = "󰢱",
           path = "",
-          gh_org_users = "",
+          gh_users = "",
         })[entry.source.name]
         return vim_item
       end
@@ -180,9 +180,9 @@ local function config()
       { name = 'nvim_lua', max_item_count = 20 },
       { name = 'luasnip',  max_item_count = 5 },
       { name = 'path',     max_item_count = 20 },
-      { name = 'emoji',    max_item_count = 5 },
+      { name = 'emoji',    max_item_count = 10 },
       { name = 'buffer',   max_item_count = 5, keyword_length = 3 },
-      { name = 'gh-users', max_item_count = 3, keyword_length = 3 },
+      { name = 'gh_users', max_item_count = 5, keyword_length = 3 },
     }),
   })
 
@@ -253,6 +253,11 @@ return {
   'hrsh7th/cmp-nvim-lua',
   {
     'duboisf/cmp-gh-users',
+    config = function()
+      require("cmp-gh-users").setup {
+        log_level = vim.log.levels.WARN
+      }
+    end,
     branch = 'incoming',
     dev = true,
   },
