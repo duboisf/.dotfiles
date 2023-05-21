@@ -7,6 +7,7 @@ return {
     local copilot = require 'copilot'
     copilot.setup {
       filetypes = {
+        gitcommit = true,
         markdown = true,
         yaml = true,
       },
