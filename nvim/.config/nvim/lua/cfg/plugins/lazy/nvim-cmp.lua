@@ -100,6 +100,10 @@ local function config()
       ['<C-d>'] = cmp.mapping.scroll_docs(4),
       ['<C-CR>'] = cmp.mapping(function()
         if copilot.has_suggestion() then
+          local luasnip = require('luasnip')
+          if luasnip.in_snippet() then
+            luasnip.unlink_current()
+          end
           copilot.accept()
         elseif cmp.visible() then
           cmp.confirm({ select = true })
