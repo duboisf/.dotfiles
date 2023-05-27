@@ -19,12 +19,6 @@ end
 
 local function config()
   local cmp = require 'cmp'
-  local types = require 'cmp.types'
-
-  -- local has_words_before = function()
-  --   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-  --   return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-  -- end
 
   local all_buffers_source = {
     name = 'buffer',
@@ -181,12 +175,12 @@ local function config()
     -- preselect = cmp.PreselectMode.None,
     sources = cmp.config.sources({
       { name = 'nvim_lsp' },
-      { name = 'nvim_lua', max_item_count = 20 },
-      { name = 'luasnip',  max_item_count = 5 },
-      { name = 'path',     max_item_count = 20 },
-      { name = 'emoji',    max_item_count = 10 },
-      { name = 'buffer',   max_item_count = 5, keyword_length = 3 },
-      { name = 'gh_users', max_item_count = 5, keyword_length = 3 },
+      { name = 'nvim_lua' },
+      { name = 'luasnip' },
+      { name = 'path' },
+      { name = 'emoji' },
+      { name = 'buffer',   keyword_length = 3 },
+      { name = 'gh_users', keyword_length = 3 },
     }),
   })
 
@@ -262,7 +256,6 @@ return {
         log_level = vim.log.levels.WARN
       }
     end,
-    branch = 'incoming',
     dev = true,
   },
 }
