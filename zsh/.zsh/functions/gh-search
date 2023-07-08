@@ -3,9 +3,11 @@ if (( $# != 1 )); then
     return 1
 fi
 
-local search_query="$(echo $1 | tr ' ' '+')"
+# html encode query string with python3
+local search_query="$(python3 -c "import urllib.parse; print(urllib.parse.quote_plus('$1'))")"
 
 gh api \
-  -H "Accept: application/vnd.github+json" \
+  --paginate \
+  -H "Accept: application/vnd.github.text-match+json" \
   -H "X-GitHub-Api-Version: 2022-11-28" \
-  '/search/code?q='"$search_query"
+  '/search/code?per_page=100&q='"$search_query"
