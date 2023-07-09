@@ -1,0 +1,22 @@
+if (( $# != 1 )); then
+    echo "Usage: $0 <GITHUB SEARCH QUERY>"
+    return 1
+fi
+
+# html encode query string with python3
+local search_query="$(python3 -c "import urllib.parse; print(urllib.parse.quote_plus('$1'))")"
+
+gh api \
+  --paginate \
+  -H "Accept: application/vnd.github.text-match+json" \
+  -H "X-GitHub-Api-Version: 2022-11-28" \
+  '/search/code?per_page=100&q='"$search_query" \
+      | jq -cr '
+          .items[]
+          | 
+            "# Repo: " + .repository.name
+           ,"\nFile: `" + .name + "`"
+           , "Path: `" + .path + "`"
+           , "Fragment:\n```\n" + .text_matches[].fragment + "\n```"
+        ' \
+      | nvim -R -c 'set ft=markdown' -
