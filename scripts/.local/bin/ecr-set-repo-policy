@@ -1,0 +1,13 @@
+#!/usr/bin/zsh
+
+if (( $# != 2 )); then
+  echo "Usage: $(basename $0) <ecr repo name> <path to json policy file>"
+  exit 1
+fi
+
+local REPO_NAME=$1
+local POLICY_FILE_PATH=$2
+POLICY_FILE_PATH=${POLICY_FILE_PATH/#\~/$HOME}
+
+aws ecr set-repository-policy --repository-name $REPO_NAME --policy-text file://$POLICY_FILE_PATH \
+  | jq '.policyText | fromjson'
