@@ -1,0 +1,18 @@
+#!/usr/bin/zsh
+
+if (( $# != 1 )); then
+  echo "Usage: $(basename $0) <repo name>"
+  exit 1
+fi
+
+local REPO_NAME=$1
+
+# Get AWS account ID
+local AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+if [[ -z $AWS_ACCOUNT_ID ]]; then
+  echo "You need to be logged in to AWS to run this script"
+  exit 1
+fi
+
+aws ecr list-tags-for-resource \
+  --resource-arn arn:aws:ecr:us-east-1:${AWS_ACCOUNT_ID}:repository/$REPO_NAME
