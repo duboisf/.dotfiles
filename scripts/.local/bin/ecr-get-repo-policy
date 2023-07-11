@@ -1,0 +1,10 @@
+#!/usr/bin/zsh
+
+if (( $# != 1 )); then
+  echo "Usage: $(basename $0) <repo name>"
+  exit 1
+fi
+
+local REPO_NAME=$1
+
+aws ecr get-repository-policy --repository-name $REPO_NAME | jq '.policyText | fromjson'
