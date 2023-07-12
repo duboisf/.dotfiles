@@ -10,6 +10,7 @@
 	browse = !bash -c 'gh browse &> /dev/null'
 	co = checkout
 	cp = cherry-pick
+    fp = fetch --prune
 	gclone = !gh repo clone
 	lp = log -p
 	pfh = push -u duboisf HEAD
