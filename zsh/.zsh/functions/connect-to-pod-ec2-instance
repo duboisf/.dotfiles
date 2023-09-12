@@ -1,0 +1,15 @@
+if [[ -z "$AWS_PROFILE" ]]; then
+    echo "AWS_PROFILE is not set"
+    return 1
+fi
+if (( $# != 1 )); then
+    echo "Usage: connect-to-pod-ec2-instance <pod-name>"
+    return 1
+fi
+local TARGET=$1
+aws ssm start-session --target $(
+    kubectl get no $(
+        kubectl get po $TARGET -o json | jq -r .spec.nodeName
+    ) -o json | \
+        jq -r '.spec.providerID | split("/") | last'
+)

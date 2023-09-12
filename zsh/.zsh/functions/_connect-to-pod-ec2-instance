@@ -1,0 +1,13 @@
+#compdef connect-to-pod-ec2-instance
+
+_connect-to-pod-ec2-instance() {
+    local state
+    _arguments \
+        '1: :->pods'
+
+    case $state in
+        (pods)
+            _arguments '1:pods:($(kubectl get pods -o custom-columns=":metadata.name" --no-headers))'
+            ;;
+    esac
+}
