@@ -452,6 +452,7 @@ return {
   },
   {
     'nvim-telescope/telescope-fzf-native.nvim',
+    enabled = require('core.utils').notStartedByFirenvim,
     build = 'make',
     config = function()
       require('telescope').load_extension 'fzf'
@@ -459,6 +460,7 @@ return {
   },
   {
     'nvim-telescope/telescope-ui-select.nvim',
+    enabled = require('core.utils').notStartedByFirenvim,
     config = function()
       require('telescope').load_extension('ui-select')
     end,

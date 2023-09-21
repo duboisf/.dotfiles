@@ -72,7 +72,6 @@ end, 'Reload lualine on colorscheme change')
 
 return {
   'nvim-lualine/lualine.nvim',
-  enabled = require('core.utils').notStartedByFirenvim,
   config = config,
   dependencies = {
     'kyazdani42/nvim-web-devicons'
