@@ -42,13 +42,13 @@ local function config()
 
   local border = {
     { "🭽", "FloatBorder" },
-    { "▔",  "FloatBorder" },
+    { "▔", "FloatBorder" },
     { "🭾", "FloatBorder" },
-    { "▕",  "FloatBorder" },
+    { "▕", "FloatBorder" },
     { "🭿", "FloatBorder" },
-    { "▁",  "FloatBorder" },
+    { "▁", "FloatBorder" },
     { "🭼", "FloatBorder" },
-    { "▏",  "FloatBorder" },
+    { "▏", "FloatBorder" },
   }
 
   local orig_open_floating_preview = vim.lsp.util.open_floating_preview
@@ -59,7 +59,9 @@ local function config()
     return orig_open_floating_preview(contents, syntax, opts, ...)
   end
 
-  -- Setup autocmds for buffer
+  ---Setup autocmds for buffer
+  ---@param client lsp.Client
+  ---@param bufnr number
   local function setup_autocmds(client, bufnr)
     local autocmd, group_id = utils.autogroup('duboisf.lsp.buffer', false)
     local opts = { buffer = bufnr }
@@ -87,6 +89,8 @@ local function config()
   local setup_mappings = (function()
     local group = vim.api.nvim_create_augroup("lsp_format_on_save", { clear = false })
 
+    ---@param client lsp.Client
+    ---@param bufnr number
     return function(client, bufnr)
       local opts = { noremap = true, silent = true, buffer = bufnr }
 
@@ -149,6 +153,8 @@ local function config()
 
   -- Use an on_attach function to only map the following keys
   -- after the language server attaches to the current buffer
+  ---@param client lsp.Client
+  ---@param bufnr number
   local on_attach = function(client, bufnr)
     setup_autocmds(client, bufnr)
     setup_mappings(client, bufnr)
@@ -193,7 +199,17 @@ local function config()
   --]]
   lspconfig.bashls.setup { capabilities = capabilities, on_attach = on_attach }
   lspconfig.dockerls.setup { capabilities = capabilities, on_attach = on_attach }
-  lspconfig.jsonls.setup { capabilities = capabilities, on_attach = on_attach }
+  lspconfig.jsonls.setup {
+    capabilities = capabilities,
+    settings = {
+      json = {
+        format = {
+          enable = false
+        }
+      }
+    },
+    on_attach = on_attach
+  }
   lspconfig.jdtls.setup { capabilities = capabilities, on_attach = on_attach }
   lspconfig.marksman.setup { capabilities = capabilities, on_attach = on_attach }
   lspconfig.pylsp.setup {
@@ -211,8 +227,10 @@ local function config()
       }
     }
   }
+  lspconfig.rnix.setup { capabilities = capabilities, on_attach = on_attach }
   lspconfig.sqlls.setup { capabilities = capabilities, on_attach = on_attach }
   lspconfig.terraformls.setup { capabilities = capabilities, on_attach = on_attach }
+  -- lspconfig.vtsls.setup { capabilities = capabilities, on_attach = on_attach }
   lspconfig.tsserver.setup {
     capabilities = capabilities,
     handlers = {
