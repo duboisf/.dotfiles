@@ -22,6 +22,8 @@ export GPG_TTY=$(tty)
 export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
 export MANWIDTH=999
 export ZK_NOTEBOOK_DIR=~/notes
+# Enable experimental pnpm support in volta
+export VOLTA_FEATURE_PNPM=1
 
 if [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
