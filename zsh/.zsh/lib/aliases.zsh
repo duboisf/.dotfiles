@@ -52,7 +52,7 @@ alias -g G='| grep'
 alias -g L='| less'
 alias -g S='| sort'
 alias -g SU='| sort -u'
-alias -g V='| nonet-nvim -n -R --cmd "let g:pager_mode = 1" '
+alias -g V='| nvim -n -R --cmd "let g:pager_mode = 1" '
 alias -g X='| xclip -selection clipboard'
 
 # chrome with firejail
@@ -109,9 +109,9 @@ alias rollouts='kc rollout status'
 alias -g CT='--context'
 alias -g AN='--all-namespaces'
 alias -g J='-o json'
-alias -g JV='-o json | nonet-nvim -R -c "set ft=json"'
+alias -g JV='-o json | nvim -R -c "set ft=json"'
 alias -g Y='-o yaml'
-alias -g YV='-o yaml | nonet-nvim -R -c "set ft=yaml"'
+alias -g YV='-o yaml | nvim -R -c "set ft=yaml"'
 alias kubelistall='kubectl api-resources --verbs=list --namespaced -o name | grep -v event | xargs -n 1 kubectl get --show-kind --ignore-not-found'
 
 # git
@@ -144,6 +144,12 @@ alias prv='p view'
 alias prc='p create'
 alias prco='p checkout'
 alias prlv='p list -w'
+alias -g U='--json url --jq ".[].url"'
+alias gsc='gh search code'
+alias gsp='gh search prs'
+alias gspm='gh search prs --author=@me --state open'
+alias gspmu='gspm --json url --jq ".[].url"'
+alias gspu='gh search prs U'
 
 # terraform
 ###########
