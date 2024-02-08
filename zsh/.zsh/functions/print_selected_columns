@@ -1,4 +1,3 @@
-
 if [ -t 0 ]; then
     echo "Usage: <command> | $0 <indices>"
     echo "  indices: space-separated list of column indices (1-based) or ranges (e.g. 1-3)"
@@ -7,24 +6,35 @@ fi
 local indices=$@
 cat - | awk -v indices="$indices" '{
     split(indices, cols)
+    colIndicesCount = 0
     for (i = 1; i <= length(cols); i++) {
-        if (cols[i] ~ /-/) {
-            split(cols[i], range, "-")
-            for (j=range[1]; j<=range[2]; j++) {
-                widths[j] = length($j) > widths[j] ? length($j) : widths[j]
-                lines[NR, j] = $j
-            }
-        } else {
-            widths[cols[i]] = length($cols[i]) > widths[cols[i]] ? length($cols[i]) : widths[cols[i]]
-            lines[NR, cols[i]] = $cols[i]
+        colStart = cols[i]
+        colEnd = cols[i]
+        split(cols[i], ranges, "-")
+        if (cols[i] ~ /^[0-9]+-[0-9]+$/) {
+            colStart = ranges[1]
+            colEnd = ranges[2]
+        } else if (cols[i] ~ /^[0-9]+-$/) {
+            colStart = ranges[1]
+            colEnd = NF
+        } else if (cols[i] ~ /^-[0-9]+$/) {
+            colStart = 1
+            colEnd = ranges[2]
+        }
+        for (j = colStart; j <= colEnd; j++) {
+            widths[j] = length($j) > widths[j] ? length($j) : widths[j]
+            lines[NR, j] = $j
+            colIndicesCount++
+            colIndices[colIndicesCount] = j
         }
     }
 }
 END {
     # Output columns with calculated widths
-    for (i=1; i<=NR; i++) {
-        for (j=1; j<=length(widths); j++) {
-            printf "%-*s%s", widths[j], lines[i, j], (j == length(widths) ? "" : OFS)
+    for (i = 1; i <= NR; i++) {
+        for (j = 1; j <= length(colIndices); j++) {
+            k = colIndices[j]
+            printf "%-*s%s", widths[k], lines[i, k], (j == length(colIndices) ? "" : " ")
         }
         printf "\n"
     }
