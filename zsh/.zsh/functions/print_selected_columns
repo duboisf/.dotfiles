@@ -1,0 +1,31 @@
+
+if [ -t 0 ]; then
+    echo "Usage: <command> | $0 <indices>"
+    echo "  indices: space-separated list of column indices (1-based) or ranges (e.g. 1-3)"
+    return 1
+fi
+local indices=$@
+cat - | awk -v indices="$indices" '{
+    split(indices, cols)
+    for (i = 1; i <= length(cols); i++) {
+        if (cols[i] ~ /-/) {
+            split(cols[i], range, "-")
+            for (j=range[1]; j<=range[2]; j++) {
+                widths[j] = length($j) > widths[j] ? length($j) : widths[j]
+                lines[NR, j] = $j
+            }
+        } else {
+            widths[cols[i]] = length($cols[i]) > widths[cols[i]] ? length($cols[i]) : widths[cols[i]]
+            lines[NR, cols[i]] = $cols[i]
+        }
+    }
+}
+END {
+    # Output columns with calculated widths
+    for (i=1; i<=NR; i++) {
+        for (j=1; j<=length(widths); j++) {
+            printf "%-*s%s", widths[j], lines[i, j], (j == length(widths) ? "" : OFS)
+        }
+        printf "\n"
+    }
+}'

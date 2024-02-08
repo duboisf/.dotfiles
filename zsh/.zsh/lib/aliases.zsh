@@ -45,7 +45,7 @@ _C() {
     awk "{ print \$$column }"
 }
 
-alias -g C='| _C'
+alias -g C='| print_selected_columns'
 alias -g DN='/dev/null'
 alias -g F='| fzf'
 alias -g G='| grep'
@@ -86,7 +86,7 @@ alias dpo='kc describe po'
 alias deploy='kc get deploy'
 alias ddeploy='kc describe deploy'
 alias logs='kc logs'
-alias no='kc get no -L karpenter.sh/provisioner-name -L kubernetes.io/arch -L node.kubernetes.io/instance-type -L dedicated'
+alias no='kc get no -L karpenter.sh/provisioner-name -L kubernetes.io/arch -L karpenter.sh/capacity-type -L node.kubernetes.io/instance-type -L karpenter.k8s.aws/instance-cpu -L karpenter.k8s.aws/instance-memory -L dedicated -L karpenter.sh/nodepool'
 alias dno='kc describe no'
 alias svc='kc get svc'
 alias dsvc='kc describe svc'
@@ -193,6 +193,7 @@ alias pl='pulumi stack ls'
 alias pss='pulumi stack select'
 alias pp='pulumi preview'
 alias ppd='pulumi preview --diff'
+alias pusl='pulumi stack --show-urns'
 
 # openssl
 ##########
