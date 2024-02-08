@@ -1,0 +1,8 @@
+# zsh function to indent piped input
+
+# Optionnaly specify the number of spaces to indent, default to 2
+local spaces=${1:-2}
+
+while IFS= read -r line; do
+    print "${(l:$spaces:: :)}${line}"
+done
