@@ -7,6 +7,7 @@ alias s='cd ..'
 
 # Text manupulation
 alias -g C='| print_selected_columns'
+alias -g D='| default'
 alias -g I='| indent'
 alias mh1='mdheading 1'
 alias mh2='mdheading 2'
