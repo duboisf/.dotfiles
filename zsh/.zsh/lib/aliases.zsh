@@ -5,6 +5,19 @@ alias la='l -a'
 alias open=xdg-open
 alias s='cd ..'
 
+# Text manupulation
+alias -g C='| print_selected_columns'
+alias -g I='| indent'
+alias mh1='mdheading 1'
+alias mh2='mdheading 2'
+alias mh3='mdheading 3'
+alias mh4='mdheading 4'
+alias mh5='mdheading 5'
+alias mh6='mdheading 6'
+alias -g CB='| codeblock'
+# view piped markdown text in nvim
+alias -g M='| nvim -R -c "set ft=markdown"'
+
 # open nvim in dotfiles folder
 alias edot='
     cd $(git -C ~/.zshrc(:A:h) rev-parse --show-toplevel) && \
@@ -45,8 +58,9 @@ _C() {
     awk "{ print \$$column }"
 }
 
-alias -g C='| print_selected_columns'
 alias -g DN='/dev/null'
+# Ignore Errors
+alias -g IE='2> /dev/null'
 alias -g F='| fzf'
 alias -g G='| grep'
 alias -g L='| less'
@@ -71,13 +85,14 @@ alias icat='kitty +kitten icat'
 # kubernetes/docker
 alias d='docker'
 alias mk='minikube'
-alias kns=kubens
-alias kctx=kubectx
 
 # kubectl
 #########
 alias k='kubectl'
 alias kc='kubectl'
+# kctxs returns list of k8s contexts that are not none, can only be used in for loops
+# e.g. for ctx in kctxs; do k --context $ctx get no; done
+alias -g kctxs='$(kubectl config get-contexts -o name | grep -v none)'
 alias skc='kubectl --as=$USER --as-group=system:masters'
 alias rpo='kc get po --field-selector=status.phase=Running'
 alias po='kc get po'
@@ -107,6 +122,9 @@ alias cronjob='kc get cronjob'
 alias dcronjob='kc describe cronjob'
 alias rollouts='kc rollout status'
 alias -g CT='--context'
+# CTX is useful for for loops.
+# e.g for ctx in kctxs; do k CTX get no; done
+alias -g CTX='--context $ctx'
 alias -g AN='--all-namespaces'
 alias -g J='-o json'
 alias -g JV='-o json | nvim -R -c "set ft=json"'

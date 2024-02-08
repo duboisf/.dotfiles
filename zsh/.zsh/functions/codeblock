@@ -1,0 +1,17 @@
+# simple function to wrap piped input into a markdown code block
+
+if [ -t 0 ]; then
+  echo "Usage: <command> | $0"
+  exit 1
+fi
+
+if (( $# > 2 )); then
+  print "Usage: <command> | $0 [language]"
+  exit 1
+fi
+
+local language="${1:-}"
+
+printf '```'$language'\n'
+cat -
+printf '```\n\n'

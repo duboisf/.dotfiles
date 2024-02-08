@@ -1,0 +1,10 @@
+
+local default_value=${1:-"<N/A>"}
+
+local input="$(cat -)"
+
+if [ -z "$input" ]; then
+  echo "$default_value"
+else
+  echo "$input"
+fi

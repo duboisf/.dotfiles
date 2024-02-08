@@ -1,0 +1,45 @@
+# Simple function to transform a piped line into a markdown header.
+# Addes a # for each level of header and an extra newline at the end.
+# Can be used via a pipe or as a function with the level as the first argument.
+
+emulate -RL zsh
+
+function heading {
+    readonly level=${1}
+    if (( $level < 1 )); then
+        print "Level must be greater than 0"
+        return 1
+    fi
+    if (( $level > 6 )); then
+        print "Level must be less than 7"
+        return 1
+    fi
+    readonly text=${2}
+    local prefix=
+
+    for i in $(seq 1 $level); do
+      prefix="$prefix#"
+    done
+
+    printf "%s %s\n\n" $prefix $text
+}
+
+if [[ -t 0 ]]; then
+    if (( $# == 0 )); then
+        print "Usage: $0 HEADING_LEVEL HEADING_TEXT..."
+        return 1
+    fi
+    readonly level=$1
+    shift
+    readonly text=$@
+    heading $level $text
+else
+    if (( $# > 1 )); then
+        print "Usage: command | $0 [HEADING_LEVEL]"
+        return 1
+    fi
+    readonly text=$(cat)
+    readonly level=${1:-1}
+    heading $level $text
+fi
+

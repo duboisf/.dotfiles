@@ -14,6 +14,7 @@ vim.filetype.add({
     ['/tmp/zsh.*'] = 'bash',
     -- I use these paths for helm charts
     ['.*/charts/.*/templates/.*%.yaml'] = 'gotmpl',
-    ['.*/kubernetes/helm/templates/.*%.yaml'] = 'gotmpl'
+    ['.*/kubernetes/helm/templates/.*%.yaml'] = 'gotmpl',
+    ['.*/.zsh/functions/.*'] = 'zsh',
   }
 })
