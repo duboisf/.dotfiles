@@ -46,14 +46,12 @@ return lush.extends({ theme }).with(function(injected_functions)
     sym('@text.reference') { theme['@text.uri'] },
 
     TextTitle { fg = theme.Statement.fg.li(10) },
-    sym('@text.title.h1') { TextTitle, bold = true, standout = true },
-    sym('@marker.h1') { bold = true, standout = true },
-    sym('@text.title.h2') { bold = true, underline = true, fg = TextTitle.fg.li(10) },
-    sym('@marker.h2') { bold = true, underline = true, sp = TextTitle.fg.li(10) },
-    sym('@text.title.h3') { TextTitle, italic = true },
-    sym('@text.title.h4') { TextTitle, fg = TextTitle.fg.da(20) },
-    sym('@text.title.h5') { TextTitle, fg = TextTitle.fg.da(30) },
-    sym('@text.title.h6') { TextTitle, fg = TextTitle.fg.da(40) },
+    sym('@markup.heading.1') { TextTitle, bold = true, underdouble = false, standout = true },
+    sym('@markup.heading.2') { TextTitle, bold = false, standout = true, fg = TextTitle.fg.li(10) },
+    sym('@markup.heading.3') { underline = true, bold = true, fg = TextTitle.fg.li(10) },
+    sym('@markup.heading.4') { TextTitle, },
+    sym('@markup.heading.5') { TextTitle, italic = true },
+    sym('@markup.heading.6') { TextTitle, italic = true, fg = TextTitle.fg.da(10) },
 
     sym('@text.danger') { theme.ErrorMsg },
 
