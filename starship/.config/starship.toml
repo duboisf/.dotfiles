@@ -1,0 +1,296 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+format = """
+[](color_orange)\
+$directory\
+$git_branch\
+$git_status\
+(fg:color_aqua bg:color_blue)\
+$c\
+$rust\
+$golang\
+$nodejs\
+$php\
+$java\
+$kotlin\
+$haskell\
+$python\
+(fg:color_blue bg:color_bg3)\
+(@$docker_context)\
+$aws\
+$fill\
+$kubernetes\
+$time\
+[](fg:color_bg1)\
+$line_break$character"""
+
+palette = 'bluloco_light'
+
+username.disabled = false
+
+[fill]
+style = "bg:color_bg1"
+symbol = " "
+
+[palettes.bluloco_light]
+color_fg0 = '#fbf1c7'
+color_bg1 = '#3c3836'
+color_bg3 = '#665c54'
+color_blue = '#265fe4'
+color_aqua = '#0098dd'
+color_green = '#23974a'
+color_orange = '#d7631c'
+color_purple = '#823ff1'
+color_red = '#d52753'
+color_yellow = '#c5a332'
+
+[palettes.gruvbox_dark]
+color_fg0 = '#fbf1c7'
+color_bg1 = '#3c3836'
+color_bg3 = '#665c54'
+color_blue = '#458588'
+color_aqua = '#689d6a'
+color_green = '#98971a'
+color_orange = '#d65d0e'
+color_purple = '#b16286'
+color_red = '#cc241d'
+color_yellow = '#d79921'
+
+
+[aws]
+format = '[ $symbol$profile ($region) ](bg:color_bg1 fg:color_orange)'
+symbol = " "
+
+[aws.region_aliases]
+us-east-1 = "use1"
+
+[buf]
+symbol = " "
+
+[c]
+symbol = " "
+
+[conda]
+symbol = " "
+
+[crystal]
+symbol = " "
+
+[dart]
+symbol = " "
+
+[directory]
+read_only = " 󰌾"
+style = "fg:#ffffff bg:color_orange" # style = "fg:color_fg0 bg:color_orange"
+format = "[ $path ]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = "󰝚 "
+"Pictures" = " "
+"Developer" = "󰲋 "
+
+[docker_context]
+symbol = " "
+
+[elixir]
+symbol = " "
+
+[elm]
+symbol = " "
+
+[fennel]
+symbol = " "
+
+[fossil_branch]
+symbol = " "
+
+[git_branch]
+symbol = " "
+style = "bg:color_aqua"
+format = '[[ $symbol $branch ](fg:color_fg0 bg:color_aqua)]($style)'
+
+[git_status]
+style = "bg:color_aqua"
+format = '[[($all_status$ahead_behind )](fg:color_fg0 bg:color_aqua)]($style)'
+
+[golang]
+symbol = " "
+style = "bg:color_blue"
+format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
+
+[guix_shell]
+symbol = " "
+
+[haskell]
+symbol = " "
+
+[haxe]
+symbol = " "
+
+[hg_branch]
+symbol = " "
+
+[hostname]
+ssh_symbol = " "
+
+[java]
+symbol = " "
+
+[julia]
+symbol = " "
+
+[kotlin]
+symbol = " "
+
+[lua]
+symbol = " "
+
+[memory_usage]
+symbol = "󰍛 "
+
+[meson]
+symbol = "󰔷 "
+
+[nim]
+symbol = "󰆥 "
+
+[nix_shell]
+symbol = " "
+
+[nodejs]
+symbol = " "
+style = "bg:color_blue"
+format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
+
+
+[ocaml]
+symbol = " "
+
+[os.symbols]
+Alpaquita = " "
+Alpine = " "
+Amazon = " "
+Android = " "
+Arch = " "
+Artix = " "
+CentOS = " "
+Debian = " "
+DragonFly = " "
+Emscripten = " "
+EndeavourOS = " "
+Fedora = " "
+FreeBSD = " "
+Garuda = "󰛓 "
+Gentoo = " "
+HardenedBSD = "󰞌 "
+Illumos = "󰈸 "
+Linux = " "
+Mabox = " "
+Macos = " "
+Manjaro = " "
+Mariner = " "
+MidnightBSD = " "
+Mint = " "
+NetBSD = " "
+NixOS = " "
+OpenBSD = "󰈺 "
+openSUSE = " "
+OracleLinux = "󰌷 "
+Pop = " "
+Raspbian = " "
+Redhat = " "
+RedHatEnterprise = " "
+Redox = "󰀘 "
+Solus = "󰠳 "
+SUSE = " "
+Ubuntu = " "
+Unknown = " "
+Windows = "󰍲 "
+
+[package]
+symbol = "󰏗 "
+
+[perl]
+symbol = " "
+
+[php]
+symbol = " "
+
+[pijul_channel]
+symbol = " "
+
+[python]
+symbol = " "
+
+[rlang]
+symbol = "󰟔 "
+
+[ruby]
+symbol = " "
+
+[rust]
+symbol = " "
+style = "bg:color_blue"
+format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
+
+[scala]
+symbol = " "
+
+[swift]
+symbol = " "
+
+[zig]
+symbol = " "
+
+[time]
+disabled = false
+time_format = "%R"
+style = "bg:color_bg1"
+format = '[[  $time ](fg:color_fg0 bg:color_bg1)]($style)'
+
+[kubernetes]
+disabled = false
+format = '[ $symbol$context( \($namespace\)) ]($style)'
+style = "bg:color_bg1 fg:color_green"
+symbol = "󱃾 "
+
+[[kubernetes.contexts]]
+context_pattern = ".*-(mer.*)-(?<name>prod.*)/kube-(?<user>.*)"
+context_alias = "pci/$name/$user"
+style = "bg:color_bg1 fg:color_red"
+
+[[kubernetes.contexts]]
+context_pattern = ".*-(mer.*)-(?<name>staging.*)/kube-(?<user>.*)"
+context_alias = "pci/$name/$user"
+style = "color_blue"
+
+[[kubernetes.contexts]]
+context_pattern = ".*-(?<name>prod.*)/kube-(?<user>.*)"
+context_alias = "$name/$user"
+style = "bg:color_bg1 fg:color_red"
+
+[[kubernetes.contexts]]
+context_pattern = '.*-(?<name>.*-\d+)/kube-(?<user>.*)'
+context_alias = "$name/$user"
+style = "bg:color_bg1 fg:color_green"
+
+[[kubernetes.contexts]]
+context_pattern = "none"
+context_alias = ""
+symbol = ""
+
+[line_break]
+disabled = false
+
+[character]
+disabled = false
+success_symbol = '[   ](bold fg:color_green)'
+error_symbol = '[💥 ](bold fg:color_red)'
+vimcmd_symbol = '[](bold fg:color_green)'
+vimcmd_replace_one_symbol = '[](bold fg:color_purple)'
+vimcmd_replace_symbol = '[](bold fg:color_purple)'
+vimcmd_visual_symbol = '[](bold fg:color_yellow)'
