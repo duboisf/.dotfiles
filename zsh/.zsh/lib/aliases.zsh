@@ -21,9 +21,7 @@ alias -g CB='| codeblock'
 alias -g M='| nvim -R -c "set ft=markdown"'
 
 # open nvim in dotfiles folder
-alias edot='
-    cd $(git -C ~/.zshrc(:A:h) rev-parse --show-toplevel) && \
-        nonet-nvim'
+alias edot='cd $(git -C ~/.zshrc(:A:h) rev-parse --show-toplevel) && nvim'
 # secure nvim for general usage
 alias safe-nvim='\nvim --noplugin'
 alias nonet-nvim='firejail \
