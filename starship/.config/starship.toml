@@ -1,48 +1,53 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 format = """
-[](color_orange)\
+$os\
+$shell\
 $directory\
 $git_branch\
 $git_status\
 (fg:color_aqua bg:color_blue)\
-$c\
 $rust\
 $golang\
 $nodejs\
-$php\
 $java\
-$kotlin\
+$pulumi\
 $haskell\
 $python\
 (fg:color_blue bg:color_bg3)\
 (@$docker_context)\
 $aws\
-$fill\
 $kubernetes\
+$line_break\
 $time\
-[](fg:color_bg1)\
-$line_break$character"""
+$character"""
 
-palette = 'bluloco_light'
-
+add_newline = false
 username.disabled = false
+palette = 'bluloco_light'
+continuation_prompt = "::: "
+
+[shell]
+disabled = false
+format = "[ $indicator ]($style)"
+nu_indicator = "nu "
+style = "bold bg:color_bg1 fg:color_orange"
 
 [fill]
 style = "bg:color_bg1"
 symbol = " "
 
 [palettes.bluloco_light]
-color_fg0 = '#fbf1c7'
-color_bg1 = '#3c3836'
-color_bg3 = '#665c54'
-color_blue = '#265fe4'
-color_aqua = '#0098dd'
+color_fg0 = '#373a41'
+color_bg1 = '#f9f9f9'
+color_bg3 = '#a0a1a7'
+color_blue = '#275fe4'
+color_aqua = '#27618d'
 color_green = '#23974a'
-color_orange = '#d7631c'
+color_orange = '#df631c'
 color_purple = '#823ff1'
 color_red = '#d52753'
-color_yellow = '#c5a332'
+color_yellow = '#df631c'
 
 [palettes.gruvbox_dark]
 color_fg0 = '#fbf1c7'
@@ -58,8 +63,9 @@ color_yellow = '#d79921'
 
 
 [aws]
-format = '[ $symbol$profile ($region) ](bg:color_bg1 fg:color_orange)'
-symbol = " "
+style = "bold yellow"
+format = '[ $symbol $profile ($region)]($style)'
+symbol = ""
 
 [aws.region_aliases]
 us-east-1 = "use1"
@@ -81,10 +87,12 @@ symbol = " "
 
 [directory]
 read_only = " 󰌾"
-style = "fg:#ffffff bg:color_orange" # style = "fg:color_fg0 bg:color_orange"
-format = "[ $path ]($style)"
+style = "bold fg:color_bg1 bg:color_orange"                                                                                                   # style = "fg:color_fg0 bg:color_orange"
+format = "[[](fg:color_orange bg:color_bg1)$path[](fg:color_orange bg:color_bg1)]($style)"
 truncation_length = 3
-truncation_symbol = "…/"
+repo_root_format = "[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "
+
+# truncation_symbol = "…/"
 
 [directory.substitutions]
 "Documents" = "󰈙 "
@@ -109,13 +117,19 @@ symbol = " "
 symbol = " "
 
 [git_branch]
-symbol = " "
-style = "bg:color_aqua"
-format = '[[ $symbol $branch ](fg:color_fg0 bg:color_aqua)]($style)'
+symbol = ""
+style = "bold fg:color_green"
+format = '[ $symbol $branch]($style)'
 
 [git_status]
-style = "bg:color_aqua"
-format = '[[($all_status$ahead_behind )](fg:color_fg0 bg:color_aqua)]($style)'
+disabled = false
+stashed = "󰽂 "
+conflicted = "[](fg:color_red)"
+diverged = "[↕](fg:color_yellow"
+deleted = "[✘](fg:color_red)"
+up_to_date = "[](fg:color_green)"
+style = "bold fg:color_fg0"
+format = '[( $all_status$ahead_behind)]($style)'
 
 [golang]
 symbol = " "
@@ -162,13 +176,16 @@ symbol = "󰆥 "
 symbol = " "
 
 [nodejs]
-symbol = " "
-style = "bg:color_blue"
-format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
-
+symbol = ""
+style = "bold fg:color_blue"
+format = '[ $symbol( $version)]($style)'
 
 [ocaml]
 symbol = " "
+
+[os]
+disabled = false
+format = "[ $symbol]($style)"
 
 [os.symbols]
 Alpaquita = " "
@@ -200,7 +217,7 @@ NixOS = " "
 OpenBSD = "󰈺 "
 openSUSE = " "
 OracleLinux = "󰌷 "
-Pop = " "
+Pop = "[ ](fg:#48B9C7)"
 Raspbian = " "
 Redhat = " "
 RedHatEnterprise = " "
@@ -223,8 +240,13 @@ symbol = " "
 [pijul_channel]
 symbol = " "
 
+[pulumi]
+disabled = false
+format = '[ $symbol($stack)]($style)'
+
 [python]
 symbol = " "
+format = '[$symbol( $version)](fg:color_orange)'
 
 [rlang]
 symbol = "󰟔 "
@@ -249,12 +271,12 @@ symbol = " "
 [time]
 disabled = false
 time_format = "%R"
-style = "bg:color_bg1"
-format = '[[  $time ](fg:color_fg0 bg:color_bg1)]($style)'
+style = "bold fg:color_purple bg:color_bg1"
+format = '[  $time ]($style)'
 
 [kubernetes]
 disabled = false
-format = '[ $symbol$context( \($namespace\)) ]($style)'
+format = '[( $symbol$context)( \($namespace\))]($style)'
 style = "bg:color_bg1 fg:color_green"
 symbol = "󱃾 "
 
@@ -288,8 +310,8 @@ disabled = false
 
 [character]
 disabled = false
-success_symbol = '[   ](bold fg:color_green)'
-error_symbol = '[💥 ](bold fg:color_red)'
+success_symbol = '[ ](bold bg:color_bg1 fg:color_green)'
+error_symbol = '[ ](bg:color_bg1 fg:color_red)'
 vimcmd_symbol = '[](bold fg:color_green)'
 vimcmd_replace_one_symbol = '[](bold fg:color_purple)'
 vimcmd_replace_symbol = '[](bold fg:color_purple)'

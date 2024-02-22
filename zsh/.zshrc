@@ -52,4 +52,6 @@ for file in ~/.zsh/lib/*.zsh ~/.zsh.private/lib/*.zsh(N); do
     source $file
 done
 
+eval "$(starship init zsh)"
+
 # zprof
