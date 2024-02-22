@@ -6,6 +6,7 @@ local config = function()
       files = { 'src/parser.c' },
     },
     filetype = 'gotmpl',
+    maintainers = { '???' },
     used_by = { 'gohtmltmpl', 'gotexttmpl', 'gotmpl' }
   }
 
@@ -42,8 +43,8 @@ local config = function()
     incremental_selection = {
       enable = true,
       -- mappings are configured using hydra in ~/.config/nvim/lua/cfg/plugins/hydra.lua
-      keymaps = { -- mappings for incremental selection (visual mappings)
-        init_selection    = 'gs', -- maps in normal mode to init the node/scope selection
+      keymaps = {                    -- mappings for incremental selection (visual mappings)
+        init_selection    = 'gs',    -- maps in normal mode to init the node/scope selection
         node_incremental  = '<C-j>', -- increment to the upper named parent
         scope_incremental = '<C-l>', -- increment to the upper scope (as defined in locals.scm)
         node_decremental  = '<C-k>', -- decrement to the previous node
@@ -98,5 +99,8 @@ return {
       require('nvim-treesitter.install').update()
     end,
     config = config,
+    dependencies = {
+      'nushell/tree-sitter-nu',
+    },
   },
 }
