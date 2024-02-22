@@ -27,16 +27,6 @@ username.disabled = false
 palette = 'bluloco_light'
 continuation_prompt = "::: "
 
-[shell]
-disabled = false
-format = "[ $indicator ]($style)"
-nu_indicator = "nu "
-style = "bold bg:color_bg1 fg:color_orange"
-
-[fill]
-style = "bg:color_bg1"
-symbol = " "
-
 [palettes.bluloco_light]
 color_fg0 = '#373a41'
 color_bg1 = '#f9f9f9'
@@ -87,19 +77,21 @@ symbol = " "
 
 [directory]
 read_only = " 󰌾"
-style = "bold fg:color_bg1 bg:color_orange"                                                                                                   # style = "fg:color_fg0 bg:color_orange"
 format = "[[](fg:color_orange bg:color_bg1)$path[](fg:color_orange bg:color_bg1)]($style)"
-truncation_length = 3
+home_symbol = " "
 repo_root_format = "[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "
-
-# truncation_symbol = "…/"
+style = "bold fg:color_bg1 bg:color_orange"                                                                                                   # style = "fg:color_fg0 bg:color_orange"
+truncate_to_repo = true
+truncation_length = 4
+truncation_symbol = " /"
 
 [directory.substitutions]
-"Documents" = "󰈙 "
+"Documents" = "󰈙"
 "Downloads" = " "
 "Music" = "󰝚 "
 "Pictures" = " "
 "Developer" = "󰲋 "
+"git" = " "
 
 [docker_context]
 symbol = " "
@@ -112,6 +104,10 @@ symbol = " "
 
 [fennel]
 symbol = " "
+
+[fill]
+style = "bg:color_bg1"
+symbol = " "
 
 [fossil_branch]
 symbol = " "
@@ -150,6 +146,37 @@ symbol = " "
 
 [hostname]
 ssh_symbol = " "
+
+[kubernetes]
+disabled = false
+format = '[( $symbol$context)( \($namespace\))]($style)'
+style = "bg:color_bg1 fg:color_green"
+symbol = "󱃾 "
+
+[[kubernetes.contexts]]
+context_pattern = ".*-(mer.*)-(?<name>prod.*)/kube-(?<user>.*)"
+context_alias = "pci/$name/$user"
+style = "bg:color_bg1 fg:color_red"
+
+[[kubernetes.contexts]]
+context_pattern = ".*-(mer.*)-(?<name>staging.*)/kube-(?<user>.*)"
+context_alias = "pci/$name/$user"
+style = "color_blue"
+
+[[kubernetes.contexts]]
+context_pattern = ".*-(?<name>prod.*)/kube-(?<user>.*)"
+context_alias = "$name/$user"
+style = "bg:color_bg1 fg:color_red"
+
+[[kubernetes.contexts]]
+context_pattern = '.*-(?<name>.*-\d+)/kube-(?<user>.*)'
+context_alias = "$name/$user"
+style = "bg:color_bg1 fg:color_green"
+
+[[kubernetes.contexts]]
+context_pattern = "none"
+context_alias = ""
+symbol = ""
 
 [java]
 symbol = " "
@@ -262,6 +289,12 @@ format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
 [scala]
 symbol = " "
 
+[shell]
+disabled = false
+# format = "[$path[](fg:color_orange bg:color_bg1)]($style)"
+format = "[ [](fg:color_fg0 bg:color_bg1)[ $indicator](fg:color_orange bg:color_fg0)[](fg:color_fg0 bg:color_bg1) ]($style)"
+nu_indicator = "nu"
+
 [swift]
 symbol = " "
 
@@ -273,37 +306,6 @@ disabled = false
 time_format = "%R"
 style = "bold fg:color_purple bg:color_bg1"
 format = '[  $time ]($style)'
-
-[kubernetes]
-disabled = false
-format = '[( $symbol$context)( \($namespace\))]($style)'
-style = "bg:color_bg1 fg:color_green"
-symbol = "󱃾 "
-
-[[kubernetes.contexts]]
-context_pattern = ".*-(mer.*)-(?<name>prod.*)/kube-(?<user>.*)"
-context_alias = "pci/$name/$user"
-style = "bg:color_bg1 fg:color_red"
-
-[[kubernetes.contexts]]
-context_pattern = ".*-(mer.*)-(?<name>staging.*)/kube-(?<user>.*)"
-context_alias = "pci/$name/$user"
-style = "color_blue"
-
-[[kubernetes.contexts]]
-context_pattern = ".*-(?<name>prod.*)/kube-(?<user>.*)"
-context_alias = "$name/$user"
-style = "bg:color_bg1 fg:color_red"
-
-[[kubernetes.contexts]]
-context_pattern = '.*-(?<name>.*-\d+)/kube-(?<user>.*)'
-context_alias = "$name/$user"
-style = "bg:color_bg1 fg:color_green"
-
-[[kubernetes.contexts]]
-context_pattern = "none"
-context_alias = ""
-symbol = ""
 
 [line_break]
 disabled = false
