@@ -80,7 +80,8 @@ local function config()
           gh_users = "",
         })[entry.source.name]
         return vim_item
-      end
+      end,
+      expandable_indicator = true,
     },
     snippet = {
       expand = function(args) require('luasnip').lsp_expand(args.body) end,

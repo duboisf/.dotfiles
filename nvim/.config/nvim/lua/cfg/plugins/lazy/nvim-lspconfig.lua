@@ -1,15 +1,15 @@
 local function config()
-  require('neoconf').setup {}
-  require('neodev').setup {
-    library = {
-      enabled = true,
-      runtime = true,
-      -- Can be a table of plugins to make available as a workspace library.
-      -- If true, include all plugins, false means include none.
-      plugins = true,
-    }
-  }
-
+  -- require('neoconf').setup {}
+  -- require('neodev').setup {
+  --   library = {
+  --     enabled = true,
+  --     runtime = true,
+  --     -- Can be a table of plugins to make available as a workspace library.
+  --     -- If true, include all plugins, false means include none.
+  --     plugins = true,
+  --   }
+  -- }
+  --
   local utils = require 'core.utils'
 
   local lspconfig = require('lspconfig')
@@ -28,18 +28,18 @@ local function config()
     end
   end
 
-  vim.diagnostic.config {
-    underline = {
-      severity = vim.diagnostic.severity.WARN,
-    },
-    virtual_text = {
-      spacing = 2,
-      severity = vim.diagnostic.severity.WARN,
-    },
-    signs = true,
-    update_in_insert = false,
-  }
-
+  -- vim.diagnostic.config {
+  --   underline = {
+  --     severity = vim.diagnostic.severity.WARN,
+  --   },
+  --   virtual_text = {
+  --     spacing = 2,
+  --     severity = vim.diagnostic.severity.WARN,
+  --   },
+  --   signs = true,
+  --   update_in_insert = false,
+  -- }
+  --
   local border = {
     { "🭽", "FloatBorder" },
     { "▔", "FloatBorder" },
@@ -62,28 +62,28 @@ local function config()
   ---Setup autocmds for buffer
   ---@param client lsp.Client
   ---@param bufnr number
-  local function setup_autocmds(client, bufnr)
-    local autocmd, group_id = utils.autogroup('duboisf.lsp.buffer', false)
-    local opts = { buffer = bufnr }
-
-    local server_capabilities = client.server_capabilities
-
-    if server_capabilities.codeLensProvider then
-      autocmd({ 'BufEnter', 'CursorHold', 'InsertLeave' }, nil, vim.lsp.codelens.refresh, 'Refresh codelens', opts)
-    end
-
-    if server_capabilities.documentHighlightProvider then
-      autocmd({ 'CursorHold' }, nil, vim.lsp.buf.document_highlight,
-        'Highlight symbol under the cursor throughout document', opts)
-      autocmd({ 'CursorMoved' }, nil, vim.lsp.buf.clear_references, 'Clear highlighted lsp symbol', opts)
-    end
-
-    local function clear_buffer_autocmds()
-      vim.api.nvim_clear_autocmds { buffer = bufnr, group = group_id }
-    end
-
-    autocmd('BufUnload', nil, clear_buffer_autocmds, 'Delete buffer autocmds to prevent duplicates', opts)
-  end
+  -- local function setup_autocmds(client, bufnr)
+  --   local autocmd, group_id = utils.autogroup('duboisf.lsp.buffer', false)
+  --   local opts = { buffer = bufnr }
+  --
+  --   local server_capabilities = client.server_capabilities
+  --
+  --   if server_capabilities.codeLensProvider then
+  --     autocmd({ 'BufEnter', 'CursorHold', 'InsertLeave' }, nil, vim.lsp.codelens.refresh, 'Refresh codelens', opts)
+  --   end
+  --
+  --   if server_capabilities.documentHighlightProvider then
+  --     autocmd({ 'CursorHold' }, nil, vim.lsp.buf.document_highlight,
+  --       'Highlight symbol under the cursor throughout document', opts)
+  --     autocmd({ 'CursorMoved' }, nil, vim.lsp.buf.clear_references, 'Clear highlighted lsp symbol', opts)
+  --   end
+  --
+  --   local function clear_buffer_autocmds()
+  --     vim.api.nvim_clear_autocmds { buffer = bufnr, group = group_id }
+  --   end
+  --
+  --   autocmd('BufUnload', nil, clear_buffer_autocmds, 'Delete buffer autocmds to prevent duplicates', opts)
+  -- end
 
   -- Setup mappings
   local setup_mappings = (function()
@@ -117,12 +117,12 @@ local function config()
         })
       end
 
-      if client.supports_method("textDocument/rangeFormatting") then
-        vim.keymap.set("x", "<Leader>F", function()
-          vim.lsp.buf.format({ bufnr = vim.api.nvim_get_current_buf() })
-        end, { buffer = bufnr, desc = "[lsp] format" })
-      end
-
+      -- if client.supports_method("textDocument/rangeFormatting") then
+      --   vim.keymap.set("x", "<Leader>F", function()
+      --     vim.lsp.buf.format({ bufnr = vim.api.nvim_get_current_buf() })
+      --   end, { buffer = bufnr, desc = "[lsp] format" })
+      -- end
+      --
       local normal_mappings = {
         [',s']         = '<cmd>Telescope lsp_document_symbols<CR>',
         [',w']         = '<cmd>Telescope lsp_dynamic_workspace_symbols<CR>',
@@ -156,7 +156,7 @@ local function config()
   ---@param client lsp.Client
   ---@param bufnr number
   local on_attach = function(client, bufnr)
-    setup_autocmds(client, bufnr)
+    -- setup_autocmds(client, bufnr)
     setup_mappings(client, bufnr)
     -- disable diagnostics for helm templates
     if vim.bo[bufnr].filetype == 'yaml' and string.find(vim.api.nvim_buf_get_name(bufnr), '/templates/') then
@@ -179,17 +179,17 @@ local function config()
     end
   end
 
-  vim.diagnostic.config({
-    underline = true,
-    virtual_text = {
-      spacing = 2,
-      severity_limit = "Hint",
-      severity = vim.diagnostic.severity.WARN,
-    },
-    signs = true,
-    update_in_insert = false,
-  })
-
+  -- vim.diagnostic.config({
+  --   underline = true,
+  --   virtual_text = {
+  --     spacing = 2,
+  --     severity_limit = "Hint",
+  --     severity = vim.diagnostic.severity.WARN,
+  --   },
+  --   signs = true,
+  --   update_in_insert = false,
+  -- })
+  --
   local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
   --[[
@@ -211,7 +211,6 @@ local function config()
     on_attach = on_attach
   }
   lspconfig.jdtls.setup { capabilities = capabilities, on_attach = on_attach }
-  lspconfig.marksman.setup { capabilities = capabilities, on_attach = on_attach }
   lspconfig.pylsp.setup {
     capabilities = capabilities,
     on_attach = on_attach,
@@ -228,9 +227,10 @@ local function config()
     }
   }
   lspconfig.rnix.setup { capabilities = capabilities, on_attach = on_attach }
+  lspconfig.rust_analyzer.setup { capabilities = capabilities, on_attach = on_attach }
   lspconfig.sqlls.setup { capabilities = capabilities, on_attach = on_attach }
   lspconfig.terraformls.setup { capabilities = capabilities, on_attach = on_attach }
-  -- lspconfig.vtsls.setup { capabilities = capabilities, on_attach = on_attach }
+  lspconfig.taplo.setup { capabilities = capabilities, on_attach = on_attach }
   lspconfig.tsserver.setup {
     capabilities = capabilities,
     handlers = {

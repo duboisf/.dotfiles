@@ -1,4 +1,4 @@
-vim.opt.clipboard = 'unnamed'
+-- vim.opt.clipboard = 'unnamed'
 -- Better display for messages
 vim.opt.cmdheight = 1
 vim.opt.dictionary:append('/usr/share/dict/american-english')

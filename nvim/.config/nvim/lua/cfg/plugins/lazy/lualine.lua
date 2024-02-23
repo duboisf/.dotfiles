@@ -21,7 +21,7 @@ end
 
 local function config()
   local function get_cwd()
-    return " " .. utils.get_short_cwd()
+    return "󰉖 " .. utils.get_short_cwd()
   end
 
   local theme = require 'core.colors'

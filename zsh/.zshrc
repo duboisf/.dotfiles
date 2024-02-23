@@ -23,7 +23,7 @@ zplug "lib/history", from:oh-my-zsh
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 
 # Theme
-zplug "duboisf/fred.zsh-theme", as:theme
+# zplug "duboisf/fred.zsh-theme", as:theme
 # zplug "~/git/fred.zsh-theme", from:local, as:theme
 
 if ! zplug check --verbose; then
