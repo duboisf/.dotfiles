@@ -197,186 +197,191 @@ local function config()
     LSP server configs
 
   --]]
-  lspconfig.bashls.setup { capabilities = capabilities, on_attach = on_attach }
-  lspconfig.dockerls.setup { capabilities = capabilities, on_attach = on_attach }
-  lspconfig.jsonls.setup {
-    capabilities = capabilities,
-    settings = {
-      json = {
-        format = {
-          enable = false
+  local function setup_lsps()
+    lspconfig.bashls.setup { capabilities = capabilities, on_attach = on_attach }
+    lspconfig.dockerls.setup { capabilities = capabilities, on_attach = on_attach }
+    lspconfig.jsonls.setup {
+      capabilities = capabilities,
+      settings = {
+        json = {
+          format = {
+            enable = false
+          }
         }
-      }
-    },
-    on_attach = on_attach
-  }
-  lspconfig.jdtls.setup { capabilities = capabilities, on_attach = on_attach }
-  lspconfig.pylsp.setup {
-    capabilities = capabilities,
-    on_attach = on_attach,
-    settings = {
-      pylsp = {
-        plugins = {
-          pycodestyle = {
-            ignore = {
-              'E501',
+      },
+      on_attach = on_attach
+    }
+    lspconfig.jdtls.setup { capabilities = capabilities, on_attach = on_attach }
+    lspconfig.pylsp.setup {
+      capabilities = capabilities,
+      on_attach = on_attach,
+      settings = {
+        pylsp = {
+          plugins = {
+            pycodestyle = {
+              ignore = {
+                'E501',
+              }
             }
           }
         }
       }
     }
-  }
-  lspconfig.rnix.setup { capabilities = capabilities, on_attach = on_attach }
-  lspconfig.rust_analyzer.setup { capabilities = capabilities, on_attach = on_attach }
-  lspconfig.sqlls.setup { capabilities = capabilities, on_attach = on_attach }
-  lspconfig.terraformls.setup { capabilities = capabilities, on_attach = on_attach }
-  lspconfig.taplo.setup { capabilities = capabilities, on_attach = on_attach }
-  lspconfig.tsserver.setup {
-    capabilities = capabilities,
-    handlers = {
-      ["textDocument/publishDiagnostics"] = vim.lsp.with(
-        vim.lsp.diagnostic.on_publish_diagnostics, {
-          underline = {
-            severity = {
-              -- don't know why but with typescript language server I need to use this min key to get it to work, same for virtual_text
-              min = vim.diagnostic.severity.INFO,
-            },
-          },
-          virtual_text = {
-            spacing = 2,
-            -- severity_limit = "Hint",
-            severity = {
-              min = vim.diagnostic.severity.WARN,
-            },
-          },
-          signs = true,
-          update_in_insert = false,
-        }),
-    },
-    on_attach = on_attach
-  }
-
-  do
-    lspconfig.lua_ls.setup {
+    lspconfig.rnix.setup { capabilities = capabilities, on_attach = on_attach }
+    lspconfig.nushell.setup { capabilities = capabilities, on_attach = on_attach }
+    lspconfig.rust_analyzer.setup { capabilities = capabilities, on_attach = on_attach }
+    lspconfig.sqlls.setup { capabilities = capabilities, on_attach = on_attach }
+    lspconfig.terraformls.setup { capabilities = capabilities, on_attach = on_attach }
+    lspconfig.taplo.setup { capabilities = capabilities, on_attach = on_attach }
+    lspconfig.tsserver.setup {
       capabilities = capabilities,
-      on_attach = on_attach,
-      settings = {
-        -- Ref: https://github.com/sumneko/lua-language-server/wiki/Settings
-        Lua = {
-          completion = {
-            callSnippet = 'Replace',
-            displayContext = 1,
-          },
-          diagnostics = {
-            globals = {
-              'dump',
-              'vim',
+      handlers = {
+        ["textDocument/publishDiagnostics"] = vim.lsp.with(
+          vim.lsp.diagnostic.on_publish_diagnostics, {
+            underline = {
+              severity = {
+                -- don't know why but with typescript language server I need to use this min key to get it to work, same for virtual_text
+                min = vim.diagnostic.severity.INFO,
+              },
             },
-          },
-          format = {
-            enable = true,
-            defaultConfig = {
-              indent_style = "space",
-              indent_size = "2",
-            }
-          },
-          hint = {
-            enable = true,
-            setType = true,
-          },
-          runtime = {
-            -- prevent suggesting paths like '.config.nvim.lua.core.utils' when we really want 'core.utils'
-            path = { 'lua/?.lua', 'lua/?/init.lua' },
-            version = 'LuaJIT',
-          },
-          telemetry = {
-            enabled = false
-          },
-          workspace = {
-            checkThirdParty = false,
-            -- library = vim.api.nvim_get_runtime_file('', true),
-            maxPreload = 1000,
-          },
-        }
-      }
-    }
-  end
-
-  do
-    local schemas = {}
-    schemas["https://json.schemastore.org/github-workflow"] = "/.github/workflows/*.yml"
-    lspconfig.yamlls.setup {
-      capabilities = capabilities,
-      on_attach = on_attach,
-      settings = {
-        yaml = {
-          schemas = schemas,
-          schemaDownload = { enable = true },
-          trace = {
-            server = "verbose"
-          },
-          validate = true,
-        }
-      }
-    }
-  end
-
-  do
-    local util = require('lspconfig/util')
-    local lastRootPath = nil
-    local gopath = os.getenv("GOPATH")
-    if gopath == nil then
-      local ok = false
-      ok, gopath = pcall(vim.fn.system, { 'go', 'env', 'GOPATH' })
-      if ok then
-        gopath = vim.trim(gopath)
-      else
-        gopath = ""
-      end
-    end
-    local gopathmod = gopath .. '/pkg/mod'
-    lspconfig.gopls.setup {
-      on_attach = on_attach,
-      capabilities = capabilities,
-      init_options = {
-        allExperiments = true,
-        -- allowImplicitNetworkAccess = true,
-        -- templateExtensions = { "yaml" },
-        staticcheck = true,
-        usePlaceholders = false, -- don't add parameter placeholders when completing a function
-        analyses = {
-          nilness = true,
-          unusedparams = true,
-        },
-        codelenses = {
-          test = true,
-          tidy = true,
-          upgrade_dependency = true,
-        },
-        hints = {
-          assignVariableTypes = false,
-          compositeLiteralFields = false,
-          compositeLiteralTypes = false,
-          constantValues = false,
-          functionTypeParameters = false,
-          parameterNames = false,
-          rangeVariableTypes = false,
-        },
-        semanticTokens = true,
+            virtual_text = {
+              spacing = 2,
+              -- severity_limit = "Hint",
+              severity = {
+                min = vim.diagnostic.severity.WARN,
+              },
+            },
+            signs = true,
+            update_in_insert = false,
+          }),
       },
-      -- don't spawn a new gopls instance if we are jumping to definitions of
-      -- functions in dependencies that are in the $GOPATH. Without this, a new
-      -- gopls instance will spawn and the root dir will be the $GOPATH and it
-      -- can't jump to symbols because it can't find a go.mod.
-      root_dir = function(fname)
-        if string.find(fname, gopathmod) and lastRootPath ~= nil then
-          return lastRootPath
-        end
-        lastRootPath = util.root_pattern("go.mod", ".git")(fname)
-        return lastRootPath
-      end,
+      on_attach = on_attach
     }
+
+    do
+      lspconfig.lua_ls.setup {
+        capabilities = capabilities,
+        on_attach = on_attach,
+        settings = {
+          -- Ref: https://github.com/sumneko/lua-language-server/wiki/Settings
+          Lua = {
+            completion = {
+              callSnippet = 'Replace',
+              displayContext = 1,
+            },
+            diagnostics = {
+              globals = {
+                'dump',
+                'vim',
+              },
+            },
+            format = {
+              enable = true,
+              defaultConfig = {
+                indent_style = "space",
+                indent_size = "2",
+              }
+            },
+            hint = {
+              enable = true,
+              setType = true,
+            },
+            runtime = {
+              -- prevent suggesting paths like '.config.nvim.lua.core.utils' when we really want 'core.utils'
+              path = { 'lua/?.lua', 'lua/?/init.lua' },
+              version = 'LuaJIT',
+            },
+            telemetry = {
+              enabled = false
+            },
+            workspace = {
+              checkThirdParty = false,
+              -- library = vim.api.nvim_get_runtime_file('', true),
+              maxPreload = 1000,
+            },
+          }
+        }
+      }
+    end
+
+    do
+      local schemas = {}
+      schemas["https://json.schemastore.org/github-workflow"] = "/.github/workflows/*.yml"
+      lspconfig.yamlls.setup {
+        capabilities = capabilities,
+        on_attach = on_attach,
+        settings = {
+          yaml = {
+            schemas = schemas,
+            schemaDownload = { enable = true },
+            trace = {
+              server = "verbose"
+            },
+            validate = true,
+          }
+        }
+      }
+    end
+
+    do
+      local util = require('lspconfig/util')
+      local lastRootPath = nil
+      local gopath = os.getenv("GOPATH")
+      if gopath == nil then
+        local ok = false
+        ok, gopath = pcall(vim.fn.system, { 'go', 'env', 'GOPATH' })
+        if ok then
+          gopath = vim.trim(gopath)
+        else
+          gopath = ""
+        end
+      end
+      local gopathmod = gopath .. '/pkg/mod'
+      lspconfig.gopls.setup {
+        on_attach = on_attach,
+        capabilities = capabilities,
+        init_options = {
+          allExperiments = true,
+          -- allowImplicitNetworkAccess = true,
+          -- templateExtensions = { "yaml" },
+          staticcheck = true,
+          usePlaceholders = false, -- don't add parameter placeholders when completing a function
+          analyses = {
+            nilness = true,
+            unusedparams = true,
+          },
+          codelenses = {
+            test = true,
+            tidy = true,
+            upgrade_dependency = true,
+          },
+          hints = {
+            assignVariableTypes = false,
+            compositeLiteralFields = false,
+            compositeLiteralTypes = false,
+            constantValues = false,
+            functionTypeParameters = false,
+            parameterNames = false,
+            rangeVariableTypes = false,
+          },
+          semanticTokens = true,
+        },
+        -- don't spawn a new gopls instance if we are jumping to definitions of
+        -- functions in dependencies that are in the $GOPATH. Without this, a new
+        -- gopls instance will spawn and the root dir will be the $GOPATH and it
+        -- can't jump to symbols because it can't find a go.mod.
+        root_dir = function(fname)
+          if string.find(fname, gopathmod) and lastRootPath ~= nil then
+            return lastRootPath
+          end
+          lastRootPath = util.root_pattern("go.mod", ".git")(fname)
+          return lastRootPath
+        end,
+      }
+    end
   end
+
+  setup_lsps()
 end
 
 return {
