@@ -217,7 +217,7 @@ $env.config = {
     }
 
     filesize: {
-        metric: false # true => KB, MB, GB (ISO standard), false => KiB, MiB, GiB (Windows standard)
+        metric: true # true => KB, MB, GB (ISO standard), false => KiB, MiB, GiB (Windows standard)
         format: "auto" # b, kb, kib, mb, mib, gb, gib, tb, tib, pb, pib, eb, eib, auto
     }
 
@@ -227,9 +227,9 @@ $env.config = {
         vi_normal: underscore # block, underscore, line, blink_block, blink_underscore, blink_line, inherit to skip setting cursor shape (underscore is the default)
     }
 
-    color_config: $dark_theme # if you want a more interesting theme, you can replace the empty record with `$dark_theme`, `$light_theme` or another custom record
+    color_config: $light_theme # if you want a more interesting theme, you can replace the empty record with `$dark_theme`, `$light_theme` or another custom record
     use_grid_icons: true
-    footer_mode: "25" # always, never, number_of_rows, auto
+    footer_mode: auto # always, never, number_of_rows, auto
     float_precision: 2 # the precision for displaying floats in tables
     buffer_editor: "" # command that will be used to edit the current line buffer with ctrl+o, if unset fallback to $env.EDITOR and $env.VISUAL
     use_ansi_coloring: true
@@ -237,8 +237,8 @@ $env.config = {
     edit_mode: emacs # emacs, vi
     shell_integration: true # enables terminal shell integration. Off by default, as some terminals have issues with this.
     render_right_prompt_on_last_line: false # true or false to enable or disable right prompt to be rendered on last line of the prompt.
-    use_kitty_protocol: false # enables keyboard enhancement protocol implemented by kitty console, only if your terminal support this.
-    highlight_resolved_externals: false # true enables highlighting of external commands in the repl resolved by which.
+    use_kitty_protocol: true # enables keyboard enhancement protocol implemented by kitty console, only if your terminal support this.
+    highlight_resolved_externals: true # true enables highlighting of external commands in the repl resolved by which.
 
     plugins: {} # Per-plugin configuration. See https://www.nushell.sh/contributor-book/plugins.html#configuration.
 
@@ -871,17 +871,26 @@ $env.config = {
             modifier: alt
             keycode: char_.
             mode: emacs
-            event: {
-                send: executehostcommand,
-                cmd: 'insert_last_word'
-            }
+            event: [
+                {
+                    send: executehostcommand,
+                    cmd: 'insert_last_word'
+                }
+            ]
         }
     ]
 }
 
 def "insert_last_word" [] {
-    let last_word = history | last | get command | split words | last
+    let last_word = history | last | get command | split row --regex '\s+' | last
     commandline --append $last_word
+    commandline --cursor-end
+}
+
+# Open nvim in my dotfiles directory
+def edot []: nothing -> nothing {
+    cd ~/.dotfiles
+    nvim
 }
 
 alias l = ls
@@ -899,7 +908,7 @@ alias d = describe
 
 alias du = du -h
 
-alias d = docker
+# alias d = docker
 alias mk = minikube
 
 # git
