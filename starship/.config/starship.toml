@@ -39,6 +39,18 @@ color_purple = '#823ff1'
 color_red = '#d52753'
 color_yellow = '#df631c'
 
+[palettes.bluloco_dark]
+color_fg0 = '#ffffff'
+color_bg1 = '#282c34'
+color_bg3 = '#abb2bf'
+color_blue = '#3691ff'
+color_aqua = '#10b1fe'
+color_green = '#3fc56b'
+color_orange = '#df631c'
+color_purple = '#9f7efe'
+color_red = '#ff6480'
+color_yellow = '#f9c859'
+
 [palettes.gruvbox_dark]
 color_fg0 = '#fbf1c7'
 color_bg1 = '#3c3836'
@@ -129,8 +141,8 @@ format = '[( $all_status$ahead_behind)]($style)'
 
 [golang]
 symbol = " "
-style = "bg:color_blue"
-format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
+style = "bold blue"
+format = '[ $symbol($version)]($style)'
 
 [guix_shell]
 symbol = " "
@@ -283,8 +295,8 @@ symbol = " "
 
 [rust]
 symbol = " "
-style = "bg:color_blue"
-format = '[[ $symbol( $version) ](fg:color_fg0 bg:color_blue)]($style)'
+style = "bold blue"
+format = '[ $symbol($version) ]($style)'
 
 [scala]
 symbol = " "
