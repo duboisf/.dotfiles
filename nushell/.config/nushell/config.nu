@@ -878,6 +878,30 @@ $env.config = {
                 }
             ]
         }
+        {
+            name: cd_dot_dot
+            modifier: alt
+            keycode: char_u
+            mode: emacs
+            event: [
+                {
+                    send: executehostcommand,
+                    cmd: 'cd ..'
+                }
+            ]
+        }
+        {
+            name: add_grep
+            modifier: control
+            keycode: char_i
+            mode: emacs
+            event: [
+                {
+                    send: executehostcommand,
+                    cmd: 'commandline --append "| grep "; commandline --cursor-end'
+                }
+            ]
+        }
     ]
 }
 
@@ -893,13 +917,14 @@ def edot []: nothing -> nothing {
     nvim
 }
 
-alias l = ls
-
-# export use kubectl.nu *
+export use ~/.config/nushell/scripts/kubectl.nu *
 # export use go.nu *
 # export use aws-utils.nu *
-export use utils.nu *
-export use aws *
+
+export use ~/.config/nushell/scripts/utils.nu *
+export use ~/.config/nushell/scripts/aws *
+
+alias l = ls
 
 alias table-to-record = transpose -i -r -d
 alias M = nvim -R -c 'set ft=markdown' -c 'set wrap' -c 'set linebreak'
@@ -909,10 +934,12 @@ alias d = describe
 alias du = du -h
 
 # alias d = docker
+
 alias mk = minikube
 
 # git
 #####
+
 alias g = git
 alias gb = git branch
 alias gco = git checkout
@@ -935,14 +962,16 @@ alias gdc = git diff --cached
 
 # github gh
 ###########
+
 alias p = gh pr
-alias pc = p checks --watch
-alias prv = p view
-alias prc = p create
-alias prco = p checkout
-alias prlv = p list -w
+alias pc = gh pr checks --watch
+alias prv = gh pr view
+alias prc = gh pr create
+alias prco = gh pr checkout
+alias prlv = gh pr list -w
 
 # alias -g U='--json url --jq ".[].url"'
+
 alias gsc = gh search code
 alias gsp = gh search prs
 alias gspm = gh search prs --author=@me --state open
@@ -954,34 +983,37 @@ alias gciah = git commit --amend --no-edit
 
 # kubectl
 #########
+
 alias k = kubectl
-alias kc = kubectl
-alias rpo = kc get po --field-selector=status.phase=Running
-alias po = kc get po
-alias pow = kc get po -o wide
-alias dpo = kc describe po
-alias deploy = kc get deploy
-alias ddeploy = kc describe deploy
-alias logs = kc logs
-alias no = kc get no -L karpenter.sh/provisioner-name -L kubernetes.io/arch -L karpenter.sh/capacity-type -L node.kubernetes.io/instance-type -L karpenter.k8s.aws/instance-cpu -L karpenter.k8s.aws/instance-memory -L dedicated -L karpenter.sh/nodepool
-alias dno = kc describe no
-alias svc = kc get svc
-alias dsvc = kc describe svc
-alias ds = kc get ds
-alias dds = kc describe ds
-alias cm = kc get configmap
-alias dcm = kc describe configmap
-alias secret = kc get secret
-alias dsecret = kc describe secret
+alias rpo = kubectl get po --field-selector=status.phase=Running
+alias po = kubectl get po
+alias pow = kubectl get po -o wide
+alias dpo = kubectl describe po
+alias deploy = kubectl get deploy
+alias ddeploy = kubectl describe deploy
+alias logs = kubectl logs
+alias no = kubectl get no -L karpenter.sh/provisioner-name -L kubernetes.io/arch -L karpenter.sh/capacity-type -L node.kubernetes.io/instance-type -L karpenter.k8s.aws/instance-cpu -L karpenter.k8s.aws/instance-memory -L dedicated -L karpenter.sh/nodepool
+alias dno = kubectl describe no
+alias svc = kubectl get svc
+alias dsvc = kubectl describe svc
+alias ds = kubectl get ds
+alias dds = kubectl describe ds
+alias cm = kubectl get configmap
+alias dcm = kubectl describe configmap
+alias secret = kubectl get secret
+alias dsecret = kubectl describe secret
+
 # base64 decode kubebernetes secrets
 # alias -g DS="-o json | jq '. + {"stringData": (.data | map_values(@base64d))} | del(.data, .metadata.managedFields)'"
-alias jo = kc get job
-alias djo = kc describe job
-alias cronjob = kc get cronjob
-alias dcronjob = kc describe cronjob
+
+alias jo = kubectl get job
+alias djo = kubectl describe job
+alias cronjob = kubectl get cronjob
+alias dcronjob = kubectl describe cronjob
 
 # pulumi
 #########
+
 alias pu = pulumi
 alias pl = pulumi stack ls
 alias pss = pulumi stack select
