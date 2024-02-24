@@ -222,14 +222,14 @@ $env.config = {
     }
 
     cursor_shape: {
-        emacs: line # block, underscore, line, blink_block, blink_underscore, blink_line, inherit to skip setting cursor shape (line is the default)
+        emacs: block # block, underscore, line, blink_block, blink_underscore, blink_line, inherit to skip setting cursor shape (line is the default)
         vi_insert: block # block, underscore, line, blink_block, blink_underscore, blink_line, inherit to skip setting cursor shape (block is the default)
         vi_normal: underscore # block, underscore, line, blink_block, blink_underscore, blink_line, inherit to skip setting cursor shape (underscore is the default)
     }
 
     color_config: $light_theme # if you want a more interesting theme, you can replace the empty record with `$dark_theme`, `$light_theme` or another custom record
     use_grid_icons: true
-    footer_mode: auto # always, never, number_of_rows, auto
+    footer_mode: 15 # always, never, number_of_rows, auto
     float_precision: 2 # the precision for displaying floats in tables
     buffer_editor: "" # command that will be used to edit the current line buffer with ctrl+o, if unset fallback to $env.EDITOR and $env.VISUAL
     use_ansi_coloring: true
@@ -917,109 +917,13 @@ def edot []: nothing -> nothing {
     nvim
 }
 
-export use ~/.config/nushell/scripts/kubectl.nu *
+use ~/.config/nushell/scripts/kubectl.nu *
 # export use go.nu *
 # export use aws-utils.nu *
 
-export use ~/.config/nushell/scripts/utils.nu *
-export use ~/.config/nushell/scripts/aws *
-
-alias l = ls
-
-alias table-to-record = transpose -i -r -d
-alias M = nvim -R -c 'set ft=markdown' -c 'set wrap' -c 'set linebreak'
-alias e = explore --peek
-alias d = describe
-
-alias du = du -h
-
-# alias d = docker
-
-alias mk = minikube
-
-# git
-#####
-
-alias g = git
-alias gb = git branch
-alias gco = git checkout
-alias ga = git add
-alias gap = git add -p
-alias gs = git status --short
-alias gl = git log --decorate
-alias gl1p = git log --decorate -1 -p
-alias gls = git log --decorate --stat
-alias glss = git log --show-signature
-alias gci = git commit -v
-alias gpl = git pull
-alias cdg = cd $"(git rev-parse --show-toplevel)"
-alias gciah = git commit --amend --no-edit
-alias gr = git rebase
-alias grc = git rebase --continue
-alias gra = git rebase --abort
-alias gd = git diff
-alias gdc = git diff --cached
-
-# github gh
-###########
-
-alias p = gh pr
-alias pc = gh pr checks --watch
-alias prv = gh pr view
-alias prc = gh pr create
-alias prco = gh pr checkout
-alias prlv = gh pr list -w
-
-# alias -g U='--json url --jq ".[].url"'
-
-alias gsc = gh search code
-alias gsp = gh search prs
-alias gspm = gh search prs --author=@me --state open
-def gspmu [] { gspm --json url | from json | get url }
-alias gspu = gh search prs U
-
-alias gci = git commit
-alias gciah = git commit --amend --no-edit
-
-# kubectl
-#########
-
-alias k = kubectl
-alias rpo = kubectl get po --field-selector=status.phase=Running
-alias po = kubectl get po
-alias pow = kubectl get po -o wide
-alias dpo = kubectl describe po
-alias deploy = kubectl get deploy
-alias ddeploy = kubectl describe deploy
-alias logs = kubectl logs
-alias no = kubectl get no -L karpenter.sh/provisioner-name -L kubernetes.io/arch -L karpenter.sh/capacity-type -L node.kubernetes.io/instance-type -L karpenter.k8s.aws/instance-cpu -L karpenter.k8s.aws/instance-memory -L dedicated -L karpenter.sh/nodepool
-alias dno = kubectl describe no
-alias svc = kubectl get svc
-alias dsvc = kubectl describe svc
-alias ds = kubectl get ds
-alias dds = kubectl describe ds
-alias cm = kubectl get configmap
-alias dcm = kubectl describe configmap
-alias secret = kubectl get secret
-alias dsecret = kubectl describe secret
-
-# base64 decode kubebernetes secrets
-# alias -g DS="-o json | jq '. + {"stringData": (.data | map_values(@base64d))} | del(.data, .metadata.managedFields)'"
-
-alias jo = kubectl get job
-alias djo = kubectl describe job
-alias cronjob = kubectl get cronjob
-alias dcronjob = kubectl describe cronjob
-
-# pulumi
-#########
-
-alias pu = pulumi
-alias pl = pulumi stack ls
-alias pss = pulumi stack select
-alias pp = pulumi preview
-alias ppd = pulumi preview --diff
-alias pusl = pulumi stack --show-urns
+use ~/.config/nushell/scripts/utils.nu *
+use ~/.config/nushell/scripts/aws *
+use ~/.config/nushell/scripts/aliases.nu *
 
 source ~/.cache/carapace/init.nu
 
