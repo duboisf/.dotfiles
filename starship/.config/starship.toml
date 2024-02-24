@@ -92,7 +92,7 @@ read_only = " 󰌾"
 format = "[[](fg:color_orange bg:color_bg1)$path[](fg:color_orange bg:color_bg1)]($style)"
 home_symbol = " "
 repo_root_format = "[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "
-style = "bold fg:color_bg1 bg:color_orange"                                                                                                   # style = "fg:color_fg0 bg:color_orange"
+style = "bold fg:color_bg1 bg:color_orange"
 truncate_to_repo = true
 truncation_length = 3
 truncation_symbol = " /"
