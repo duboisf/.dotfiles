@@ -27,7 +27,7 @@ prompt_kube_context() {
       if [[ -n $kube_ns ]]; then
         kube_ctx+="=>$kube_ns"
       fi
-      prompt_segment '#D26D26' '#000' " ﴱ $kube_ctx "
+      prompt_segment '#D26D26' '#000' " 󰠲 $kube_ctx "
     fi
   fi
 }

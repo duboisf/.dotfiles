@@ -30,7 +30,7 @@ local function config()
   end
 
   local function prompt_with_cwd(prompt)
-    return prompt .. '  ' .. utils.get_short_cwd()
+    return prompt .. ' 󰉖 ' .. utils.get_short_cwd()
   end
 
   -- returns true if the current buffer has an LSP client attached to it
@@ -72,7 +72,7 @@ local function config()
     builtin.find_files {
       cwd = cwd,
       hidden = true,
-      prompt_title = "Files   " .. cwd,
+      prompt_title = "Files 󰉖  " .. cwd,
     }
   end
 
@@ -116,7 +116,7 @@ local function config()
     set_prompt_border_color('#eeff00')
     with_git_root(function(git_root)
       local path = utils.collapse_home_path_to_tilde(git_root)
-      builtin.git_files({ prompt_title = "  files  " .. path })
+      builtin.git_files({ prompt_title = "  files 󰉖 " .. path })
     end)
   end
 
@@ -182,7 +182,7 @@ local function config()
     local cwd = get_buffer_dir()
     builtin.live_grep {
       cwd = cwd,
-      prompt_title = "Live Grep  " .. cwd,
+      prompt_title = "Live Grep 󰉖 " .. cwd,
     }
   end
 
@@ -199,7 +199,7 @@ local function config()
       local path = utils.collapse_home_path_to_tilde(git_root)
       builtin.live_grep({
         cwd = git_root,
-        prompt_title = "   Live Grep  " .. path
+        prompt_title = "   Live Grep 󰉖 " .. path
       })
     end)
   end
@@ -278,7 +278,7 @@ local function config()
       },
       dynamic_preview_title = true,
       prompt_prefix = "  ",
-      selection_caret = " ",
+      selection_caret = "󰁕 ",
       path_display = { "truncate" },
       winblend = 20,
       color_devicons = true,

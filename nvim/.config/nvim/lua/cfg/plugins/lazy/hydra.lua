@@ -22,13 +22,13 @@ local config = function()
     body = 'gm',
     heads = {
       { 'j', ":lua require'nvim-treesitter.textobjects.move'.goto_next_start({'@function.outer','@class.outer'})<CR>",
-        { desc = '→', silent = true } },
+        { desc = '→󰊕', silent = true } },
       { 'h', ":lua require'nvim-treesitter.textobjects.move'.goto_next_end({'@function.outer','@class.outer'})<CR>",
-        { desc = '→', silent = true } },
+        { desc = '󰊕→', silent = true } },
       { 'k', ":lua require'nvim-treesitter.textobjects.move'.goto_previous_start({'@function.outer','@class.outer'})<CR>",
-        { desc = '←', silent = true } },
+        { desc = '←󰊕', silent = true } },
       { 'l', ":lua require'nvim-treesitter.textobjects.move'.goto_previous_end({'@function.outer','@class.outer'})<CR>",
-        { desc = '←', silent = true } },
+        { desc = '󰊕←', silent = true } },
       { '<C-c>', '<Esc>', { exit = true } },
       { '<Esc>', '<Esc>', { exit = true } },
     }
