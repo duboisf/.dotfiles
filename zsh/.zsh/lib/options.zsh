@@ -5,3 +5,5 @@ setopt extendedglob
 setopt incappendhistory
 setopt interactivecomments
 setopt menucomplete
+unsetopt listbeep
+unsetopt histbeep
