@@ -961,14 +961,12 @@ def edot []: nothing -> nothing {
     nvim
 }
 
-use ~/.config/nushell/scripts/kubectl.nu *
-# export use go.nu *
-# export use aws-utils.nu *
-
-use ~/.config/nushell/scripts/utils.nu *
-use ~/.config/nushell/scripts/aws *
 use ~/.config/nushell/scripts/aliases.nu *
+use ~/.config/nushell/scripts/aws *
+use ~/.config/nushell/scripts/kubectl.nu *
+use ~/.config/nushell/scripts/private.nu *
+use ~/.config/nushell/scripts/pulumi.nu *
+use ~/.config/nushell/scripts/utils.nu *
 
 source ~/.cache/carapace/init.nu
-
 use ~/.cache/starship/init.nu
