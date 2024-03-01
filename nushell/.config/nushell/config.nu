@@ -884,14 +884,14 @@ $env.config = {
             ]
         }
         {
-            name: add_grep
+            name: append_pipe_grep
             modifier: control
             keycode: char_i
             mode: emacs
             event: [
                 {
                     send: executehostcommand,
-                    cmd: 'commandline --append "| grep "; commandline --cursor-end'
+                    cmd: 'use keybinding-utils *; append-pipe-grep'
                 }
             ]
         }
@@ -903,7 +903,7 @@ $env.config = {
             event: [
                 {
                     send: executehostcommand,
-                    cmd: 'use cd-utils.nu; cd-utils fzf'
+                    cmd: 'use keybinding-utils *; cd-fzf'
                 }
             ]
         }
@@ -915,7 +915,7 @@ $env.config = {
             event: [
                 {
                     send: executehostcommand,
-                    cmd: 'let ans = ^(history | last | get command); $ans | explore'
+                    cmd: 'use keybinding-utils *; explore-last-result'
                 }
             ]
         }
@@ -924,35 +924,60 @@ $env.config = {
             modifier: control
             keycode: char_r
             mode: [emacs, vi_insert, vi_normal]
-            event: { send: executehostcommand, cmd: 'history-fzf' }
+            event: {
+              send: executehostcommand,
+              cmd: 'use keybinding-utils *; history-fzf'
+            }
         }
     ]
 }
 
-def "history-fzf" []: nothing -> nothing {
-  if $env.config.history.file_format == sqlite {
-    let picked_entry = open ~/.config/nushell/history.sqlite3
-    | query db `
-        SELECT max(id) as id, command_line
-        FROM history
-        WHERE duration_ms IS NOT NULL
-        GROUP BY command_line
-        ORDER BY id DESC
-    `
-    | get command_line
-    | str join (char -i 0)
-    | fzf --read0 --tiebreak=index --preview="echo Command:\\n; tree-sitter highlight --scope=source.nu <(echo {})" --preview-window=up:50%:wrap
+# Module that defines commands only used in keybindings
+module keybinding-utils {
 
-    if $picked_entry != "" {
-      commandline -r $picked_entry
+  export def append-pipe-grep []: nothing -> nothing {
+    commandline edit --append "| grep "
+    commandline set-cursor --end
+  }
+
+  export def --env cd-fzf []: nothing -> nothing {
+    let picked_dir = fd --type d | ^fzf | to text
+    if $picked_dir != null {
+      cd $picked_dir
     }
   }
-}
 
-def "insert_last_word" [] {
+  export def explore-last-result []: nothing -> nothing {
+    let last_command = history | last | get command
+    commandline edit $"let ans = ($last_command); $ans | explore"
+  }
+
+  export def insert-last-word [] {
     let last_word = history | last | get command | split row --regex '\s+' | last
-    commandline --append $last_word
-    commandline --cursor-end
+    commandline edit --append $last_word
+    commandline set-cursor --end
+  }
+
+  export def history-fzf []: nothing -> nothing {
+    if $env.config.history.file_format == sqlite {
+      let picked_entry = open ~/.config/nushell/history.sqlite3
+      | query db `
+          SELECT max(id) as id, command_line
+          FROM history
+          WHERE duration_ms IS NOT NULL
+          GROUP BY command_line
+          ORDER BY id DESC
+      `
+      | get command_line
+      | str join (char -i 0)
+      | fzf --read0 --tiebreak=index --preview="echo Command:\\n; tree-sitter highlight --scope=source.nu <(echo {})" --preview-window=up:50%:wrap
+
+      if $picked_entry != "" {
+        commandline -r $picked_entry
+      }
+    }
+  }
+
 }
 
 # Open nvim in my dotfiles directory
