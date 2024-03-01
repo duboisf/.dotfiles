@@ -103,7 +103,6 @@ truncation_symbol = " /"
 "Music" = "󰝚 "
 "Pictures" = " "
 "Developer" = "󰲋 "
-"git" = " "
 
 [docker_context]
 symbol = " "
