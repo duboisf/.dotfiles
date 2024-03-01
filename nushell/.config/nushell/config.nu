@@ -368,13 +368,6 @@ $env.config = {
             }
         }
         {
-            name: history_menu
-            modifier: control
-            keycode: char_r
-            mode: [emacs, vi_insert, vi_normal]
-            event: { send: menu name: history_menu }
-        }
-        {
             name: help_menu
             modifier: none
             keycode: f1
@@ -902,7 +895,58 @@ $env.config = {
                 }
             ]
         }
+        {
+            name: fzf_cd
+            modifier: alt
+            keycode: char_c
+            mode: emacs
+            event: [
+                {
+                    send: executehostcommand,
+                    cmd: 'use cd-utils.nu; cd-utils fzf'
+                }
+            ]
+        }
+        {
+            name: explore_last_result
+            modifier: alt
+            keycode: char_e
+            mode: emacs
+            event: [
+                {
+                    send: executehostcommand,
+                    cmd: 'let ans = ^(history | last | get command); $ans | explore'
+                }
+            ]
+        }
+        {
+            name: history_menu
+            modifier: control
+            keycode: char_r
+            mode: [emacs, vi_insert, vi_normal]
+            event: { send: executehostcommand, cmd: 'history-fzf' }
+        }
     ]
+}
+
+def "history-fzf" []: nothing -> nothing {
+  if $env.config.history.file_format == sqlite {
+    let picked_entry = open ~/.config/nushell/history.sqlite3
+    | query db `
+        SELECT max(id) as id, command_line
+        FROM history
+        WHERE duration_ms IS NOT NULL
+        GROUP BY command_line
+        ORDER BY id DESC
+    `
+    | get command_line
+    | str join (char -i 0)
+    | fzf --read0 --tiebreak=index --preview="echo Command:\\n; tree-sitter highlight --scope=source.nu <(echo {})" --preview-window=up:50%:wrap
+
+    if $picked_entry != "" {
+      commandline -r $picked_entry
+    }
+  }
 }
 
 def "insert_last_word" [] {
