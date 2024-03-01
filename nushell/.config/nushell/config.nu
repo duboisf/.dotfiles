@@ -867,7 +867,7 @@ $env.config = {
             event: [
                 {
                     send: executehostcommand,
-                    cmd: 'insert_last_word'
+                    cmd: 'use keybinding-utils *; insert-last-word'
                 }
             ]
         }
