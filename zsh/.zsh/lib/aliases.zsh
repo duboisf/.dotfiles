@@ -234,5 +234,3 @@ alias ssousers='aws --no-cli-pager \
 alias rgf='rg --files-with-matches'
 
 alias ic=istioctl
-
-alias nu='exec nu'
