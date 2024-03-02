@@ -1,3 +1,3 @@
 export use profile.nu *
-export use rds.nu
+export module rds.nu
 export use wrapper.nu *

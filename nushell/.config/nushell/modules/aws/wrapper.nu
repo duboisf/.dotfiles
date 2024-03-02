@@ -1,10 +1,16 @@
+
+const hist_table_name = "_aws_results"
+
+def "aws-history table exists" []: nothing -> bool {
+  ((stor open | schema).tables | get --ignore-errors $hist_table_name) != null
+}
+
 def "aws-history store" [command: list<string>, result: closure]: nothing -> list<any> {
-  let table_name = "_aws_results"
-  if ((stor open | schema).tables | get --ignore-errors $table_name) == null {
-    stor create --table-name $table_name -c {timestamp: datetime, command: str, result: str}
+  if not (aws-history table exists) {
+    stor create --table-name $hist_table_name -c {timestamp: datetime, command: str, result: str}
   }
   let result = do $result
-  stor insert --table-name $table_name --data-record {
+  stor insert --table-name $hist_table_name --data-record {
     timestamp: (date now),
     command: ($command | str join " "),
     result: ($result| to nuon)
@@ -14,6 +20,9 @@ def "aws-history store" [command: list<string>, result: closure]: nothing -> lis
 
 # This command returns the in-memory history of the aws commands called.
 export def "aws-history" []: nothing -> table<id: int, timestamp: datetime, command: string, result: any> {
+  if not (aws-history table exists) {
+    return []
+  }
   stor open
   | query db "select * from _aws_results"
   | update id {into int}
@@ -23,11 +32,17 @@ export def "aws-history" []: nothing -> table<id: int, timestamp: datetime, comm
 
 # This command returns the last command from the in-memory history.
 export def "aws-history last" []: nothing -> record<id: int, timestamp: datetime, command: string, result: any> {
+  if not (aws-history table exists) {
+    return []
+  }
   aws-history | last
 }
 
 # This command returns the result of the last aws command from the in-memory history.
 export def "aws-history last result" []: nothing -> any {
+  if not (aws-history table exists) {
+    return []
+  }
   (aws-history last).result
 }
 

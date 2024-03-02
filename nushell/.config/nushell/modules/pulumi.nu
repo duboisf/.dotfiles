@@ -1,4 +1,4 @@
-use ~/.config/nushell/scripts/utils.nu notify
+use utils.nu notify
 
 export def "pup" [] {
     pulumi up

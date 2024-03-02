@@ -1,133 +1,142 @@
+do { ||
+  use std log
+  const supported_version = '0.90.2'
+  if (nu --version) < $supported_version {
+    log warning $"This config is designed for nushell ($supported_version) or later."  
+  }
+}
+
 source ~/.config/nushell/config-default.nu
 
-mut config = $env.config
-$config.show_banner = false
-$config.history.file_format = "sqlite"
-$config.history.isolation = true
-$config.completions.algorithm = "fuzzy"
-$config.filesize.metric = true
-$config.cursor_shape.emacs = "block"
-$config.color_config = $light_theme # if you want a more interesting theme, you can replace the empty record with `$dark_theme`, `$light_theme` or another custom record
-$config.footer_mode = 15 # always, never, number_of_rows, auto
-$config.shell_integration = true # enables terminal shell integration. Off by default, as some terminals have issues with this.
-$config.use_kitty_protocol = true # enables keyboard enhancement protocol implemented by kitty console, only if your terminal support this.
-$config.highlight_resolved_externals = true # true enables highlighting of external commands in the repl resolved by which.
-$config.keybindings = $config.keybindings ++ [
-  {
-      name: sonder_config_kubectl
-      modifier: alt
-      keycode: char_k
-      mode: emacs
-      event: [
-          { edit: Clear }
-          {
-              edit: InsertString,
-              value: "sonder config kubectl"
-          }
-          { send: Enter }
-      ]
-  }
-  {
-      name: sonder_config_kubectl
-      modifier: alt
-      keycode: char_n
-      mode: emacs
-      event: [
-          { edit: Clear }
-          {
-              edit: InsertString,
-              value: "sonder config kubectl --namespace"
-          }
-          { send: Enter }
-      ]
-  }
-  {
-      name: git_switch_branch
-      modifier: alt
-      keycode: char_s
-      mode: emacs
-      event: [
-          { edit: Clear }
-          {
-              edit: InsertString,
-              value: "gh switch-branch"
-          }
-          { send: Enter }
-      ]
-  }
-  {
-      name: insert_last_word
-      modifier: alt
-      keycode: char_.
-      mode: emacs
-      event: [
-          {
-              send: executehostcommand,
-              cmd: 'use keybinding-utils *; insert-last-word'
-          }
-      ]
-  }
-  {
-      name: cd_dot_dot
-      modifier: alt
-      keycode: char_u
-      mode: emacs
-      event: [
-          {
-              send: executehostcommand,
-              cmd: 'cd ..'
-          }
-      ]
-  }
-  {
-      name: append_pipe_grep
-      modifier: control
-      keycode: char_i
-      mode: emacs
-      event: [
-          {
-              send: executehostcommand,
-              cmd: 'use keybinding-utils *; append-pipe-grep'
-          }
-      ]
-  }
-  {
-      name: fzf_cd
-      modifier: alt
-      keycode: char_c
-      mode: emacs
-      event: [
-          {
-              send: executehostcommand,
-              cmd: 'use keybinding-utils *; cd-fzf'
-          }
-      ]
-  }
-  {
-      name: explore_last_result
-      modifier: alt
-      keycode: char_e
-      mode: emacs
-      event: [
-          {
-              send: executehostcommand,
-              cmd: 'use keybinding-utils *; explore-last-result'
-          }
-      ]
-  }
-  {
-      name: history_menu
-      modifier: control
-      keycode: char_r
-      mode: [emacs, vi_insert, vi_normal]
-      event: {
-        send: executehostcommand,
-        cmd: 'use keybinding-utils *; history-fzf'
-      }
-  }
-]
-
-$env.config = $config
+do --env { ||
+  mut c = $env.config
+  $c.show_banner = false
+  $c.history.file_format = "sqlite"
+  $c.history.isolation = true
+  $c.completions.algorithm = "fuzzy"
+  $c.filesize.metric = true
+  $c.cursor_shape.emacs = "block"
+  $c.color_config = $light_theme # if you want a more interesting theme, you can replace the empty record with `$dark_theme`, `$light_theme` or another custom record
+  $c.footer_mode = 15 # always, never, number_of_rows, auto
+  $c.shell_integration = true # enables terminal shell integration. Off by default, as some terminals have issues with this.
+  $c.use_kitty_protocol = true # enables keyboard enhancement protocol implemented by kitty console, only if your terminal support this.
+  $c.highlight_resolved_externals = true # true enables highlighting of external commands in the repl resolved by which.
+  $c.keybindings = $c.keybindings ++ [
+    {
+        name: sonder_config_kubectl
+        modifier: alt
+        keycode: char_k
+        mode: emacs
+        event: [
+            { edit: Clear }
+            {
+                edit: InsertString,
+                value: "sonder config kubectl"
+            }
+            { send: Enter }
+        ]
+    }
+    {
+        name: sonder_config_kubectl
+        modifier: alt
+        keycode: char_n
+        mode: emacs
+        event: [
+            { edit: Clear }
+            {
+                edit: InsertString,
+                value: "sonder config kubectl --namespace"
+            }
+            { send: Enter }
+        ]
+    }
+    {
+        name: git_switch_branch
+        modifier: alt
+        keycode: char_s
+        mode: emacs
+        event: [
+            { edit: Clear }
+            {
+                edit: InsertString,
+                value: "gh switch-branch"
+            }
+            { send: Enter }
+        ]
+    }
+    {
+        name: insert_last_word
+        modifier: alt
+        keycode: char_.
+        mode: emacs
+        event: [
+            {
+                send: executehostcommand,
+                cmd: 'use keybinding-utils *; insert-last-word'
+            }
+        ]
+    }
+    {
+        name: cd_dot_dot
+        modifier: alt
+        keycode: char_u
+        mode: emacs
+        event: [
+            {
+                send: executehostcommand,
+                cmd: 'cd ..'
+            }
+        ]
+    }
+    {
+        name: append_pipe_grep
+        modifier: control
+        keycode: char_i
+        mode: emacs
+        event: [
+            {
+                send: executehostcommand,
+                cmd: 'use keybinding-utils *; append-pipe-grep'
+            }
+        ]
+    }
+    {
+        name: fzf_cd
+        modifier: alt
+        keycode: char_c
+        mode: emacs
+        event: [
+            {
+                send: executehostcommand,
+                cmd: 'use keybinding-utils *; cd-fzf'
+            }
+        ]
+    }
+    {
+        name: explore_last_result
+        modifier: alt
+        keycode: char_e
+        mode: emacs
+        event: [
+            {
+                send: executehostcommand,
+                cmd: 'use keybinding-utils *; explore-last-result'
+            }
+        ]
+    }
+    {
+        name: history_menu
+        modifier: control
+        keycode: char_r
+        mode: [emacs, vi_insert, vi_normal]
+        event: {
+          send: executehostcommand,
+          cmd: 'use keybinding-utils *; history-fzf'
+        }
+    }
+  ]
+  $env.config = $c
+}
 
 # Module that defines commands only used in keybindings
 module keybinding-utils {
@@ -183,12 +192,12 @@ def edot []: nothing -> nothing {
     nvim
 }
 
-use ~/.config/nushell/scripts/aliases.nu *
-use ~/.config/nushell/scripts/aws *
-use ~/.config/nushell/scripts/kubectl.nu *
-use ~/.config/nushell/scripts/private.nu *
-use ~/.config/nushell/scripts/pulumi.nu *
-use ~/.config/nushell/scripts/utils.nu *
+source aliases.nu
+use aws *
+use kubectl.nu *
+use private.nu *
+use pulumi.nu *
+use utils.nu *
 
 source ~/.cache/carapace/init.nu
 use ~/.cache/starship/init.nu

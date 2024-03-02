@@ -31,13 +31,8 @@ export def --wrapped "dno" [
         | update status.conditions.lastTransitionTime {into datetime}
 }
 
-export def --wrapped "kubectl get" [...rest] {
-    let input = $in
-    if ($rest | any {$in in [--help -h]}) {
-        ^kubectl get ...$rest
-    } else { 
-        ^kubectl get ...$rest -o json | from json
-    }
+export def --wrapped "kg" [...rest] {
+    ^kubectl get ...$rest -o json | from json | get items
 }
 
 # export alias "k get" = kubectl get
@@ -55,10 +50,27 @@ export def --wrapped po [
         | update age {into duration}
 }
 
-export def "kube contexts" [] {
-    kubectl config view -o json
+export def "kctxs" [] {
+    ^kubectl config view -o json
     | from json
     | get contexts
     | flatten
     | where name != none
+}
+
+# Get kubernetes pods
+def poj []: nothing -> table<name: string, ready: string, status: string, age: datetime> {
+    kubectl get pods -o json | from json | get items
+        | each { |in| {
+            name: $in.metadata.name,
+            ready: ($in.status.containerStatuses
+                | do {
+                    let total = ($in | length)
+                    let ready = ($in | where state.running? != null | length)
+                    $"($ready)/($total)"
+                }
+            ),
+            status: $in.status.phase,
+            age: ($in.metadata.creationTimestamp | into datetime)
+        }}
 }
