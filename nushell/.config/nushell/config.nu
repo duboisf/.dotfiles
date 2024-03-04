@@ -21,7 +21,10 @@ do --env { ||
   $c.shell_integration = true # enables terminal shell integration. Off by default, as some terminals have issues with this.
   $c.use_kitty_protocol = true # enables keyboard enhancement protocol implemented by kitty console, only if your terminal support this.
   $c.highlight_resolved_externals = true # true enables highlighting of external commands in the repl resolved by which.
-  $c.keybindings = $c.keybindings ++ (use ~/.config/nushell/modules/config-utils; config-utils keybindings)
+  $c.keybindings = $c.keybindings ++ (do {||
+    use ~/.config/nushell/modules/config-utils
+    config-utils keybindings
+  })
   $env.config = $c
 }
 
