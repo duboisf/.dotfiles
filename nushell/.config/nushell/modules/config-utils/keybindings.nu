@@ -36,12 +36,12 @@ export def history-fzf []: nothing -> nothing {
     | fzf --read0 --tiebreak=index --preview="echo Command:\\n; echo {} | nu -n --stdin -c nu-highlight" --preview-window=up:50%:wrap
 
     if $picked_entry != "" {
-      commandline edit $picked_entry
+      commandline edit --insert $picked_entry
     }
   }
 }
 
-export def main []: nothing -> table<any> {
+export def main []: nothing -> list<any> {
   [
     {
         name: sonder_config_kubectl
