@@ -1,7 +1,6 @@
 export alias l = ls
 
 export alias table-to-record = transpose -i -r -d
-export alias M = nvim -R -c 'set ft=markdown' -c 'set wrap' -c 'set linebreak'
 export alias e = explore --peek
 export alias d = describe
 
