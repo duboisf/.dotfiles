@@ -32,10 +32,10 @@ export def "aws-history" []: nothing -> table<id: int, timestamp: datetime, comm
 
 # This command returns the last command from the in-memory history.
 export def "aws-history last" []: nothing -> record<id: int, timestamp: datetime, command: string, result: any> {
-  if not (aws-history table exists) {
-    return []
+  if (aws-history table exists) {
+    return (aws-history | last)
   }
-  aws-history | last
+  return []
 }
 
 # This command returns the result of the last aws command from the in-memory history.
