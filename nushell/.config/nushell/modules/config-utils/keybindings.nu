@@ -149,5 +149,15 @@ export def main []: nothing -> list<any> {
           cmd: 'use config-utils keybindings *; history-fzf'
         }
     }
+    {
+        name: kubectl_output_yaml
+        modifier: alt
+        keycode: char_y
+        mode: [emacs, vi_insert, vi_normal]
+        event: {
+          send: executehostcommand,
+          cmd: 'commandline edit --insert "-o yaml | from yaml"'
+        }
+    }
   ]
 }

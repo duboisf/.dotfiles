@@ -76,7 +76,5 @@ export def "as sqlite" []: table<any> -> any {
   let input = $in
   let db_path = mktemp -t --suffix .sqlite
   $input | into sqlite $db_path
-  stor import --file-name $db_path
-  rm $db_path
-  stor open
+  open $db_path
 }

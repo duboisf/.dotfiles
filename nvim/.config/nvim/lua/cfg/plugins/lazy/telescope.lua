@@ -254,7 +254,8 @@ local function config()
         g = grep_mappings,
         l = lsp_mappings,
         t = { '<cmd>Telescope<CR>', 'Show available pickers' },
-      }
+      },
+      ['/'] = { builtin.current_buffer_fuzzy_find, 'Current buffer fuzzy find' },
     }, { prefix = '<leader>' })
 
     nmap('z=', spell_suggestions, 'show spelling suggestions for word under cursor')

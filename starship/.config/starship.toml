@@ -7,15 +7,8 @@ $directory\
 $git_branch\
 $git_status\
 (fg:color_aqua bg:color_blue)\
-$rust\
-$golang\
-$nodejs\
-$java\
 $pulumi\
-$haskell\
-$python\
 (fg:color_blue bg:color_bg3)\
-(@$docker_context)\
 $aws\
 $kubernetes\
 $line_break\
@@ -129,7 +122,7 @@ style = "bold fg:color_green"
 format = '[ $symbol $branch]($style)'
 
 [git_status]
-disabled = false
+disabled = true
 stashed = "󰽂 "
 conflicted = "[](fg:color_red)"
 diverged = "[↕](fg:color_yellow"

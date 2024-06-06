@@ -13,41 +13,38 @@ export def --wrapped no [
         ...$rest
     ]
     ^kubectl ...$args
-        | from ssv
-        | rename -b {str downcase}
-        | update age {str replace 's' 'sec ' | str replace 'd' 'day ' | str replace 'm' 'min ' | str replace 'h' 'hr '}
-        | update age {into duration}
 }
 
-export def --wrapped "dno" [
-    ...rest: string        # Extra arguments to pass to kubectl get nodes
-] {
-    kubectl get no ...$rest
-        | get items
-        | where metadata.name !~ fargate
-        | rename -c  {metadata: m}
-        | select m spec status | reject m.annotations status.images
-        | update m.creationTimestamp {into datetime}
-        | update status.conditions.lastTransitionTime {into datetime}
-}
+# export def --wrapped "dno" [
+#     ...rest: string        # Extra arguments to pass to kubectl get nodes
+# ] {
+#     kubectl get no ...$rest
+#         | get items
+#         | where metadata.name !~ fargate
+#         | rename -c  {metadata: m}
+#         | select m spec status | reject m.annotations status.images
+#         | update m.creationTimestamp {into datetime}
+#         | update status.conditions.lastTransitionTime {into datetime}
+# }
 
-export def --wrapped "kg" [...rest] {
-    ^kubectl get ...$rest -o json | from json | get items
-}
+# export def --wrapped "kg" [...rest] {
+#     ^kubectl get ...$rest -o json | from json | get items
+# }
 
 # export alias "k get" = kubectl get
 
 export def --wrapped po [
     ...rest: string          # Extra arguments to pass to kubectl get pods
 ] {
-    let args = [get po -o wide ...$rest] | compact
-    kubectl ...$args
-        | complete
-        | get stdout
-        | from ssv
-        | rename -b {str downcase}
-        | update age {str replace 's' 'sec ' | str replace 'd' 'day ' | str replace 'm' 'min ' | str replace 'h' 'hr '}
-        | update age {into duration}
+    let args = [get po ...$rest]
+    ^kubectl ...$args
+    # kubectl ...$args
+    #     | complete
+    #     | get stdout
+    #     | from ssv
+    #     | rename -b {str downcase}
+    #     | update age {str replace 's' 'sec ' | str replace 'd' 'day ' | str replace 'm' 'min ' | str replace 'h' 'hr '}
+    #     | update age {into duration}
 }
 
 export def "kctxs" [] {
@@ -59,7 +56,7 @@ export def "kctxs" [] {
 }
 
 # Get kubernetes pods
-def poj []: nothing -> table<name: string, ready: string, status: string, age: datetime> {
+export def poj []: nothing -> table<name: string, ready: string, status: string, age: datetime> {
     kubectl get pods -o json | from json | get items
         | each { |in| {
             name: $in.metadata.name,

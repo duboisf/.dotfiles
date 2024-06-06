@@ -8,7 +8,6 @@ export def "with" [type: string, type_name: string, path: string, query_params: 
     ""
   }
   let url = $"(config base_url)/($type)/($type_id)/($path)($params)"
-  print $url
   let resp = http get -H (config auth) $url
   let json_resp = match ($resp | describe) {
     # For some reason some endpoints (like devices/posture/integration) return json but with content-type: text/plain
