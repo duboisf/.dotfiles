@@ -1,6 +1,6 @@
 {
   "LuaSnip": { "branch": "master", "commit": "2dbef19461198630b3d7c39f414d09fb07d1fdd2" },
-  "bluloco.nvim": { "branch": "main", "commit": "e97a9d61fad847a8d98c280181dde1c228be422b" },
+  "bluloco.nvim": { "branch": "main", "commit": "5e70851f396decd0d28a10655d5235ddf507fd95" },
   "cmp-buffer": { "branch": "main", "commit": "3022dbc9166796b644a841a02de8dd1cc1d311fa" },
   "cmp-cmdline": { "branch": "main", "commit": "8ee981b4a91f536f52add291594e89fb6645e451" },
   "cmp-dictionary": { "branch": "main", "commit": "afa18f35a818af7bcb65b05c183a6777ede6c0ad" },
@@ -51,7 +51,7 @@
   "telescope.nvim": { "branch": "master", "commit": "7b5c5f56a21e82fdcfe5b250278b8dfc4b1cbab4" },
   "tree-sitter-nu": { "branch": "main", "commit": "7dd29f9616822e5fc259f5b4ae6c4ded9a71a132" },
   "vim-eunuch": { "branch": "master", "commit": "084946fb1c8103ae0cb7342e9be3a2c69374958c" },
-  "vim-fugitive": { "branch": "master", "commit": "e7bf502a6ae492f42a91d231864e25630286319b" },
+  "vim-fugitive": { "branch": "master", "commit": "4f59455d2388e113bd510e85b310d15b9228ca0d" },
   "vim-rego": { "branch": "master", "commit": "b47bf95996b72d630464b44ca567f2945bd37ac9" },
   "vim-repeat": { "branch": "master", "commit": "24afe922e6a05891756ecf331f39a1f6743d3d5a" },
   "vim-rhubarb": { "branch": "master", "commit": "ee69335de176d9325267b0fd2597a22901d927b1" },
