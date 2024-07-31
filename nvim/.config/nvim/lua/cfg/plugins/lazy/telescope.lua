@@ -3,6 +3,7 @@ local function config()
   local action_state = require 'telescope.actions.state'
   local actions = require 'telescope.actions'
   local builtin = require 'telescope.builtin'
+  local putils = require 'telescope.previewers.utils'
   local themes = require 'telescope.themes'
   local tutils = require 'telescope.utils'
   local utils = require 'core.utils'
@@ -283,6 +284,20 @@ local function config()
       path_display = { "truncate" },
       winblend = 20,
       color_devicons = true,
+      preview = {
+        -- 1) Do not show previewer for certain files
+        filetype_hook = function(filepath, bufnr, opts)
+          local excluded = vim.tbl_filter(function(ending)
+            return filepath:match(ending)
+          end, {
+            "pnpm%-lock%.yaml",
+          })
+          if not vim.tbl_isempty(excluded) then
+            return false
+          end
+          return true
+        end,
+      },
       layout_strategy = "flex",
       layout_config = {
         width = 0.90,
@@ -433,8 +448,6 @@ local function config()
       themes = {},
       terms = {}
     },
-    preview = {
-    }
   }
 end
 
