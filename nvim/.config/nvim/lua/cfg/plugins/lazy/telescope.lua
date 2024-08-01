@@ -218,48 +218,40 @@ local function config()
   end
 
   local function setup_mappings()
-    local file_mappings = {
-      name = 'Files',
-      a = { find_all_files, 'All files (including hidden)' },
-      d = { cwd_files, 'Dir of current buffer' },
-      e = { find_files, 'Workspace' },
-      g = { git_files, '  files' },
-      r = { builtin.oldfiles, 'Recent files' },
-    }
-    local grep_mappings = {
-      name = 'Live Grep',
-      a = { live_grep_everything, 'Workspace (all, without ignore)' },
-      d = { live_grep_dir_of_current_buffer, 'Dir of current buffer' },
-      e = { live_grep_workspace, 'Workspace' },
-      g = { live_grep_git_root, 'Git root' }
-    }
-    local lsp_mappings = {
-      name = 'LSP',
-      l = { lsp_dynamic_workspace_symbols, 'LSP dynamic workspace symbols' },
-      s = { builtin.lsp_document_symbols, 'LSP document symbols' },
-    }
+    which_key.add({
+      -- Files
+      { "<leader>f", group = "Files" },
+      { "<leader>fa", find_all_files, desc = 'All files (including hidden)' },
+      { "<leader>fd", cwd_files, desc = 'Dir of current buffer' },
+      { "<leader>fe", find_files, desc = 'Workspace' },
+      { "<leader>fg", git_files, desc = '  files' },
+      { "<leader>fr", builtin.oldfiles, desc = 'Recent files' },
 
-    which_key.register({
-      -- I use these so often that they have their dedicated keys
-      f = file_mappings,
-      g = grep_mappings,
-      -- We group all other telescope mappings under <leader>t
-      t = {
-        name = 'Telescope',
-        ['*'] = { builtin.current_buffer_fuzzy_find, 'Current buffer fuzzy find' },
-        b = { builtin.buffers, 'Buffers' },
-        c = { change_cwd, 'Change CWD of current window' },
-        h = { builtin.help_tags, 'Help tags' },
-        -- For consistency, we also have all the file mappings repeated here
-        f = file_mappings,
-        g = grep_mappings,
-        l = lsp_mappings,
-        t = { '<cmd>Telescope<CR>', 'Show available pickers' },
-      },
-      ['/'] = { builtin.current_buffer_fuzzy_find, 'Current buffer fuzzy find' },
-    }, { prefix = '<leader>' })
+      -- Grep
+      { "<leader>g", group = "Grep" },
+      { "<leader>ga", live_grep_everything, desc = "Workspace (all, without ignore)" },
+      { "<leader>gd", live_grep_dir_of_current_buffer, desc = "Dir of current buffer" },
+      { "<leader>ge", live_grep_workspace, desc = "Workspace" },
+      { "<leader>gg", live_grep_git_root, desc = "Git root" },
 
-    nmap('z=', spell_suggestions, 'show spelling suggestions for word under cursor')
+      -- LSP
+      { "<leader>l", group = "LSP" },
+      { "<leader>ll", lsp_dynamic_workspace_symbols, desc = "Dynamic workspace symbols" },
+      { "<leader>ls", builtin.lsp_document_symbols, desc = "Document symbols" },
+      { "<leader>lr", lsp_references, desc = "References" },
+
+      -- Telescope
+      { "<leader>t", group = "Telescope" },
+      { "<leader>t*", builtin.current_buffer_fuzzy_find, desc = "Current buffer fuzzy find" },
+      { "<leader>tb", builtin.buffers, desc = "Buffers" },
+      { "<leader>tc", change_cwd, desc = "Change CWD of current window" },
+      { "<leader>th", builtin.help_tags, desc = "Help tags" },
+      { "<leader>tt", '<cmd>Telescope<CR>', desc = "Show available pickers" },
+
+      -- Misc
+      { "<leader>/", builtin.current_buffer_fuzzy_find, desc = "Current buffer fuzzy find" },
+      { "z=", spell_suggestions, desc = "Show spelling suggestions for word under cursor" },
+    })
   end
 
   setup_mappings()
@@ -459,7 +451,7 @@ return {
     config = config,
     dependencies = {
       'which-key.nvim',
-      'kyazdani42/nvim-web-devicons',
+      'nvim-tree/nvim-web-devicons',
       'nvim-lua/popup.nvim',
       'nvim-lua/plenary.nvim',
     },
