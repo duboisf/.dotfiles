@@ -1,6 +1,6 @@
 # The basic stuff
 alias du='du -h'
-alias l='exa -l --color=auto'
+alias l='eza -l --color=auto' # cargo install eza
 alias la='l -a'
 alias open=xdg-open
 alias s='cd ..'
