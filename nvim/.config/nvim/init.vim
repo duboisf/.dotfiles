@@ -30,7 +30,7 @@ endif
 " Miscellaneous mappings
 nnoremap <silent><leader>q :q<CR>
 nnoremap <silent><leader>s :silent w<CR>
-nnoremap <silent><leader>b :bd<CR>
+nnoremap <silent><leader>bd :bd<CR>
 nnoremap <silent><leader>m <C-W>_
 nnoremap <silent><leader>= <C-W>=
 nnoremap <silent><leader>. 10<C-W>>

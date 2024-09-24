@@ -109,7 +109,7 @@ local function config()
               bufnr = bufnr,
               async = false,
               filter = function(format_client)
-                return format_client.name ~= "tsserver"
+                return format_client.name ~= "ts_ls"
               end
             })
           end,
@@ -227,13 +227,17 @@ local function config()
         }
       }
     }
+    lspconfig.ruby_lsp.setup { capabilities = capabilities, on_attach = on_attach, init_options = {
+      formatter = 'standard',
+      linters = { 'standard' },
+    } }
     lspconfig.rnix.setup { capabilities = capabilities, on_attach = on_attach }
     lspconfig.nushell.setup { capabilities = capabilities, on_attach = on_attach }
     lspconfig.rust_analyzer.setup { capabilities = capabilities, on_attach = on_attach }
     lspconfig.sqlls.setup { capabilities = capabilities, on_attach = on_attach }
     lspconfig.terraformls.setup { capabilities = capabilities, on_attach = on_attach }
     lspconfig.taplo.setup { capabilities = capabilities, on_attach = on_attach }
-    lspconfig.tsserver.setup {
+    lspconfig.ts_ls.setup {
       capabilities = capabilities,
       handlers = {
         ["textDocument/publishDiagnostics"] = vim.lsp.with(

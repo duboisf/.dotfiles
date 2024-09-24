@@ -1,7 +1,7 @@
 return {
   {
     'mfussenegger/nvim-dap',
-    config = function ()
+    config = function()
       local dap = require 'dap'
       vim.keymap.set('n', '<F5>', dap.continue)
       vim.keymap.set('n', '<F10>', function() require('dap').step_over() end)
@@ -9,13 +9,14 @@ return {
       vim.keymap.set('n', '<F12>', function() require('dap').step_out() end)
       vim.keymap.set('n', '<F9>', function() require('dap').toggle_breakpoint() end)
       vim.keymap.set('n', '<Leader>B', function() require('dap').set_breakpoint() end)
-      vim.keymap.set('n', '<Leader>lp', function() require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end)
+      vim.keymap.set('n', '<Leader>lp',
+        function() require('dap').set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end)
       vim.keymap.set('n', '<Leader>dr', function() require('dap').repl.open() end)
       vim.keymap.set('n', '<Leader>dl', function() require('dap').run_last() end)
-      vim.keymap.set({'n', 'v'}, '<Leader>dh', function()
+      vim.keymap.set({ 'n', 'v' }, '<Leader>dh', function()
         require('dap.ui.widgets').hover()
       end)
-      vim.keymap.set({'n', 'v'}, '<Leader>dp', function()
+      vim.keymap.set({ 'n', 'v' }, '<Leader>dp', function()
         require('dap.ui.widgets').preview()
       end)
       vim.keymap.set('n', '<Leader>df', function()
@@ -27,6 +28,7 @@ return {
         widgets.centered_float(widgets.scopes)
       end)
     end,
+    dependencies = { 'nvim-neotest/nvim-nio' },
   },
   {
     'rcarriga/nvim-dap-ui',
@@ -36,6 +38,11 @@ return {
     'leoluz/nvim-dap-go',
     config = true,
     ft = { 'go' },
+  },
+  {
+    'suketa/nvim-dap-ruby',
+    config = true,
+    ft = { 'ruby' },
   },
   {
     'theHamsta/nvim-dap-virtual-text',

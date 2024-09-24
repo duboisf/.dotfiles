@@ -249,6 +249,7 @@ local function config()
       { "<leader>tt", '<cmd>Telescope<CR>', desc = "Show available pickers" },
 
       -- Misc
+      { "<leader>bb", builtin.buffers, desc = "Buffers", desc = "Search buffers" },
       { "<leader>/", builtin.current_buffer_fuzzy_find, desc = "Current buffer fuzzy find" },
       { "z=", spell_suggestions, desc = "Show spelling suggestions for word under cursor" },
     })
