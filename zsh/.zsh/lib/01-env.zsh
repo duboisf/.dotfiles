@@ -2,6 +2,7 @@ export PYENV_ROOT="$HOME/.pyenv"
 export VOLTA_HOME="$HOME/.volta"
 
 path=(
+  ~/.rbenv/bin
   $PYENV_ROOT/bin
   $VOLTA_HOME/bin
   ~/.tfenv/bin
@@ -28,5 +29,7 @@ export ZK_NOTEBOOK_DIR=~/notes
 export VOLTA_FEATURE_PNPM=1
 
 export BAT_THEME='Solarized (dark)'
+
+export BUNDLE_RUBYGEMS__PKG__GITHUB__COM=duboisf:$(gh auth token)
 
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
