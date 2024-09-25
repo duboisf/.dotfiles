@@ -6,6 +6,7 @@ return {
   config = function()
     local copilot = require 'copilot'
     copilot.setup {
+      copilot_node_command = 'node20x',
       filetypes = {
         gitcommit = true,
         markdown = true,
