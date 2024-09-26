@@ -92,15 +92,12 @@ return {
     config = true,
   },
   'nvim-treesitter/playground',
-  'p00f/nvim-ts-rainbow',
   {
     'nvim-treesitter/nvim-treesitter',
     build = function()
       require('nvim-treesitter.install').update()
     end,
     config = config,
-    dependencies = {
-      'nushell/tree-sitter-nu',
-    },
   },
+  'nushell/tree-sitter-nu',
 }
