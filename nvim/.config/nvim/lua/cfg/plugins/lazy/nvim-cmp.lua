@@ -80,7 +80,7 @@ local function config()
     },
     formatting = {
       format = function(entry, vim_item)
-        vim_item.kind = KindIcons[vim_item.kind] or vim_item.kind)
+        vim_item.kind = KindIcons[vim_item.kind] or vim_item.kind
         vim_item.menu = MenuIcons[entry.source.name] or entry.source.name
         return vim_item
       end,
