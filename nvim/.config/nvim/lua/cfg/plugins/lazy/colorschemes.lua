@@ -67,11 +67,13 @@ return {
       vim.opt.termguicolors = true
       vim.cmd.colorscheme 'fred-bluloco'
     end,
+    dependencies = { 'duboisf/crepuscule.nvim' }
+  },
+  {
+    'duboisf/crepuscule.nvim',
+    config = true,
     dependencies = {
-      {
-        "duboisf/crepuscule.nvim",
-        config = true,
-      }
-    }
+      'nvim-lua/plenary.nvim',
+    },
   },
 }
