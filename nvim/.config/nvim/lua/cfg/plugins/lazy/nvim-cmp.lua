@@ -29,7 +29,7 @@ local function config()
     }
   }
 
-  local CompletionItemKinds = {
+  local KindIcons = {
     Text = '',
     Method = '󰆧',
     Function = '󰊕',
@@ -56,6 +56,18 @@ local function config()
     Operator = '',
     TypeParameter = '',
     User = '',
+    Team = '',
+  }
+
+  local MenuIcons = {
+    buffer = "󰘙",
+    dictionary = "",
+    emoji = "",
+    luasnip = "",
+    nvim_lsp = "",
+    nvim_lua = "󰢱",
+    path = "",
+    gh_users = "",
   }
 
   cmp.setup({
@@ -68,17 +80,8 @@ local function config()
     },
     formatting = {
       format = function(entry, vim_item)
-        vim_item.kind = string.format("%s", CompletionItemKinds[vim_item.kind])
-        vim_item.menu = ({
-          buffer = "󰘙",
-          dictionary = "",
-          emoji = "",
-          luasnip = "",
-          nvim_lsp = "",
-          nvim_lua = "󰢱",
-          path = "",
-          gh_users = "",
-        })[entry.source.name]
+        vim_item.kind = KindIcons[vim_item.kind] or vim_item.kind)
+        vim_item.menu = MenuIcons[entry.source.name] or entry.source.name
         return vim_item
       end,
       expandable_indicator = true,
@@ -234,6 +237,7 @@ return {
       -- completion suggestions from language server
       'hrsh7th/cmp-nvim-lsp',
       'nvim-lua/plenary.nvim',
+      'L3MON4D3/LuaSnip',
     },
   },
   -- complete words from other buffers
@@ -252,11 +256,10 @@ return {
   'hrsh7th/cmp-nvim-lua',
   {
     'duboisf/cmp-gh-users',
-    config = function()
-      require("cmp-gh-users").setup {
-        log_level = vim.log.levels.WARN
-      }
-    end,
+    opts = {
+      log_level = vim.log.levels.WARN,
+      filetypes = { 'gitcommit', 'markdown', 'bash' },
+    },
     dev = true,
   },
 }
