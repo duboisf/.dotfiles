@@ -1,0 +1,10 @@
+readonly project_dir=~/git
+
+local dir=$(cd ${project_dir} && ls -1d *(/) | sort | fzf)
+
+if [[ -n $dir ]]; then
+    cd ${project_dir}/$dir
+    nvim
+fi
+
+# vim: ft=bash
