@@ -12,7 +12,6 @@ return {
         })
       }
     })
-    require('mini.jump').setup({})
     require('mini.splitjoin').setup({})
     require('mini.surround').setup({})
   end,
