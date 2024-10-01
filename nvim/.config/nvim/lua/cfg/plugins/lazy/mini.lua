@@ -1,7 +1,11 @@
 return {
   'echasnovski/mini.nvim',
-  config = function()
+  config    = function()
+    local wk = require('which-key')
+
     require('mini.comment').setup({})
+    require('mini.cursorword').setup()
+
     local MiniIndentscope = require('mini.indentscope')
     MiniIndentscope.setup({
       draw = {
@@ -12,8 +16,25 @@ return {
         })
       }
     })
+
+    local MiniFiles = require('mini.files')
+    MiniFiles.setup()
+    wk.add({
+      "<leader>v",
+      function()
+        if not MiniFiles.close() then
+          MiniFiles.open(vim.api.nvim_buf_get_name(0), false)
+        end
+      end,
+      desc =
+      "Open file browser in current file's directory"
+    })
+
     require('mini.splitjoin').setup({})
     require('mini.surround').setup({})
   end,
-  version = false
+  version   = false,
+  depencies = {
+    "folke/which-key.nvim",
+  }
 }

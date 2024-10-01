@@ -13,8 +13,6 @@ set('n', '<A-i>', require('core.utils').inspect_highlight, {
   desc = 'Inspect highlight under cursor'
 })
 
-set('n', '<leader>v', vim.cmd.Explore)
-
 set('n', '<C-u>', '<C-u>zz')
 set('n', '<C-d>', '<C-d>zz')
 
