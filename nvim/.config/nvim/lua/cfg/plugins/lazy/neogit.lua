@@ -5,5 +5,10 @@ return {
     "sindrets/diffview.nvim", -- optional - Diff integration
     "nvim-telescope/telescope.nvim",
   },
-  config = true
+  config = {
+    kind = 'auto',
+    integrations = {
+      telescope = false,
+    },
+  }
 }
