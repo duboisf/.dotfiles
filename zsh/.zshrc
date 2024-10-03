@@ -54,4 +54,4 @@ done
 
 eval "$(starship init zsh)"
 
-# zprof
+eval "$(rbenv init -)"
