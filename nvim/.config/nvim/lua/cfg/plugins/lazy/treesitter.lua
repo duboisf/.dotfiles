@@ -31,6 +31,7 @@ local config = function()
       'mermaid',
       'query',
       'regex',
+      'ruby',
       'terraform',
       'typescript',
       'vim',
