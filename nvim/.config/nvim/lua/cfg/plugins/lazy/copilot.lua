@@ -25,5 +25,13 @@ return {
         }
       }
     }
+    vim.api.nvim_create_autocmd('FileType', {
+      desc = 'Force Copilot to attach to NeogitCommitMessage buffers',
+      pattern = 'NeogitCommitMessage',
+      callback = function()
+        require('copilot.client').buf_attach(true)
+      end
+    }
+    )
   end,
 }
