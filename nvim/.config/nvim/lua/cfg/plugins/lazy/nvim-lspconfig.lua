@@ -389,13 +389,27 @@ local function config()
 end
 
 return {
-  'neovim/nvim-lspconfig',
-  config = function()
-    config()
-  end,
-  dependencies = {
-    'folke/neoconf.nvim',
-    'folke/neodev.nvim',
-    'nvim-navbuddy',
+  {
+    'williamboman/mason.nvim',
+    config = true,
+  },
+  {
+    'williamboman/mason-lspconfig.nvim',
+    config = true,
+    dependencies = {
+      'williamboman/mason.nvim',
+    }
+  },
+  {
+    'neovim/nvim-lspconfig',
+    config = function()
+      config()
+    end,
+    dependencies = {
+      'williamboman/mason-lspconfig.nvim',
+      'folke/neoconf.nvim',
+      'folke/neodev.nvim',
+      'nvim-navbuddy',
+    },
   }
 }
