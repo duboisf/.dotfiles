@@ -160,9 +160,23 @@ local function config()
     }
   end
 
-  -- Searche workspace LSP symbols but checks if there's an LSP client attached
-  -- to the current buffer first. If there isn't, notifies me instead of throwing
-  -- an error.
+  local function find_buffers()
+    builtin.buffers {
+      attach_mappings = function(_, map)
+        map(
+          { 'i', 'n' },
+          '<C-d>',
+          function(prompt_bufnr)
+            actions.delete_buffer(prompt_bufnr)
+          end,
+          { desc = 'Delete buffer' })
+        return true
+      end,
+    }
+  end
+
+  -- Search workspace LSP symbols but checks if there's an LSP client attached
+  -- to the current buffer first. If there isn't, it's a no-op.
   local function lsp_dynamic_workspace_symbols()
     if has_lsp_client_attached() then
       return builtin.lsp_dynamic_workspace_symbols()
@@ -249,7 +263,7 @@ local function config()
       { "<leader>tt", '<cmd>Telescope<CR>', desc = "Show available pickers" },
 
       -- Misc
-      { "<leader>bb", builtin.buffers, desc = "Search buffers" },
+      { "<leader>bb", find_buffers, desc = "Search buffers" },
       { "<leader>/", builtin.current_buffer_fuzzy_find, desc = "Current buffer fuzzy find" },
       { "z=", spell_suggestions, desc = "Show spelling suggestions for word under cursor" },
     })
