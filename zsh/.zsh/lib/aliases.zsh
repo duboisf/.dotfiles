@@ -83,6 +83,7 @@ alias icat='kitty +kitten icat'
 
 # kubernetes/docker
 alias d='docker'
+alias bake='docker buildx bake'
 alias mk='minikube'
 
 # kubectl
