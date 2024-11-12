@@ -78,3 +78,23 @@ export def "as sqlite" []: table<any> -> any {
   $input | into sqlite $db_path
   open $db_path
 }
+
+# Rename files in the current directory that match the given regex.
+# The new names will be prefixed with the given prefix and a number
+# to that starts at 1 and increments for each file.
+export def "rename-file" [
+  regex: string # The regex to match the file name
+  replacement_prefix: string # The prefix to add to the replacement
+  --interactive = true # Whether to prompt before renaming if the file already exists
+] {
+  ls
+  | where name =~ $regex
+  | enumerate
+  | each { |e|
+    let old_name = $e.item.name
+    let new_name = $"($replacement_prefix)-($e.index + 1).($old_name | path parse | get extension)"
+    let args = [(if $interactive { "-i" } else { "" })]
+    ^mv ...$args $old_name $new_name
+  }
+  null
+}
