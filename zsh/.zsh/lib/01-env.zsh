@@ -19,6 +19,8 @@ if [[ -d ~/.tfenv/bin ]]; then
     path=(~/.tfenv/bin $path)
 fi
 
+# Inform difftastic that I use a light terminal background
+export DFT_BACKGROUND=light
 export DOCKER_BUILDKIT=1
 export EDITOR=nvim
 export GPG_TTY=$(tty)
