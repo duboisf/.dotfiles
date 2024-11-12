@@ -4,7 +4,7 @@ return {
     local wk = require('which-key')
 
     require('mini.comment').setup({})
-    require('mini.cursorword').setup()
+    require('mini.cursorword').setup({})
 
     local MiniIndentscope = require('mini.indentscope')
     MiniIndentscope.setup({
@@ -18,7 +18,11 @@ return {
     })
 
     local MiniFiles = require('mini.files')
-    MiniFiles.setup()
+    MiniFiles.setup({
+      mappings = {
+        go_in_plus = "<CR>",
+      },
+    })
     wk.add({
       "<leader>v",
       function()
