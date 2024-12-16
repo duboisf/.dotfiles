@@ -1,0 +1,46 @@
+#!/usr/bin/env nu
+
+def main [
+    repo: string, # The GitHub repository name
+    pr_number: int, # The PR number
+]: nothing -> nothing {
+    loop {
+        try {
+            let pod_result = ^kubectl get ephemeralrunners | grep $"($repo).*pull/($pr_number)" | complete
+            if $pod_result.exit_code != 0 {
+                error make { msg: $"No runner pod found running a job for repo ($repo)" } 
+            }
+            let pod = $pod_result.stdout
+            | from ssv -n
+            | get 0.column0
+            let containerIDResult = ^kubectl get po $pod -o json | complete
+            if $containerIDResult.exit_code != 0 {
+                error make { msg: $"Failed to get container ID for pod ($pod)" }
+            }
+            let containerID = $containerIDResult.stdout
+            | from json
+            | get status.containerStatuses
+            | where image =~ dind
+            | get containerID
+            | split row "//"
+            | get 1
+            let runnerMemoryResult = ^kubectl exec $pod -c runner -- sh -c "cat /sys/fs/cgroup/memory.current" | complete
+            if $runnerMemoryResult.exit_code != 0 {
+                error make { msg: $"Failed to get memory use for runner container in pod ($pod)" }
+            }
+            let runnerMemory = $runnerMemoryResult.stdout | into filesize
+            let dindMemoryResult = ^kubectl exec $pod -c dind -- sh -c $"find /sys/fs/cgroup/ -name *($containerID).scope -exec cat {}/memory.current \\;"
+            | complete
+            if $dindMemoryResult.exit_code != 0 {
+                error make { msg: $"Failed to get memory use for dind container in pod ($pod)" }
+            }
+            let dindMemory = $dindMemoryResult.stdout
+            | into filesize
+            let time = date now | format date "%Y-%m-%d/%H:%M:%S"
+            print $"($time) Memory use: dind=($dindMemory), runner=($runnerMemory), pod=($pod)"
+        } catch { |err|
+            print $err.msg
+        }
+        sleep 5sec
+    }
+}
