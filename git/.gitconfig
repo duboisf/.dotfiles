@@ -33,8 +33,6 @@
 [diff]
 	compactionHeuristic = true
 	submodule = log
-
-# vim: noet
 [init]
 	defaultBranch = main
 [core]
