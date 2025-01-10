@@ -14,12 +14,10 @@ stow nvim
 # etc.
 ```
 
-## Install github's hub
-
-GitHub's `hub` is an alias for `git` in my zsh config. It makes cloning repos from GitHub a breeze, among other things. Install with:
+## Install github's cli, gh
 
 ```bash
-sudo apt install hub
+curl -L -o /tmp/gh.deb https://github.com/cli/cli/releases/download/v2.65.0/gh_2.65.0_linux_amd64.deb && sudo dpkg -i /tmp/gh.deb
 ```
 
 ## Install nerdfonts
@@ -41,24 +39,12 @@ fc-cache -fv
 Download nightly build from [here](https://github.com/neovim/neovim/releases/nightly) and then:
 
 ```bash
-cd ~/Downloads
-chmod +x ./nvim.appimage
-./nvim.appimage --appimage-extract
-mv squashfs-root/ ~/.local/nvim
-mkdir ~/.local/bin
-ln -s ~/.local/nvim/AppRun ~/.local/bin/nvim
+mkdir ~/.local/stow
+cd ~/.local/stow
+curl -LO https://github.com/neovim/neovim/releases/download/v0.10.3/nvim-linux64.tar.gz
+tar xf nvim-linux64.tar.gz
+stow nvim-linux64
 ```
-
-### Setup nvim dependencies
-
-To get all the nvim plugins working properly we need to install python and node:
-
-```sh
-sudo apt install python3-pip
-pip3 install pynvim
-```
-
-We also need to install some binaries like [bat](https://github.com/sharkdp/bat/releases), rg (`sudo apt install ripgrep`) and [fd](https://github.com/sharkdp/fd/releases).
 
 ## Install kitty
 
