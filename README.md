@@ -26,11 +26,10 @@ These fonts are needed to render the terminal and nvim correctly:
 
 ```bash
 cd ~/Downloads
-wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/FiraCode.zip
-wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/JetBrainsMono.zip
+wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/CascadiaMono.tar.xz
 mkdir ~/.fonts
 cd ~/.fonts
-unzip ~/Downloads/{FiraCode,JetBrainsMono}.zip
+tar xf ~/Downloads/CascadiaMono.tar.xz
 fc-cache -fv
 ```
 
@@ -39,9 +38,9 @@ fc-cache -fv
 Download nightly build from [here](https://github.com/neovim/neovim/releases/nightly) and then:
 
 ```bash
-mkdir ~/.local/stow
+mkdir -p ~/.local/stow
 cd ~/.local/stow
-curl -LO https://github.com/neovim/neovim/releases/download/v0.10.3/nvim-linux64.tar.gz
+curl -LO https://github.com/neovim/neovim/releases/download/v0.10.4/nvim-linux64.tar.gz
 tar xf nvim-linux64.tar.gz
 stow nvim-linux64
 ```
