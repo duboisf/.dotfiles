@@ -129,6 +129,8 @@ trap "rm -rf $TMPDIR" EXIT
     fi
     echo "🔧 installing volta"
     curl curl https://get.volta.sh | bash
+    # install latest lts node
+    volta install node
     echo "✅ volta installed"
 )
 
