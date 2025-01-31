@@ -121,24 +121,42 @@ trap "rm -rf $TMPDIR" EXIT
     echo "✅ fzf installed"
 )
 
+# fd
+(
+    if [[ -x ~/.local/bin/fd ]]; then
+        echo "✅ fd already installed"
+        exit 0
+    fi
+    echo "🔧 installing fd"
+    cd $TMPDIR
+    curl -L -o fd.tar.gz https://github.com/sharkdp/fd/releases/download/v10.2.0/fd-v10.2.0-x86_64-unknown-linux-gnu.tar.gz
+    tar xf fd.tar.gz
+    find | grep fd
+    install ./fd-*/fd ~/.local/bin
+    echo "✅ fd installed"
+)
+
 # volta
 (
-    if command -v volta > /dev/null; then
+    if [[ -x ~/.volta/bin/volta ]]; then
         echo "✅ volta already installed"
         exit 0
     fi
     echo "🔧 installing volta"
     curl curl https://get.volta.sh | bash
     # install latest lts node
-    volta install node
+    ~/.volta/bin/volta install node
     echo "✅ volta installed"
 )
 
 # dotfiles
 (
-    if [[ ! -d ~/.dotfiles ]]; then
+    cd
+    if [ ! -d ~/.dotfiles ]; then
         # This should already be clone but 🤷
         echo "🔧 cloning dotfiles"
+        git clone --recursive https://github.com/duboisf/.dotfiles.git
+        echo "✅ dotfiles cloned"
         exit 0
     fi
     echo "🔧 update dotfiles git submodules"
