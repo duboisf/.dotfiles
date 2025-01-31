@@ -107,6 +107,20 @@ trap "rm -rf $TMPDIR" EXIT
     echo "✅ eza installed"
 )
 
+# fzf
+(
+    if [[ -x ~/.local/bin/fzf ]]; then
+        echo "✅ fzf already installed"
+        exit 0
+    fi
+    echo "🔧 installing fzf"
+    cd $TMPDIR
+    curl -L -o fzf.tar.gz https://github.com/junegunn/fzf/releases/download/v0.58.0/fzf-0.58.0-linux_amd64.tar.gz
+    tar xf fzf.tar.gz
+    install ./fzf ~/.local/bin
+    echo "✅ fzf installed"
+)
+
 # dotfiles
 (
     if [[ ! -d ~/.dotfiles ]]; then
