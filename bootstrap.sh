@@ -174,12 +174,12 @@ trap "rm -rf $TMPDIR" EXIT
         echo "🔧 cloning dotfiles"
         git clone --recursive https://github.com/duboisf/.dotfiles.git
         echo "✅ dotfiles cloned"
-        exit 0
     fi
-    echo "🔧 update dotfiles git submodules"
     cd ~/.dotfiles
     git submodule update --init --recursive
-    echo "✅ dotfiles git submodules updated"
+    echo "🔧 stowing various dotfiles"
+    stow gh git kitty nushell nvim starship zsh
+    echo "✅ dotfiles stowed"
 )
 
 echo "All done! You might need to log out and log back in for some changes to take effect."
