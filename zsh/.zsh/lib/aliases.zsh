@@ -157,7 +157,7 @@ alias gdc='git diff --cached'
 # github gh
 ###########
 alias p='gh pr'
-alias pc='p checks --watch'
+alias pc='p checks $(git branch --show-current) --watch'
 alias prv='p view'
 alias prc='p create'
 alias prco='p checkout'
