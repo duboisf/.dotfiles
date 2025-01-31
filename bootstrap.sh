@@ -79,15 +79,29 @@ trap "rm -rf $TMPDIR" EXIT
     echo "✅ kitty installed"
 )
 
-# dotfiles
+# starship
 (
-    if [ -d ~/.dotfiles ]; then
-        echo "✅ dotfiles already cloned"
+    if [[ -x ~/.local/bin/starship ]]; then
+        echo "✅ starship already installed"
         exit 0
     fi
-    echo "🔧 cloning dotfiles"
-    cd ~
-    # This repo contains git submodules, so you need the --recursive option
-    git clone --recursive https://github.com/duboisf/.dotfiles.git
-    echo "✅ dotfiles cloned"
+    echo "🔧 installing starship"
+    cd $TMPDIR
+    curl -L -o starship.tar.gz https://github.com/starship/starship/releases/download/v1.22.1/starship-x86_64-unknown-linux-gnu.tar.gz
+    tar xf starship.tar.gz
+    install ./starship ~/.local/bin
+    echo "✅ starship installed"
+)
+
+# dotfiles
+(
+    if [[ ! -d ~/.dotfiles ]]; then
+        # This should already be clone but 🤷
+        echo "🔧 cloning dotfiles"
+        exit 0
+    fi
+    echo "🔧 update dotfiles git submodules"
+    cd ~/.dotfiles
+    git submodule update --init --recursive
+    echo "✅ dotfiles git submodules updated"
 )
