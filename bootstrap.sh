@@ -121,6 +121,17 @@ trap "rm -rf $TMPDIR" EXIT
     echo "✅ fzf installed"
 )
 
+# volta
+(
+    if command -v volta > /dev/null; then
+        echo "✅ volta already installed"
+        exit 0
+    fi
+    echo "🔧 installing volta"
+    curl curl https://get.volta.sh | bash
+    echo "✅ volta installed"
+)
+
 # dotfiles
 (
     if [[ ! -d ~/.dotfiles ]]; then
