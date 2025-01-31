@@ -47,6 +47,10 @@ for file in ~/.zsh/lib/*.zsh ~/.zsh.private/lib/*.zsh(N); do
     source $file
 done
 
-eval "$(starship init zsh)"
+if (( ${+commands[starship]} )); then
+    eval "$(starship init zsh)"
+fi
 
-eval "$(rbenv init -)"
+if (( ${+commands[rbenv]} )); then
+    eval "$(rbenv init -)"
+fi
