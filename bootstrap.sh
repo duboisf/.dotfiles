@@ -31,7 +31,7 @@ trap "rm -rf $TMPDIR" EXIT
     echo "✅ gh installed"
 )
 
-# font
+# Caskaydia font
 (
     if (( $(find ~/.fonts -name 'Caskaydia*' 2> /dev/null | wc -l) > 0 )); then
         echo "✅ Caskaydia font already installed"
@@ -39,13 +39,30 @@ trap "rm -rf $TMPDIR" EXIT
     fi
     echo "🔧 installing Caskaydia font"
     cd $TMPDIR
-    curl -L -o fonts.tar.xz https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/CascadiaMono.tar.xz
+    curl -L -o cascadia.tar.xz https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/CascadiaMono.tar.xz
     mkdir ~/.fonts 2> /dev/null || true
     cd ~/.fonts
-    tar xf $TMPDIR/fonts.tar.xz
+    tar xf $TMPDIR/cascadia.tar.xz
     fc-cache -fv
     echo "✅ Caskaydia font installed"
 )
+
+# Symbols font
+(
+    if (( $(find ~/.fonts -name 'SymbolsNerd*' 2> /dev/null | wc -l) > 0 )); then
+        echo "✅ Symbols Nerd Font already installed"
+        exit 0
+    fi
+    echo "🔧 installing Symbols Nerd Font"
+    cd $TMPDIR
+    curl -L -o symbols.tar.xz https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/NerdFontsSymbolsOnly.tar.xz
+    mkdir ~/.fonts 2> /dev/null || true
+    cd ~/.fonts
+    tar xf $TMPDIR/symbols.tar.xz
+    fc-cache -fv
+    echo "✅ Symbols Nerd Font installed"
+)
+
 
 # nvim
 (
