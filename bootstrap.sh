@@ -181,3 +181,5 @@ trap "rm -rf $TMPDIR" EXIT
     git submodule update --init --recursive
     echo "✅ dotfiles git submodules updated"
 )
+
+echo "All done! You might need to log out and log back in for some changes to take effect."
