@@ -6,10 +6,12 @@ set -euo pipefail
 sudo apt-get update
 
 sudo apt-get install --no-install-recommends -y \
+    build-essential \
     ca-certificates \
     curl \
     fontconfig \
     git \
+    ripgrep \
     stow \
     wget \
     xz-utils \
