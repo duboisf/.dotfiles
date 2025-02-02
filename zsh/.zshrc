@@ -1,6 +1,8 @@
 # zmodload zsh/zprof
 
-export XDG_CONFIG_HOME=$HOME/.config
+# define some XDG variables
+export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
+export XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR:-/run/user/$UID}
 
 export ZPLUG_LOG_LOAD_FAILURE=true
 source ~/.zplug/init.zsh
