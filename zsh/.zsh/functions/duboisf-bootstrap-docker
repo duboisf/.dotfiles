@@ -30,5 +30,8 @@ sudo apt-get install \
 sudo systemctl disable --now docker.service docker.socket
 sudo rm /var/run/docker.sock
 dockerd-rootless-setuptool.sh install
+# Enable rootless docker to start on boot and run long-running containers even
+# if the user logged out
+sudo loginctl enable-linger $(whoami)
 
 echo "✅ docker installed"
