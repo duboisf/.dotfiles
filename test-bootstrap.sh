@@ -5,6 +5,10 @@
 # between invocations.
 # Use `docker stop test-dotfiles-bootstrap` to stop and remove the container.
 
+if ! docker image inspect ubuntu:sudo > /dev/null 2>&1; then
+    docker buildx build -t ubuntu:sudo -f Dockerfile --load .
+fi
+
 if ! docker inspect test-dotfiles-bootstrap > /dev/null 2>&1; then
     # ubuntu:sudo is the image built from the Dockerfile
     docker run -d --rm \
