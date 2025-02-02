@@ -184,4 +184,7 @@ trap "rm -rf $TMPDIR" EXIT
     echo "✅ dotfiles stowed"
 )
 
+echo "ℹ There are other functions to bootstrap other tools,"
+echo "  here are the functions to call:"
+print -l ${(ok)functions} | grep -E '^duboisf-bootstrap-'
 echo "All done! You might need to log out and log back in for some changes to take effect."
