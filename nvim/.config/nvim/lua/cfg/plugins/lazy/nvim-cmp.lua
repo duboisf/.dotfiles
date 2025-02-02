@@ -256,6 +256,7 @@ return {
   'hrsh7th/cmp-nvim-lua',
   {
     'duboisf/cmp-gh-users',
+    enabled = (vim.fn.isdirectory(vim.fn.getenv('HOME') .. '/git/cmp-gh-users') == 1),
     opts = {
       log_level = vim.log.levels.WARN,
       filetypes = { 'gitcommit', 'markdown', 'bash' },
