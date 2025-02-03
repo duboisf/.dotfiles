@@ -1,5 +1,5 @@
 {
-  "CopilotChat.nvim": { "branch": "canary", "commit": "18d51754e9dc87d6b85f1e331c1fca0825384517" },
+  "CopilotChat.nvim": { "branch": "main", "commit": "1b375c24602680b5fe28c3c223a822111857dc37" },
   "LuaSnip": { "branch": "master", "commit": "2737edc9e674e537dc0a97e3405658d57d2d31ed" },
   "bluloco.nvim": { "branch": "main", "commit": "07f4b5cca8cfe31aad69ab5c1be0f6a0715a8d2e" },
   "cmp-buffer": { "branch": "main", "commit": "3022dbc9166796b644a841a02de8dd1cc1d311fa" },
@@ -24,7 +24,6 @@
   "mason-lspconfig.nvim": { "branch": "main", "commit": "4d0e5b49363cac187326998b96aa6a2884e0e89b" },
   "mason.nvim": { "branch": "main", "commit": "e2f7f9044ec30067bc11800a9e266664b88cda22" },
   "mini.nvim": { "branch": "main", "commit": "7b4d5d48b6b5a75009d63f8f3e4ef4819b7e8139" },
-  "multicursor.nvim": { "branch": "1.0", "commit": "b715cc5bf69cf6e338899510eb2b60b1dd7ccce0" },
   "neoconf.nvim": { "branch": "main", "commit": "777cd15e537e6b3e7cfbb6dba77f0caeaa95aef0" },
   "neodev.nvim": { "branch": "main", "commit": "46aa467dca16cf3dfe27098042402066d2ae242d" },
   "neogit": { "branch": "master", "commit": "8e1e301c2e33c60375850bcf22ba1fb77b684b97" },
