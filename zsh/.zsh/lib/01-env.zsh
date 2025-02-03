@@ -32,11 +32,7 @@ export VOLTA_FEATURE_PNPM=1
 
 export BAT_THEME='Solarized (dark)'
 
-export BUNDLE_RUBYGEMS__PKG__GITHUB__COM=duboisf:$(gh auth token)
-
 if systemctl --user --quiet is-active docker.service; then
     # Using docker in rootless mode
     export DOCKER_HOST=unix://${XDG_RUNTIME_DIR}/docker.sock
 fi
-
-[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"

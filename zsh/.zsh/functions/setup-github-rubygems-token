@@ -1,0 +1,1 @@
+export BUNDLE_RUBYGEMS__PKG__GITHUB__COM=duboisf:$(gh auth token)
