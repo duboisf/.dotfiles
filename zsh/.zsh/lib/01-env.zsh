@@ -1,23 +1,34 @@
-export PYENV_ROOT="$HOME/.pyenv"
-export VOLTA_HOME="$HOME/.volta"
+if [[ -d $HOME/.pyenv ]]; then
+    export PYENV_ROOT="$HOME/.pyenv"
+    path=($PYENV_ROOT/bin $path)
+fi
+
+if [[ -d $HOME/.volta ]]; then
+    export VOLTA_HOME="$HOME/.volta"
+    path=($VOLTA_HOME/bin $path)
+fi
 
 path=(
-  ~/.rbenv/bin
-  $PYENV_ROOT/bin
-  $VOLTA_HOME/bin
-  ~/.tfenv/bin
-  ~/.krew/bin
   ~/.local/bin
   /snap/bin
-  ~/go/bin
-  /usr/local/go/bin
-  ~/.pulumi/bin
   $path
 )
 
-if [[ -d ~/.tfenv/bin ]]; then
-    path=(~/.tfenv/bin $path)
-fi
+optional_paths=(
+    /usr/local/go/bin
+    ~/.ghcup/bin
+    ~/.krew/bin
+    ~/.pulumi/bin
+    ~/.rbenv/bin
+    ~/.tfenv/bin
+    ~/go/bin
+)
+
+for d in ~/.ghcup/bin ~/.rbenv/bin ~/.tfenv; do
+    if [[ -d $d ]]; then
+        path=($d $path)
+    fi
+done
 
 # Inform difftastic that I use a light terminal background
 export DFT_BACKGROUND=light
