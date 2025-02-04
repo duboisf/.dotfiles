@@ -14,21 +14,23 @@ path=(
   $path
 )
 
-optional_paths=(
-    /usr/local/go/bin
-    ~/.ghcup/bin
-    ~/.krew/bin
-    ~/.pulumi/bin
-    ~/.rbenv/bin
-    ~/.tfenv/bin
-    ~/go/bin
-)
+function () {
+    local optional_paths=(
+        /usr/local/go/bin
+        ~/.ghcup/bin
+        ~/.krew/bin
+        ~/.pulumi/bin
+        ~/.rbenv/bin
+        ~/.tfenv/bin
+        ~/go/bin
+    )
 
-for d in ~/.ghcup/bin ~/.rbenv/bin ~/.tfenv; do
-    if [[ -d $d ]]; then
-        path=($d $path)
-    fi
-done
+    for d in $optional_paths; do
+        if [[ -d $d ]]; then
+            path=($d $path)
+        fi
+    done
+}
 
 # Inform difftastic that I use a light terminal background
 export DFT_BACKGROUND=light
