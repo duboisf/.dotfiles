@@ -37,7 +37,7 @@ export DFT_BACKGROUND=light
 export DOCKER_BUILDKIT=1
 export EDITOR=nvim
 export GPG_TTY=$(tty)
-export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+export MANPAGER='nvim +Man!'
 export MANWIDTH=999
 export ZK_NOTEBOOK_DIR=~/notes
 # Enable experimental pnpm support in volta
