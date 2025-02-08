@@ -23,8 +23,13 @@ sudo apt-get install \
     docker-ce-cli \
     docker-ce-rootless-extras \
     docker-compose-plugin \
+    fuse-overlayfs \
     systemd-container \
     uidmap
+
+# Enable rootless docker to start on boot and run long-running containers even
+# if the user logged out
+sudo loginctl enable-linger $(whoami)
 
 # Run docker in rootless mode, disable system service
 sudo systemctl disable --now docker.service docker.socket
