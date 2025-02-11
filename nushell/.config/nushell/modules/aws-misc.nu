@@ -3,15 +3,19 @@
 # Note: to use this helper, the flow logs must be configured with all standard
 # fields, not the default format.
 export def query-vpc-flow-logs [logGroup: string, relativeStartTime: duration, filter: string]: nothing -> table {
-  let queryId = (^aws logs start-query 
-    --log-group-name $logGroup
-    --start-time ((date now) - $relativeStartTime | format date "%s")
-    --end-time (date now | format date "%s") 
-    --query-string $"
-      fields @timestamp, action, srcAddr, pktSrcAddr, srcPort, pktSrcAwsService, dstAddr, pktDstAddr, dstPort, pktDstAwsService, flowDirection, tcpFlags, trafficPath, bytes, start, end, instanceId, interfaceId, packets, protocol, rejectReason, sublocationId, sublocationType, subnetId, vpcId
-      | filter ($filter)")
-  | from json
+  let queryId = try {
+    (^aws logs start-query 
+      --log-group-name $logGroup
+      --start-time ((date now) - $relativeStartTime | format date "%s")
+      --end-time (date now | format date "%s") 
+      --query-string $"
+        fields @timestamp, action, srcAddr, pktSrcAddr, srcPort, pktSrcAwsService, dstAddr, pktDstAddr, dstPort, pktDstAwsService, flowDirection, tcpFlags, trafficPath, bytes, start, end, instanceId, interfaceId, packets, protocol, rejectReason, sublocationId, sublocationType, subnetId, vpcId
+        | filter ($filter)")
+    | from json
   | get queryId
+  } catch {
+    return
+  }
 
   print "Getting network interfaces..."
   let enis = ^aws --output=json ec2 describe-network-interfaces | from json
