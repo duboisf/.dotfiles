@@ -1,4 +1,7 @@
 
+# Query vpc flow logs.
+# Note: to use this helper, the flow logs must be configured with all standard
+# fields, not the default format.
 export def query-vpc-flow-logs [logGroup: string, relativeStartTime: duration, filter: string]: nothing -> table {
   let queryId = (^aws logs start-query 
     --log-group-name $logGroup
@@ -43,7 +46,6 @@ export def query-vpc-flow-logs [logGroup: string, relativeStartTime: duration, f
     }
   }
 
-
   let descriptionFromIp = { |ip|
       try {
         let pod = $pods
@@ -74,7 +76,7 @@ export def query-vpc-flow-logs [logGroup: string, relativeStartTime: duration, f
         | first
         | get Name
       } catch {
-        "❎"
+        ""
       }
   }
  
@@ -83,15 +85,18 @@ export def query-vpc-flow-logs [logGroup: string, relativeStartTime: duration, f
   | get results
   | each { transpose --as-record --header-row | reject @ptr }
   | tee { save -f /tmp/tmp-results.nuon }
-  | default "❎" pktSrcAwsService
-  | default "❎" pktDstAwsService
+  | default "" pktSrcAwsService
+  | default "" pktDstAwsService
   | move --after srcPort pktSrcAwsService
   | move --after dstPort pktDstAwsService
-  | default "❎" instanceId
+  | default "" instanceId
   | move --before interfaceId instanceId
   | update start { ($in | into int) * 1_000_000_000 | into datetime }
   | update end { ($in | into int) * 1_000_000_000 | into datetime }
   | insert duration { $in.end - $in.start }
+  | move --after end duration
+  | update srcPort {into int}
+  | update dstPort {into int}
   | insert srcAddrDesc { |row| do $descriptionFromIp $row.srcAddr }
   | move srcAddrDesc --after srcAddr
   | insert dstAddrDesc { |row| do $descriptionFromIp $row.dstAddr }
