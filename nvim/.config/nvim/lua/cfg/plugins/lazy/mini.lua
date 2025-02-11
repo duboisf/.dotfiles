@@ -20,7 +20,10 @@ return {
     local MiniFiles = require('mini.files')
     MiniFiles.setup({
       mappings = {
+        go_in = 'L',
         go_in_plus = "<CR>",
+        go_out = 'H',
+        go_out_plus = '',
       },
     })
     wk.add({
