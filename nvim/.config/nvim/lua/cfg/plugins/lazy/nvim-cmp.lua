@@ -70,13 +70,14 @@ local function config()
     gh_users = "",
   }
 
+  vim.opt.completeopt = { "menu", "menuone", "noselect" }
+
   cmp.setup({
     completion = {
       autocomplete = {
         cmp.TriggerEvent.InsertEnter,
         cmp.TriggerEvent.TextChanged,
       },
-      completeopt = "menu,menuone,noselect",
     },
     formatting = {
       format = function(entry, vim_item)
