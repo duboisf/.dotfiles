@@ -1,4 +1,4 @@
-use wrapper.nu *
+use waws/wrapper.nu *
 use std
 
 export def "cache get" [key: string, populate: closure]: nothing -> record<items: list<string>, last_access?: datetime> {
@@ -60,7 +60,7 @@ export def "logs get" [
     let downloadFile = { |filename|
         let cleanFilename = $filename | str replace "/" "_"
         print -e $"Downloading ($filename)"
-        aws rds download-db-log-file-portion --db-instance-identifier $instance --log-file-name $filename --starting-token 0
+        waws rds download-db-log-file-portion --db-instance-identifier $instance --log-file-name $filename --starting-token 0
             | save $"($instance)_($cleanFilename)"
     }
     if $filename != null {
@@ -75,5 +75,5 @@ export def "logs get" [
 }
 
 export def "instances list" []: nothing -> list<string> {
-    aws rds describe-db-instances | get DBInstanceIdentifier
+    waws rds describe-db-instances | get DBInstanceIdentifier
 }

@@ -34,7 +34,7 @@ def edot []: nothing -> nothing {
 }
 
 source ~/.config/nushell/aliases.nu
-use ~/.config/nushell/modules/aws *
+use ~/.config/nushell/modules/waws
 use ~/.config/nushell/modules/kubectl.nu *
 use ~/.config/nushell/modules/private.nu *
 use ~/.config/nushell/modules/pulumi.nu *

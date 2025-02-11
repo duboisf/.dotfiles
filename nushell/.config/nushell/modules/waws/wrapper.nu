@@ -1,12 +1,12 @@
 
 const hist_table_name = "_aws_results"
 
-def "aws-history table exists" []: nothing -> bool {
+def "history table exists" []: nothing -> bool {
   ((stor open | schema).tables | get --ignore-errors $hist_table_name) != null
 }
 
-def "aws-history store" [command: list<string>, result: closure]: nothing -> list<any> {
-  if not (aws-history table exists) {
+def "history store" [command: list<string>, result: closure]: nothing -> list<any> {
+  if not (history table exists) {
     stor create --table-name $hist_table_name -c {timestamp: datetime, command: str, result: str}
   }
   let result = do $result
@@ -19,8 +19,8 @@ def "aws-history store" [command: list<string>, result: closure]: nothing -> lis
 }
 
 # This command returns the in-memory history of the aws commands called.
-export def "aws-history" []: nothing -> table<id: int, timestamp: datetime, command: string, result: any> {
-  if not (aws-history table exists) {
+export def "history" []: nothing -> table<id: int, timestamp: datetime, command: string, result: any> {
+  if not (history table exists) {
     return []
   }
   stor open
@@ -31,19 +31,19 @@ export def "aws-history" []: nothing -> table<id: int, timestamp: datetime, comm
 }
 
 # This command returns the last command from the in-memory history.
-export def "aws-history last" []: nothing -> record<id: int, timestamp: datetime, command: string, result: any> {
-  if (aws-history table exists) {
-    return (aws-history | last)
+export def "history last" []: nothing -> record<id: int, timestamp: datetime, command: string, result: any> {
+  if (history table exists) {
+    return (history | last)
   }
   return []
 }
 
 # This command returns the result of the last aws command from the in-memory history.
-export def "aws-history last result" []: nothing -> any {
-  if not (aws-history table exists) {
+export def "history last result" []: nothing -> any {
+  if not (history table exists) {
     return []
   }
-  (aws-history last).result
+  (history last).result
 }
 
 # This is a wrapper around the aws cli that automatically converts the results
@@ -58,16 +58,16 @@ export def "aws-history last result" []: nothing -> any {
 # Furthermore it keeps a history of the commands called in the in-memory sqlite
 # db. No more "oops, I should have stored that last command in a variable!" moments.
 #
-# To retrieve the history, use the `aws-history` command. It returns a table with
+# To retrieve the history, use the `history` command. It returns a table with
 # the id, timestamp, command and result of each command.
 # There are also two special commands to retrieve the last command and its result:
-# - `aws-history last`: returns the history table row of the last command
-# - `aws-history last result`: returns the result of the last aws command
+# - `history last`: returns the history table row of the last command
+# - `history last result`: returns the result of the last aws command
 #
 # It also has a special cases for certain commands like `help` and the
 # `resource-explorer-2` command that returns the results directly
 # instead of the first key of the result.
-export def --wrapped aws [
+export def --wrapped waws [
   ...rest # The normal aws arguments and options, just don't add --output=json as it's added automatically!
 ]: nothing -> list<any> {
   if "help" in $rest {
@@ -75,7 +75,7 @@ export def --wrapped aws [
   }
   let args = [...$rest --output json]
   let output = ^aws ...$args | from json
-  aws-history store [aws ...$args] {||
+  history store [aws ...$args] {||
     for $arg in $rest {
         match $arg {
             "resource-explorer-2" => (return $output)
@@ -112,7 +112,7 @@ export def --wrapped aws [
 #       },
 #       ...
 #   ]
-export def "get-first-key" []: record -> any {
+def "get-first-key" []: record -> any {
   let input = $in
   let firstKey = $input | columns | get 0
   $input | get $firstKey
