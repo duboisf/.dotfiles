@@ -46,6 +46,17 @@ export def query-vpc-flow-logs [logGroup: string, relativeStartTime: duration, f
     }
   }
 
+  let descriptionFromEniId = { |eniId|
+      try {
+        $enis
+        | where NetworkInterfaceId == $eniId
+        | first
+        | get Description
+      } catch {
+        ""
+      }
+  }
+
   let descriptionFromIp = { |ip|
       try {
         let pod = $pods
@@ -103,6 +114,8 @@ export def query-vpc-flow-logs [logGroup: string, relativeStartTime: duration, f
   | move dstAddrDesc --after dstAddr
   | insert subnetName { |row| do $subnetNameFromId $row.subnetId }
   | move subnetName --after subnetId
+  | insert interfaceDesc { |row| do $descriptionFromEniId $row.interfaceId }
+  | move --after interfaceId interfaceDesc
   | collect
 }
 
