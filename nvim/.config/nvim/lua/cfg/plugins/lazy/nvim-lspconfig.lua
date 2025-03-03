@@ -41,23 +41,21 @@ local function config()
   -- }
   --
   local border = {
-    { "🭽", "FloatBorder" },
-    { "▔", "FloatBorder" },
-    { "🭾", "FloatBorder" },
-    { "▕", "FloatBorder" },
-    { "🭿", "FloatBorder" },
-    { "▁", "FloatBorder" },
-    { "🭼", "FloatBorder" },
-    { "▏", "FloatBorder" },
+    { " ", "FloatBorder" },
+    { "🭸", "FloatBorder" },
+    { " ", "FloatBorder" },
+    { "🭲", "FloatBorder" },
+    { " ", "FloatBorder" },
+    { "🭸", "FloatBorder" },
+    { " ", "FloatBorder" },
+    { "🭲", "FloatBorder" }
   }
 
-  local orig_open_floating_preview = vim.lsp.util.open_floating_preview
-  ---@diagnostic disable-next-line: duplicate-set-field
-  function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
-    opts = opts or {}
-    opts.border = opts.border or border
-    return orig_open_floating_preview(contents, syntax, opts, ...)
-  end
+  -- Fix grey background in floating windows
+  vim.cmd [[ hi! link NormalFloat Normal ]]
+
+  -- Add the border on hover and on signature help popup window
+  vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = border })
 
   ---Setup autocmds for buffer
   ---@param client lsp.Client
