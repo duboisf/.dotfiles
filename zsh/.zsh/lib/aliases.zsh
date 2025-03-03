@@ -237,3 +237,5 @@ alias rgf='rg --files-with-matches'
 alias ic=istioctl
 
 alias be='bundle exec'
+
+alias cpc='nvim -c CopilotChat -c only'
