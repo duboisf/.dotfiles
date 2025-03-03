@@ -2,15 +2,14 @@
 # Query vpc flow logs.
 # Note: to use this helper, the flow logs must be configured with all standard
 # fields, not the default format.
-export def query-vpc-flow-logs [logGroup: string, relativeStartTime: duration, filter: string]: nothing -> table {
+export def query-vpc-flow-logs [logGroup: string, relativeStartTime: duration, relativeEndTime: duration, filter?: string]: nothing -> table {
+  let filterPredicate = if $filter not-in [null, ""] { $"\n| filter ($filter)" } else { "" }
   let queryId = try {
     (^aws logs start-query 
       --log-group-name $logGroup
       --start-time ((date now) - $relativeStartTime | format date "%s")
-      --end-time (date now | format date "%s") 
-      --query-string $"
-        fields @timestamp, action, srcAddr, pktSrcAddr, srcPort, pktSrcAwsService, dstAddr, pktDstAddr, dstPort, pktDstAwsService, flowDirection, tcpFlags, trafficPath, bytes, start, end, instanceId, interfaceId, packets, protocol, rejectReason, sublocationId, sublocationType, subnetId, vpcId
-        | filter ($filter)")
+      --end-time ((date now) - $relativeEndTime | format date "%s") 
+      --query-string $"fields @timestamp, action, srcAddr, pktSrcAddr, srcPort, pktSrcAwsService, dstAddr, pktDstAddr, dstPort, pktDstAwsService, flowDirection, tcpFlags, trafficPath, bytes, start, end, instanceId, interfaceId, packets, protocol, rejectReason, sublocationId, sublocationType, subnetId, vpcId ($filterPredicate)")
     | from json
   | get queryId
   } catch {
@@ -98,8 +97,8 @@ export def query-vpc-flow-logs [logGroup: string, relativeStartTime: duration, f
   ^aws logs get-query-results --query-id $queryId
   | from json
   | get results
-  | each { transpose --as-record --header-row | reject @ptr }
-  | tee { save -f /tmp/tmp-results.nuon }
+  | par-each { transpose --as-record --header-row | reject @ptr }
+  | tee { save -f /tmp/vpc-results.nuon }
   | default "" pktSrcAwsService
   | default "" pktDstAwsService
   | move --after srcPort pktSrcAwsService
@@ -122,4 +121,3 @@ export def query-vpc-flow-logs [logGroup: string, relativeStartTime: duration, f
   | move --after interfaceId interfaceDesc
   | collect
 }
-
