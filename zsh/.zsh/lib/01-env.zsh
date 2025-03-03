@@ -45,7 +45,15 @@ export VOLTA_FEATURE_PNPM=1
 
 export BAT_THEME='Solarized (dark)'
 
-if systemctl --user --quiet is-active docker.service; then
-    # Using docker in rootless mode
-    export DOCKER_HOST=unix://${XDG_RUNTIME_DIR}/docker.sock
+export JAVA_HOME=/usr/lib/jvm/jdk-23.0.1-oracle-x64
+
+if (( $+commands[systemctl] )); then
+  if systemctl --user --quiet is-active docker.service; then
+      # Using docker in rootless mode
+      export DOCKER_HOST=unix://${XDG_RUNTIME_DIR}/docker.sock
+  fi
 fi
+
+# Prevent "WARNING: Getting tokens from fapi backend failed." message
+# when using ssh with TPM2-stored keys
+export TPM2_PKCS11_LOG_LEVEL=0
