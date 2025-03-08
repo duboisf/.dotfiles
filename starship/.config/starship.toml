@@ -4,6 +4,7 @@ format = """
 $os\
 $shell\
 $directory\
+$hostname\
 $git_branch\
 $git_status\
 (fg:color_aqua bg:color_blue)\
@@ -149,7 +150,10 @@ symbol = " "
 symbol = " "
 
 [hostname]
+format = "[[ ](fg:color_blue bg:color_bg1)$symbol$hostname[](fg:color_blue bg:color_bg1)]($style)"
+ssh_only = true
 ssh_symbol = " "
+style = "bold fg:color_bg1 bg:color_blue"
 
 [kubernetes]
 disabled = false
