@@ -10,25 +10,19 @@ local config = {
     '-Declipse.product=org.eclipse.jdt.ls.core.product',
     '-Dlog.protocol=true',
     '-Dlog.level=ALL',
-    '-Xmx1g',
+    '-Xmx2g',
     '--add-modules=ALL-SYSTEM',
     '--add-opens', 'java.base/java.util=ALL-UNNAMED',
     '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
 
+    '-javaagent:' .. home .. '/Downloads/lombok.jar',
+
     -- 💀
     '-jar', home ..
   '/.local/share/nvim/mason/packages/jdtls/plugins/org.eclipse.equinox.launcher_1.6.900.v20240613-2009.jar',
-    -- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                       ^^^^^^^^^^^^^^
-    -- Must point to the                                                     Change this to
-    -- eclipse.jdt.ls installation                                           the actual version
-
 
     -- 💀
     '-configuration', home .. '/.local/share/nvim/mason/packages/jdtls/config_linux',
-    -- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^
-    -- Must point to the                      Change to one of `linux`, `win` or `mac`
-    -- eclipse.jdt.ls installation            Depending on your system.
-
 
     -- 💀
     -- See `data directory configuration` section in the README
@@ -47,6 +41,36 @@ local border = {
   { "🭼", "FloatBorder" },
   { "▏", "FloatBorder" },
 }
+
+do
+  local normal_mappings = {
+    [',s']         = '<cmd>Telescope lsp_document_symbols<CR>',
+    [',w']         = '<cmd>Telescope lsp_dynamic_workspace_symbols<CR>',
+    ['<leader>cl'] = '<cmd>lua vim.lsp.codelens.run()<CR>',
+    ['<leader>ca'] = '<cmd>lua vim.lsp.buf.code_action()<CR>',
+    ['<leader>d']  = '<cmd>lua vim.diagnostic.open_float()<CR>',
+    ['<leader>rn'] = '<cmd>lua vim.lsp.buf.rename()<CR>',
+    ['K']          = '<Cmd>lua vim.lsp.buf.hover()<CR>',
+    ['[d']         = '<cmd>lua vim.diagnostic.goto_prev()<CR>',
+    [']d']         = '<cmd>lua vim.diagnostic.goto_next()<CR>',
+    ['gD']         = '<Cmd>lua vim.lsp.buf.type_definition()<CR>',
+    ['gd']         = '<Cmd>Telescope lsp_definitions<CR>',
+    ['gi']         = '<cmd>Telescope lsp_implementations<CR>',
+    ['gr']         = '<cmd>Telescope lsp_references<CR>',
+  }
+
+  local bufnr = vim.api.nvim_get_current_buf()
+  local opts = { noremap = true, silent = true, buffer = bufnr }
+
+  for lhs, rhs in pairs(normal_mappings) do
+    vim.keymap.set('n', lhs, rhs, opts)
+  end
+
+  for _, mode in ipairs({ 'i' }) do
+    -- TODO: check if the language server supports signature help before adding this mapping
+    vim.keymap.set(mode, '<C-s>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  end
+end
 
 require('jdtls').start_or_attach(config)
 
