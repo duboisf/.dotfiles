@@ -1,7 +1,6 @@
 local actions = {}
 
-local function searchAndReplaceTag(action, tag, sha)
-  local buf = vim.api.nvim_get_current_buf()
+local function searchAndReplaceTag(buf, action, tag, sha)
   local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
   local escapeAction = action:gsub("%-", "%%-")
   local pattern = string.format("^%%s+%%-?%%s+uses: %s@%s$", escapeAction, tag)
@@ -18,14 +17,14 @@ local function searchAndReplaceTag(action, tag, sha)
   end
 end
 
-local function replaceTagWithCommitSha(action, tag)
+local function replaceTagWithCommitSha(buf, action, tag)
   local repo = string.gsub(action, "^([^/]+)/([^/]+).*", "%1/%2")
   local on_exit = vim.schedule_wrap(function(obj)
     if obj.code == 0 then
       if #obj.stdout > 0 then
         local commitSha = obj.stdout:sub(1, 40)
         -- vim.notify(string.format("replacing action %s tag %s with %s", action, tag, commitSha), vim.log.levels.DEBUG)
-        searchAndReplaceTag(action, tag, commitSha)
+        searchAndReplaceTag(buf, action, tag, commitSha)
       else
         error(string.format("tag %s not found for actions %s", action, tag))
       end
@@ -57,11 +56,10 @@ function actions.UpdateTagsWithCommitSha(orgsToIgnore)
       actions[actionWithTag] = ""
     end
   end
-  vim.notify(vim.inspect(actions))
   for actionWithTag, _ in pairs(actions) do
-    vim.notify("processing action " .. actionWithTag)
+    -- vim.notify("processing action " .. actionWithTag)
     local action, tag = actionWithTag:match("^(.+)@(.+)$")
-    local ok, err = pcall(replaceTagWithCommitSha, action, tag)
+    local ok, err = pcall(replaceTagWithCommitSha, buf, action, tag)
     if not ok then
       vim.notify(err, vim.log.levels.ERROR)
     end
