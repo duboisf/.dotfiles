@@ -34,4 +34,4 @@ function OpenECRRepository()
   os.execute("xdg-open " .. url)
 end
 
-vim.api.nvim_set_keymap('n', '<leader>oe', ':lua OpenECRRepository()<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>oe', ':lua OpenECRRepository()<CR>', { noremap = true, silent = true })

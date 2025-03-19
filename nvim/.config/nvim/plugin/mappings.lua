@@ -1,3 +1,5 @@
+local actions = require("duboisf.github.actions")
+
 local set = vim.keymap.set
 
 -- Useful map to move over a parenthesis that was injected by the autopairs plugin
@@ -21,3 +23,13 @@ set('t', '<Esc>', [[<C-\><C-n>]], { silent = true })
 
 -- in insert mode, make ctrl-e jump to the end of the line, staying in insert mode
 set('i', '<silent><C-e>', '<C-O>$', { silent = true })
+
+set(
+  'n',
+  '<leader>ot',
+  function() actions.UpdateTagsWithCommitSha({ "Flatbook" }) end,
+  {
+    desc = "Update GitHub Action tags with the associated tag's commit SHA",
+    silent = true,
+  }
+)
