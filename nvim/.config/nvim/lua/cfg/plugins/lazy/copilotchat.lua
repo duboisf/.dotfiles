@@ -32,33 +32,70 @@ You will receive code snippets that include line number prefixes - use these to 
 ]], vim.uv.os_uname().sysname)
 
 return {
-  "CopilotC-Nvim/CopilotChat.nvim",
-  dependencies = {
-    { "zbirenbaum/copilot.lua" },
-    { "nvim-lua/plenary.nvim" },
-  },
-  build = "make tiktoken",
-  config = function()
-    require("CopilotChat").setup({
-      auto_follow_cursor = false,
-      debug = true,
-      question_header = "# 🙋 Fred the human ",
-      answer_header = "# 🤖 Serge Faute (Fred's intern) ",
-      show_help = false,
-      prompts = {
-        SergeFaute = {
-          system_prompt = system_prompt,
-          description = [[ Fred's intern, supports tool calling ]],
-        }
-      },
-      sticky = {
-        '$gemini-2.0-flash-001',
-        '/SergeFaute',
-        'What is the latest version of the actions/checkout github action?'
-      },
-    })
-    local copilotchat = require('CopilotChat')
+  vim.env.CHAT_FORK and {
+    "CopilotChatFork",
+    dir = "~/git/third_party/CopilotChat.nvim",
+    dependencies = {
+      { "zbirenbaum/copilot.lua" },
+      { "nvim-lua/plenary.nvim" },
+    },
+    build = "make tiktoken",
+    config = function()
+      local CopilotChat = require 'CopilotChat'
+      CopilotChat.setup({
+        auto_follow_cursor = false,
+        debug = false,
+        question_header = "# 🙋 Fred the human (fork) ",
+        answer_header = "# 🤖 Serge Faute (Fred's intern) ",
+        show_help = false,
+        prompts = {
+          SergeFaute = {
+            system_prompt = system_prompt,
+            description = [[ Fred's intern, supports tool calling ]],
+          }
+        },
+        sticky = {
+          '$gemini-2.0-flash-001',
+          '/SergeFaute',
+          'What is the latest version of the actions/checkout github action?'
+        },
+      })
 
-    vim.keymap.set({ 'n', 'v' }, '<leader>cc', function() copilotchat.open() end, { desc = "Open CopilotChat" })
-  end,
+      vim.keymap.set({ 'n', 'v' }, '<leader>cc', function() CopilotChat.open() end, { desc = "Open CopilotChat" })
+      vim.keymap.set({ 'v' }, '<leader>ce', ':CopilotChatExplain<CR>',
+        { desc = "Ask Copilot to explain the selected lines" })
+    end,
+  } or {
+    "CopilotC-Nvim/CopilotChat.nvim",
+    dependencies = {
+      { "zbirenbaum/copilot.lua" },
+      { "nvim-lua/plenary.nvim" },
+    },
+    build = "make tiktoken",
+    config = function()
+      local CopilotChat = require 'CopilotChat'
+      CopilotChat.setup({
+        auto_follow_cursor = true,
+        debug = false,
+        question_header = "# 🙋 Fred the human ",
+        answer_header = "# 🤖 Serge Faute (Fred's intern) ",
+        show_help = false,
+        prompts = {
+          SergeFaute = {
+            system_prompt = system_prompt,
+            description = [[ Fred's intern, supports tool calling ]],
+          }
+        },
+        -- sticky = {
+        --   '$gemini-2.0-flash-001',
+        --   '/SergeFaute',
+        --   'What is the latest version of the actions/checkout github action?'
+        -- },
+      })
+
+      vim.keymap.set({ 'n', 'v' }, '<leader>cc', function() CopilotChat.open() end, { desc = "Open CopilotChat" })
+      vim.keymap.set({ 'v' }, '<leader>ce', ':CopilotChatExplain<CR>',
+        { desc = "Ask Copilot to explain the selected lines" })
+    end,
+  }
 }
