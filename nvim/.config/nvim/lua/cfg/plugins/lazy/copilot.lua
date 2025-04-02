@@ -3,28 +3,28 @@ return {
   cmd = 'Copilot',
   cond = require('core.utils').has_network,
   event = 'InsertEnter',
-  config = function()
-    local copilot = require 'copilot'
-    copilot.setup {
-      copilot_node_command = 'node20x',
-      filetypes = {
-        gitcommit = true,
-        markdown = true,
-        yaml = true,
-      },
-      panel = {
-        enabled = true,
-        auto_refresh = true,
-      },
-      suggestion = {
-        enabled = true,
-        auto_trigger = true,
-        keymap = {
-          accept = false,
-          accept_word = '<M-l>',
-        }
+  opts = {
+    copilot_node_command = 'node20x',
+    filetypes = {
+      gitcommit = true,
+      markdown = true,
+      yaml = true,
+    },
+    panel = {
+      enabled = true,
+      auto_refresh = true,
+    },
+    suggestion = {
+      enabled = true,
+      auto_trigger = true,
+      keymap = {
+        accept = false,
+        accept_word = '<M-l>',
       }
     }
+  },
+  config = function(_, opts)
+    require('copilot').setup(opts)
 
     vim.keymap.set(
       'n',
