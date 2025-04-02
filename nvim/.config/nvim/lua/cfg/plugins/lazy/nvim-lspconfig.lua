@@ -1,15 +1,4 @@
 local function config()
-  -- require('neoconf').setup {}
-  -- require('neodev').setup {
-  --   library = {
-  --     enabled = true,
-  --     runtime = true,
-  --     -- Can be a table of plugins to make available as a workspace library.
-  --     -- If true, include all plugins, false means include none.
-  --     plugins = true,
-  --   }
-  -- }
-  --
   local utils = require 'core.utils'
 
   local lspconfig = require('lspconfig')

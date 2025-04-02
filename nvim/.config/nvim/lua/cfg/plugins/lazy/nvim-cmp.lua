@@ -180,7 +180,10 @@ local function config()
     -- preselect = cmp.PreselectMode.None,
     sources = cmp.config.sources({
       { name = 'nvim_lsp' },
-      { name = 'nvim_lua' },
+      {
+        name = "lazydev",
+        group_index = 0,
+      },
       { name = 'luasnip' },
       { name = 'path' },
       { name = 'emoji' },

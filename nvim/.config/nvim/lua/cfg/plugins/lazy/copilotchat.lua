@@ -34,7 +34,7 @@ You will receive code snippets that include line number prefixes - use these to 
 return {
   vim.env.CHAT_FORK and {
     "CopilotChatFork",
-    dir = "~/git/third_party/CopilotChat.nvim",
+    dir = vim.env.CHAT_FORK,
     dependencies = {
       { "zbirenbaum/copilot.lua" },
       { "nvim-lua/plenary.nvim" },
@@ -44,7 +44,7 @@ return {
       local CopilotChat = require 'CopilotChat'
       CopilotChat.setup({
         auto_follow_cursor = false,
-        debug = false,
+        debug = true,
         question_header = "# 🙋 Fred the human (fork) ",
         answer_header = "# 🤖 Serge Faute (Fred's intern) ",
         show_help = false,
@@ -72,6 +72,7 @@ return {
       { "nvim-lua/plenary.nvim" },
     },
     build = "make tiktoken",
+    tag = "v3.9.1",
     config = function()
       local CopilotChat = require 'CopilotChat'
       CopilotChat.setup({
@@ -79,6 +80,7 @@ return {
         debug = false,
         question_header = "# 🙋 Fred the human ",
         answer_header = "# 🤖 Serge Faute (Fred's intern) ",
+        model = "gpt-4o-2024-11-20",
         show_help = false,
         prompts = {
           SergeFaute = {
@@ -86,6 +88,7 @@ return {
             description = [[ Fred's intern, supports tool calling ]],
           }
         },
+
         -- sticky = {
         --   '$gemini-2.0-flash-001',
         --   '/SergeFaute',

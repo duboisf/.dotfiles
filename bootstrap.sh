@@ -74,7 +74,7 @@ trap "rm -rf $TMPDIR" EXIT
     fi
     echo "🔧 installing nvim"
     cd $TMPDIR
-    curl -L -o nvim.tar.gz https://github.com/neovim/neovim/releases/download/v0.10.4/nvim-linux-x86_64.tar.gz
+    curl -L -o nvim.tar.gz https://github.com/neovim/neovim/releases/download/v0.11.0/nvim-linux-x86_64.tar.gz
     mkdir -p ~/.local/stow 2> /dev/null || true
     cd ~/.local/stow
     tar xf $TMPDIR/nvim.tar.gz
