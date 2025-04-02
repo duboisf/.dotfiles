@@ -239,3 +239,5 @@ alias ic=istioctl
 alias be='bundle exec'
 
 alias cpc='nvim -c CopilotChat -c only'
+
+alias kssh='kitten ssh'

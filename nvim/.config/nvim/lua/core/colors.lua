@@ -29,6 +29,8 @@ return lush.extends({ theme }).with(function(injected_functions)
     sym('@lsp.mod.global') { fg = lush.hsl(20, 100, 50) }, -- global variables
     MiniIndentscopeSymbol { fg = lush.hsl(20, 100, 50) },
 
+    CopilotSuggestion { theme.Comment, fg = theme.Comment.fg.lighten(30), gui = 'italic' },
+
     -- Treesitter diff
     sym('@text.diff.add') { theme.DiffAdd },
     sym('@text.diff.delete') { theme.DiffDelete },

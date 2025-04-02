@@ -175,6 +175,9 @@ local function config()
         }
       end
     end
+    if client.name == "ruff" then
+      client.server_capabilities.hoverProvider = false
+    end
   end
 
   -- vim.diagnostic.config({
@@ -209,21 +212,56 @@ local function config()
       },
       on_attach = on_attach
     }
-    lspconfig.pylsp.setup {
+
+    lspconfig.pyright.setup({
+      handlers = {
+        ["textDocument/publishDiagnostics"] = vim.lsp.with(
+          vim.lsp.diagnostic.on_publish_diagnostics, {
+            virtual_text = true,
+            signs = true,
+            update_in_insert = true,
+          }
+        )
+      },
+      on_attach = on_attach,
+      on_init = function(client)
+        local root_dir = client.config.root_dir
+        local venv_path = root_dir .. "/.venv"
+        if vim.fn.isdirectory(venv_path) == 1 then
+          client.config.settings.python.pythonPath = venv_path .. "/bin/python"
+        end
+      end,
+      filetype = { "python" },
+      settings = {
+        pyright = {
+          disableOrganizeImports = true,
+        },
+        python = {
+          analysis = {
+            typeCheckingMode = "off",
+            diagnosticMode = "workspace",
+            typeCheckingBehavior = "strict",
+            reportMissingType = true,
+            reportUnusedImport = false,
+            reportUnusedVariable = false,
+          },
+        },
+      },
+    })
+
+    lspconfig.ruff.setup {
       capabilities = capabilities,
       on_attach = on_attach,
-      settings = {
-        pylsp = {
-          plugins = {
-            pycodestyle = {
-              ignore = {
-                'E501',
-              }
-            }
+      init_options = {
+        settings = {
+          showSyntaxErrors = true,
+          lint = {
+            extendSelect = { "I" }
           }
         }
       }
     }
+
     lspconfig.ruby_lsp.setup { capabilities = capabilities, on_attach = on_attach, init_options = {
       formatter = 'standard',
       linters = { 'standard' },
@@ -404,8 +442,6 @@ return {
     end,
     dependencies = {
       'williamboman/mason-lspconfig.nvim',
-      'folke/neoconf.nvim',
-      'folke/neodev.nvim',
       'nvim-navbuddy',
     },
   }

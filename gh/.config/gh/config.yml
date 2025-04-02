@@ -18,7 +18,7 @@ aliases:
     fclone: |
         !gh repo clone Flatbook/$1
     merge-and-delete-pr: |
-      !gh pr merge --delete-branch && git pull
+        !gh pr merge --delete-branch && git pull
     show-branch-protection: |
         !gh api graphql \
           -f query="$(curl -s https://gist.githubusercontent.com/duboisf/68fb6e22ac0a2165ca298074f0e3b553/raw/23c22a0f3922b812581684e2fbd7c6d5bb8f9532/operations.graphql)" \
