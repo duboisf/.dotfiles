@@ -56,6 +56,9 @@ return lush.extends({ theme }).with(function(injected_functions)
     sym('@markup.heading.6') { TextTitle, italic = true, fg = TextTitle.fg.da(10) },
     sym('@markup.italic') { gui = 'italic' },
 
+    -- Markdown fenced code block language
+    sym('@label.markdown') { gui = 'italic', fg = theme.Comment.fg.li(50) },
+
     sym('@text.danger') { theme.ErrorMsg },
 
     -- Don't use comment semantic highlighting, it hides treesitter comment highlighting like TODO/FIXME
