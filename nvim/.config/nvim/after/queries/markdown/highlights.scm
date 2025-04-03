@@ -17,3 +17,8 @@
 (atx_heading
   (atx_h6_marker)
   (_)) @markup.heading.6
+
+(fenced_code_block
+  (info_string
+    (#set! conceal "")
+    (#set! conceal_lines "")))
