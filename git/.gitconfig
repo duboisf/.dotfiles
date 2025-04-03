@@ -3,7 +3,6 @@
 [user]
 	email = 169247+duboisf@users.noreply.github.com
 	name = Fred Dubois
-	signingkey = 7FDBB1D481604E6E
 [alias]
 	auto-pr-merge = !gh pr merge --auto --merge
 	# Prevent annoying 'Opening in existing browser session.' message
@@ -17,7 +16,7 @@
 	poh = push -u origin HEAD
 	pr-merge = !gh pr merge --merge --delete-branch && git pull --prune
 	prv = !gh pr view
-	create-branch = !bash -c \"git switch -c fd/$1\"
+	create-branch = !bash -c 'git switch -c fd/'$1
 [commit]
 	verbose = true
 	gpgsign = true
@@ -43,3 +42,6 @@
 	helper = !/usr/bin/gh auth git-credential
 [fetch]
 	pruneTags = true
+
+[include]
+    path = ~/.gitconfig.local
