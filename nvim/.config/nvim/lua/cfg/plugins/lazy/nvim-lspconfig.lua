@@ -11,77 +11,88 @@ local function config()
   ]]
 
   local function safe_formatting_sync()
-    local id, client = next(vim.lsp.get_active_clients())
-    if id ~= nil and client.server_capabilities.documentFormattingProvider then
-      vim.lsp.buf.format({ async = false, timeout_ms = 1000 })
+    for _, client in pairs(vim.lsp.get_clients()) do
+      if client.server_capabilities.documentFormattingProvider then
+        vim.lsp.buf.format({ async = false, timeout_ms = 1000 })
+        return
+      end
     end
   end
 
-  -- vim.diagnostic.config {
-  --   underline = {
-  --     severity = vim.diagnostic.severity.WARN,
-  --   },
-  --   virtual_text = {
-  --     spacing = 2,
-  --     severity = vim.diagnostic.severity.WARN,
-  --   },
-  --   signs = true,
-  --   update_in_insert = false,
-  -- }
-  --
+  vim.diagnostic.config({
+    update_in_insert = true,
+    virtual_text = true,
+  }, nil)
+
+  -- Setup border for floating windows, here's a description of the
+  -- border parameter from the nvim docs (:h nvim_open_win()):
+  --   If it is an array, it should have a length of eight or
+  --   any divisor of eight. The array will specify the eight
+  --   chars building up the border in a clockwise fashion
+  --   starting with the top-left corner. As an example, the
+  --   double box style could be specified as: >
+  --   [ "╔", "═" ,"╗", "║", "╝", "═", "╚", "║" ].
   local border = {
-    { " ", "FloatBorder" },
-    { "🭸", "FloatBorder" },
-    { " ", "FloatBorder" },
+    { "┌", "FloatBorder" },
+    { "─", "FloatBorder" },
+    { "┐", "FloatBorder" },
     { "🭲", "FloatBorder" },
-    { " ", "FloatBorder" },
-    { "🭸", "FloatBorder" },
-    { " ", "FloatBorder" },
+    { "┘", "FloatBorder" },
+    { "─", "FloatBorder" },
+    { "└", "FloatBorder" },
     { "🭲", "FloatBorder" }
   }
 
   -- Fix grey background in floating windows
   vim.cmd [[ hi! link NormalFloat Normal ]]
 
-  -- Add the border on hover and on signature help popup window
-  vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = border })
+  -- Add border to hover window
+  local original_hover = vim.lsp.buf.hover
+  ---@diagnostic disable-next-line: duplicate-set-field
+  vim.lsp.buf.hover = function(opts)
+    opts = vim.tbl_deep_extend('force', { border = border }, opts or {})
+    original_hover(opts)
+  end
 
   ---Setup autocmds for buffer
-  ---@param client lsp.Client
+  ---@param client vim.lsp.Client
   ---@param bufnr number
-  -- local function setup_autocmds(client, bufnr)
-  --   local autocmd, group_id = utils.autogroup('duboisf.lsp.buffer', false)
-  --   local opts = { buffer = bufnr }
-  --
-  --   local server_capabilities = client.server_capabilities
-  --
-  --   if server_capabilities.codeLensProvider then
-  --     autocmd({ 'BufEnter', 'CursorHold', 'InsertLeave' }, nil, vim.lsp.codelens.refresh, 'Refresh codelens', opts)
-  --   end
-  --
-  --   if server_capabilities.documentHighlightProvider then
-  --     autocmd({ 'CursorHold' }, nil, vim.lsp.buf.document_highlight,
-  --       'Highlight symbol under the cursor throughout document', opts)
-  --     autocmd({ 'CursorMoved' }, nil, vim.lsp.buf.clear_references, 'Clear highlighted lsp symbol', opts)
-  --   end
-  --
-  --   local function clear_buffer_autocmds()
-  --     vim.api.nvim_clear_autocmds { buffer = bufnr, group = group_id }
-  --   end
-  --
-  --   autocmd('BufUnload', nil, clear_buffer_autocmds, 'Delete buffer autocmds to prevent duplicates', opts)
-  -- end
+  local function setup_autocmds(client, bufnr)
+    local autocmd, group_id = utils.autogroup('duboisf.lsp.buffer', false)
+    local opts = { buffer = bufnr }
+
+    local server_capabilities = client.server_capabilities
+
+    if server_capabilities then
+      if server_capabilities.codeLensProvider then
+        autocmd({ 'BufEnter', 'CursorHold', 'InsertLeave' }, nil, vim.lsp.codelens.refresh, 'Refresh codelens', opts)
+      end
+
+      if server_capabilities.documentHighlightProvider then
+        autocmd({ 'CursorHold' }, nil, vim.lsp.buf.document_highlight,
+          'Highlight symbol under the cursor throughout document', opts)
+        autocmd({ 'CursorMoved' }, nil, vim.lsp.buf.clear_references, 'Clear highlighted lsp symbol', opts)
+      end
+    end
+
+
+    local function clear_buffer_autocmds()
+      vim.api.nvim_clear_autocmds { buffer = bufnr, group = group_id }
+    end
+
+    autocmd('BufUnload', nil, clear_buffer_autocmds, 'Delete buffer autocmds to prevent duplicates', opts)
+  end
 
   -- Setup mappings
   local setup_mappings = (function()
     local group = vim.api.nvim_create_augroup("lsp_format_on_save", { clear = false })
 
-    ---@param client lsp.Client
+    ---@param client vim.lsp.Client
     ---@param bufnr number
     return function(client, bufnr)
       local opts = { noremap = true, silent = true, buffer = bufnr }
 
-      if client.supports_method("textDocument/formatting") then
+      if client:supports_method("textDocument/formatting", bufnr) then
         vim.keymap.set("n", "<Leader>F", function()
           vim.lsp.buf.format({ bufnr = vim.api.nvim_get_current_buf() })
         end, { buffer = bufnr, desc = "[lsp] format" })
@@ -104,64 +115,55 @@ local function config()
         })
       end
 
-      -- if client.supports_method("textDocument/rangeFormatting") then
-      --   vim.keymap.set("x", "<Leader>F", function()
-      --     vim.lsp.buf.format({ bufnr = vim.api.nvim_get_current_buf() })
-      --   end, { buffer = bufnr, desc = "[lsp] format" })
-      -- end
-      --
+      if client:supports_method("textDocument/rangeFormatting", bufnr) then
+        vim.keymap.set("x", "<Leader>F", function()
+          vim.lsp.buf.format({ bufnr = vim.api.nvim_get_current_buf() })
+        end, { buffer = bufnr, desc = "[lsp] format" })
+      end
+
       local normal_mappings = {
-        [',s']         = '<cmd>Telescope lsp_document_symbols<CR>',
-        [',w']         = '<cmd>Telescope lsp_dynamic_workspace_symbols<CR>',
-        ['<leader>F']  = safe_formatting_sync,
-        ['<leader>cl'] = '<cmd>lua vim.lsp.codelens.run()<CR>',
-        ['<leader>ca'] = '<cmd>lua vim.lsp.buf.code_action()<CR>',
-        ['<leader>d']  = '<cmd>lua vim.diagnostic.open_float()<CR>',
-        ['<leader>rn'] = '<cmd>lua vim.lsp.buf.rename()<CR>',
-        ['K']          = '<Cmd>lua vim.lsp.buf.hover()<CR>',
-        ['[d']         = '<cmd>lua vim.diagnostic.goto_prev()<CR>',
-        [']d']         = '<cmd>lua vim.diagnostic.goto_next()<CR>',
-        ['gD']         = '<Cmd>lua vim.lsp.buf.type_definition()<CR>',
-        ['gd']         = '<Cmd>Telescope lsp_definitions<CR>',
-        ['gi']         = '<cmd>Telescope lsp_implementations<CR>',
-        ['gr']         = '<cmd>Telescope lsp_references<CR>',
+        [',s']        = '<cmd>Telescope lsp_document_symbols<CR>',
+        [',w']        = '<cmd>Telescope lsp_dynamic_workspace_symbols<CR>',
+        ['<leader>F'] = safe_formatting_sync,
+        ['gD']        = '<Cmd>lua vim.lsp.buf.type_definition()<CR>',
+        ['gd']        = '<Cmd>Telescope lsp_definitions<CR>',
       }
 
       for lhs, rhs in pairs(normal_mappings) do
         vim.keymap.set('n', lhs, rhs, opts)
-      end
-
-      for _, mode in ipairs({ 'i' }) do
-        -- TODO: check if the language server supports signature help before adding this mapping
-        vim.keymap.set(mode, '<C-s>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
       end
     end
   end)()
 
   -- Use an on_attach function to only map the following keys
   -- after the language server attaches to the current buffer
-  ---@param client lsp.Client
+  ---@param client vim.lsp.Client
   ---@param bufnr number
   local on_attach = function(client, bufnr)
-    -- setup_autocmds(client, bufnr)
+    setup_autocmds(client, bufnr)
     setup_mappings(client, bufnr)
+
     -- disable diagnostics for helm templates
     if vim.bo[bufnr].filetype == 'yaml' and string.find(vim.api.nvim_buf_get_name(bufnr), '/templates/') then
-      vim.diagnostic.disable()
+      vim.diagnostic.enable(false)
     end
+
+    -- workaround to gopls hl semanticTokens
+    -- https://github.com/golang/go/issues/54531#issuecomment-1464982242
     if client.name == "gopls" then
-      -- workaround to hl semanticTokens
-      -- https://github.com/golang/go/issues/54531#issuecomment-1464982242
       if not client.server_capabilities.semanticTokensProvider then
-        local semantic = client.config.capabilities.textDocument.semanticTokens
-        client.server_capabilities.semanticTokensProvider = {
-          full = true,
-          legend = {
-            tokenTypes = semantic.tokenTypes,
-            tokenModifiers = semantic.tokenModifiers,
-          },
-          range = true,
-        }
+        local textDocument = client.config.capabilities.textDocument
+        local semanticTokens = textDocument and textDocument.semanticTokens
+        if semanticTokens then
+          client.server_capabilities.semanticTokensProvider = {
+            full = true,
+            legend = {
+              tokenTypes = semanticTokens.tokenTypes,
+              tokenModifiers = semanticTokens.tokenModifiers,
+            },
+            range = true,
+          }
+        end
       end
     end
     if client.name == "ruff" then
@@ -169,17 +171,6 @@ local function config()
     end
   end
 
-  -- vim.diagnostic.config({
-  --   underline = true,
-  --   virtual_text = {
-  --     spacing = 2,
-  --     severity_limit = "Hint",
-  --     severity = vim.diagnostic.severity.WARN,
-  --   },
-  --   signs = true,
-  --   update_in_insert = false,
-  -- })
-  --
   local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
   --[[
@@ -203,16 +194,13 @@ local function config()
     }
 
     lspconfig.pyright.setup({
-      handlers = {
-        ["textDocument/publishDiagnostics"] = vim.lsp.with(
-          vim.lsp.diagnostic.on_publish_diagnostics, {
-            virtual_text = true,
-            signs = true,
-            update_in_insert = true,
-          }
-        )
-      },
-      on_attach = on_attach,
+      ---@param client vim.lsp.Client
+      ---@param bufnr number
+      on_attach = function(client, bufnr)
+        on_attach(client, bufnr)
+        local ns = vim.lsp.diagnostic.get_namespace(client.id)
+        vim.diagnostic.config({ virtual_text = true, signs = true, update_in_insert = true }, ns)
+      end,
       on_init = function(client)
         local root_dir = client.config.root_dir
         local venv_path = root_dir .. "/.venv"
@@ -263,27 +251,27 @@ local function config()
     lspconfig.taplo.setup { capabilities = capabilities, on_attach = on_attach }
     lspconfig.ts_ls.setup {
       capabilities = capabilities,
-      handlers = {
-        ["textDocument/publishDiagnostics"] = vim.lsp.with(
-          vim.lsp.diagnostic.on_publish_diagnostics, {
-            underline = {
-              severity = {
-                -- don't know why but with typescript language server I need to use this min key to get it to work, same for virtual_text
-                min = vim.diagnostic.severity.INFO,
-              },
+      on_attach = function(client, bufnr)
+        on_attach(client, bufnr)
+        local ns = vim.lsp.diagnostic.get_namespace(client.id)
+        vim.diagnostic.config({
+          underline = {
+            severity = {
+              -- don't know why but with typescript language server I need to use this min key to get it to work, same for virtual_text
+              min = vim.diagnostic.severity.INFO,
             },
-            virtual_text = {
-              spacing = 2,
-              -- severity_limit = "Hint",
-              severity = {
-                min = vim.diagnostic.severity.WARN,
-              },
+          },
+          virtual_text = {
+            spacing = 2,
+            -- severity_limit = "Hint",
+            severity = {
+              min = vim.diagnostic.severity.WARN,
             },
-            signs = true,
-            update_in_insert = false,
-          }),
-      },
-      on_attach = on_attach
+          },
+          signs = true,
+          update_in_insert = false,
+        }, ns)
+      end,
     }
 
     do

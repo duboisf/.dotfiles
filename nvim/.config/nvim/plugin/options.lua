@@ -52,6 +52,6 @@ vim.opt.textwidth = 0
 vim.opt.title = true
 vim.opt.titlelen = 30
 -- Smaller updatetime for CursorHold & CursorHoldI
-vim.opt.updatetime = 50
+vim.opt.updatetime = 500
 vim.opt.wildignore:append { '*/.git/*', '*/.hg/*', '*/.svn/*' }
 vim.opt.wrap = false
