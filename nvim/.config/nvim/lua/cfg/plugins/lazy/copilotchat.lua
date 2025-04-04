@@ -72,7 +72,6 @@ return {
       { "nvim-lua/plenary.nvim" },
     },
     build = "make tiktoken",
-    tag = "v3.9.1",
     config = function()
       local CopilotChat = require 'CopilotChat'
       CopilotChat.setup({
@@ -80,7 +79,7 @@ return {
         debug = false,
         question_header = "# 🙋 Fred the human ",
         answer_header = "# 🤖 Serge Faute (Fred's intern) ",
-        model = "gpt-4o-2024-11-20",
+        model = "gpt-4o-mini",
         show_help = false,
         prompts = {
           SergeFaute = {
