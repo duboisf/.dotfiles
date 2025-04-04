@@ -79,3 +79,5 @@ configmap
 Okta
 IAM
 minikube
+nodepool
+whitelist
