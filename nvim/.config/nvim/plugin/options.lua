@@ -1,6 +1,7 @@
--- vim.opt.clipboard = 'unnamed'
 -- Better display for messages
 vim.opt.cmdheight = 1
+vim.opt.concealcursor = 'nc'
+vim.opt.conceallevel = 2
 vim.opt.dictionary:append('/usr/share/dict/american-english')
 vim.opt.encoding = 'utf-8'
 vim.opt.expandtab = true
