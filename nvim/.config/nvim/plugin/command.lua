@@ -38,3 +38,7 @@ vim.api.nvim_create_user_command('EditTheme', function()
   vim.cmd.vsplit(theme_path)
   vim.cmd.Lushify()
 end, {})
+
+vim.api.nvim_create_user_command("WTF", function(args)
+  require("duboisf.wtf")(args.fargs[1])
+end, { nargs = 1 })
