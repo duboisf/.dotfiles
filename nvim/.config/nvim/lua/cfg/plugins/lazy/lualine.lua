@@ -70,10 +70,9 @@ autocmd('ColorScheme', '*', function()
   config()
 end, 'Reload lualine on colorscheme change')
 
+---@type LazyPluginSpec
 return {
   'nvim-lualine/lualine.nvim',
   config = config,
-  dependencies = {
-    'kyazdani42/nvim-web-devicons'
-  },
+  dependencies = { 'kyazdani42/nvim-web-devicons' },
 }
