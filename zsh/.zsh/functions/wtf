@@ -1,0 +1,22 @@
+emulate -RL zsh
+
+setopt err_return warn_create_global
+
+local last_command=$(fc -lLn | tail -n 1)
+local last_cmd_output=$(
+    kitten @ get-text \
+        --match "id:$KITTY_WINDOW_ID" \
+        --extent last_non_empty_output
+)
+
+export MISTRAL_API_KEY=$(secret-tool lookup purpose ai provider mistral)
+
+local tmp_file=$(mktemp)
+trap 'rm -f $tmp_file' EXIT
+
+(
+    echo "Command: $last_command"
+    echo "Output:\n$last_cmd_output"
+) > $tmp_file
+
+nvim -c "WTF $tmp_file"
