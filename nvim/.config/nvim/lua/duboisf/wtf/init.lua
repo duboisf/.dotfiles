@@ -45,6 +45,8 @@ function Buffer.new()
 
   self.spinner = Spinner.new(buf)
 
+  self:append("\n")
+
   self.spinner:start("Thinking")
 
   self:modifiable(false)
@@ -79,6 +81,17 @@ function Buffer:write(lines)
   self:modifiable(false)
 end
 
+--- Get the end position of the buffer
+--- @return number row
+--- @return number col
+function Buffer:get_end_pos()
+  local buf = self.get_buf()
+  local last_line = vim.api.nvim_buf_get_lines(buf, -2, -1, false)[1]
+  local row = vim.api.nvim_buf_line_count(buf) - 1 -- 0-based index for row
+  local col = #last_line                           -- Length of the last line for column
+  return row, col
+end
+
 function Buffer:append(text)
   self:modifiable(true)
 
@@ -88,14 +101,18 @@ function Buffer:append(text)
 
   local buf = self.get_buf()
 
-  local last_line = vim.api.nvim_buf_get_lines(buf, -2, -1, false)[1]
-  local row = vim.api.nvim_buf_line_count(buf) - 1 -- 0-based index for row
-  local col = #last_line                           -- Length of the last line for column
+  local row, col = self:get_end_pos()
 
   local ok, err = pcall(vim.api.nvim_buf_set_text, buf, row, col, row, col, vim.split(text, "\n"))
   if not ok then
     error("Error appending text to buffer " .. buf .. ": " .. err)
   end
+
+  local win = api.nvim_get_current_win()
+
+  -- Make the cursor follow the text
+  api.nvim_win_set_cursor(win, { row + 1, col + 1 })
+
   self:modifiable(false)
 end
 
