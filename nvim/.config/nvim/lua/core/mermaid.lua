@@ -2,14 +2,14 @@ local M = {}
 
 -- Get the treesitter tree for the buffer bufnr.
 --- @param bufnr number: Buffer handle, defaults to current
---- @return TSTree
+--- @return TSTree?
 local function get_tree(bufnr)
-  local parser = vim.treesitter.get_parser(bufnr, 'markdown')
+  local parser = assert(vim.treesitter.get_parser(bufnr, 'markdown'), 'Parser is nil')
   return parser:parse()[1]
 end
 
 -- Get a treesitter query to find mermaid diagrams in markdown.
---- @return Query
+--- @return vim.treesitter.Query
 local function get_query()
   return vim.treesitter.query.parse('markdown', [[
     (fenced_code_block
@@ -22,7 +22,7 @@ end
 --- @param bufnr number: Buffer handle, defaults to current
 --- @return table<string>: List of mermaid diagrams
 local function find_mermaid_diagrams(bufnr)
-  local tree = get_tree(bufnr)
+  local tree = assert(get_tree(bufnr), 'Tree is nil')
   local query = get_query()
   local mermaid_diagrams = {}
   for capture_id, node, _ in query:iter_captures(tree:root(), bufnr, 0, -1) do
