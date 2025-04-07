@@ -13,13 +13,17 @@ return {
     panel = {
       enabled = true,
       auto_refresh = true,
+      keymap = {
+        open = false,
+      },
     },
     suggestion = {
       enabled = true,
       auto_trigger = true,
       keymap = {
-        accept = false,
-        accept_word = '<M-l>',
+        accept = '<C-CR>',
+        accept_line = '<M-l>',
+        accept_word = '<M-j>',
       }
     }
   },

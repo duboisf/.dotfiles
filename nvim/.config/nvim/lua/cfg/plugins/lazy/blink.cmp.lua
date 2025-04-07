@@ -2,7 +2,8 @@ return {
   'saghen/blink.cmp',
   -- optional: provides snippets for the snippet source
   dependencies = {
-    'rafamadriz/friendly-snippets'
+    'fang2hou/blink-copilot',
+    'rafamadriz/friendly-snippets',
   },
 
   -- use a release tag to download pre-built binaries
@@ -40,25 +41,22 @@ return {
       documentation = {
         auto_show = false,
       },
-      menu = {
-        draw = {
-          columns = { { "label", "label_description", gap = 1 }, { "kind_icon", "kind", gap = 1 } },
-        },
-      }
     },
 
     signature = {
       enabled = true,
-      window = {
-        border = 'rounded',
-      },
     },
 
     -- Default list of enabled providers defined so that you can extend it
     -- elsewhere in your config, without redefining it, due to `opts_extend`
     sources = {
-      default = { 'lsp', 'path', 'snippets', 'buffer' },
+      default = { 'lsp', 'copilot', 'path', 'snippets', 'buffer' },
       providers = {
+        copilot = {
+          name = "Copilot",
+          async = true,
+          module = "blink-copilot",
+        },
         lazydev = {
           name = "LazyDev",
           module = "lazydev.integrations.blink",

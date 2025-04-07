@@ -95,8 +95,26 @@ return {
         -- },
       })
 
-      vim.keymap.set({ 'n', 'v' }, '<leader>cc', function() CopilotChat.open() end, { desc = "Open CopilotChat" })
-      vim.keymap.set({ 'v' }, '<leader>ce', ':CopilotChatExplain<CR>',
+      local function submit()
+        local section = CopilotChat.chat:get_closest_section('question')
+        if not section or section.answer then
+          return
+        end
+        CopilotChat.ask(section.content)
+      end
+
+      local set = vim.keymap.set
+
+      -- Map <C-CR> to submit the question in insert mode only in the copilot-chat buffer
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = "copilot-chat",
+        callback = function()
+          set('i', '<C-CR>', submit, { desc = "Send CopilotChat message" })
+        end
+      })
+
+      set({ 'n', 'v' }, '<leader>cc', CopilotChat.open, { desc = "Open CopilotChat" })
+      set({ 'v' }, '<leader>ce', ':CopilotChatExplain<CR>',
         { desc = "Ask Copilot to explain the selected lines" })
     end,
   }
