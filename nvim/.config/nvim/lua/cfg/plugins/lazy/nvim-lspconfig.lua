@@ -20,7 +20,6 @@ local function config()
   end
 
   vim.diagnostic.config({
-    update_in_insert = true,
     virtual_text = false,
     virtual_lines = {
       -- only show diagnostics onthe current line
