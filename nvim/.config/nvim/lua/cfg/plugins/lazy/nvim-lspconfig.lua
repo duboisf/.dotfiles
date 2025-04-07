@@ -21,7 +21,7 @@ local function config()
 
   vim.diagnostic.config({
     virtual_text = false,
-    virtual_lines = function(namespace, bufnr)
+    virtual_lines = function(namespace, _)
       if namespace then
         local ns = vim.diagnostic.get_namespace(namespace)
         if string.find(ns.name, "lua_ls") then

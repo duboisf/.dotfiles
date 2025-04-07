@@ -7,5 +7,4 @@ return {
     end
   },
   'tpope/vim-rhubarb',
-  'tpope/vim-unimpaired',
 }

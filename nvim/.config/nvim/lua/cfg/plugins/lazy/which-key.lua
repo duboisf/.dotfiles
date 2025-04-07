@@ -8,7 +8,6 @@ return {
   config = function(_, opts)
     require('which-key').setup(opts)
 
-    -- vim.keymap.set('i', , rhs, opts?)
     -- worakaround for <C-o>, see https://github.com/folke/which-key.nvim/issues/827
     vim.keymap.set("i", "<C-o>", function()
       vim.cmd("startinsert!")
