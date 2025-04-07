@@ -21,10 +21,19 @@ local function config()
 
   vim.diagnostic.config({
     virtual_text = false,
-    virtual_lines = {
-      -- only show diagnostics onthe current line
-      current_line = true,
-    },
+    virtual_lines = function(namespace, bufnr)
+      if namespace then
+        local ns = vim.diagnostic.get_namespace(namespace)
+        if string.find(ns.name, "lua_ls") then
+          local mode = vim.api.nvim_get_mode().mode
+          print("mode=" .. mode)
+          return false
+        end
+      end
+      return {
+        current_line = true
+      }
+    end
   }, nil)
 
   -- Setup border for floating windows, here's a description of the
@@ -118,6 +127,18 @@ local function config()
           end,
           desc = "[lsp] format on save",
         })
+
+        if client.name == 'lua_ls' then
+          vim.api.nvim_create_autocmd("BufWritePost", {
+            buffer = bufnr,
+            group = group,
+            desc = "Fix diagnostics disapearing after formatting file with lua_ls",
+            callback = function()
+              vim.diagnostic.enable(true)
+            end
+
+          })
+        end
       end
 
       if client:supports_method("textDocument/rangeFormatting", bufnr) then

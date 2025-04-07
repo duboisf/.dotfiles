@@ -1,8 +1,6 @@
 return {
   'echasnovski/mini.nvim',
-  config    = function()
-    local wk = require('which-key')
-
+  config  = function()
     require('mini.comment').setup({})
     require('mini.cursorword').setup({})
 
@@ -26,22 +24,19 @@ return {
         go_out_plus = '',
       },
     })
-    wk.add({
-      "<leader>v",
-      function()
-        if not MiniFiles.close() then
-          MiniFiles.open(vim.api.nvim_buf_get_name(0), false)
-        end
-      end,
-      desc =
-      "Open file browser in current file's directory"
+    vim.keymap.set('n', '<leader>v', function()
+      if not MiniFiles.close() then
+        MiniFiles.open(vim.api.nvim_buf_get_name(0), false)
+      end
+    end, {
+      desc = "Open file browser in current file's directory",
+      noremap = true,
+      silent = true
     })
 
+    require('mini.sessions').setup({})
     require('mini.splitjoin').setup({})
     require('mini.surround').setup({})
   end,
-  version   = false,
-  depencies = {
-    "folke/which-key.nvim",
-  }
+  version = false,
 }

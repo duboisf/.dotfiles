@@ -152,7 +152,6 @@ return {
           },
         },
         swap = {
-          -- mappings are configured using hydra in ~/.config/nvim/lua/cfg/plugins/hydra.lua
           enable = true,
         },
       }
