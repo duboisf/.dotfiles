@@ -31,17 +31,6 @@ local config = {
   root_dir = vim.fs.dirname(vim.fs.find({ 'gradlew', '.git' }, { upwared = true })[1]),
 }
 
-local border = {
-  { "🭽", "FloatBorder" },
-  { "▔", "FloatBorder" },
-  { "🭾", "FloatBorder" },
-  { "▕", "FloatBorder" },
-  { "🭿", "FloatBorder" },
-  { "▁", "FloatBorder" },
-  { "🭼", "FloatBorder" },
-  { "▏", "FloatBorder" },
-}
-
 do
   local normal_mappings = {
     [',s']         = '<cmd>Telescope lsp_document_symbols<CR>',
@@ -73,11 +62,3 @@ do
 end
 
 require('jdtls').start_or_attach(config)
-
-local orig_open_floating_preview = vim.lsp.util.open_floating_preview
----@diagnostic disable-next-line: duplicate-set-field
-function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
-  opts = opts or {}
-  opts.border = opts.border or border
-  return orig_open_floating_preview(contents, syntax, opts, ...)
-end

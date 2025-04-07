@@ -233,38 +233,40 @@ local function config()
   })
 end
 
-return {
-  {
-    'hrsh7th/nvim-cmp',
-    config = config,
-    dependencies = {
-      -- completion suggestions from language server
-      'hrsh7th/cmp-nvim-lsp',
-      'nvim-lua/plenary.nvim',
-      'L3MON4D3/LuaSnip',
-    },
-  },
-  -- complete words from other buffers
-  'hrsh7th/cmp-buffer',
-  -- completion when in nvim commandline
-  'hrsh7th/cmp-cmdline',
-  -- complete words from the dictionary
-  'uga-rosa/cmp-dictionary',
-  -- complete emojis like :tada:
-  'hrsh7th/cmp-emoji',
-  -- completion for filesystem paths
-  'hrsh7th/cmp-path',
-  -- completion for luasnip snippets
-  'saadparwaiz1/cmp_luasnip',
-  -- completion for neovim lua api
-  'hrsh7th/cmp-nvim-lua',
-  {
-    'duboisf/cmp-gh-users',
-    enabled = (vim.fn.isdirectory(vim.fn.getenv('HOME') .. '/git/cmp-gh-users') == 1),
-    opts = {
-      log_level = vim.log.levels.WARN,
-      filetypes = { 'gitcommit', 'markdown', 'bash' },
-    },
-    dev = true,
-  },
-}
+return {}
+-- return {
+--   {
+--     'hrsh7th/nvim-cmp',
+--     enabled = false,
+--     config = config,
+--     dependencies = {
+--       -- completion suggestions from language server
+--       'hrsh7th/cmp-nvim-lsp',
+--       'nvim-lua/plenary.nvim',
+--       'L3MON4D3/LuaSnip',
+--     },
+--   },
+--   -- complete words from other buffers
+--   'hrsh7th/cmp-buffer',
+--   -- completion when in nvim commandline
+--   'hrsh7th/cmp-cmdline',
+--   -- complete words from the dictionary
+--   'uga-rosa/cmp-dictionary',
+--   -- complete emojis like :tada:
+--   'hrsh7th/cmp-emoji',
+--   -- completion for filesystem paths
+--   'hrsh7th/cmp-path',
+--   -- completion for luasnip snippets
+--   'saadparwaiz1/cmp_luasnip',
+--   -- completion for neovim lua api
+--   'hrsh7th/cmp-nvim-lua',
+--   {
+--     'duboisf/cmp-gh-users',
+--     enabled = (vim.fn.isdirectory(vim.fn.getenv('HOME') .. '/git/cmp-gh-users') == 1),
+--     opts = {
+--       log_level = vim.log.levels.WARN,
+--       filetypes = { 'gitcommit', 'markdown', 'bash' },
+--     },
+--     dev = true,
+--   },
+-- }

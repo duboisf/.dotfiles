@@ -32,27 +32,29 @@ local function config()
   --   starting with the top-left corner. As an example, the
   --   double box style could be specified as: >
   --   [ "╔", "═" ,"╗", "║", "╝", "═", "╚", "║" ].
-  local border = {
-    { "┌", "FloatBorder" },
-    { "─", "FloatBorder" },
-    { "┐", "FloatBorder" },
-    { "🭲", "FloatBorder" },
-    { "┘", "FloatBorder" },
-    { "─", "FloatBorder" },
-    { "└", "FloatBorder" },
-    { "🭲", "FloatBorder" }
-  }
+  -- local border = {
+  --   { "┌", "FloatBorder" },
+  --   { "─", "FloatBorder" },
+  --   { "┐", "FloatBorder" },
+  --   { "🭲", "FloatBorder" },
+  --   { "┘", "FloatBorder" },
+  --   { "─", "FloatBorder" },
+  --   { "└", "FloatBorder" },
+  --   { "🭲", "FloatBorder" }
+  -- }
+
+  vim.o.winborder = 'rounded'
 
   -- Fix grey background in floating windows
   vim.cmd [[ hi! link NormalFloat Normal ]]
 
-  -- Add border to hover window
-  local original_hover = vim.lsp.buf.hover
-  ---@diagnostic disable-next-line: duplicate-set-field
-  vim.lsp.buf.hover = function(opts)
-    opts = vim.tbl_deep_extend('force', { border = border }, opts or {})
-    original_hover(opts)
-  end
+  -- -- Add border to hover window
+  -- local original_hover = vim.lsp.buf.hover
+  -- ---@diagnostic disable-next-line: duplicate-set-field
+  -- vim.lsp.buf.hover = function(opts)
+  --   opts = vim.tbl_deep_extend('force', { border = border }, opts or {})
+  --   original_hover(opts)
+  -- end
 
   ---Setup autocmds for buffer
   ---@param client vim.lsp.Client
@@ -122,11 +124,11 @@ local function config()
       end
 
       local normal_mappings = {
-        [',s']        = '<cmd>Telescope lsp_document_symbols<CR>',
-        [',w']        = '<cmd>Telescope lsp_dynamic_workspace_symbols<CR>',
+        -- [',s']        = '<cmd>Telescope lsp_document_symbols<CR>',
+        -- [',w']        = '<cmd>Telescope lsp_dynamic_workspace_symbols<CR>',
         ['<leader>F'] = safe_formatting_sync,
-        ['gD']        = '<Cmd>lua vim.lsp.buf.type_definition()<CR>',
-        ['gd']        = '<Cmd>Telescope lsp_definitions<CR>',
+        -- ['gD']        = '<Cmd>lua vim.lsp.buf.type_definition()<CR>',
+        -- ['gd']        = '<Cmd>Telescope lsp_definitions<CR>',
       }
 
       for lhs, rhs in pairs(normal_mappings) do
@@ -171,7 +173,8 @@ local function config()
     end
   end
 
-  local capabilities = require('cmp_nvim_lsp').default_capabilities()
+  -- local capabilities = require('cmp_nvim_lsp').default_capabilities()
+  local capabilities = require('blink.cmp').get_lsp_capabilities()
 
   --[[
 
@@ -403,11 +406,11 @@ end
 return {
   {
     'williamboman/mason.nvim',
-    config = true,
+    opts = true,
   },
   {
     'williamboman/mason-lspconfig.nvim',
-    config = true,
+    opts = true,
     dependencies = {
       'williamboman/mason.nvim',
     }
@@ -418,8 +421,9 @@ return {
       config()
     end,
     dependencies = {
-      'williamboman/mason-lspconfig.nvim',
       'nvim-navbuddy',
+      'saghen/blink.cmp',
+      'williamboman/mason-lspconfig.nvim',
     },
   }
 }
