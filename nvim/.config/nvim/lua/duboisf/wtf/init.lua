@@ -3,27 +3,40 @@ local co = coroutine
 local uv = vim.uv
 local Spinner = require("duboisf.wtf.spinner")
 
-local function set_options()
-  vim.bo.bufhidden = 'wipe'
-  vim.bo.buftype = 'nofile'
-  vim.bo.filetype = 'markdown'
-  vim.bo.modified = false
-  vim.bo.swapfile = false
+local function set_buf_opt(buf, name, value)
+  local opts = { buf = buf }
+  api.nvim_set_option_value(name, value, opts)
+end
 
-  vim.b.disable_jump_to_last_position = true
+local function set_local_opt(name, value)
+  local opts = { scope = 'local' }
+  api.nvim_set_option_value(name, value, opts)
+end
 
-  vim.o.cmdheight = 0
-  vim.o.concealcursor = 'n'
-  vim.o.number = false
-  vim.o.relativenumber = false
-  vim.o.showtabline = 0
-  vim.o.signcolumn = 'yes:1'
-  vim.o.wrap = true
-  vim.o.fillchars = 'eob: '
+local function set_options(buf)
+  set_buf_opt(buf, 'bufhidden', 'wipe')
+  set_buf_opt(buf, 'buftype', 'nofile')
+  set_buf_opt(buf, 'filetype', 'markdown')
+  set_buf_opt(buf, 'modified', false)
+  set_buf_opt(buf, 'swapfile', false)
+
+  api.nvim_buf_set_var(buf, 'disable_jump_to_last_position', true)
+
+  set_local_opt('cmdheight', 0)
+  set_local_opt('concealcursor', 'n')
+  set_local_opt('fillchars', 'eob: ')
+  set_local_opt('hidden', true)
+  set_local_opt('number', false)
+  set_local_opt('relativenumber', false)
+  set_local_opt('showtabline', 0)
+  set_local_opt('signcolumn', 'yes:1')
+  set_local_opt('wrap', true)
+  set_local_opt('laststatus', 0)
 end
 
 ---@class Buffer
 ---@field private get_buf fun(): number
+---@field private get_win fun(): number
 ---@field private lines string[]
 ---@field private spinner Spinner?
 local Buffer = {
@@ -35,13 +48,20 @@ function Buffer.new()
   local self = setmetatable({}, { __index = Buffer })
 
   local buf = api.nvim_get_current_buf()
+  local win = api.nvim_get_current_win()
 
   self.get_buf = function()
     return buf
   end
 
+  self.get_win = function()
+    return win
+  end
+
+  set_options(buf)
+
   api.nvim_buf_set_lines(buf, 0, -1, false, {})
-  api.nvim_win_set_cursor(0, { 1, 0 })
+  api.nvim_win_set_cursor(win, { 1, 0 })
 
   self.spinner = Spinner.new(buf)
 
@@ -65,20 +85,10 @@ function Buffer.new()
 end
 
 function Buffer:modifiable(b)
-  vim.bo.modifiable = b
-  vim.bo.readonly = not b
-end
-
---- Append lines at the end of the buffer
----@param lines string[]
-function Buffer:write(lines)
-  -- if this is the first write, we need to insert instead of append
-  local append = #self.lines > 0
-
-  vim.list_extend(self.lines, lines)
-  self:modifiable(true)
-  api.nvim_buf_set_lines(self.get_buf(), append and -1 or 0, -1, false, lines)
-  self:modifiable(false)
+  ---@type vim.api.keyset.option
+  local opts = { buf = self.get_buf() }
+  api.nvim_set_option_value('modifiable', b, opts)
+  api.nvim_set_option_value('readonly', not b, opts)
 end
 
 --- Get the end position of the buffer
@@ -108,10 +118,11 @@ function Buffer:append(text)
     error("Error appending text to buffer " .. buf .. ": " .. err)
   end
 
-  local win = api.nvim_get_current_win()
-
   -- Make the cursor follow the text
-  api.nvim_win_set_cursor(win, { row + 1, col + 1 })
+  local current_win = api.nvim_get_current_win()
+  if current_win == self.get_win() then
+    api.nvim_win_set_cursor(current_win, { row + 1, col + 1 })
+  end
 
   self:modifiable(false)
 end
@@ -120,8 +131,6 @@ return function(wft_file)
   local thread
 
   thread = coroutine.create(function()
-    set_options()
-
     vim.cmd.file({ "wtf://" .. vim.fn.getcwd(), mods = { silent = true } })
 
     local buffer = Buffer.new()
