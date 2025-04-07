@@ -21,7 +21,11 @@ local function config()
 
   vim.diagnostic.config({
     update_in_insert = true,
-    virtual_text = true,
+    virtual_text = false,
+    virtual_lines = {
+      -- only show diagnostics onthe current line
+      current_line = true,
+    },
   }, nil)
 
   -- Setup border for floating windows, here's a description of the

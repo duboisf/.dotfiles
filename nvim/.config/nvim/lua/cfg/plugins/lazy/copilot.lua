@@ -19,7 +19,7 @@ return {
     },
     suggestion = {
       enabled = true,
-      auto_trigger = true,
+      auto_trigger = false,
       keymap = {
         accept = '<C-CR>',
         accept_line = '<M-l>',
