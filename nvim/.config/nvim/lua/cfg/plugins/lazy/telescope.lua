@@ -36,7 +36,7 @@ local function config()
 
   -- returns true if the current buffer has an LSP client attached to it
   local function has_lsp_client_attached()
-    local clients = vim.lsp.buf_get_clients(0)
+    local clients = vim.lsp.get_clients()
     if #clients == 0 then
       vim.notify('no lsp clients attached to current buffer', vim.log.levels.WARN, { title = "Telescope" })
       return false
@@ -462,7 +462,7 @@ return {
   {
     -- requires git, fd, ripgrep
     'nvim-telescope/telescope.nvim',
-    enabled = require('core.utils').notStartedByFirenvim,
+    enabled = false,
     config = config,
     dependencies = {
       'which-key.nvim',
@@ -473,7 +473,7 @@ return {
   },
   {
     'nvim-telescope/telescope-fzf-native.nvim',
-    enabled = require('core.utils').notStartedByFirenvim,
+    enabled = false,
     build = 'make',
     config = function()
       require('telescope').load_extension 'fzf'
@@ -481,7 +481,7 @@ return {
   },
   {
     'nvim-telescope/telescope-ui-select.nvim',
-    enabled = require('core.utils').notStartedByFirenvim,
+    enabled = false,
     config = function()
       require('telescope').load_extension('ui-select')
     end,

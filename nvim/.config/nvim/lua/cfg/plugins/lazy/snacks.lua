@@ -10,6 +10,8 @@ local function search_dotfiles()
   })
 end
 
+vim.keymap.set("i", "<C-CR>", function() print("pressed Ctrl+Shift+Enter") end, { desc = "Ctrl+Shift+Enter" })
+
 ---@type LazyPluginSpec
 return {
   "folke/snacks.nvim",
@@ -23,8 +25,9 @@ return {
   keys = {
     -- List pickers
     { "<leader>a",       function() Snacks.picker() end,                                         desc = "List Pickers" },
-    -- find my .dotfiles
+    -- Custom
     { ",d",              search_dotfiles,                                                        desc = "Find my dotfiles" },
+    { "<leader>fd",      function() Snacks.picker.files({ cwd = vim.fn.expand("%:p:h") }) end,   desc = "Find files with cwd set to current file" },
     -- Top Pickers & Explorer
     { "<leader><space>", function() Snacks.picker.smart() end,                                   desc = "Smart Find Files" },
     { "<leader>,",       function() Snacks.picker.buffers() end,                                 desc = "Buffers" },
@@ -33,9 +36,9 @@ return {
     { "<leader>n",       function() Snacks.picker.notifications() end,                           desc = "Notification History" },
     { "<leader>e",       function() Snacks.explorer() end,                                       desc = "File Explorer" },
     -- find
-    { "<leader>fb",      function() Snacks.picker.buffers() end,                                 desc = "Buffers" },
+    { "<leader><Tab>",   function() Snacks.picker.buffers() end,                                 desc = "Buffers" },
     { "<leader>fc",      function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
-    { "<leader>ff",      function() Snacks.picker.files() end,                                   desc = "Find Files" },
+    { "<leader>fe",      function() Snacks.picker.files() end,                                   desc = "Find Files" },
     { "<leader>fg",      function() Snacks.picker.git_files() end,                               desc = "Find Git Files" },
     { "<leader>fp",      function() Snacks.picker.projects() end,                                desc = "Projects" },
     { "<leader>fr",      function() Snacks.picker.recent() end,                                  desc = "Recent" },
@@ -51,7 +54,7 @@ return {
     { ",sb",             function() Snacks.picker.lines() end,                                   desc = "Buffer Lines" },
     { ",sB",             function() Snacks.picker.grep_buffers() end,                            desc = "Grep Open Buffers" },
     { ",sg",             function() Snacks.picker.grep() end,                                    desc = "Grep" },
-    { ",sw",             function() Snacks.picker.grep_word() end,                               desc = "Visual selection or word", mode = { "n", "x" } },
+    { ",sW",             function() Snacks.picker.grep_word() end,                               desc = "Visual selection or word",               mode = { "n", "x" } },
     -- search
     { ',s"',             function() Snacks.picker.registers() end,                               desc = "Registers" },
     { ',s/',             function() Snacks.picker.search_history() end,                          desc = "Search History" },
@@ -77,10 +80,10 @@ return {
     -- LSP
     { "gd",              function() Snacks.picker.lsp_definitions() end,                         desc = "Goto Definition" },
     { "gD",              function() Snacks.picker.lsp_declarations() end,                        desc = "Goto Declaration" },
-    { "grr",             function() Snacks.picker.lsp_references() end,                          nowait = true,                     desc = "References" },
+    { "grr",             function() Snacks.picker.lsp_references() end,                          nowait = true,                                   desc = "References" },
     { "gri",             function() Snacks.picker.lsp_implementations() end,                     desc = "Goto Implementation" },
     { "gy",              function() Snacks.picker.lsp_type_definitions() end,                    desc = "Goto T[y]pe Definition" },
-    { "<leader>ls",      function() Snacks.picker.lsp_symbols() end,                             desc = "LSP Symbols" },
-    { "<leader>lw",      function() Snacks.picker.lsp_workspace_symbols() end,                   desc = "LSP Workspace Symbols" },
+    { ",ss",             function() Snacks.picker.lsp_symbols() end,                             desc = "LSP Symbols" },
+    { ",sw",             function() Snacks.picker.lsp_workspace_symbols() end,                   desc = "LSP Workspace Symbols" },
   },
 }
