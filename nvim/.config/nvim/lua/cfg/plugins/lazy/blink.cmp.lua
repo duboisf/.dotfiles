@@ -38,6 +38,16 @@ return {
 
     -- (Default) Only show the documentation popup when manually triggered
     completion = {
+      accept = {
+        auto_brackets = {
+          -- kind_resolution = {
+          --   blocked_filetypes = { 'typescriptreact', 'javascriptreact', 'vue', 'go' },
+          -- },
+          semantic_token_resolution = {
+            blocked_filetypes = { 'java', 'go' },
+          },
+        },
+      },
       documentation = {
         auto_show = false,
       },
