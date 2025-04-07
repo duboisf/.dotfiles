@@ -41,6 +41,9 @@ return {
       documentation = {
         auto_show = false,
       },
+      ghost_text = {
+        enabled = true,
+      }
     },
 
     signature = {
@@ -56,6 +59,7 @@ return {
           name = "Copilot",
           async = true,
           module = "blink-copilot",
+          score_offset = -1,
         },
         lazydev = {
           name = "LazyDev",
