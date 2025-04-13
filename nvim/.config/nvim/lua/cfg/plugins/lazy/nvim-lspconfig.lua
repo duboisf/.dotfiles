@@ -3,6 +3,7 @@ local function config()
 
   local lspconfig = require('lspconfig')
 
+
   vim.cmd [[
     sign define DiagnosticSignError text= texthl=DiagnosticSignError
     sign define DiagnosticSignWarn text= texthl=DiagnosticSignWarn
@@ -26,8 +27,9 @@ local function config()
         local ns = vim.diagnostic.get_namespace(namespace)
         if string.find(ns.name, "lua_ls") then
           local mode = vim.api.nvim_get_mode().mode
-          print("mode=" .. mode)
-          return false
+          return {
+            current_line = mode ~= "i"
+          }
         end
       end
       return {
@@ -104,8 +106,6 @@ local function config()
     ---@param client vim.lsp.Client
     ---@param bufnr number
     return function(client, bufnr)
-      local opts = { noremap = true, silent = true, buffer = bufnr }
-
       if client:supports_method("textDocument/formatting", bufnr) then
         vim.keymap.set("n", "<Leader>F", function()
           vim.lsp.buf.format({ bufnr = vim.api.nvim_get_current_buf() })
@@ -147,17 +147,13 @@ local function config()
         end, { buffer = bufnr, desc = "[lsp] format" })
       end
 
-      local normal_mappings = {
-        -- [',s']        = '<cmd>Telescope lsp_document_symbols<CR>',
-        -- [',w']        = '<cmd>Telescope lsp_dynamic_workspace_symbols<CR>',
-        ['<leader>F'] = safe_formatting_sync,
-        -- ['gD']        = '<Cmd>lua vim.lsp.buf.type_definition()<CR>',
-        -- ['gd']        = '<Cmd>Telescope lsp_definitions<CR>',
-      }
-
-      for lhs, rhs in pairs(normal_mappings) do
-        vim.keymap.set('n', lhs, rhs, opts)
+      local function set(lhs, rhs, desc)
+        vim.keymap.set('n', lhs, rhs, { noremap = true, silent = true, buffer = bufnr, desc = desc })
       end
+
+      set('grl', function() vim.lsp.codelens.run() end, '[lsp] vim.lsp.codelens.run()')
+      set('<leader>F', safe_formatting_sync, '[lsp] format')
+      set('<leader>d', function() vim.diagnostic.open_float() end, '[lsp] vim.diagnostic.open_float()')
     end
   end)()
 

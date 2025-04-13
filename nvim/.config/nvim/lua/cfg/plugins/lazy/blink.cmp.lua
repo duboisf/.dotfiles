@@ -63,7 +63,7 @@ return {
     -- Default list of enabled providers defined so that you can extend it
     -- elsewhere in your config, without redefining it, due to `opts_extend`
     sources = {
-      default = { 'lsp', 'copilot', 'path', 'snippets', 'buffer' },
+      default = { 'lazydev', 'lsp', 'path', 'snippets', 'buffer' },
       providers = {
         copilot = {
           name = "Copilot",
@@ -87,5 +87,15 @@ return {
     -- See the fuzzy documentation for more information
     fuzzy = { implementation = "prefer_rust_with_warning" }
   },
-  opts_extend = { "sources.default" }
+  config = function(_, opts)
+    local blink = require('blink.cmp')
+    blink.setup(opts)
+
+    vim.keymap.set('i', '<C-S-Space>', function()
+      blink.show({
+        providers = { 'copilot' },
+        callback = blink.show_documentation
+      })
+    end, { desc = 'Show Copilot Completions', noremap = true })
+  end
 }

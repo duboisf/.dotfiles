@@ -58,9 +58,12 @@ _C() {
     awk "{ print \$$column }"
 }
 
+# DN is for /[D]ev/[N]ull
 alias -g DN='/dev/null'
-# Ignore Errors
+# IE is for Ignore Errors
 alias -g IE='2> /dev/null'
+# ME is for Merge Errors
+alias -g ME='2>&1'
 alias -g G='| grep'
 alias -g L='| less'
 alias -g S='| sort'

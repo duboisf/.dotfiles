@@ -67,6 +67,7 @@ return {
     end,
   } or {
     "CopilotC-Nvim/CopilotChat.nvim",
+    enabled = false,
     dependencies = {
       { "zbirenbaum/copilot.lua" },
       { "nvim-lua/plenary.nvim" },
@@ -81,35 +82,27 @@ return {
         answer_header = "# 🤖 Serge Faute (Fred's intern) ",
         model = "gpt-4o-mini",
         show_help = false,
-        prompts = {
-          SergeFaute = {
-            system_prompt = system_prompt,
-            description = [[ Fred's intern, supports tool calling ]],
-          }
+        sticky = {
+          '#buffers',
+          '$claude-3.7-sonnet'
         },
-
-        -- sticky = {
-        --   '$gemini-2.0-flash-001',
-        --   '/SergeFaute',
-        --   'What is the latest version of the actions/checkout github action?'
-        -- },
       })
 
-      local function submit()
-        local section = CopilotChat.chat:get_closest_section('question')
-        if not section or section.answer then
-          return
-        end
-        CopilotChat.ask(section.content)
-      end
+      -- local function submit()
+      --   local section = CopilotChat.chat:get_closest_section('question')
+      --   if not section or section.answer then
+      --     return
+      --   end
+      --   CopilotChat.ask(section.content)
+      -- end
 
       local set = vim.keymap.set
 
       -- Map <C-CR> to submit the question in insert mode only in the copilot-chat buffer
       vim.api.nvim_create_autocmd("FileType", {
         pattern = "copilot-chat",
-        callback = function()
-          set('i', '<C-CR>', submit, { desc = "Send CopilotChat message" })
+        callback = function(args)
+          set('i', '<C-CR>', submit, { desc = "Send CopilotChat message", buffer = args.buf })
         end
       })
 

@@ -112,7 +112,6 @@ function Buffer:append(text)
   local buf = self.get_buf()
 
   local row, col = self:get_end_pos()
-
   local ok, err = pcall(vim.api.nvim_buf_set_text, buf, row, col, row, col, vim.split(text, "\n"))
   if not ok then
     error("Error appending text to buffer " .. buf .. ": " .. err)
@@ -121,6 +120,7 @@ function Buffer:append(text)
   -- Make the cursor follow the text
   local current_win = api.nvim_get_current_win()
   if current_win == self.get_win() then
+    row, col = self:get_end_pos()
     api.nvim_win_set_cursor(current_win, { row + 1, col + 1 })
   end
 
@@ -175,7 +175,7 @@ return function(wft_file)
 
     co.yield()
 
-    buffer:append("*(Done, press q to quit)*")
+    buffer:append("*(Done, press q to quit)*\n")
   end)
 
   local ok, err = co.resume(thread)
