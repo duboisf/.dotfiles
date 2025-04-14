@@ -121,3 +121,31 @@ export def query-vpc-flow-logs [logGroup: string, relativeStartTime: duration, r
   | move --after interfaceId interfaceDesc
   | collect
 }
+
+
+def repos []: nothing -> list<string> {
+    open repos | lines
+}
+
+def policies []: nothing -> list<string> {
+    ls | where name =~ '^lifecycle-.*\.json' | get name
+}
+
+export def preview-ecr-lifecycle-policy [
+    repo: string@repos,
+    policy: string@policies
+]: nothing -> nothing {
+    ^aws ecr start-lifecycle-policy-preview --repository-name $repo --lifecycle-policy-text $"file://($policy)" | from json
+    mut result = {}
+    loop {
+        $result = ^aws ecr get-lifecycle-policy-preview --repository-name $repo | from json
+        if $result.status != IN_PROGRESS {
+            break
+        }
+        print -n "."
+        sleep 2sec
+    }
+    $result | save -f $"($repo)-results.json"
+    open $"($repo)-results.json"
+}
+
