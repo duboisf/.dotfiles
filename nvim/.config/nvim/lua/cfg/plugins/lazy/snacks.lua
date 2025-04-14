@@ -26,7 +26,9 @@ return {
   opts = {
     input = {},
     picker = {},
-    explorer = {},
+    explorer = {
+      replace_netrw = false,
+    },
   },
   keys = {
     -- List pickers
