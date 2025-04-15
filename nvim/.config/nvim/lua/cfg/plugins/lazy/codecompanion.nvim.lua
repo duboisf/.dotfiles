@@ -78,6 +78,17 @@ return {
   tag = "v14.8.0",
   -- branch = "feat/move-to-function-calling",
   opts = {
+    adapters = {
+      copilot = function()
+        return require("codecompanion.adapters").extend("copilot", {
+          schema = {
+            model = {
+              default = "gpt-4.1"
+            },
+          },
+        })
+      end
+    },
     strategies = {
       send = {
         modes = { i = "<C-CR>" }

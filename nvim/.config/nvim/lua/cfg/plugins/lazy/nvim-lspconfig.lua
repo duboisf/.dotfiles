@@ -22,20 +22,9 @@ local function config()
 
   vim.diagnostic.config({
     virtual_text = false,
-    virtual_lines = function(namespace, _)
-      if namespace then
-        local ns = vim.diagnostic.get_namespace(namespace)
-        if string.find(ns.name, "lua_ls") then
-          local mode = vim.api.nvim_get_mode().mode
-          return {
-            current_line = mode ~= "i"
-          }
-        end
-      end
-      return {
-        current_line = true
-      }
-    end
+    virtual_lines = {
+      current_line = true,
+    },
   }, nil)
 
   -- Setup border for floating windows, here's a description of the
