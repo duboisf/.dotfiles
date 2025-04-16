@@ -34,6 +34,7 @@ local function config()
     options = {
       theme = lualine_bluloco,
       disabled_filetypes = {
+        "chatter",
         "startify",
         "TelescopePrompt",
       },

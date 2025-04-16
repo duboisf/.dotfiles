@@ -2,6 +2,7 @@
   "CopilotChat.nvim": { "branch": "main", "commit": "23162ada224e858d0d60bbbf2a35f9b6c98427ce" },
   "LuaSnip": { "branch": "master", "commit": "c9b9a22904c97d0eb69ccb9bab76037838326817" },
   "blink-copilot": { "branch": "main", "commit": "71102fe2fa1616353f8cb315bb8b85db0812a218" },
+  "blink-emoji.nvim": { "branch": "master", "commit": "a77aebc092ebece1eed108f301452ae774d6b67a" },
   "blink.cmp": { "branch": "main", "commit": "cb5e346d9e0efa7a3eee7fd4da0b690c48d2a98e" },
   "bluloco.nvim": { "branch": "main", "commit": "917d52614062d8b995a94296de19842edb5c70ce" },
   "codecompanion.nvim": { "branch": "main", "commit": "abc0e1c8edd5a78814830e730eef67b7b5278bdd" },

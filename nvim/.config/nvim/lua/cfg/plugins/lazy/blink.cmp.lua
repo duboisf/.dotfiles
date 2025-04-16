@@ -3,6 +3,7 @@ return {
   -- optional: provides snippets for the snippet source
   dependencies = {
     'fang2hou/blink-copilot',
+    'moyiz/blink-emoji.nvim',
     'rafamadriz/friendly-snippets',
   },
 
@@ -63,13 +64,19 @@ return {
     -- Default list of enabled providers defined so that you can extend it
     -- elsewhere in your config, without redefining it, due to `opts_extend`
     sources = {
-      default = { 'lazydev', 'lsp', 'path', 'snippets', 'buffer' },
+      default = { 'lazydev', 'lsp', 'emoji', 'path', 'snippets', 'buffer' },
       providers = {
         copilot = {
           name = "Copilot",
           async = true,
           module = "blink-copilot",
           score_offset = -1,
+        },
+        emoji = {
+          module = "blink-emoji",
+          name = "Emoji",
+          score_offset = 15,        -- Tune by preference
+          opts = { insert = true }, -- Insert emoji (default) or complete its name
         },
         lazydev = {
           name = "LazyDev",
