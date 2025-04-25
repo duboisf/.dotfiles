@@ -90,9 +90,13 @@ return {
       end
     },
     strategies = {
-      send = {
-        modes = { i = "<C-CR>" }
-      }
+      chat = {
+        keymaps = {
+          send = {
+            modes = { i = "<C-CR>" }
+          },
+        },
+      },
     },
     prompt_library = {
       ["WriteGoTests"] = {
