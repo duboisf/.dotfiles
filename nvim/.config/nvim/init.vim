@@ -29,12 +29,8 @@ endif
 
 " Miscellaneous mappings
 nnoremap <silent><leader>q :q<CR>
-nnoremap <silent><leader>s :silent w<CR>
-nnoremap <silent><leader>bd :bd<CR>
-nnoremap <silent><leader>m <C-W>_
-nnoremap <silent><leader>= <C-W>=
-nnoremap <silent><leader>. 10<C-W>>
-nnoremap <silent><leader>, 10<C-W><
+nnoremap <silent><leader>w :silent w<CR>
+nnoremap <silent><leader>d :bd<CR>
 " Move selection up or down
 xnoremap <silent><C-Up> xkP`[V`]
 xnoremap <silent><C-Down> xp`[V`]
@@ -42,7 +38,8 @@ xnoremap <silent><C-Down> xp`[V`]
 nnoremap <silent><C-Up> ddkP
 nnoremap <silent><C-Down> ddp
 " Toggle wrap
-nnoremap <silent><leader>w :set wrap!<CR>
+nnoremap <silent>[w :set wrap<CR>
+nnoremap <silent>]w :set nowrap<CR>
 " Yank highlighted selection in visual mode to clipboard
 vnoremap <silent><leader>y "+y
 " Yank highlighted lines in visual mode to clipboard
