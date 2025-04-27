@@ -1,4 +1,4 @@
-local actions = {}
+local M = {}
 
 local function searchAndReplaceTag(buf, action, tag, sha)
   local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
@@ -44,8 +44,8 @@ local function isActionInIgnoreList(orgsToIgnore, action)
   return false
 end
 
-function actions.UpdateTagsWithCommitSha(orgsToIgnore)
-  local orgsToIgnore = orgsToIgnore or {}
+function M.UpdateTagsWithCommitSha(orgsToIgnore)
+  orgsToIgnore = orgsToIgnore or {}
   local buf = vim.api.nvim_get_current_buf()
   local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
   local actions = {}
@@ -66,4 +66,4 @@ function actions.UpdateTagsWithCommitSha(orgsToIgnore)
   end
 end
 
-return actions
+return M

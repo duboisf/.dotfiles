@@ -1,27 +1,26 @@
+---@module 'blink.cmp.config'
+
 return {
   'saghen/blink.cmp',
   -- optional: provides snippets for the snippet source
   dependencies = {
-    'fang2hou/blink-copilot',
-    'moyiz/blink-emoji.nvim',
     'rafamadriz/friendly-snippets',
   },
 
   -- use a release tag to download pre-built binaries
   version = '1.*',
-  -- AND/OR build from source, requires nightly: https://rust-lang.github.io/rustup/concepts/channels.html#working-with-nightly-rust
-  -- build = 'cargo build --release',
-  -- If you use nix, you can build from source using latest nightly rust with:
-  -- build = 'nix run .#build-plugin',
 
-  ---@module 'blink.cmp'
   ---@type blink.cmp.Config
   opts = {
-    -- 'default' (recommended) for mappings similar to built-in completions (C-y to accept)
-    -- 'super-tab' for mappings similar to vscode (tab to accept)
-    -- 'enter' for enter to accept
-    -- 'none' for no mappings
-    --
+    snippets = {
+      expand = function(snippet)
+        if string.find(snippet, "$CLIPBOARD") then
+          local clipboard = vim.fn.getreg('+')
+          snippet = string.gsub(snippet, "$CLIPBOARD", clipboard)
+        end
+        vim.snippet.expand(snippet)
+      end
+    },
     -- All presets have the following mappings:
     -- C-space: Open menu or open docs if already open
     -- C-n/C-p or Up/Down: Select next/previous item
@@ -29,8 +28,11 @@ return {
     -- C-k: Toggle signature help (if signature.enabled = true)
     --
     -- See :h blink-cmp-config-keymap for defining your own keymap
-    keymap = { preset = 'enter' },
-
+    keymap = {
+      preset = 'enter',
+      ['<Down>'] = {},
+      ['<Up>'] = {},
+    },
     appearance = {
       -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
       -- Adjusts spacing to ensure icons are aligned
@@ -41,9 +43,6 @@ return {
     completion = {
       accept = {
         auto_brackets = {
-          -- kind_resolution = {
-          --   blocked_filetypes = { 'typescriptreact', 'javascriptreact', 'vue', 'go' },
-          -- },
           semantic_token_resolution = {
             blocked_filetypes = { 'java', 'go' },
           },
@@ -53,7 +52,7 @@ return {
         auto_show = false,
       },
       ghost_text = {
-        enabled = true,
+        enabled = false,
       }
     },
 
@@ -61,23 +60,9 @@ return {
       enabled = true,
     },
 
-    -- Default list of enabled providers defined so that you can extend it
-    -- elsewhere in your config, without redefining it, due to `opts_extend`
     sources = {
-      default = { 'lazydev', 'lsp', 'emoji', 'path', 'snippets', 'buffer' },
+      default = { 'lazydev', 'lsp', 'path', 'snippets', 'buffer' },
       providers = {
-        copilot = {
-          name = "Copilot",
-          async = true,
-          module = "blink-copilot",
-          score_offset = -1,
-        },
-        emoji = {
-          module = "blink-emoji",
-          name = "Emoji",
-          score_offset = 15,        -- Tune by preference
-          opts = { insert = true }, -- Insert emoji (default) or complete its name
-        },
         lazydev = {
           name = "LazyDev",
           module = "lazydev.integrations.blink",
@@ -87,22 +72,6 @@ return {
       },
     },
 
-    -- (Default) Rust fuzzy matcher for typo resistance and significantly better performance
-    -- You may use a lua implementation instead by using `implementation = "lua"` or fallback to the lua implementation,
-    -- when the Rust fuzzy matcher is not available, by using `implementation = "prefer_rust"`
-    --
-    -- See the fuzzy documentation for more information
     fuzzy = { implementation = "prefer_rust_with_warning" }
   },
-  config = function(_, opts)
-    local blink = require('blink.cmp')
-    blink.setup(opts)
-
-    vim.keymap.set('i', '<C-S-Space>', function()
-      blink.show({
-        providers = { 'copilot' },
-        callback = blink.show_documentation
-      })
-    end, { desc = 'Show Copilot Completions', noremap = true })
-  end
 }

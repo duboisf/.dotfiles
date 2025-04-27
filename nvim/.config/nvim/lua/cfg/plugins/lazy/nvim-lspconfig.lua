@@ -3,7 +3,6 @@ local function config()
 
   local lspconfig = require('lspconfig')
 
-
   vim.cmd [[
     sign define DiagnosticSignError text= texthl=DiagnosticSignError
     sign define DiagnosticSignWarn text= texthl=DiagnosticSignWarn
@@ -50,14 +49,6 @@ local function config()
 
   -- Fix grey background in floating windows
   vim.cmd [[ hi! link NormalFloat Normal ]]
-
-  -- -- Add border to hover window
-  -- local original_hover = vim.lsp.buf.hover
-  -- ---@diagnostic disable-next-line: duplicate-set-field
-  -- vim.lsp.buf.hover = function(opts)
-  --   opts = vim.tbl_deep_extend('force', { border = border }, opts or {})
-  --   original_hover(opts)
-  -- end
 
   ---Setup autocmds for buffer
   ---@param client vim.lsp.Client
@@ -142,7 +133,6 @@ local function config()
 
       set('grl', function() vim.lsp.codelens.run() end, '[lsp] vim.lsp.codelens.run()')
       set('<leader>F', safe_formatting_sync, '[lsp] format')
-      set('<leader>d', function() vim.diagnostic.open_float() end, '[lsp] vim.diagnostic.open_float()')
     end
   end)()
 
@@ -430,7 +420,6 @@ return {
       config()
     end,
     dependencies = {
-      'nvim-navbuddy',
       'saghen/blink.cmp',
       'williamboman/mason-lspconfig.nvim',
     },

@@ -138,11 +138,11 @@ return {
           set_jumps = true,
           goto_next_start = {
             [']f'] = '@function.outer',
-            ['<C-j>'] = '@parameter.inner'
+            ['<Down>'] = '@parameter.inner'
           },
           goto_previous_start = {
             ['[f'] = '@function.outer',
-            ['<C-k>'] = '@parameter.inner'
+            ['<Up>'] = '@parameter.inner'
           },
           goto_next_end = {
             ["]F"] = '@function.outer',
