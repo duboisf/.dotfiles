@@ -30,8 +30,6 @@ return {
     -- See :h blink-cmp-config-keymap for defining your own keymap
     keymap = {
       preset = 'enter',
-      ['<Down>'] = {},
-      ['<Up>'] = {},
     },
     appearance = {
       -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
@@ -46,6 +44,7 @@ return {
           semantic_token_resolution = {
             blocked_filetypes = { 'java', 'go' },
           },
+          enabled = false,
         },
       },
       documentation = {

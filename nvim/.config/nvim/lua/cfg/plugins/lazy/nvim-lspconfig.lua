@@ -284,8 +284,8 @@ local function config()
           -- Ref: https://github.com/sumneko/lua-language-server/wiki/Settings
           Lua = {
             completion = {
-              callSnippet = 'Replace',
-              displayContext = 1,
+              callSnippet = 'Both',
+              displayContext = 4,
             },
             diagnostics = {
               globals = {
@@ -359,7 +359,7 @@ local function config()
         on_attach = on_attach,
         capabilities = capabilities,
         init_options = {
-          allExperiments = true,
+          -- allExperiments = true,
           -- allowImplicitNetworkAccess = true,
           -- templateExtensions = { "yaml" },
           staticcheck = true,
@@ -382,7 +382,7 @@ local function config()
             parameterNames = false,
             rangeVariableTypes = false,
           },
-          semanticTokens = true,
+          semanticTokens = false,
         },
         -- don't spawn a new gopls instance if we are jumping to definitions of
         -- functions in dependencies that are in the $GOPATH. Without this, a new
