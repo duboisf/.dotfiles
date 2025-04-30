@@ -2,6 +2,7 @@
 
 return {
   'saghen/blink.cmp',
+
   -- optional: provides snippets for the snippet source
   dependencies = {
     'rafamadriz/friendly-snippets',
@@ -30,6 +31,15 @@ return {
     -- See :h blink-cmp-config-keymap for defining your own keymap
     keymap = {
       preset = 'enter',
+      ['<Tab>'] = {
+        function(cmp)
+          if not cmp.snippet_active() then
+            return cmp.select_next()
+          end
+        end,
+        'snippet_forward',
+        'fallback',
+      },
     },
     appearance = {
       -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
@@ -44,7 +54,7 @@ return {
           semantic_token_resolution = {
             blocked_filetypes = { 'java', 'go' },
           },
-          enabled = false,
+          enabled = true,
         },
       },
       documentation = {
@@ -52,7 +62,13 @@ return {
       },
       ghost_text = {
         enabled = false,
-      }
+      },
+      list = {
+        selection = {
+          preselect = true,
+          auto_insert = false,
+        },
+      },
     },
 
     signature = {
