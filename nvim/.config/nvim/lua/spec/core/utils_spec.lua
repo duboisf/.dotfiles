@@ -1,5 +1,7 @@
+---@module 'plenary.busted'
+
 -- Use the command 'PlenaryBustedDirectory %' to run tests in this file
-local utils = require 'core.utils'
+local utils = require('core.utils')
 
 describe('curry', function()
   it('should curry functions with 2 parameters', function()
@@ -92,26 +94,4 @@ describe('filepath_to_lua_module', function()
     -- then
     assert.are.equal('core.utils', module)
   end)
-end)
-
-describe('short_plugin_name', function()
-  local test_cases = {
-    { 'github_owner/plugin-name.nvim', 'plugin-name' },
-    { 'github_owner/plugin-name.vim', 'plugin-name' },
-    { 'github_owner/nvim-plugin-name', 'plugin-name' },
-    { 'github_owner/nvim-plugin-name.lua', 'plugin-name' },
-    { 'github_owner/vim-plugin-name', 'plugin-name' },
-    { 'kyazdani42/nvim-tree.lua', 'tree' },
-    { 'github_owner/SomePlugin.nvim', 'someplugin' },
-  }
-  -- when
-  for _, test_case in ipairs(test_cases) do
-    local full_plugin_name = test_case[1]
-    local expected_short_plugin_name = test_case[2]
-    it('should return the short plugin name ' ..
-      expected_short_plugin_name .. ' for the full plugin name ' .. full_plugin_name, function()
-      local actual_short_plugin_name = utils.packer.short_plugin_name(full_plugin_name)
-      assert.are.equal(expected_short_plugin_name, actual_short_plugin_name)
-    end)
-  end
 end)
