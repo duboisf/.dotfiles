@@ -1,4 +1,5 @@
-local utils = require 'core.utils'
+local utils = require('core.utils')
+local go = require('core.go')
 
 local function reload_module(opts)
   local module = opts.args ~= '' and opts.args or vim.fn.expand('%')
@@ -7,23 +8,20 @@ end
 
 vim.api.nvim_create_user_command('ReloadModule', reload_module, { nargs = '?' })
 
-local function telescope_find_config()
-  require('telescope.builtin').find_files {
-    cwd = vim.fn.stdpath('config'),
-    prompt_title = 'nvim config files',
-  }
-end
-
-vim.api.nvim_create_user_command('Config', telescope_find_config, {})
-
-local function telescope_find_data()
-  require('telescope.builtin').find_files {
-    cwd = vim.fn.stdpath('data'),
-    prompt_title = 'nvim plugins',
-  }
-end
-
-vim.api.nvim_create_user_command('Plugins', telescope_find_data, {})
+vim.api.nvim_create_autocmd('BufEnter', {
+  pattern = '*/pkg/mod/*/*.go',
+  callback = function(args)
+    if vim.b.go_open_github_package then
+      return
+    end
+    print('GoOpenGithubPackage')
+    vim.api.nvim_buf_create_user_command(args.buf, 'GoOpenGithubPackage', function()
+      local pkg_path = vim.fn.expand('%:p')
+      go.open_github_repo_url(pkg_path)
+    end, { nargs = 0 })
+    vim.b.go_open_github_package = true
+  end,
+})
 
 vim.api.nvim_create_user_command('EditTheme', function()
   local paths = vim.api.nvim_get_runtime_file('lua/core/colors.lua', false)
