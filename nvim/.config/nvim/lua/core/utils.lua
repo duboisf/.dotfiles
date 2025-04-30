@@ -14,7 +14,7 @@ end
 function M.is_quickfix_open()
   for _, win in ipairs(vim.api.nvim_list_wins()) do
     local buf = vim.api.nvim_win_get_buf(win)
-    local buftype = vim.api.nvim_buf_get_option(buf, 'buftype')
+    local buftype = vim.api.nvim_get_option_value('buftype', { buf = buf })
     if buftype == 'quickfix' then
       return true
     end
@@ -120,7 +120,6 @@ end
 
 -- Reloads a lua module.
 --- @param module string Either a file path to a lua module or the lua module name.
---- @return nil
 function M.reload_module(module)
   if vim.fn.filereadable(module) then
     reload_module_file(module)
@@ -145,7 +144,6 @@ function M.cwd_in_dotfiles()
 end
 
 --- Inspect highlight group / Treesitter node under cursor
---- @return nil
 function M.inspect_highlight()
   -- if inside a noice popup, show the highlight group under the cursor
   if vim.o.ft == 'noice' then
@@ -160,15 +158,6 @@ end
 
 function M.tail(s)
   return string.sub(s, 2)
-end
-
-M.packer = {}
-
-function M.packer.short_plugin_name(plugin_name)
-  for _, pattern in ipairs({ '.+/', '^nvim%-', '^vim%-', '%.nvim$', '%.vim$', '%.lua$' }) do
-    plugin_name = string.lower(string.gsub(plugin_name, pattern, ''))
-  end
-  return plugin_name
 end
 
 --- Check if we have networking
