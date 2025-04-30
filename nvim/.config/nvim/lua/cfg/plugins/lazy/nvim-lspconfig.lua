@@ -382,7 +382,7 @@ local function config()
             parameterNames = false,
             rangeVariableTypes = false,
           },
-          semanticTokens = false,
+          semanticTokens = true,
         },
         -- don't spawn a new gopls instance if we are jumping to definitions of
         -- functions in dependencies that are in the $GOPATH. Without this, a new
