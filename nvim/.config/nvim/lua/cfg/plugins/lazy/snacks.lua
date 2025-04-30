@@ -1,6 +1,3 @@
--- Just to make lazydev load the type annotations
-pcall(require, "snacks")
-
 local function search_dotfiles()
   Snacks.picker.files({
     cwd = vim.env.HOME .. "/.dotfiles",
@@ -10,7 +7,14 @@ local function search_dotfiles()
   })
 end
 
-vim.keymap.set("i", "<C-CR>", function() print("pressed Ctrl+Shift+Enter") end, { desc = "Ctrl+Shift+Enter" })
+local function find_lazy_plugin_files()
+  local data_path = vim.fn.stdpath('data')
+  local lazy_plugins = vim.fs.joinpath(data_path, 'lazy')
+  Snacks.picker.files({
+    dirs = { lazy_plugins },
+    title = "Lazy plugins",
+  })
+end
 
 --- Get the directory of the current buffer
 local function get_current_buf_dir()
@@ -50,6 +54,7 @@ return {
     { "<leader>fc",      function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end,              desc = "Find Config File" },
     { "<leader>fe",      function() Snacks.picker.files() end,                                                desc = "Find Files" },
     { "<leader>fg",      function() Snacks.picker.git_files() end,                                            desc = "Find Git Files" },
+    { "<leader>fl",      function() find_lazy_plugin_files() end,                                             desc = "Find Lazy Plugin Files" },
     { "<leader>fp",      function() Snacks.picker.projects() end,                                             desc = "Projects" },
     { "<leader>fr",      function() Snacks.picker.recent() end,                                               desc = "Recent" },
     -- git
