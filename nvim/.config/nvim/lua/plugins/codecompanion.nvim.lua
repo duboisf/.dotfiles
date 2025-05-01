@@ -72,7 +72,7 @@ local function fidget_progress()
   return M
 end
 
----@type LazySpec
+---@type LazyPluginSpec
 return {
   "olimorris/codecompanion.nvim",
   version = "v15.*",
@@ -94,6 +94,9 @@ return {
           send = {
             modes = { i = "<C-CR>" }
           },
+        },
+        role = {
+          user = "Fred",
         },
       },
     },
@@ -137,6 +140,7 @@ return {
     fidget_progress():init()
   end,
   dependencies = {
+    "folke/snacks.nvim",
     "j-hui/fidget.nvim",
     "nvim-lua/plenary.nvim",
     "nvim-treesitter/nvim-treesitter",
