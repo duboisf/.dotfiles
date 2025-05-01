@@ -24,15 +24,8 @@ local function config()
     return "󰉖 " .. utils.get_short_cwd()
   end
 
-  local theme = require 'core.colors'
-  local lualine_bluloco = require 'lualine.themes.bluloco'
-  lualine_bluloco.insert.a.bg = theme.Attribute.fg.hex
-  lualine_bluloco.insert.b.fg = lualine_bluloco.insert.a.bg
-  lualine_bluloco.normal.b.fg = lualine_bluloco.normal.a.bg
-
   local cfg = {
     options = {
-      theme = lualine_bluloco,
       disabled_filetypes = {
         "startify",
         "TelescopePrompt",
@@ -60,6 +53,18 @@ local function config()
   end
 
   local lualine = require 'lualine'
+
+  local ok, theme = pcall(require, 'core.colors')
+  if ok then
+    local lualine_bluloco
+    ok, lualine_bluloco = pcall(require, 'lualine.themes.bluloco')
+    if ok then
+      lualine_bluloco.insert.a.bg = theme.Attribute.fg.hex
+      lualine_bluloco.insert.b.fg = lualine_bluloco.insert.a.bg
+      lualine_bluloco.normal.b.fg = lualine_bluloco.normal.a.bg
+      cfg.options.theme = lualine_bluloco
+    end
+  end
 
   lualine.setup(cfg)
 end
