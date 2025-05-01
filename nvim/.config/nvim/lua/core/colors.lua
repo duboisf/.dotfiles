@@ -15,6 +15,7 @@ return lush.extends({ theme }).with(function(injected_functions)
   return {
     Statement { theme.Statement, gui = 'italic' },
     Boolean { theme.Boolean, gui = 'italic' },
+    ColorColumn { theme.ColorColumn, bg = theme.ColorColumn.bg.lighten(40) },
     Comment { theme.Comment, gui = 'italic' },
     LineNr { fg = theme.LineNr.fg.darken(30 * direction) },
     LineNrAbove { fg = LineNr.fg.darken(15 * direction) },
