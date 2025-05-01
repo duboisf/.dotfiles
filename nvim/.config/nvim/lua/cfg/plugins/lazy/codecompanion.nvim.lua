@@ -75,8 +75,7 @@ end
 ---@type LazySpec
 return {
   "olimorris/codecompanion.nvim",
-  tag = "v14.8.0",
-  -- branch = "feat/move-to-function-calling",
+  version = "v15.*",
   opts = {
     adapters = {
       copilot = function()
