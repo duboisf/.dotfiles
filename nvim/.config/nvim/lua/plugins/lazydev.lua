@@ -1,7 +1,9 @@
-pcall(require, "lazydev")
+---@module 'lazydev'
 
+---@type LazyPluginSpec
 return {
-  "folke/lazydev.nvim",
+  "duboisf/lazydev.nvim",
+  branch = "fix/blink-module-completion",
   dependencies = {},
   ft = "lua", -- only load on lua files
   ---@type lazydev.Config
