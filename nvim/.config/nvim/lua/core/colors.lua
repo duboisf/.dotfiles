@@ -48,12 +48,12 @@ return lush.extends({ theme }).with(function(injected_functions)
     sym('@text.reference') { theme['@text.uri'] },
 
     TextTitle { fg = theme.Statement.fg.li(10) },
-    sym('@markup.heading.1') { TextTitle, bold = true, underline = true, standout = true },
-    sym('@markup.heading.2') { TextTitle, bold = false, standout = true, fg = TextTitle.fg.li(10) },
-    sym('@markup.heading.3') { underline = true, bold = true, fg = TextTitle.fg.li(10) },
-    sym('@markup.heading.4') { TextTitle, },
-    sym('@markup.heading.5') { TextTitle, italic = true },
-    sym('@markup.heading.6') { TextTitle, italic = true, fg = TextTitle.fg.da(10) },
+    -- sym('@markup.heading.1') { TextTitle, bold = true, underline = true, standout = true },
+    -- sym('@markup.heading.2') { TextTitle, bold = false, standout = true, fg = TextTitle.fg.li(10) },
+    -- sym('@markup.heading.3') { underline = true, bold = true, fg = TextTitle.fg.li(10) },
+    -- sym('@markup.heading.4') { TextTitle, },
+    -- sym('@markup.heading.5') { TextTitle, italic = true },
+    -- sym('@markup.heading.6') { TextTitle, italic = true, fg = TextTitle.fg.da(10) },
     sym('@markup.italic') { gui = 'italic' },
 
     -- Markdown fenced code block language
