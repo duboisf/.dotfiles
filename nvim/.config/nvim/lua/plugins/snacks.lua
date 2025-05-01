@@ -1,3 +1,5 @@
+---@module 'snacks'
+
 local function search_dotfiles()
   Snacks.picker.files({
     cwd = vim.env.HOME .. "/.dotfiles",
