@@ -36,6 +36,9 @@ local opts = {
     -- try to load one of these colorschemes when starting an installation during startup
     colorscheme = { "habamax" },
   },
+  change_detection = {
+    enabled = false,
+  },
   checker = {
     enabled = false,
   },
