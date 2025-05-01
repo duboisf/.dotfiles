@@ -1,7 +1,7 @@
-local config = function()
-  local gitsigns = require('gitsigns')
-
-  gitsigns.setup {
+---@type LazyPluginSpec
+return {
+  'lewis6991/gitsigns.nvim',
+  opts = {
     debug_mode = false,
     -- current_line_blame = true,
     -- current_line_blame_opts = {
@@ -49,10 +49,5 @@ local config = function()
       -- Text object
       map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
     end
-  }
-end
-
-return {
-  'lewis6991/gitsigns.nvim',
-  config = config,
+  },
 }
