@@ -1,26 +1,4 @@
-local config = function()
-  local parser_config = require('nvim-treesitter.parsers').get_parser_configs()
-  parser_config.gotmpl = {
-    install_info = {
-      url = 'https://github.com/ngalaiko/tree-sitter-go-template',
-      files = { 'src/parser.c' },
-    },
-    filetype = 'gotmpl',
-    maintainers = { '???' },
-    used_by = { 'gohtmltmpl', 'gotexttmpl', 'gotmpl' }
-  }
-end
-
 return {
-  {
-    -- Need to include them here _and_ in the dependencies key, because lazy.nvim
-    -- What I mean is that if a plugin is only refered to in a dependencies key,
-    -- they won't be loaded.
-    'nvim-treesitter/nvim-treesitter-context',
-    'nushell/tree-sitter-nu',
-    'nvim-treesitter/nvim-treesitter-textobjects',
-    'nvim-treesitter/playground',
-  },
   ---@type LazyPluginSpec
   {
     'nvim-treesitter/nvim-treesitter',
@@ -30,7 +8,13 @@ return {
       'nvim-treesitter/nvim-treesitter-textobjects',
       'nvim-treesitter/playground',
     },
+    ---@module 'nvim-treesitter.configs'
+    ---@type TSConfig
     opts = {
+      sync_install = false,
+      ignore_install = {},
+      auto_install = false,
+      modules = {},
       ensure_installed = {
         'bash',
         'comment',
@@ -156,9 +140,7 @@ return {
         },
       }
     },
-    config = function(_, opts)
-      require('nvim-treesitter.configs').setup(opts)
-    end,
+    main = 'nvim-treesitter.configs',
   },
   {
     'nvim-treesitter/nvim-treesitter-context',
