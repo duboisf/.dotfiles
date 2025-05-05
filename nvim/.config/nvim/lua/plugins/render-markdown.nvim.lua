@@ -15,7 +15,7 @@ return {
     file_types = { 'markdown', 'codecompanion' },
     code = {
       language_pad = 1,
-      left_pad = 2,
+      left_pad = 1,
       style = 'full',
       border = 'thin',
       width = "block",
