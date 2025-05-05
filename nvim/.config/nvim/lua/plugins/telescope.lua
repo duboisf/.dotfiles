@@ -465,8 +465,8 @@ return {
     enabled = false,
     config = config,
     dependencies = {
+      'echasnovski/mini.icons',
       'which-key.nvim',
-      'nvim-tree/nvim-web-devicons',
       'nvim-lua/popup.nvim',
       'nvim-lua/plenary.nvim',
     },

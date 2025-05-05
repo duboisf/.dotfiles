@@ -1,3 +1,4 @@
+---@type LazyPluginSpec
 return {
   'mhinz/vim-startify',
   enabled = require('core.utils').notStartedByFirenvim,
@@ -6,11 +7,11 @@ return {
     vim.g.startify_change_to_dir = 0
 
     vim.g.startify_lists = {
-      { type = 'dir', header = {'   MRU ' .. vim.fn.getcwd()} },
-      { type = 'files', header= {'   MRU'}, },
-      { type = 'sessions', header= {'   Sessions'} },
-      { type = 'bookmarks', header= {'   Bookmarks'} },
-      { type = 'commands',  header= {'   Commands'} },
+      { type = 'dir',       header = { '   MRU ' .. vim.fn.getcwd() } },
+      { type = 'files',     header = { '   MRU' }, },
+      { type = 'sessions',  header = { '   Sessions' } },
+      { type = 'bookmarks', header = { '   Bookmarks' } },
+      { type = 'commands',  header = { '   Commands' } },
     }
   end,
 }

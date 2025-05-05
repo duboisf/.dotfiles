@@ -79,5 +79,7 @@ end, 'Reload lualine on colorscheme change')
 return {
   'nvim-lualine/lualine.nvim',
   config = config,
-  dependencies = { 'kyazdani42/nvim-web-devicons' },
+  dependencies = {
+    'echasnovski/mini.icons',
+  },
 }

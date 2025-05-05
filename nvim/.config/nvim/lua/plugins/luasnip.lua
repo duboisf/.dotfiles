@@ -91,7 +91,12 @@ local function config()
         { trig = 'fi', name = 'Inline function' },
         fmt([[function() {} end]], { i(1) })),
       s(
-        { trig = 'req', name = 'Require a module', dscr = 'Names the module variable with the name of the last dot-separated section of the module' },
+        {
+          trig = 'req',
+          name = 'Require a module',
+          dscr =
+          'Names the module variable with the name of the last dot-separated section of the module'
+        },
         fmt([[local {} = require '{}']], {
           f(function(args)
             if args then
@@ -216,7 +221,9 @@ local function config()
   ls.add_snippets('gitcommit', markdown_snippets)
 end
 
+---@type LazyPluginSpec
 return {
   'L3MON4D3/LuaSnip',
   config = config,
+  enabled = false,
 }

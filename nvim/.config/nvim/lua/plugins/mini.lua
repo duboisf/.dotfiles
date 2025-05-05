@@ -1,6 +1,15 @@
 return {
-  { 'echasnovski/mini.comment',    opts = {} },
-  { 'echasnovski/mini.cursorword', opts = {} },
+  -- { 'echasnovski/mini.comment', opts = {} },
+  -- { 'echasnovski/mini.cursorword', opts = {} },
+  {
+    'echasnovski/mini.icons',
+    opts = {},
+    config = function(_, opts)
+      local MiniIcons = require('mini.icons')
+      MiniIcons.setup(opts)
+      MiniIcons.mock_nvim_web_devicons()
+    end
+  },
   {
     'echasnovski/mini.indentscope',
     config = function()
@@ -40,12 +49,8 @@ return {
       })
     end
   },
-  {
-    'echasnovski/mini.splitjoin',
-    opts = true,
-  },
-  {
-    'echasnovski/mini.surround',
-    opts = {},
-  },
+  -- {
+  --   'echasnovski/mini.surround',
+  --   opts = {},
+  -- },
 }
