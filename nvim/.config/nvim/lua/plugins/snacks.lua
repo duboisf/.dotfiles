@@ -46,7 +46,16 @@ return {
   ---@type snacks.Config
   opts = {
     input = {},
-    picker = {},
+    picker = {
+      sources = {
+        files = {
+          hidden = true,
+        },
+        grep = {
+          hidden = true,
+        },
+      },
+    },
     explorer = {
       replace_netrw = false,
     },
