@@ -1,9 +1,10 @@
 return {
   "folke/which-key.nvim",
-  enabled = true,
+  enabled = false,
   opts = {
     preset = "helix",
     sort = { "alphanum", "local", "order", "group", "mod" },
+    show_help = false,
   },
   -- config = function(_, opts)
   --   require('which-key').setup(opts)
