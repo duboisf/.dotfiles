@@ -3,6 +3,7 @@
   "LuaSnip": { "branch": "master", "commit": "c9b9a22904c97d0eb69ccb9bab76037838326817" },
   "blink.cmp": { "branch": "main", "commit": "cb5e346d9e0efa7a3eee7fd4da0b690c48d2a98e" },
   "bluloco.nvim": { "branch": "main", "commit": "29322e83d4e5a1577c20532fee7173a9e7c9bd2b" },
+  "chatter.nvim": { "branch": "main", "commit": "38a930fe18f19ce333271e6bdf52fd46e41d8e82" },
   "codecompanion.nvim": { "branch": "main", "commit": "81691b1f2b95540f09d3910273edb6b83faa7520" },
   "copilot.lua": { "branch": "master", "commit": "a5c390f8d8e85b501b22dcb2f30e0cbbd69d5ff0" },
   "crepuscule.nvim": { "branch": "main", "commit": "54f8b5db78473a88873693c19920b973315afd10" },
