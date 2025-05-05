@@ -12,7 +12,7 @@
   "friendly-snippets": { "branch": "main", "commit": "572f5660cf05f8cd8834e096d7b4c921ba18e175" },
   "gitsigns.nvim": { "branch": "main", "commit": "24ecb1375789bd3dec196f13d03163c0f0a68c47" },
   "kitty-scrollback.nvim": { "branch": "main", "commit": "2ca6956b9c99cc2d5df0ef1be537b54ccbb7b3d9" },
-  "kulala.nvim": { "branch": "main", "commit": "48902de58ea576c30f8aa8e0a791d06b54f9f81f" },
+  "kulala.nvim": { "branch": "main", "commit": "d94ccc1e4bd6b45ebe775225446d9b384bae8deb" },
   "lazy.nvim": { "branch": "main", "commit": "6c3bda4aca61a13a9c63f1c1d1b16b9d3be90d7a" },
   "lazydev.nvim": { "branch": "fix/blink-module-completion", "commit": "c0ea2bc0222fd4a80ca8f1d0cfb85f1607b70179" },
   "lualine.nvim": { "branch": "master", "commit": "15884cee63a8c205334ab13ab1c891cd4d27101a" },

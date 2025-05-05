@@ -95,6 +95,10 @@ return {
           lookahead = true,
           disable = {},
           keymaps = {
+            -- custom captures
+            ["aL"] = "@list.outer",
+            ["iL"] = "@list.inner",
+
             -- the queries are in textobjects.scm
             ["aa"] = "@assignment.outer",
             ["ia"] = "@assignment.inner",
