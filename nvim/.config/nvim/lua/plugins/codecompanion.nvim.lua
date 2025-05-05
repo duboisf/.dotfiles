@@ -1,72 +1,117 @@
-local function fidget_progress()
-  local progress = require("fidget.progress")
+local function spinner()
+  local M = {
+    ---@type boolean
+    processing = false,
+    ---@type integer
+    spinner_index = 1,
+    ---@type integer?
+    namespace_id = nil,
+    ---@type uv.uv_timer_t?
+    timer = nil,
+    ---@type string[]
+    spinner_symbols = {
+      "⠋",
+      "⠙",
+      "⠹",
+      "⠸",
+      "⠼",
+      "⠴",
+      "⠦",
+      "⠧",
+      "⠇",
+      "⠏",
+    },
+    ---@type string
+    filetype = "codecompanion",
+  }
 
-  local M = {}
+  function M:get_buf(filetype)
+    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+      if vim.api.nvim_buf_is_valid(buf) and vim.bo[buf].filetype == filetype then
+        return buf
+      end
+    end
+    return nil
+  end
+
+  function M:update_spinner()
+    if not self.processing then
+      self:stop_spinner()
+      return
+    end
+
+    self.spinner_index = (self.spinner_index % #self.spinner_symbols) + 1
+
+    local buf = self:get_buf(self.filetype)
+    if buf == nil then
+      return
+    end
+
+    -- Clear previous virtual text
+    vim.api.nvim_buf_clear_namespace(buf, self.namespace_id, 0, -1)
+
+    local last_line = vim.api.nvim_buf_line_count(buf) - 1
+    vim.api.nvim_buf_set_extmark(buf, self.namespace_id, last_line, 0, {
+      virt_lines = { { { self.spinner_symbols[self.spinner_index] .. " Processing...", "Comment" } } },
+      virt_lines_above = false, -- false means below the line
+    })
+  end
+
+  function M:start_spinner()
+    self.processing = true
+    self.spinner_index = 0
+
+    if self.timer then
+      self.timer:stop()
+      self.timer:close()
+      self.timer = nil
+    end
+
+    self.timer = vim.uv.new_timer()
+    self.timer:start(
+      0,
+      100,
+      vim.schedule_wrap(function()
+        self:update_spinner()
+      end)
+    )
+  end
+
+  function M:stop_spinner()
+    self.processing = false
+
+    if self.timer then
+      self.timer:stop()
+      self.timer:close()
+      self.timer = nil
+    end
+
+    local buf = self:get_buf(self.filetype)
+    if buf == nil then
+      return
+    end
+
+    vim.api.nvim_buf_clear_namespace(buf, self.namespace_id, 0, -1)
+  end
 
   function M:init()
-    local group = vim.api.nvim_create_augroup("CodeCompanionFidgetHooks", {})
+    -- Create namespace for virtual text
+    self.namespace_id = vim.api.nvim_create_namespace("CodeCompanionSpinner")
+
+    vim.api.nvim_create_augroup("CodeCompanionHooks", { clear = true })
+    local group = vim.api.nvim_create_augroup("CodeCompanionHooks", {})
 
     vim.api.nvim_create_autocmd({ "User" }, {
-      pattern = "CodeCompanionRequestStarted",
+      pattern = "CodeCompanionRequest*",
       group = group,
       callback = function(request)
-        local handle = M:create_progress_handle(request)
-        M:store_progress_handle(request.data.id, handle)
-      end,
-    })
-
-    vim.api.nvim_create_autocmd({ "User" }, {
-      pattern = "CodeCompanionRequestFinished",
-      group = group,
-      callback = function(request)
-        local handle = M:pop_progress_handle(request.data.id)
-        if handle then
-          M:report_exit_status(handle, request)
-          handle:finish()
+        if request.match == "CodeCompanionRequestStarted" then
+          self:start_spinner()
+        elseif request.match == "CodeCompanionRequestFinished" then
+          self:stop_spinner()
         end
       end,
     })
-  end
-
-  M.handles = {}
-
-  function M:store_progress_handle(id, handle)
-    M.handles[id] = handle
-  end
-
-  function M:pop_progress_handle(id)
-    local handle = M.handles[id]
-    M.handles[id] = nil
-    return handle
-  end
-
-  function M:create_progress_handle(request)
-    return progress.handle.create({
-      title = " Requesting assistance (" .. request.data.strategy .. ")",
-      message = "In progress...",
-      lsp_client = {
-        name = M:llm_role_title(request.data.adapter),
-      },
-    })
-  end
-
-  function M:llm_role_title(adapter)
-    local parts = {}
-    table.insert(parts, adapter.formatted_name)
-    if adapter.model and adapter.model ~= "" then
-      table.insert(parts, "(" .. adapter.model .. ")")
-    end
-    return table.concat(parts, " ")
-  end
-
-  function M:report_exit_status(handle, request)
-    if request.data.status == "success" then
-      handle.message = "Completed"
-    elseif request.data.status == "error" then
-      handle.message = " Error"
-    else
-      handle.message = "󰜺 Cancelled"
-    end
   end
 
   return M
@@ -117,9 +162,34 @@ return {
           },
         },
       },
+      ["Fix go linting errors"] = {
+        strategy = "chat",
+        description = "Fix go linting errors",
+        opts = {
+          is_slash_cmd = true,
+          auto_submit = false,
+          short_name = "golang_lint",
+        },
+        prompts = {
+          {
+            role = "user",
+            content =
+            [[I want you to fix the linting errors in this project. @full_stack_dev start by running `make lint` and based on the linting errors:
+
+1. Fix the first error by modifying the file, to do so:
+  1.1. Read the around the lines where the error is (+- 5 lines), to get the context of the code
+  1.2. Fix the error
+  1.3. When updating the file, make sure to only update the lines that you read, don't overwrite the file with only the changes.
+2. Rerun `make lint` to make sure the error was fixed
+3. Repeat until all linting errors are fixed.]]
+          },
+
+        },
+      },
     },
   },
   config = function(_, opts)
+    spinner():init()
     local cc = require('codecompanion')
     cc.setup(opts)
     vim.keymap.set('n',
@@ -135,9 +205,6 @@ return {
     --     vim.o.relativenumber = false
     --   end
     -- })
-  end,
-  init = function()
-    fidget_progress():init()
   end,
   dependencies = {
     "folke/snacks.nvim",
