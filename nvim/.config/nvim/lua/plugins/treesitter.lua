@@ -96,8 +96,8 @@ return {
           disable = {},
           keymaps = {
             -- custom captures
-            ["aL"] = "@list.outer",
-            ["iL"] = "@list.inner",
+            ["al"] = "@list.outer",
+            ["il"] = "@list.inner",
 
             -- the queries are in textobjects.scm
             ["aa"] = "@assignment.outer",
@@ -112,8 +112,8 @@ return {
             ["ic"] = "@conditional.inner",
             ["ab"] = "@block.outer",
             ["ib"] = "@block.inner",
-            ["al"] = "@loop.outer",
-            ["il"] = "@loop.inner",
+            ["aL"] = "@loop.outer",
+            ["iL"] = "@loop.inner",
             ["iS"] = "@statement.inner",
             ["aS"] = "@statement.outer",
             ["ad"] = "@comment.outer",
