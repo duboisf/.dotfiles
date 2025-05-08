@@ -1,5 +1,24 @@
 ---@module 'snacks'
 
+local function get_git_root()
+  local obj = vim.system({ "git", "rev-parse", "--show-toplevel" }):wait()
+  if obj.code ~= 0 then
+    vim.notify("Not in a git repo", vim.log.levels.WARN)
+    return nil
+  end
+  return vim.fn.trim(obj.stdout)
+end
+
+local function files_in_git_root()
+  local git_root = get_git_root()
+  if git_root then
+    Snacks.picker.files({
+      cwd = git_root,
+      hidden = true,
+    })
+  end
+end
+
 local function search_dotfiles()
   Snacks.picker.files({
     cwd = vim.env.HOME .. "/.dotfiles",
@@ -65,6 +84,7 @@ return {
     { "<leader>a",       function() Snacks.picker() end,                                         desc = "List Pickers" },
     -- Custom
     { ",d",              search_dotfiles,                                                        desc = "Find my dotfiles" },
+    { "<leader>fa",      function() files_in_git_root() end,                                     desc = "Find Config File" },
     { "<leader>fd",      function() Snacks.picker.files({ cwd = get_current_buf_dir() }) end,    desc = "Find files in directory of current file" },
     { "<leader>gd",      grep_current_file_directory,                                            desc = "Grep files in directory of current file" },
     { "<leader>gg",      grep_cwd,                                                               desc = "Grep files" },
