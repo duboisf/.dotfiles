@@ -136,6 +136,9 @@ return {
     strategies = {
       chat = {
         keymaps = {
+          clear = {
+            modes = {},
+          },
           send = {
             modes = { i = "<C-CR>" }
           },
