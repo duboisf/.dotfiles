@@ -8,6 +8,7 @@ return {
   ---@module 'render-markdown'
   ---@type render.md.UserConfig
   opts = {
+    debounce = 10,
     render_modes = true,
     sign = {
       enabled = false,
@@ -15,7 +16,7 @@ return {
     file_types = { 'markdown', 'codecompanion' },
     code = {
       language_pad = 1,
-      left_pad = 1,
+      left_pad = 0,
       style = 'full',
       border = 'thin',
       width = "block",
