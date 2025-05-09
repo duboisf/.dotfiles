@@ -48,11 +48,11 @@ return {
       incremental_selection = {
         enable = true,
         -- mappings are configured using hydra in ~/.config/nvim/lua/cfg/plugins/hydra.lua
-        keymaps = {                 -- mappings for incremental selection (visual mappings)
-          init_selection    = 'gs', -- maps in normal mode to init the node/scope selection
-          node_incremental  = 'j',  -- increment to the upper named parent
-          scope_incremental = 'l',  -- increment to the upper scope (as defined in locals.scm)
-          node_decremental  = 'k',  -- decrement to the previous node
+        keymaps = {                        -- mappings for incremental selection (visual mappings)
+          init_selection    = 'gs',        -- maps in normal mode to init the node/scope selection
+          node_incremental  = '<C-Down>',  -- increment to the upper named parent
+          scope_incremental = '<C-Right>', -- increment to the upper scope (as defined in locals.scm)
+          node_decremental  = '<C-Up>',    -- decrement to the previous node
         }
       },
       indent = {
@@ -126,11 +126,11 @@ return {
           set_jumps = true,
           goto_next_start = {
             [']f'] = '@function.outer',
-            ['<C-Down>'] = '@parameter.inner'
+            ['<C-j>'] = '@parameter.inner'
           },
           goto_previous_start = {
             ['[f'] = '@function.outer',
-            ['<C-Up>'] = '@parameter.inner'
+            ['<C-k>'] = '@parameter.inner'
           },
           goto_next_end = {
             ["]F"] = '@function.outer',
