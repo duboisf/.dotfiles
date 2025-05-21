@@ -27,7 +27,6 @@ export def history-fzf []: nothing -> nothing {
     | query db `
         SELECT max(id) as id, command_line
         FROM history
-        WHERE duration_ms IS NOT NULL
         GROUP BY command_line
         ORDER BY id DESC
     `
