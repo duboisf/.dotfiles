@@ -41,10 +41,10 @@ trap "rm -rf $TMPDIR" EXIT
     fi
     echo "🔧 installing Caskaydia font"
     cd $TMPDIR
-    curl -L -o cascadia.tar.xz https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/CascadiaMono.tar.xz
+    curl -L -o cascadia.tar.xz https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/CascadiaCode.zip
     mkdir ~/.fonts 2> /dev/null || true
     cd ~/.fonts
-    tar xf $TMPDIR/cascadia.tar.xz
+    unzip $TMPDIR/cascadia.tar.xz
     fc-cache -fv
     echo "✅ Caskaydia font installed"
 )
