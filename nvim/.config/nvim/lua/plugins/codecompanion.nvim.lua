@@ -1,3 +1,5 @@
+---@module 'codecompanion.schema'
+
 local function spinner()
   local M = {
     ---@type boolean
@@ -124,17 +126,25 @@ return {
   opts = {
     adapters = {
       copilot = function()
-        return require("codecompanion.adapters").extend("copilot", {
-          schema = {
-            model = {
-              default = "gpt-4.1"
+        return require("codecompanion.adapters").extend(
+          "copilot",
+          ---@type Copilot.Adapter
+          {
+            schema = {
+              model = {
+                default = "claude-sonnet-4"
+              },
+              max_tokens = {
+                default = 200000
+              }
             },
-          },
-        })
+          }
+        )
       end
     },
     strategies = {
       chat = {
+        adapter = "copilot",
         keymaps = {
           clear = {
             modes = {},
