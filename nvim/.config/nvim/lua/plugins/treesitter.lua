@@ -98,6 +98,8 @@ return {
             -- custom captures
             ["al"] = "@list.outer",
             ["il"] = "@list.inner",
+            ["ak"] = "@key.outer",
+            ["ik"] = "@key.inner",
 
             -- the queries are in textobjects.scm
             ["aa"] = "@assignment.outer",
