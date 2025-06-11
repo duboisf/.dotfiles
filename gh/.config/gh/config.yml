@@ -10,6 +10,18 @@ pager:
 aliases:
     create-pr: |
         !gh pr create && gh pr merge --auto --merge
+    changelog: |
+        !nu -c '
+          gh release list --json name
+          | from json
+          | get name
+          | par-each --keep-order { |name|
+              gh release view $name --json name,body,author
+              | from json
+              | $"# ($in.name) by ($in.author.login)\n\n($in.body)"
+          }
+          | str join "\n"
+        '
     download-latest-release: |
         !repo=${1:-cli/cli}; picked_asset=$(gh release view -R $repo --json assets -q ".assets[].name" \
           | fzf --prompt="Pick an asset to download: "); \
