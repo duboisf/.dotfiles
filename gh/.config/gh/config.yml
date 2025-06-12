@@ -7,9 +7,8 @@ prompt: enabled
 # A pager program to send command output to, e.g. "less". Set the value to "cat" to disable the pager.
 pager:
 # Aliases allow you to create nicknames for gh commands
+# TODO: create upgrade command to download and install latest gh version (thanks for the suggestion @bilyes)
 aliases:
-    create-pr: |
-        !gh pr create && gh pr merge --auto --merge
     changelog: |
         !nu -c '
           gh release list --json name
@@ -26,11 +25,11 @@ aliases:
         !repo=${1:-cli/cli}; picked_asset=$(gh release view -R $repo --json assets -q ".assets[].name" \
           | fzf --prompt="Pick an asset to download: "); \
         test -n $picked_asset && echo "Downloading asset $picked_asset..." && gh release download -R $repo -p $picked_asset
-    # TODO: create upgrade command to download and install latest gh version (thanks for the suggestion @bilyes)
-    fclone: |
-        !gh repo clone Flatbook/$1
-    merge-and-delete-pr: |
+    pr create-auto-merge: |
+        !gh pr create && gh pr merge --auto --merge
+    pr merge-and-delete: |
         !gh pr merge --delete-branch && git pull
+    pr watch-checks: pr checks --watch
     show-branch-protection: |
         !gh api graphql \
           -f query="$(curl -s https://gist.githubusercontent.com/duboisf/68fb6e22ac0a2165ca298074f0e3b553/raw/23c22a0f3922b812581684e2fbd7c6d5bb8f9532/operations.graphql)" \
@@ -44,13 +43,14 @@ aliases:
         test -n "$picked_branch" && git switch "$(echo "$picked_branch" | cut -c 3-)"
     # Args: <team-slug> <permission>
     # Permission can be one of: pull, triage, push, maintain, admin and custom repository role names, if the org defined any.
-    team-add-permission: |
-      !gh api \
-        --method PUT \
-        -H "Accept: application/vnd.github+json" \
-        -H "X-GitHub-Api-Version: 2022-11-28" \
-        '/orgs/{owner}/teams/'$1'/repos/{owner}/{repo}' \
-        -f permission=$2
+    repo add-permission: |
+        !gh api /orgs/{owner}/teams/$1/repos/{owner}/{repo} -f permission=$2 \
+          --method PUT -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" 
+    repo default-settings: |
+        !gh api /repos/{owner}/{repo} -F has_issues=false -F has_projects=false -F has_wiki=false \
+          --method PATCH -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" 
+    repo fclone: |
+        gh repo clone Flatbook/$1
     view-latest-release: |
         !repo=${1:-cli/cli}
         gh release view --repo $repo --json assets,body,publishedAt,tagName,name,url --template '
@@ -71,5 +71,4 @@ aliases:
         {{- end }}
         {{- end }}
         ' | glow -p -
-    watch-checks: pr checks --watch
 version: "1"
