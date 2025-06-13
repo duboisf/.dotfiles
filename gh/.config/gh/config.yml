@@ -9,6 +9,8 @@ pager:
 # Aliases allow you to create nicknames for gh commands
 # TODO: create upgrade command to download and install latest gh version (thanks for the suggestion @bilyes)
 aliases:
+    create-auto-merge-pr: |
+        !gh pr create && gh pr merge --auto --merge
     changelog: |
         !nu -c '
           gh release list --json name
@@ -25,9 +27,7 @@ aliases:
         !repo=${1:-cli/cli}; picked_asset=$(gh release view -R $repo --json assets -q ".assets[].name" \
           | fzf --prompt="Pick an asset to download: "); \
         test -n $picked_asset && echo "Downloading asset $picked_asset..." && gh release download -R $repo -p $picked_asset
-    pr create-auto-merge: |
-        !gh pr create && gh pr merge --auto --merge
-    pr merge-and-delete: |
+    merge-and-delete-pr: |
         !gh pr merge --delete-branch && git pull
     pr watch-checks: pr checks --watch
     show-branch-protection: |
