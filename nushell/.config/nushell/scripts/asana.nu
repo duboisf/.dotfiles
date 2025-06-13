@@ -13,7 +13,7 @@ export def "asana me" [] {
     } https://app.asana.com/api/1.0/users/me | get data
 }
 
-export def "asana my tasks" [since: string] {
+export def "asana my tasks" [since: datetime] {
     use std log
     let params = {
         opt_fields: "completed_at,name,notes",
@@ -35,14 +35,14 @@ export def "asana my tasks" [since: string] {
             $cumul ++ $results
         }
     }
-    fetch ($since + 'T00:00:00.000Z') []
+    fetch ($"($since | format date "%F")T00:00:00.000Z") []
 }
 
 export def "asana to markdown" [] {
     each { |task|
         ([
             $"# ($task.name)"
-            $"    Completed on ($task.completed_at | into datetime | date to-timezone local)"
+            $"_Completed on ($task.completed_at | into datetime | date to-timezone local)_"
             $task.notes
         ] | compact | str join "\n\n" | str trim --right) + "\n"
     } | to text
