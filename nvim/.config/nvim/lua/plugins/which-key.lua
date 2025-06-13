@@ -1,6 +1,6 @@
 return {
   "folke/which-key.nvim",
-  enabled = false,
+  enabled = true,
   opts = {
     preset = "helix",
     sort = { "alphanum", "local", "order", "group", "mod" },
