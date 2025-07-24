@@ -1,0 +1,21 @@
+emulate -RL zsh
+
+setopt err_return warn_create_global
+local API_RESOURCE="$1"
+local ctx
+local kind
+
+if [[ -z "$API_RESOURCE" ]]; then
+    print "Usage: kubectl_search_api_resources <API_RESOURCE>" >&2
+    print "Will search for the api resources that match the regex API_RESOURCE in all clusters and all namespaces" >&2
+    return 1
+fi
+
+for ctx in $(kubectl config view -o json | jq -r '.contexts[].name' | grep -v none); do
+    for kind in $(kubectl --context=$ctx api-resources | grep $API_RESOURCE | awk '{print $1}'); do
+        local RESULT="$(kubectl get --context=$ctx $kind -A 2> /dev/null)"
+        if [[ -n "$RESULT" ]]; then
+            print "ctx: $ctx, kind: $kind\n$RESULT"
+        fi
+    done
+done
