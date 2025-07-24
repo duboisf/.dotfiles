@@ -66,6 +66,11 @@ return {
   opts = {
     input = {},
     picker = {
+      formatters = {
+        file = {
+          truncate = 200,
+        },
+      },
       sources = {
         files = {
           hidden = true,
