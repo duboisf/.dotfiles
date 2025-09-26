@@ -201,10 +201,13 @@ local function config()
       on_attach = function(client, bufnr)
         on_attach(client, bufnr)
         local ns = vim.lsp.diagnostic.get_namespace(client.id)
-        vim.diagnostic.config({ virtual_text = true, signs = true, update_in_insert = true }, ns)
+        vim.diagnostic.config({ virtual_text = true, signs = true, update_in_insert = false }, ns)
       end,
       on_init = function(client)
         local root_dir = client.config.root_dir
+        if not root_dir then
+          return
+        end
         local venv_path = root_dir .. "/.venv"
         if vim.fn.isdirectory(venv_path) == 1 then
           client.config.settings.python.pythonPath = venv_path .. "/bin/python"
@@ -217,7 +220,7 @@ local function config()
         },
         python = {
           analysis = {
-            typeCheckingMode = "off",
+            typeCheckingMode = "on",
             diagnosticMode = "workspace",
             typeCheckingBehavior = "strict",
             reportMissingType = true,
@@ -367,6 +370,10 @@ local function config()
           analyses = {
             nilness = true,
             unusedparams = true,
+            -- at least one file in a package should have a package comment
+            ST1000 = false,
+            -- someId should be someID
+            ST1003 = false,
           },
           codelenses = {
             test = true,
@@ -379,6 +386,7 @@ local function config()
             compositeLiteralTypes = false,
             constantValues = false,
             functionTypeParameters = false,
+            ignoredError = true,
             parameterNames = false,
             rangeVariableTypes = false,
           },
