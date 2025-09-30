@@ -77,6 +77,7 @@ local function config()
     end
 
     autocmd('BufUnload', nil, clear_buffer_autocmds, 'Delete buffer autocmds to prevent duplicates', opts)
+    autocmd('LspDetach', nil, clear_buffer_autocmds, 'Delete buffer autocmds when lsp client detaches', opts)
   end
 
   -- Setup mappings
