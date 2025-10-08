@@ -14,6 +14,16 @@ return {
       enabled = false,
     },
     file_types = { 'markdown', 'codecompanion' },
+    win_options = {
+      conceallevel = { rendered = 2 },
+    },
+    overrides = {
+      buftype = {
+        nofile = {
+          render_modes = { 'n', 'c', 'i' },
+        },
+      },
+    },
     code = {
       language_pad = 1,
       left_pad = 0,
