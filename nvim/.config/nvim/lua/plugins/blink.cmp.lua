@@ -61,6 +61,20 @@ return {
         'snippet_forward',
         'fallback',
       },
+      ['<C-y>'] = {
+        function(cmp)
+          -- disable auto_brackets for this accept
+          local auto_brackets = require('blink.cmp.config').completion.accept.auto_brackets
+          local original_value = auto_brackets.enabled
+          auto_brackets.enabled = false
+          return cmp.select_and_accept({
+            callback = function()
+              auto_brackets.enabled = original_value
+            end
+          })
+        end,
+        'fallback'
+      },
     },
     appearance = {
       -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
