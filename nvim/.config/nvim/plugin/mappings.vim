@@ -1,7 +1,7 @@
 " Miscellaneous mappings
 nnoremap <silent><leader>q :q<CR>
 nnoremap <silent><leader>s :silent w<CR>
-nnoremap <silent><leader>d :bd<CR>
+nnoremap <silent><leader>x :bd<CR>
 " Move selection up or down
 xnoremap <silent><C-Up> xkP`[V`]
 xnoremap <silent><C-Down> xp`[V`]
