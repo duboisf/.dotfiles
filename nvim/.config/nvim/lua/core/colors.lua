@@ -69,5 +69,8 @@ return lush.extends({ theme }).with(function(injected_functions)
     fugitiveStagedModifier { theme.Function },
 
     CmpItemKindUser { theme.CmpItemKindDefault },
+
+    DapBreakpointLine { theme.Normal, bg = theme.Normal.bg.darken(5) },
+    DapStoppedLine { theme.Normal, bg = theme.DiffAdd.bg },
   }
 end)
