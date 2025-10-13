@@ -122,25 +122,27 @@ end
 ---@type LazyPluginSpec
 return {
   "olimorris/codecompanion.nvim",
-  version = "v15.*",
+  version = "v17.*",
   opts = {
     adapters = {
-      copilot = function()
-        return require("codecompanion.adapters").extend(
-          "copilot",
-          ---@type Copilot.Adapter
-          {
-            schema = {
-              model = {
-                default = "claude-sonnet-4"
+      http = {
+        copilot = function()
+          return require("codecompanion.adapters").extend(
+            "copilot",
+            ---@type CodeCompanion.HTTPAdapter.Copilot
+            {
+              schema = {
+                model = {
+                  default = "claude-sonnet-4"
+                },
+                max_tokens = {
+                  default = 200000
+                }
               },
-              max_tokens = {
-                default = 200000
-              }
-            },
-          }
-        )
-      end
+            }
+          )
+        end
+      }
     },
     strategies = {
       chat = {
@@ -164,14 +166,22 @@ return {
         description = "Write Go tests for a file",
         opts = {
           is_slash_cmd = false,
-          auto_submit = false,
+          auto_submit = true,
           short_name = "golang_tests",
         },
         prompts = {
           {
             role = "user",
-            content =
-            [[#buffer Write BDD-style unit tests for this file. Add the _test suffix to the package name to avoid having access to internals. Wrap group the unit tests that test the same method togeter in the same function, use t.Run and t.Parallel. So for method Foo.Call, create a function TestFoo_Call(t *testing.T) that has several tests for Foo.Call inside. For the t.Run description, use spaces between words for the description.]]
+            content = function(context)
+              local lines = vim.api.nvim_buf_get_lines(context.bufnr, 0, -1, false)
+              local text = table.concat(lines, "\n")
+              return "I have the following code:\n\n```" .. context.filetype .. "\n" .. text .. "\n```\n\n" .. [[
+Write unit tests for this using BDD, use a package suffixed with _test,
+don't test private methods (you won't be able to).
+Use // Given, When, Then comments in tests. Use stretchr/testify/assert and mock.
+]]
+            end,
+            contains_code = true,
           },
         },
       },
@@ -205,9 +215,9 @@ return {
     spinner():init()
     local cc = require('codecompanion')
     cc.setup(opts)
-    vim.keymap.set('n',
+    vim.keymap.set({ 'n', 'v' },
       '<leader>c',
-      ':CodeCompanionChat Toggle<CR>',
+      ':CodeCompanionChat<CR>',
       { desc = "Toggle CodeCompanionChat", nowait = true }
     )
     -- vim.api.nvim_create_autocmd("FileType", {
