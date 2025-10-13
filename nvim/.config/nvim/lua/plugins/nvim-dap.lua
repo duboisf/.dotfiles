@@ -1,10 +1,12 @@
----@type dap.Configuration
-local rr_replay_launch_config = {
-  type = "go",
-  name = "Replay last rr recording",
-  request = "launch",
-  mode = "replay",
-  traceDirPath = vim.fn.expand("~/.local/share/rr/latest-trace"),
+---@type dap.Configuration[]
+local extra_launch_configs = {
+  {
+    type = "go",
+    name = "Replay last rr recording",
+    request = "launch",
+    mode = "replay",
+    traceDirPath = vim.fn.expand("~/.local/share/rr/latest-trace"),
+  },
 }
 
 ---@type table[]
@@ -46,7 +48,6 @@ local function on_session(old, new)
   if new then
     toggle = set
   elseif old then
-    require('dapui').close()
     toggle = function(mode, lhs, _, _)
       vim.keymap.del(mode, lhs)
     end
@@ -54,7 +55,6 @@ local function on_session(old, new)
   if not toggle then
     return
   end
-  toggle('n', '<leader>do', function() require('dapui').toggle({ reset = true }) end)
   toggle('n', '<leader>dt', function()
     dap.terminate()
   end)
@@ -95,10 +95,16 @@ return {
       vim.keymap.set('n', '<leader>dl', dap.run_last, { desc = 'Dap Run Last' })
       vim.keymap.set('n', '<F9>', dap.toggle_breakpoint, { desc = 'Dap Toggle Breakpoint' })
       vim.keymap.set('n', '<leader>b', dap.toggle_breakpoint, { desc = 'Dap Toggle Breakpoint' })
-      vim.keymap.set('n', '<leader>dt', function() require('dap-go').debug_test() end,
+      vim.keymap.set('n', '<leader>B', function()
+        ---@diagnostic disable-next-line: undefined-global
+        Snacks.input.input(nil, function(msg)
+          dap.toggle_breakpoint(nil, nil, msg)
+        end)
+      end, { desc = 'Dap Toggle Logpoint' })
+      vim.keymap.set('n', '<leader>td', function() require('dap-go').debug_test() end,
         { desc = 'Dap Debug Current Go Test' })
-      vim.keymap.set('n', '<leader>dc', function() require('dapui').close() end, { desc = 'Dap Close UI' })
-
+      vim.keymap.set('n', '<leader>du', function() require('dapui').toggle({ reset = true }) end,
+        { desc = 'Dap Toggle UI' })
       vim.fn.sign_define('DapBreakpoint', {
         text = '🔴',
         texthl = '',
@@ -112,10 +118,26 @@ return {
         linehl = 'DapStoppedLine',
         numhl = ''
       })
+
+      -- Disable blink completion in dap-repl and dapui buffers
+      vim.api.nvim_create_autocmd('Filetype', {
+        pattern = { 'dap-repl', 'dapui*' },
+        callback = function()
+          vim.b.completion = false
+        end,
+      })
+
+      vim.api.nvim_create_autocmd('Filetype', {
+        pattern = 'dap-float',
+        callback = function(args)
+          vim.keymap.set('n', 'q', vim.cmd.close, { buffer = args.buf, silent = true })
+        end,
+      })
     end,
     dependencies = {
       'nvim-neotest/nvim-nio',
-      'rcarriga/nvim-dap-ui'
+      'rcarriga/nvim-dap-ui',
+      'folke/snacks.nvim',
     },
   },
   {
@@ -123,30 +145,24 @@ return {
     opts = {
       layouts = {
         {
-          elements = {
-            "scopes",
-          },
-          size = 10,
-          position = "top", -- Can be "left" or "right"
+          elements = { "scopes" },
+          size = 15,
+          position = "top",
         },
         {
-          -- You can change the order of elements in the sidebar
           elements = {
             -- Provide IDs as strings or tables with "id" and "size" keys
-            { id = "breakpoints", size = 0.25 },
             { id = "stacks",      size = 0.25 },
             { id = "watches",     size = 0.25 },
+            { id = "breakpoints", size = 0.25 },
           },
           size = 40,
-          position = "left", -- Can be "left" or "right"
+          position = "right",
         },
         {
-          elements = {
-            "repl",
-            "console",
-          },
+          elements = { "repl" },
           size = 10,
-          position = "bottom", -- Can be "bottom" or "top"
+          position = "bottom",
         },
       },
     },
@@ -154,9 +170,7 @@ return {
   {
     'leoluz/nvim-dap-go',
     opts = {
-      dap_configurations = {
-        rr_replay_launch_config,
-      },
+      dap_configurations = extra_launch_configs,
     },
     ft = { 'go' },
   },
@@ -167,6 +181,10 @@ return {
   },
   {
     'theHamsta/nvim-dap-virtual-text',
-    config = true,
+    opts = {
+      all_references = true,
+      commented = true,
+      virt_text_win_col = 80,
+    },
   },
 }
