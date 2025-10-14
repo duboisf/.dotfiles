@@ -43,6 +43,23 @@ end
 local function on_session(old, new)
   local dap = require('dap')
 
+  ---@type ProgressHandle|nil
+  local progress
+  dap.listeners.before.initialize.duboisf = function()
+    local fidget = require('fidget')
+    progress = fidget.progress.handle.create({
+      title = "DAP",
+      message = "Starting debug session...",
+    })
+  end
+
+  dap.listeners.after.launch.duboisf = function()
+    if progress ~= nil then
+      progress:finish()
+      progress = nil
+    end
+  end
+
   ---@type KeyMapper|nil
   local toggle
   if new then
@@ -138,6 +155,7 @@ return {
       'nvim-neotest/nvim-nio',
       'rcarriga/nvim-dap-ui',
       'folke/snacks.nvim',
+      'j-hui/fidget.nvim',
     },
   },
   {
