@@ -21,7 +21,7 @@ o.laststatus = 3
 o.list = false
 -- Specify the characters to use for tabs and trailing spaces
 -- Depends on the list option being true
-o.listchars = [[tab:→\ ,trail:·]]
+o.listchars = 'tab:→ ,trail:·'
 o.mouse = 'a'
 o.number = true
 o.relativenumber = true
