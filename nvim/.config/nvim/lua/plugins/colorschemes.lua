@@ -21,6 +21,7 @@ return {
   {
     'duboisf/crepuscule.nvim',
     config = true,
+    enabled = false,
     dependencies = {
       'nvim-lua/plenary.nvim',
     },
