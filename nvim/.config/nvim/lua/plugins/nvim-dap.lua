@@ -1,11 +1,131 @@
+local launchTemplate = [[{
+    "\$schema": "https://raw.githubusercontent.com/mfussenegger/dapconfig-schema/master/dapconfig-schema.json",
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "${1:go}",
+            "request": "${2|launch,attach|}",
+            "program": "${3:\${workspaceFolder}}",
+            "name": "${4:Launch main}",
+            "args": []${0}
+        }
+    ]
+}]]
+
+local function create_autocmds()
+  -- Remove existing dap autocommand to define my own
+  vim.api.nvim_del_augroup_by_name('dap-launch.json')
+
+  local group = vim.api.nvim_create_augroup('duboisf.dap', { clear = true })
+
+  vim.api.nvim_create_autocmd('BufNewFile', {
+    group = group,
+    pattern = '*/.vscode/launch.json',
+    callback = function(args)
+      vim.api.nvim_buf_call(args.buf, function()
+        vim.snippet.expand(launchTemplate)
+      end)
+    end,
+    desc = 'Insert launch.json template when creating a new one',
+  })
+
+  -- Disable blink completion in dap-repl and dapui buffers
+  vim.api.nvim_create_autocmd('Filetype', {
+    group = group,
+    pattern = { 'dap-repl', 'dapui*' },
+    callback = function()
+      vim.b.completion = false
+    end,
+  })
+
+  vim.api.nvim_create_autocmd('Filetype', {
+    group = group,
+    pattern = 'dap-float',
+    callback = function(args)
+      vim.keymap.set('n', 'q', vim.cmd.close, { buffer = args.buf, silent = true })
+    end,
+  })
+end
+
+---Get the list of main files in the current Go project using gopls
+---@return string?, string[] error message or list of main files
+local function find_main_files()
+  local clients = vim.lsp.get_clients({ bufnr = 0, name = "gopls" })
+  if vim.tbl_isempty(clients) then
+    return "gopls isn't attached to the buffer", {}
+  end
+  local gopls = clients[1]
+  local thread = coroutine.running()
+  gopls:request("workspace/symbol", { query = "main" }, function(err, result, _, _)
+    if err then
+      return coroutine.resume(thread, err.message)
+    end
+    local files = {}
+    local workspaceDir = vim.uri_to_fname(gopls.workspace_folders[1].uri)
+    for _, item in ipairs(result) do
+      if item.name == "main" and item.kind == vim.lsp.protocol.SymbolKind.Function then
+        local fname = vim.uri_to_fname(item.location.uri)
+        table.insert(files, fname:sub(#workspaceDir + 2))
+      end
+    end
+    return coroutine.resume(thread, nil, files)
+  end)
+  local err, files = coroutine.yield()
+  if err then
+    return "Error finding files with main functions: " .. err, {}
+  end
+  if not files or vim.tbl_isempty(files) then
+    return nil, {}
+  end
+  return nil, files
+end
+
+local function select_main_file()
+  return coroutine.create(function(dap_run_co)
+    local dap = require('dap')
+    local err, files = find_main_files()
+    if err then
+      vim.notify(err, vim.log.levels.ERROR)
+      return coroutine.resume(dap_run_co, dap.ABORT)
+    end
+    vim.ui.select(files, { prompt = "Select file containing main function" }, function(choice)
+      coroutine.resume(dap_run_co, choice or dap.ABORT)
+    end)
+  end)
+end
+
+local function getargs()
+  return require('dap-go').get_arguments()
+end
+
 ---@type dap.Configuration[]
 local extra_launch_configs = {
+  {
+    type = "go",
+    name = "Debug main",
+    request = "launch",
+    program = select_main_file,
+  },
+  {
+    type = "go",
+    name = "Debug main (Arguments)",
+    request = "launch",
+    program = select_main_file,
+    args = getargs,
+  },
   {
     type = "go",
     name = "Replay last rr recording",
     request = "launch",
     mode = "replay",
     traceDirPath = vim.fn.expand("~/.local/share/rr/latest-trace"),
+  },
+  {
+    type = "go",
+    name = "Debug package (Arguments)",
+    request = "launch",
+    program = "${fileDirname}",
+    args = getargs,
   },
 }
 
@@ -107,6 +227,8 @@ return {
 
       dap.listeners.on_session["duboisf"] = vim.schedule_wrap(on_session)
 
+      create_autocmds()
+
       vim.keymap.set('n', '<F5>', dap.continue, { desc = 'Dap Continue' })
       vim.keymap.set('n', '<C-S-down>', dap.continue, { desc = 'Dap Continue' })
       vim.keymap.set('n', '<leader>dl', dap.run_last, { desc = 'Dap Run Last' })
@@ -134,21 +256,6 @@ return {
         texthl = '',
         linehl = 'DapStoppedLine',
         numhl = ''
-      })
-
-      -- Disable blink completion in dap-repl and dapui buffers
-      vim.api.nvim_create_autocmd('Filetype', {
-        pattern = { 'dap-repl', 'dapui*' },
-        callback = function()
-          vim.b.completion = false
-        end,
-      })
-
-      vim.api.nvim_create_autocmd('Filetype', {
-        pattern = 'dap-float',
-        callback = function(args)
-          vim.keymap.set('n', 'q', vim.cmd.close, { buffer = args.buf, silent = true })
-        end,
       })
     end,
     dependencies = {
