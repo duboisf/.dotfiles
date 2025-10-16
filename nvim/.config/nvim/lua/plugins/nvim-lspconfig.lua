@@ -1,8 +1,6 @@
 local function config()
   local utils = require 'core.utils'
 
-  local lspconfig = require('lspconfig')
-
   vim.cmd [[
     sign define DiagnosticSignError text= texthl=DiagnosticSignError
     sign define DiagnosticSignWarn text= texthl=DiagnosticSignWarn
@@ -18,6 +16,29 @@ local function config()
       end
     end
   end
+
+  -- local orig_buf_request_all = vim.lsp.buf_request_all
+  -- ---@diagnostic disable-next-line: duplicate-set-field
+  -- vim.lsp.buf_request_all = function(bufnr, method, params, handler)
+  --   return orig_buf_request_all(bufnr, method, params, function(results, context, cfg)
+  --     local transformed_results = {} --- @type table<integer,lsp.Hover>
+  --     for _, res in pairs(results) do
+  --       local err, result = res.err, res.result
+  --       if not err then
+  --         if result and type(result.contents) == 'table' and result.contents.kind == 'markdown' then
+  --           -- Strip backslash escapes from plaintext
+  --           if result.contents.value then
+  --             -- result.contents.value = result.contents.value:gsub('\\([%.%[%]%(%)%*])', '%1')
+  --             result.contents.value = result.contents.value:gsub('\\([%.%(%)])', '%1')
+  --             result.contents.value = result.contents.value:gsub('\\%[(.-)%]', '`%1`')
+  --           end
+  --         end
+  --       end
+  --       table.insert(transformed_results, res)
+  --     end
+  --     return handler(transformed_results, context, cfg)
+  --   end)
+  -- end
 
   vim.diagnostic.config({
     virtual_text = false,
@@ -182,10 +203,12 @@ local function config()
 
   --]]
   local function setup_lsps()
-    lspconfig.bashls.setup { capabilities = capabilities, on_attach = on_attach }
-    lspconfig.dockerls.setup { capabilities = capabilities, on_attach = on_attach }
-    lspconfig.jsonls.setup {
+    vim.lsp.config('*', {
       capabilities = capabilities,
+      on_attach = on_attach,
+    })
+    local lspconfig = vim.lsp.config
+    lspconfig.jsonls = {
       settings = {
         json = {
           format = {
@@ -193,48 +216,45 @@ local function config()
           }
         }
       },
-      on_attach = on_attach
     }
 
-    lspconfig.pyright.setup({
-      ---@param client vim.lsp.Client
-      ---@param bufnr number
-      on_attach = function(client, bufnr)
-        on_attach(client, bufnr)
-        local ns = vim.lsp.diagnostic.get_namespace(client.id)
-        vim.diagnostic.config({ virtual_text = true, signs = true, update_in_insert = false }, ns)
-      end,
-      on_init = function(client)
-        local root_dir = client.config.root_dir
-        if not root_dir then
-          return
-        end
-        local venv_path = root_dir .. "/.venv"
-        if vim.fn.isdirectory(venv_path) == 1 then
-          client.config.settings.python.pythonPath = venv_path .. "/bin/python"
-        end
-      end,
-      filetype = { "python" },
-      settings = {
-        pyright = {
-          disableOrganizeImports = true,
-        },
-        python = {
-          analysis = {
-            typeCheckingMode = "on",
-            diagnosticMode = "workspace",
-            typeCheckingBehavior = "strict",
-            reportMissingType = true,
-            reportUnusedImport = false,
-            reportUnusedVariable = false,
-          },
-        },
-      },
-    })
+    -- lspconfig.pyright = {
+    --   ---@param client vim.lsp.Client
+    --   ---@param bufnr number
+    --   on_attach = function(client, bufnr)
+    --     on_attach(client, bufnr)
+    --     local ns = vim.lsp.diagnostic.get_namespace(client.id)
+    --     vim.diagnostic.config({ virtual_text = true, signs = true, update_in_insert = false }, ns)
+    --   end,
+    --   on_init = function(client)
+    --     local root_dir = client.config.root_dir
+    --     if not root_dir then
+    --       return
+    --     end
+    --     local venv_path = root_dir .. "/.venv"
+    --     if vim.fn.isdirectory(venv_path) == 1 then
+    --       client.config.settings.python.pythonPath = venv_path .. "/bin/python"
+    --     end
+    --   end,
+    --   filetype = { "python" },
+    --   settings = {
+    --     pyright = {
+    --       disableOrganizeImports = true,
+    --     },
+    --     python = {
+    --       analysis = {
+    --         typeCheckingMode = "on",
+    --         diagnosticMode = "workspace",
+    --         typeCheckingBehavior = "strict",
+    --         reportMissingType = true,
+    --         reportUnusedImport = false,
+    --         reportUnusedVariable = false,
+    --       },
+    --     },
+    --   },
+    -- }
 
-    lspconfig.ruff.setup {
-      capabilities = capabilities,
-      on_attach = on_attach,
+    lspconfig.ruff = {
       init_options = {
         settings = {
           showSyntaxErrors = true,
@@ -245,18 +265,13 @@ local function config()
       }
     }
 
-    lspconfig.ruby_lsp.setup { capabilities = capabilities, on_attach = on_attach, init_options = {
-      formatter = 'standard',
-      linters = { 'standard' },
-    } }
-    lspconfig.rnix.setup { capabilities = capabilities, on_attach = on_attach }
-    lspconfig.nushell.setup { capabilities = capabilities, on_attach = on_attach }
-    lspconfig.rust_analyzer.setup { capabilities = capabilities, on_attach = on_attach }
-    lspconfig.sqlls.setup { capabilities = capabilities, on_attach = on_attach }
-    lspconfig.terraformls.setup { capabilities = capabilities, on_attach = on_attach }
-    lspconfig.taplo.setup { capabilities = capabilities, on_attach = on_attach }
-    lspconfig.ts_ls.setup {
-      capabilities = capabilities,
+    lspconfig.ruby_lsp = {
+      init_options = {
+        formatter = 'standard',
+        linters = { 'standard' },
+      }
+    }
+    lspconfig.ts_ls = {
       on_attach = function(client, bufnr)
         on_attach(client, bufnr)
         local ns = vim.lsp.diagnostic.get_namespace(client.id)
@@ -281,9 +296,7 @@ local function config()
     }
 
     do
-      lspconfig.lua_ls.setup {
-        capabilities = capabilities,
-        on_attach = on_attach,
+      lspconfig.lua_ls = {
         settings = {
           -- Ref: https://github.com/sumneko/lua-language-server/wiki/Settings
           Lua = {
@@ -329,9 +342,7 @@ local function config()
     do
       local schemas = {}
       schemas["https://json.schemastore.org/github-workflow"] = "/.github/workflows/*.yml"
-      lspconfig.yamlls.setup {
-        capabilities = capabilities,
-        on_attach = on_attach,
+      lspconfig.yamlls = {
         settings = {
           yaml = {
             schemas = schemas,
@@ -346,8 +357,8 @@ local function config()
     end
 
     do
-      local util = require('lspconfig/util')
-      local lastRootPath = nil
+      -- local util = require('lspconfig/util')
+      -- local lastRootPath = nil
       local gopath = os.getenv("GOPATH")
       if gopath == nil then
         local ok = false
@@ -358,10 +369,8 @@ local function config()
           gopath = ""
         end
       end
-      local gopathmod = gopath .. '/pkg/mod'
-      lspconfig.gopls.setup {
-        on_attach = on_attach,
-        capabilities = capabilities,
+      -- local gopathmod = gopath .. '/pkg/mod'
+      lspconfig.gopls = {
         init_options = {
           -- allExperiments = true,
           -- allowImplicitNetworkAccess = true,
@@ -397,18 +406,34 @@ local function config()
         -- functions in dependencies that are in the $GOPATH. Without this, a new
         -- gopls instance will spawn and the root dir will be the $GOPATH and it
         -- can't jump to symbols because it can't find a go.mod.
-        root_dir = function(fname)
-          if string.find(fname, gopathmod) and lastRootPath ~= nil then
-            return lastRootPath
-          end
-          lastRootPath = util.root_pattern("go.mod", ".git")(fname)
-          return lastRootPath
-        end,
+        --   root_dir = function(fname)
+        --     if string.find(fname, gopathmod) and lastRootPath ~= nil then
+        --       return lastRootPath
+        --     end
+        --     lastRootPath = util.root_pattern("go.mod", ".git")(fname)
+        --     return lastRootPath
+        --   end,
       }
     end
   end
 
   setup_lsps()
+
+  -- Wrap hover handler to strip markdown escape sequences after setup
+  -- vim.defer_fn(function()
+  --   local original_hover = vim.lsp.handlers['textDocument/hover']
+  --   vim.lsp.handlers['textDocument/hover'] = function(err, result, ctx, cfg)
+  --     if result and result.contents then
+  --       if type(result.contents) == 'table' and result.contents.value then
+  --         -- Strip backslash escapes from markdown
+  --         result.contents.value = result.contents.value:gsub('\\([%.%[%]%(%)%*])', '%1')
+  --       elseif type(result.contents) == 'string' then
+  --         result.contents = result.contents:gsub('\\([%.%[%]%(%)%*])', '%1')
+  --       end
+  --     end
+  --     return original_hover(err, result, ctx, cfg)
+  --   end
+  -- end, 0)
 end
 
 return {
