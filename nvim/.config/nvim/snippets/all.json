@@ -2,7 +2,7 @@
   "Asana task markdown link": {
     "prefix": "asana task link",
     "body": [
-      "[${1:Asana Task}](${2:$CLIPBOARD})"
+      "[Asana Task](${1})${0}"
     ],
     "description": "Create an Asana task markdown link (uses Asana URL from clipboard)"
   }
