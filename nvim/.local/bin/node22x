@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# This script is used by the copilot plugin to run node 20.x
+
+~/.volta/bin/volta run --node=22.x node "$@"

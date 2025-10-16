@@ -2,7 +2,7 @@ return {
   "zbirenbaum/copilot.lua",
   cond = require("core.utils").has_network,
   opts = {
-    copilot_node_command = "node20x",
+    copilot_node_command = "node22x",
     filetypes = {
       gitcommit = true,
       markdown = true,
