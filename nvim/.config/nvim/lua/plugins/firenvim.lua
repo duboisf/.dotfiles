@@ -7,7 +7,6 @@ return {
   end,
   config = function()
     local group = vim.api.nvim_create_augroup("cfg#firenvim", { clear = true })
-    local firenvim = require('cfg.firenvim')
 
     vim.api.nvim_create_autocmd("BufEnter", {
       group = group,
