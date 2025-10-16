@@ -38,6 +38,19 @@ local function create_autocmds()
     end,
   })
 
+  -- Set winbar for dapui windows
+  vim.api.nvim_create_autocmd('BufWinEnter', {
+    group = group,
+    pattern = '*',
+    callback = function()
+      local ft = vim.bo.filetype
+      if ft:match('^dapui_') then
+        local name = ft:gsub('^dapui_', '')
+        vim.wo.winbar = name:sub(1, 1):upper() .. name:sub(2)
+      end
+    end,
+  })
+
   vim.api.nvim_create_autocmd('Filetype', {
     group = group,
     pattern = 'dap-float',
@@ -99,7 +112,7 @@ local function getargs()
 end
 
 ---@type dap.Configuration[]
-local extra_launch_configs = {
+local extra_go_launch_configs = {
   {
     type = "go",
     name = "Debug main",
@@ -257,12 +270,31 @@ return {
         linehl = 'DapStoppedLine',
         numhl = ''
       })
+
+      dap.configurations.go = dap.configurations.go or {}
+      for _, config in ipairs(extra_go_launch_configs) do
+        table.insert(dap.configurations.go, config)
+      end
+
+      dap.configurations.lua = {
+        {
+          type = 'nlua',
+          request = 'attach',
+          name = "Attach to running Neovim instance",
+        }
+      }
+
+      dap.adapters.nlua = function(callback, config)
+        callback({ type = 'server', host = config.host or "127.0.0.1", port = config.port or 8086 })
+      end
     end,
     dependencies = {
+      'leoluz/nvim-dap-go',
       'nvim-neotest/nvim-nio',
       'rcarriga/nvim-dap-ui',
       'folke/snacks.nvim',
       'j-hui/fidget.nvim',
+      'jbyuki/one-small-step-for-vimkind',
     },
   },
   {
@@ -285,7 +317,10 @@ return {
           position = "right",
         },
         {
-          elements = { "repl" },
+          elements = {
+            { id = "repl",    size = 0.5 },
+            { id = "console", size = 0.5 }
+          },
           size = 10,
           position = "bottom",
         },
