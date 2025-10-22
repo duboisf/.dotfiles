@@ -340,12 +340,12 @@ local function config()
     end
 
     do
-      local schemas = {}
-      schemas["https://json.schemastore.org/github-workflow"] = "/.github/workflows/*.yml"
       lspconfig.yamlls = {
         settings = {
           yaml = {
-            schemas = schemas,
+            schemas = {
+              ["https://json.schemastore.org/github-workflow"] = "/.github/workflows/*.yml",
+            },
             schemaDownload = { enable = true },
             trace = {
               server = "verbose"
@@ -354,6 +354,14 @@ local function config()
           }
         }
       }
+      -- Use volta to run yamlls with node 22.
+      -- This is needed because if there is a project with an old (volta) pinned node version
+      -- then yamlls fails to start.
+      local cmd = lspconfig.yamlls.cmd
+      ---@cast cmd string[]
+      table.insert(cmd, 1, "--node=22")
+      table.insert(cmd, 1, "run")
+      table.insert(cmd, 1, "volta")
     end
 
     do
