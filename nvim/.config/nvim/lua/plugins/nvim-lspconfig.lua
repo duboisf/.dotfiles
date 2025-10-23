@@ -17,28 +17,34 @@ local function config()
     end
   end
 
-  -- local orig_buf_request_all = vim.lsp.buf_request_all
-  -- ---@diagnostic disable-next-line: duplicate-set-field
-  -- vim.lsp.buf_request_all = function(bufnr, method, params, handler)
-  --   return orig_buf_request_all(bufnr, method, params, function(results, context, cfg)
-  --     local transformed_results = {} --- @type table<integer,lsp.Hover>
-  --     for _, res in pairs(results) do
-  --       local err, result = res.err, res.result
-  --       if not err then
-  --         if result and type(result.contents) == 'table' and result.contents.kind == 'markdown' then
-  --           -- Strip backslash escapes from plaintext
-  --           if result.contents.value then
-  --             -- result.contents.value = result.contents.value:gsub('\\([%.%[%]%(%)%*])', '%1')
-  --             result.contents.value = result.contents.value:gsub('\\([%.%(%)])', '%1')
-  --             result.contents.value = result.contents.value:gsub('\\%[(.-)%]', '`%1`')
-  --           end
-  --         end
-  --       end
-  --       table.insert(transformed_results, res)
-  --     end
-  --     return handler(transformed_results, context, cfg)
-  --   end)
-  -- end
+  -- Wrap buf_request_all to strip markdown escape sequences in hover results
+  -- for all LSP clients.
+  -- I'm not sure why, but the LSP servers are returning markdown for the documentation but
+  -- they contain backslash escape sequences that mess up the rendering in the hover window.
+  -- Pretty sure I shouldn't be doing this but for now it is what it is.
+  -- TODO: figure out a better solution.
+  local orig_buf_request_all = vim.lsp.buf_request_all
+  ---@diagnostic disable-next-line: duplicate-set-field
+  vim.lsp.buf_request_all = function(bufnr, method, params, handler)
+    return orig_buf_request_all(bufnr, method, params, function(results, context, cfg)
+      local transformed_results = {} --- @type table<integer,lsp.Hover>
+      for _, res in pairs(results) do
+        local err, result = res.err, res.result
+        if not err then
+          if result and type(result.contents) == 'table' and result.contents.kind == 'markdown' then
+            -- Strip backslash escapes from plaintext
+            if result.contents.value then
+              -- result.contents.value = result.contents.value:gsub('\\([%.%[%]%(%)%*])', '%1')
+              result.contents.value = result.contents.value:gsub('\\([%.%(%)])', '%1')
+              result.contents.value = result.contents.value:gsub('\\%[(.-)%]', '`%1`')
+            end
+          end
+        end
+        table.insert(transformed_results, res)
+      end
+      return handler(transformed_results, context, cfg)
+    end)
+  end
 
   vim.diagnostic.config({
     virtual_text = false,
@@ -426,22 +432,6 @@ local function config()
   end
 
   setup_lsps()
-
-  -- Wrap hover handler to strip markdown escape sequences after setup
-  -- vim.defer_fn(function()
-  --   local original_hover = vim.lsp.handlers['textDocument/hover']
-  --   vim.lsp.handlers['textDocument/hover'] = function(err, result, ctx, cfg)
-  --     if result and result.contents then
-  --       if type(result.contents) == 'table' and result.contents.value then
-  --         -- Strip backslash escapes from markdown
-  --         result.contents.value = result.contents.value:gsub('\\([%.%[%]%(%)%*])', '%1')
-  --       elseif type(result.contents) == 'string' then
-  --         result.contents = result.contents:gsub('\\([%.%[%]%(%)%*])', '%1')
-  --       end
-  --     end
-  --     return original_hover(err, result, ctx, cfg)
-  --   end
-  -- end, 0)
 end
 
 return {
