@@ -168,6 +168,12 @@ local function config()
 
       set('grl', function() vim.lsp.codelens.run() end, '[lsp] vim.lsp.codelens.run()')
       set('<leader>F', safe_formatting_sync, '[lsp] format')
+
+
+      vim.keymap.set('n', 'gK', function()
+        local new_config = not vim.diagnostic.config().virtual_lines
+        vim.diagnostic.config({ virtual_lines = new_config })
+      end, { desc = 'Toggle diagnostic virtual_lines' })
     end
   end)()
 
