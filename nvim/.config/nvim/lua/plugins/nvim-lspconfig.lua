@@ -8,6 +8,13 @@ local function config()
     sign define DiagnosticSignHint text=󰌵 texthl=DiagnosticSignHint
   ]]
 
+  -- Disable lsp semantic tokens highlighting for strings as it messes up
+  -- treesitter injections highlighting.
+  -- Example: go.nvim plugin does treesitter injections for json and sql in strings.
+  -- With semantic tokens enabled, the strings are highlighted plain strings as
+  -- semantic tokens have a higher priority than treesitter (use :Inspect to see).
+  vim.api.nvim_set_hl(0, '@lsp.type.string', {})
+
   local function safe_formatting_sync()
     for _, client in pairs(vim.lsp.get_clients()) do
       if client.server_capabilities.documentFormattingProvider then
