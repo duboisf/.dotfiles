@@ -4,7 +4,6 @@ return {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     dependencies = {
-      'nushell/tree-sitter-nu',
       'nvim-treesitter/nvim-treesitter-textobjects',
       'nvim-treesitter/playground',
     },
@@ -28,6 +27,7 @@ return {
         'gomod',
         'gosum',
         'gotmpl',
+        'json',
         'lua',
         'make',
         'markdown',
@@ -116,8 +116,8 @@ return {
             ["ib"] = "@block.inner",
             ["aL"] = "@loop.outer",
             ["iL"] = "@loop.inner",
-            ["iS"] = "@statement.inner",
-            ["aS"] = "@statement.outer",
+            ["is"] = "@statement.inner",
+            ["as"] = "@statement.outer",
             ["ad"] = "@comment.outer",
             ["am"] = "@call.outer",
             ["im"] = "@call.inner"
