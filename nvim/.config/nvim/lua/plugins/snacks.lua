@@ -42,6 +42,15 @@ local function get_current_buf_dir()
   return vim.fn.expand("%:p:h")
 end
 
+local function grep_git_root()
+  local git_root = get_git_root()
+  Snacks.picker.grep({
+    args = { "-i", "-." },
+    need_search = false,
+    cwd = git_root,
+  })
+end
+
 local function grep_cwd()
   Snacks.picker.grep({
     args = { "-i", "-." },
@@ -92,7 +101,7 @@ return {
     { "<leader>fa",      function() files_in_git_root() end,                                     desc = "Find Config File" },
     { "<leader>fd",      function() Snacks.picker.files({ cwd = get_current_buf_dir() }) end,    desc = "Find files in directory of current file" },
     { "<leader>gd",      grep_current_file_directory,                                            desc = "Grep files in directory of current file" },
-    { "<leader>gg",      grep_cwd,                                                               desc = "Grep files" },
+    { "<leader>gg",      grep_git_root,                                                          desc = "Grep files in git root" },
     -- Top Pickers & Explorer
     { "<leader><space>", function() Snacks.picker.smart() end,                                   desc = "Smart Find Files" },
     { "<leader>,",       function() Snacks.picker.buffers() end,                                 desc = "Buffers" },
