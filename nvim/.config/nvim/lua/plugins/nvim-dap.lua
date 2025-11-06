@@ -217,6 +217,8 @@ local function on_session(old, new)
   toggle('n', '<left>', dap.step_out)
   toggle({ 'n', 'v' }, '<C-h>', require('dap.ui.widgets').hover)
   toggle({ 'n', 'v' }, '<C-p>', require('dap.ui.widgets').preview)
+  toggle('n', '[v', function() vim.cmd('DapVirtualTextEnable') end)
+  toggle('n', ']v', function() vim.cmd('DapVirtualTextDisable') end)
   toggle('n', '<leader>lf',
     function()
       local widgets = require('dap.ui.widgets')
@@ -342,9 +344,7 @@ return {
   {
     'theHamsta/nvim-dap-virtual-text',
     opts = {
-      all_references = true,
-      commented = true,
-      virt_text_win_col = 80,
+      virt_lines = true,
     },
   },
 }
