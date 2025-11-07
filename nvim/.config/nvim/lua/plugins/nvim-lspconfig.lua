@@ -26,9 +26,6 @@ local function config()
 
   -- Wrap buf_request_all to strip markdown escape sequences in hover results
   -- for all LSP clients.
-  -- I'm not sure why, but the LSP servers are returning markdown for the documentation but
-  -- they contain backslash escape sequences that mess up the rendering in the hover window.
-  -- Pretty sure I shouldn't be doing this but for now it is what it is.
   -- TODO: figure out a better solution.
   local orig_buf_request_all = vim.lsp.buf_request_all
   ---@diagnostic disable-next-line: duplicate-set-field
@@ -41,9 +38,7 @@ local function config()
           if result and type(result.contents) == 'table' and result.contents.kind == 'markdown' then
             -- Strip backslash escapes from plaintext
             if result.contents.value then
-              -- result.contents.value = result.contents.value:gsub('\\([%.%[%]%(%)%*])', '%1')
-              result.contents.value = result.contents.value:gsub('\\([%.%(%)])', '%1')
-              result.contents.value = result.contents.value:gsub('\\%[(.-)%]', '`%1`')
+              result.contents.value = result.contents.value:gsub('\\([%.%(%)-])', '%1')
             end
           end
         end
