@@ -7,8 +7,6 @@ $directory\
 $hostname\
 $git_branch\
 $git_status\
-(fg:color_aqua bg:color_blue)\
-$pulumi\
 (fg:color_blue bg:color_bg3)\
 $aws\
 $kubernetes\
