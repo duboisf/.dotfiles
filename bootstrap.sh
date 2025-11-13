@@ -20,6 +20,17 @@ sudo apt-get install --no-install-recommends -y \
 TMPDIR=$(mktemp -d)
 trap "rm -rf $TMPDIR" EXIT
 
+# golang
+(
+    if command -v go > /dev/null; then
+        echo "✅ golang already installed"
+        exit 0
+    fi
+    cd $TMPDIR
+    curl -L -o golang.tar.gz https://go.dev/dl/go1.25.4.linux-amd64.tar.gz
+    sudo tar -C /usr/local -xzf golang.tar.gz
+)
+
 # gh
 (
     if command -v gh > /dev/null; then
@@ -74,7 +85,7 @@ trap "rm -rf $TMPDIR" EXIT
     fi
     echo "🔧 installing nvim"
     cd $TMPDIR
-    curl -L -o nvim.tar.gz https://github.com/neovim/neovim/releases/download/v0.11.0/nvim-linux-x86_64.tar.gz
+    curl -L -o nvim.tar.gz https://github.com/neovim/neovim/releases/download/v0.11.5/nvim-linux-x86_64.tar.gz
     mkdir -p ~/.local/stow 2> /dev/null || true
     cd ~/.local/stow
     tar xf $TMPDIR/nvim.tar.gz
@@ -106,7 +117,7 @@ trap "rm -rf $TMPDIR" EXIT
     fi
     echo "🔧 installing starship"
     cd $TMPDIR
-    curl -L -o starship.tar.gz https://github.com/starship/starship/releases/download/v1.22.1/starship-x86_64-unknown-linux-gnu.tar.gz
+    curl -L -o starship.tar.gz https://github.com/starship/starship/releases/download/v1.24.0/starship-x86_64-unknown-linux-gnu.tar.gz
     tar xf starship.tar.gz
     install ./starship ~/.local/bin
     echo "✅ starship installed"
@@ -120,7 +131,7 @@ trap "rm -rf $TMPDIR" EXIT
     fi
     echo "🔧 installing eza"
     cd $TMPDIR
-    curl -L -o eza.tar.gz https://github.com/eza-community/eza/releases/download/v0.20.19/eza_x86_64-unknown-linux-gnu.tar.gz
+    curl -L -o eza.tar.gz https://github.com/eza-community/eza/releases/download/v0.23.4/eza_x86_64-unknown-linux-gnu.tar.gz
     tar xf eza.tar.gz
     install ./eza ~/.local/bin
     echo "✅ eza installed"
@@ -134,7 +145,7 @@ trap "rm -rf $TMPDIR" EXIT
     fi
     echo "🔧 installing fzf"
     cd $TMPDIR
-    curl -L -o fzf.tar.gz https://github.com/junegunn/fzf/releases/download/v0.58.0/fzf-0.58.0-linux_amd64.tar.gz
+    curl -L -o fzf.tar.gz https://github.com/junegunn/fzf/releases/download/v0.66.1/fzf-0.66.1-linux_amd64.tar.gz
     tar xf fzf.tar.gz
     install ./fzf ~/.local/bin
     echo "✅ fzf installed"
@@ -148,7 +159,7 @@ trap "rm -rf $TMPDIR" EXIT
     fi
     echo "🔧 installing fd"
     cd $TMPDIR
-    curl -L -o fd.tar.gz https://github.com/sharkdp/fd/releases/download/v10.2.0/fd-v10.2.0-x86_64-unknown-linux-gnu.tar.gz
+    curl -L -o fd.tar.gz https://github.com/sharkdp/fd/releases/download/v10.3.0/fd-v10.3.0-x86_64-unknown-linux-gnu.tar.gz
     tar xf fd.tar.gz
     find | grep fd
     install ./fd-*/fd ~/.local/bin
