@@ -125,6 +125,15 @@ return {
   version = "v17.*",
   opts = {
     adapters = {
+      acp = {
+        codex = function()
+          return require("codecompanion.adapters").extend("codex", {
+            defaults = {
+              auth_method = "chatgpt",
+            },
+          })
+        end,
+      },
       http = {
         copilot = function()
           return require("codecompanion.adapters").extend(
@@ -146,7 +155,7 @@ return {
     },
     strategies = {
       chat = {
-        adapter = "copilot",
+        adapter = "codex",
         keymaps = {
           clear = {
             modes = {},
