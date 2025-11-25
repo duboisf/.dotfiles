@@ -9,7 +9,6 @@ sudo apt-get install --no-install-recommends -y \
     build-essential \
     ca-certificates \
     curl \
-    eza \
     fontconfig \
     git \
     ripgrep \
@@ -122,6 +121,20 @@ trap "rm -rf $TMPDIR" EXIT
     tar xf starship.tar.gz
     install ./starship ~/.local/bin
     echo "✅ starship installed"
+)
+
+# eza
+(
+    if [[ -x ~/.local/bin/eza ]]; then
+        echo "✅ eza already installed"
+        exit 0
+    fi
+    echo "🔧 installing eza"
+    cd $TMPDIR
+    curl -L -o eza.tar.gz https://github.com/eza-community/eza/releases/download/v0.23.4/eza_x86_64-unknown-linux-gnu.tar.gz
+    tar xf eza.tar.gz
+    install ./eza ~/.local/bin
+    echo "✅ eza installed"
 )
 
 # fzf
