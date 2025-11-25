@@ -239,7 +239,17 @@ fi
 
 # Copy the current buffer into the system clipboard so that you can paste with ctrl-v
 copy-to-system-clipboard () {
-    print -rn -- $BUFFER | xclip -selection clipboard
+    local clipboard_cmd
+    if (( $+commands[xclip] )); then
+        clipboard_cmd='xclip -selection clipboard'
+    elif (( $+commands[wl-copy] )); then
+        clipboard_cmd='wl-copy'
+    else
+        zle -M "No clipboard command found (xclip/wl-copy)"
+        return 1
+    fi
+
+    print -rn -- $BUFFER | $clipboard_cmd
 }
 
 zle -N copy-to-system-clipboard
