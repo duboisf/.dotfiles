@@ -3,6 +3,7 @@
 [user]
 	email = 169247+duboisf@users.noreply.github.com
 	name = Fred Dubois
+	signingkey = EAD1C56184229C79E576B6255EECC8A93659FC0D
 [alias]
 	auto-pr-merge = !gh pr merge --auto --merge
 	# Prevent annoying 'Opening in existing browser session.' message
