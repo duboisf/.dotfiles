@@ -23,6 +23,7 @@ function () {
         ~/.rbenv/bin
         ~/.tfenv/bin
         ~/go/bin
+        ~/.cargo/bin
     )
 
     for d in $optional_paths; do

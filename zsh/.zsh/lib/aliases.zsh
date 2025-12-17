@@ -179,6 +179,7 @@ alias gspu='gh search prs U'
 alias tf=terraform
 alias tfi='tf init'
 alias tfp='tf plan -out=plan.out'
+alias tfa='tf apply plan.out'
 alias tfpc='tfp | perl -wlne "/^(..0m)?(\s{6}\S)/ or /^..0m$/ or print"'
 alias tfs='tf show plan.out'
 alias tfsc='tfs | perl -wlne "/^(..0m)?(\s{6}\S)/ or /^(..0m){1,2}$/ or print"'
@@ -246,3 +247,13 @@ alias be='bundle exec'
 alias cpc='nvim -c CopilotChat -c only'
 
 alias kssh='kitten ssh'
+
+alias rgh='rg --hidden'
+
+alias ts=tailscale
+
+alias gc='gcloud'
+alias gcal='gc auth login --update-adc'
+alias gccl='gc config list'
+alias gclp='gc projects list'
+alias gcsp='gc config set project'

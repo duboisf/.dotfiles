@@ -1,5 +1,5 @@
 export def main []: nothing -> record<token: string, accounts: record<any>> {
-  open ~/.cloudflare.json
+  open ~/.config/cloudflare/config.json
 }
 
 export def base_url []: nothing -> string { "https://api.cloudflare.com/client/v4" }

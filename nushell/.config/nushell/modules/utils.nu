@@ -25,7 +25,7 @@ export def "edit interactively" []: table -> list<string> {
   # Read back the possibly edited file and return the selected column names
   open $tmpFile
   | lines
-  | filter { |line| not ($line | str starts-with '#') }
+  | where { |line| not ($line | str starts-with '#') }
   | each { split row '#' | take 1 | str trim }
   | flatten
 }
@@ -64,7 +64,7 @@ export def "pick columns" []: table -> list<string> {
   let selectedColumns = $columnData
   | edit interactively
   | lines
-  | filter { |line| not ($line | str starts-with '#') }
+  | where { |line| not ($line | str starts-with '#') }
   | each { split row '#' | take 1 | str trim }
   | flatten
 
