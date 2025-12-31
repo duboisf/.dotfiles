@@ -222,6 +222,7 @@ local function config()
       on_attach = on_attach,
     })
     local lspconfig = vim.lsp.config
+    vim.lsp.enable('terraformls')
     lspconfig.jsonls = {
       settings = {
         json = {
@@ -373,9 +374,11 @@ local function config()
       -- then yamlls fails to start.
       local cmd = lspconfig.yamlls.cmd
       ---@cast cmd string[]
-      table.insert(cmd, 1, "--node=22")
-      table.insert(cmd, 1, "run")
-      table.insert(cmd, 1, "volta")
+      table.insert(cmd, 1, "--")
+      table.insert(cmd, 1, "node@22")
+      table.insert(cmd, 1, "exec")
+      table.insert(cmd, 1, "mise")
+      print(vim.inspect(cmd))
     end
 
     do

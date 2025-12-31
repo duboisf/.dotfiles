@@ -52,7 +52,3 @@ done
 if (( ${+commands[starship]} )); then
     eval "$(starship init zsh)"
 fi
-
-if (( ${+commands[rbenv]} )); then
-    eval "$(rbenv init -)"
-fi
