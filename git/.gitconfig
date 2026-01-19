@@ -17,7 +17,7 @@
 	poh = push -u origin HEAD
 	pr-merge = !gh pr merge --merge --delete-branch && git pull --prune
 	prv = !gh pr view
-	create-branch = !bash -c 'git switch -c fd/'$1
+	create-branch = !bash -c 'git switch -c fred/'$1
 [commit]
 	verbose = true
 	gpgsign = true
@@ -46,3 +46,5 @@
 
 [include]
     path = ~/.gitconfig.local
+[difftool "nvimdiff"]
+	cmd = nvim -d \"$LOCAL\" \"$REMOTE\"
