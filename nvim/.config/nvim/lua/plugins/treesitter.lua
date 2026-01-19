@@ -37,6 +37,7 @@ return {
         'regex',
         'ruby',
         'terraform',
+        'tsx',
         'typescript',
         'vim',
         'vimdoc',
