@@ -78,7 +78,7 @@ return {
     picker = {
       formatters = {
         file = {
-          truncate = 200,
+          min_width = 999,
         },
       },
       sources = {
