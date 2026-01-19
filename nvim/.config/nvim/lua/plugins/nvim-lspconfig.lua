@@ -378,7 +378,6 @@ local function config()
       table.insert(cmd, 1, "node@22")
       table.insert(cmd, 1, "exec")
       table.insert(cmd, 1, "mise")
-      print(vim.inspect(cmd))
     end
 
     do
