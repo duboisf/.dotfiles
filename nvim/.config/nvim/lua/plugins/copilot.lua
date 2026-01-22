@@ -1,6 +1,5 @@
 return {
   "zbirenbaum/copilot.lua",
-  cond = require("core.utils").has_network,
   opts = {
     copilot_node_command = "node22x",
     filetypes = {

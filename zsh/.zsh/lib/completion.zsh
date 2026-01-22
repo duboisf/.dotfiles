@@ -29,3 +29,6 @@ if command -v gcloud >/dev/null; then
     source "${sdk_root}/completion.bash.inc"
   fi
 fi
+
+# Makefile completion: show only targets, not files and targets
+zstyle ':completion:*:*:make:*' tag-order 'targets'
