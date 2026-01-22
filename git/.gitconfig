@@ -38,13 +38,13 @@
 [core]
 	pager = less -F -X
 [credential "https://github.com"]
-	helper = !/usr/bin/gh auth git-credential
+	helper = !/home/fred/.local/bin/gh auth git-credential
 [credential "https://gist.github.com"]
-	helper = !/usr/bin/gh auth git-credential
+	helper = !/home/fred/.local/bin/gh auth git-credential
 [fetch]
 	pruneTags = true
+[worktree]
+	useRelativePaths = true
 
 [include]
     path = ~/.gitconfig.local
-[difftool "nvimdiff"]
-	cmd = nvim -d \"$LOCAL\" \"$REMOTE\"
