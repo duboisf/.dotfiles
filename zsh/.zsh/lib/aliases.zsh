@@ -195,11 +195,6 @@ alias tfwss='tfw show'
 ########
 alias rdlv='dlv --listen=:2345 --headless=true --api-version=2 --accept-multiclient'
 
-# on debian-based distros, fd is called fdfind
-if (( $+commands[fdfind] )); then
-    alias fd=fdfind
-fi
-
 # helm
 #######
 alias h=helm
