@@ -157,10 +157,9 @@ alias grc='git rebase --continue'
 alias gra='git rebase --abort'
 alias gd='git diff'
 alias gdc='git diff --cached'
-alias gw='git worktree'
-alias gwl='gw list'
-alias gwa='gw add'
-alias gwr='gw remove'
+alias gwl='git worktree list'
+alias gwa='git worktree add'
+alias gwr='git worktree remove'
 
 # github gh
 ###########
