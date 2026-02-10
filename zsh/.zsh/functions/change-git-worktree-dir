@@ -1,0 +1,45 @@
+
+local current worktree
+current=$(git rev-parse --show-toplevel 2>/dev/null)
+
+# Collect worktree paths and branches (excluding current)
+local raw abspath branch relpath
+raw=$(
+  git worktree list --porcelain |
+  awk -v current="$current" '
+    BEGIN { OFS="\t" }
+    /^worktree /  { path = $2; branch = "" }
+    /^branch /    { sub(/^refs\/heads\//, "", $2); branch = $2 }
+    /^detached$/  { branch = "(detached)" }
+    /^$/          { if (path && path != current) print path, branch; path = "" }
+    END           { if (path && path != current) print path, branch }
+  '
+)
+
+if [[ -z "$raw" ]]; then
+  [[ -z "$WIDGET" ]] && echo "gw: No other git worktree found."
+  return 1
+fi
+
+# Build entries with relative paths: abspath\trelpath\tbranch
+local entries
+entries=$(
+  {
+    printf "_\tPATH\tBRANCH\n"
+    while IFS=$'\t' read -r abspath branch; do
+      relpath=$(realpath --relative-to="$current" "$abspath")
+      printf "%s\t%s\t%s\n" "$abspath" "$relpath" "$branch"
+    done <<< "$raw"
+  } | column -t -s "	"
+)
+
+worktree=$(
+  echo "$entries" |
+  fzf --layout=reverse --header-first \
+      --header="Current dir: $current" \
+      --prompt="Switch to: " \
+      --with-nth=2.. --accept-nth=1 --header-lines=1
+) || return 0
+if [[ -n "$worktree" ]]; then
+  cd "$worktree"
+fi

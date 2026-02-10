@@ -1,0 +1,9 @@
+
+change-git-worktree-dir
+local rc=$?
+if [[ $rc -eq 0 ]]; then
+  zle reset-prompt
+else
+  zle redisplay
+  zle -M "No other worktrees found."
+fi
