@@ -49,6 +49,10 @@ for file in ~/.zsh/lib/*.zsh ~/.zsh.private/lib/*.zsh(N); do
     source $file
 done
 
-if (( ${+commands[starship]} )); then
-    eval "$(starship init zsh)"
+if [[ $TERM != "linux" ]]; then
+    if (( ${+commands[starship]} )); then
+        eval "$(starship init zsh)"
+    fi
+else
+    PS1='%n@%m:%~%# '
 fi
