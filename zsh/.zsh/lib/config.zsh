@@ -18,18 +18,12 @@ redraw-prompt () {
 }
 zle -N redraw-prompt
 
-# Use Esc-l (or Alt-l) to list directory content
-bindkey -s '\el' 'l\n'
-
 cd-to-parent-directory-widget() {
     cd ..
     local result=$?
     zle redraw-prompt
     return $result
 }
-zle -N cd-to-parent-directory-widget
-# Bind Esc+u (or Alt+u) to go up to the parent folder
-bindkey '\eu' cd-to-parent-directory-widget
 
 # Push to the directory stack on directory change
 setopt autopushd
@@ -107,10 +101,6 @@ cdr-widget() {
         fi
     done
 }
-# define the cdr-widget
-zle -N cdr-widget
-# bind alt-j to the cdr-widget
-bindkey '\ej' cdr-widget
 
 # END Recently visited directories
 
@@ -121,118 +111,6 @@ bindkey '\ej' cdr-widget
 # the history file, and also causes your typed commands to be appended to the
 # history file"
 setopt share_history
-
-# fzf config
-############
-
-# Mofify the fzf-history-widget. When pressing enter, it
-# immediately executes the history entry; when pressing
-# ctrl-e, it puts the history entry on the command line to
-# edit it; when pressing ctrl-i, it inserts the history entry
-# after the cursor
-fzf-history-widget () {
-    emulate -L zsh
-    local selected num
-    setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases 2> /dev/null
-    selected=($(fc -rl 1 | perl -ne 'print if !$seen{(/^\s*[0-9]+\s+(.*)/, $1)}++' |
-    FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --expect=ctrl-e,ctrl-i --tiebreak=index --bind=ctrl-r:toggle-sort $FZF_CTRL_R_OPTS --query=${(qqq)LBUFFER} +m" $(__fzfcmd)))
-    local ret=$?
-    if [[ -n "$selected" ]]; then
-        local -i execute_directly=1
-        local pressed_key
-        pressed_key=$selected[1]
-        if [[ $pressed_key =~ ctrl-[ei] ]]; then
-            execute_directly=0
-            shift selected
-        fi
-        # selected history entry
-        num=$selected[1]
-        if [[ -n "$num" ]]; then
-            if [[ $pressed_key == ctrl-i ]]; then
-                # ctrl-i to insert the selected history entry
-                # after the cursor
-                RBUFFER=$(builtin history -n $num $num)${RBUFFER}
-            else
-                zle vi-fetch-history -n $num
-            fi
-            if (( $execute_directly )); then
-                zle accept-line
-            fi
-        fi
-    fi
-    zle reset-prompt
-    return $ret
-}
-
-if (( $+commands[fzf] )); then
-    () {
-        # In debian based distributions, the fd binary is named fdfind
-        local fd_bin_path=${commands[fd]:-$commands[fdfind]}
-        if [[ -n $fd_bin_path ]]; then
-            # Ensure precmds are run after cd.
-            # Copied from junegunn/fzf's repo.
-            original-fzf-redraw-prompt() {
-              local precmd
-              for precmd in $precmd_functions; do
-                $precmd
-              done
-              zle reset-prompt
-            }
-            zle -N original-fzf-redraw-prompt
-            # revert the fzf-cd-widget in junegunn/fzf's repo to changing the
-            # directory without printing the cd command on the command line.
-            modified-fzf-cd-widget () {
-                local cmd="${FZF_ALT_C_COMMAND:-"command find -L . -mindepth 1 \\( -path '*/\\.*' -o -fstype 'sysfs' -o -fstype 'devfs' -o -fstype 'devtmpfs' -o -fstype 'proc' \\) -prune     -o -type d -print 2> /dev/null | cut -b3-"}"
-                setopt localoptions pipefail no_aliases 2> /dev/null
-                local dir="$(eval "$cmd" | FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} --reverse --bind=ctrl-z:ignore ${FZF_DEFAULT_OPTS-} ${FZF_ALT_C_OPTS-}" $(__fzfcmd) +m)"
-                if [[ -z "$dir" ]]; then
-                    zle redisplay
-                    return 0
-                fi
-                builtin cd -- ${(q)dir}
-                local ret=$?
-                unset dir
-                zle original-fzf-redraw-prompt
-                return $ret
-            }
-            zle -N modified-fzf-cd-widget
-
-            # this wrapper is use to set force_chpwd_recent_dirs to
-            # 1 so that the custom_chpwd_recent_dirs isn't skipped
-            # so that the directories jumped to with fzf-cd-widget
-            # are recorded in the recently visited directories
-            fzf-cd-widget-wrapper() {
-                force_chpwd_recent_dirs=1
-                zle modified-fzf-cd-widget
-            }
-            zle -N fzf-cd-widget-wrapper
-            bindkey '\ec' fzf-cd-widget-wrapper
-            # Use fd instead of find
-            typeset -g FZF_ALT_C_COMMAND
-            typeset -g FZF_CTRL_T_COMMAND
-            typeset -g FZF_DEFAULT_COMMAND
-            # By default fzf uses find, let's use fd instead
-            FZF_DEFAULT_COMMAND="$fd_bin_path --type file --follow --hidden --no-ignore"
-            FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-            FZF_ALT_C_COMMAND="$fd_bin_path --type directory --follow"
-            # Use fd instead of find for zsh completion
-            _fzf_compgen_path() fd --hidden --follow --no-ignore . "$1"
-            # Use fd to generate the list for directory completion
-            _fzf_compgen_dir() fd --type directory --hidden --no-ignore --follow . "$1"
-            # This function is used to pass different options to fzf based
-            # on the command we are displaying completion for
-            _fzf_comprun() {
-                local cmd=$1
-                shift
-                case $cmd in
-                    *) fzf "$@";;
-                esac
-            }
-            # fzf completion for functions
-            _fzf_complete_functions() _fzf_complete -- "$@" < <(print ${(kF)functions})
-        fi
-    }
-fi
 
 # Editing
 #########
@@ -251,17 +129,3 @@ copy-to-system-clipboard () {
 
     print -rn -- $BUFFER | "${clipboard_cmd[@]}"
 }
-
-zle -N copy-to-system-clipboard
-bindkey '\C-x\C-y' copy-to-system-clipboard
-
-# Edit the current command line in $EDITOR
-autoload -U edit-command-line
-zle -N edit-command-line
-bindkey '\C-x\C-e' edit-command-line
-
-# file rename magic
-bindkey "^[m" copy-prev-shell-word
-
-# Use Esc-s (or Alt-s) to switch git branches
-bindkey -s '\es' 'gh switch-branch\n'
