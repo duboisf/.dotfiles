@@ -2,64 +2,64 @@
 local current worktree
 current=$(git rev-parse --show-toplevel 2>/dev/null)
 
-# Collect worktree paths and branches (excluding current)
-local raw abspath branch relpath
-raw=$(
-  git worktree list --porcelain |
-  awk -v current="$current" '
-    BEGIN { OFS="\t" }
-    /^worktree /  { path = $2; branch = "" }
-    /^branch /    { sub(/^refs\/heads\//, "", $2); branch = $2 }
-    /^detached$/  { branch = "(detached)" }
-    /^$/          { if (path && path != current) print path, branch; path = "" }
-    END           { if (path && path != current) print path, branch }
-  '
-)
+while true; do
+  # Collect worktree paths and branches (excluding current)
+  local raw abspath branch relpath
+  raw=$(
+    git worktree list --porcelain |
+    awk -v current="$current" '
+      BEGIN { OFS="\t" }
+      /^worktree /  { path = $2; branch = "" }
+      /^branch /    { sub(/^refs\/heads\//, "", $2); branch = $2 }
+      /^detached$/  { branch = "(detached)" }
+      /^$/          { if (path && path != current) print path, branch; path = "" }
+      END           { if (path && path != current) print path, branch }
+    '
+  )
 
-if [[ -z "$raw" ]]; then
-  [[ -z "$WIDGET" ]] && echo "gw: No other git worktree found."
-  return 1
-fi
-
-# Build entries with relative paths: abspath\trelpath\tbranch
-local entries
-entries=$(
-  {
-    printf "_\tPATH\tBRANCH\n"
-    while IFS=$'\t' read -r abspath branch; do
-      relpath=$(realpath --relative-to="$current" "$abspath")
-      printf "%s\t%s\t%s\n" "$abspath" "$relpath" "$branch"
-    done <<< "$raw"
-  } | column -t -s "	"
-)
-
-local selection key
-selection=$(
-  echo "$entries" |
-  fzf --layout=reverse --header-first \
-      --header="Current: $current  │  enter: switch  ctrl-x: remove" \
-      --prompt="Worktree: " \
-      --with-nth=2.. --accept-nth=1 --header-lines=1 \
-      --expect=ctrl-x
-) || return 0
-
-key=$(head -1 <<< "$selection")
-worktree=$(tail -1 <<< "$selection")
-
-if [[ -z "$worktree" ]]; then
-  return 0
-fi
-
-if [[ "$key" == "ctrl-x" ]]; then
-  local output
-  if output=$(git worktree remove "$worktree" 2>&1); then
-    REPLY="Removed worktree: $worktree"
-    [[ -z "$WIDGET" ]] && echo "$REPLY"
-  else
-    REPLY="$output"
-    [[ -z "$WIDGET" ]] && echo "$REPLY" >&2
+  if [[ -z "$raw" ]]; then
+    [[ -z "$WIDGET" ]] && echo "$0: No other git worktree found."
     return 1
   fi
-else
-  cd "$worktree"
-fi
+
+  # Build entries with relative paths: abspath\trelpath\tbranch
+  local entries
+  entries=$(
+    {
+      printf "_\tPATH\tBRANCH\n"
+      while IFS=$'\t' read -r abspath branch; do
+        relpath=$(realpath --relative-to="$current" "$abspath")
+        printf "%s\t%s\t%s\n" "$abspath" "$relpath" "$branch"
+      done <<< "$raw"
+    } | column -t -s "	"
+  )
+
+  local selection key
+  selection=$(
+    echo "$entries" |
+    fzf --layout=reverse --header-first \
+        --header="Current: $current  │  enter: switch  ctrl-x: remove" \
+        --prompt="Worktree: " \
+        --with-nth=2.. --accept-nth=1 --header-lines=1 \
+        --expect=ctrl-x
+  ) || return 0
+
+  key=$(head -1 <<< "$selection")
+  worktree=$(tail -1 <<< "$selection")
+
+  if [[ -z "$worktree" ]]; then
+    return 0
+  fi
+
+  if [[ "$key" == "ctrl-x" ]]; then
+    local output
+    if output=$(git worktree remove "$worktree" 2>&1); then
+      [[ -z "$WIDGET" ]] && echo "Removed worktree: $worktree"
+    else
+      [[ -z "$WIDGET" ]] && echo "$output" >&2
+    fi
+  else
+    cd "$worktree"
+    return 0
+  fi
+done
