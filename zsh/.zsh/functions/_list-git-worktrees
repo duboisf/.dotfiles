@@ -1,0 +1,25 @@
+
+emulate -RL zsh
+
+local current=${1:?usage: _list-git-worktrees <current-worktree-root>}
+local raw abspath branch relpath
+
+raw=$(
+  git worktree list --porcelain |
+  awk -v current="$current" '
+    BEGIN { OFS="\t" }
+    /^worktree /  { path = $2; branch = "" }
+    /^branch /    { sub(/^refs\/heads\//, "", $2); branch = $2 }
+    /^detached$/  { branch = "(detached)" }
+    /^$/          { if (path && path != current) print path, branch; path = "" }
+    END           { if (path && path != current) print path, branch }
+  '
+)
+
+[[ -z "$raw" ]] && return
+
+printf "_\tPATH\tBRANCH\n"
+while IFS=$'\t' read -r abspath branch; do
+  relpath=$(realpath --relative-to="$current" "$abspath")
+  printf "%s\t%s\t%s\n" "$abspath" "$relpath" "$branch"
+done <<< "$raw" | column -t -s "	"
