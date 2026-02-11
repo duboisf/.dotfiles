@@ -1,10 +1,9 @@
 
-local current worktree
+local current worktree raw abspath branch relpath entries selection key output
 current=$(git rev-parse --show-toplevel 2>/dev/null)
 
 while true; do
   # Collect worktree paths and branches (excluding current)
-  local raw abspath branch relpath
   raw=$(
     git worktree list --porcelain |
     awk -v current="$current" '
@@ -23,7 +22,6 @@ while true; do
   fi
 
   # Build entries with relative paths: abspath\trelpath\tbranch
-  local entries
   entries=$(
     {
       printf "_\tPATH\tBRANCH\n"
@@ -34,7 +32,6 @@ while true; do
     } | column -t -s "	"
   )
 
-  local selection key
   selection=$(
     echo "$entries" |
     fzf --layout=reverse --header-first \
@@ -52,7 +49,6 @@ while true; do
   fi
 
   if [[ "$key" == "ctrl-x" ]]; then
-    local output
     if output=$(git worktree remove "$worktree" 2>&1); then
       [[ -z "$WIDGET" ]] && echo "Removed worktree: $worktree"
     else
