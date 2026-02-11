@@ -1,9 +1,11 @@
 
+REPLY=
 change-git-worktree-dir
 local rc=$?
 if [[ $rc -eq 0 ]]; then
   zle reset-prompt
+  [[ -n "$REPLY" ]] && zle -M "$REPLY"
 else
   zle redisplay
-  zle -M "No other worktrees found."
+  zle -M "${REPLY:-No other worktrees found.}"
 fi

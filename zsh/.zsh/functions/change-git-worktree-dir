@@ -33,13 +33,33 @@ entries=$(
   } | column -t -s "	"
 )
 
-worktree=$(
+local selection key
+selection=$(
   echo "$entries" |
   fzf --layout=reverse --header-first \
-      --header="Current dir: $current" \
-      --prompt="Switch to: " \
-      --with-nth=2.. --accept-nth=1 --header-lines=1
+      --header="Current: $current  │  enter: switch  ctrl-x: remove" \
+      --prompt="Worktree: " \
+      --with-nth=2.. --accept-nth=1 --header-lines=1 \
+      --expect=ctrl-x
 ) || return 0
-if [[ -n "$worktree" ]]; then
+
+key=$(head -1 <<< "$selection")
+worktree=$(tail -1 <<< "$selection")
+
+if [[ -z "$worktree" ]]; then
+  return 0
+fi
+
+if [[ "$key" == "ctrl-x" ]]; then
+  local output
+  if output=$(git worktree remove "$worktree" 2>&1); then
+    REPLY="Removed worktree: $worktree"
+    [[ -z "$WIDGET" ]] && echo "$REPLY"
+  else
+    REPLY="$output"
+    [[ -z "$WIDGET" ]] && echo "$REPLY" >&2
+    return 1
+  fi
+else
   cd "$worktree"
 fi
