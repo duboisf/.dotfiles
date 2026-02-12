@@ -9,11 +9,6 @@ bindkey -s '\el' 'l\n'
 zle -N cd-to-parent-directory-widget
 bindkey '\eu' cd-to-parent-directory-widget
 
-# define the cdr-widget
-zle -N cdr-widget
-# bind alt-j to the cdr-widget
-bindkey '\ej' cdr-widget
-
 zle -N copy-to-system-clipboard
 bindkey '\C-x\C-y' copy-to-system-clipboard
 
