@@ -160,6 +160,7 @@ alias gdc='git diff --cached'
 alias gwl='git worktree list'
 alias gwa='git worktree add'
 alias gwr='git worktree remove'
+alias gmw='git merge-worktree'
 
 # github gh
 ###########

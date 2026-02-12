@@ -19,6 +19,7 @@
 	prv = !gh pr view
 	create-branch = !bash -c 'git switch -c fred/'$1
 	delete-merged = !git branch --merged main | grep -vE '^[ *]*(main)$' | xargs -r git branch -D
+	merge-worktree = "!f() { [ -z \"$1\" ] && echo 'usage: git merge-worktree <branch>' && exit 1; wt=$(git worktree list --porcelain | awk -v b=\"refs/heads/$1\" '/^worktree /{p=substr($0,10)} /^branch /{if($2==b)print p}'); [ -z \"$wt\" ] && echo \"error: no worktree found for branch '\"$1\"'\" && exit 1; git merge \"$1\" && git worktree remove \"$wt\"; }; f"
 [commit]
 	verbose = true
 	gpgsign = true

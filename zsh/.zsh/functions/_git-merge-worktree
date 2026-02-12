@@ -1,0 +1,19 @@
+local current
+current=$(command git rev-parse --show-toplevel 2>/dev/null) || return 1
+
+local -a branches
+local porcelain wt_path branch line
+
+porcelain=$(command git worktree list --porcelain 2>/dev/null) || return 1
+
+while IFS= read -r line; do
+  case "$line" in
+    worktree\ *) wt_path="${line#worktree }" ;;
+    branch\ *)
+      branch="${line#branch refs/heads/}"
+      [[ "$wt_path" != "$current" ]] && branches+=("${branch}:${wt_path}")
+      ;;
+  esac
+done <<< "$porcelain"
+
+(( ${#branches} )) && _describe -t worktree-branches 'worktree branch' branches
