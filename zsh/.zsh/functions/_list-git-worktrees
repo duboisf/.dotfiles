@@ -18,8 +18,10 @@ raw=$(
 
 [[ -z "$raw" ]] && return
 
-printf "_\tPATH\tBRANCH\n"
-while IFS=$'\t' read -r abspath branch; do
-  relpath=$(realpath --relative-to="$current" "$abspath")
-  printf "%s\t%s\t%s\n" "$abspath" "$relpath" "$branch"
-done <<< "$raw" | column -t -s "	"
+{
+  printf "_\tPATH\tBRANCH\n"
+  while IFS=$'\t' read -r abspath branch; do
+    relpath=$(realpath --relative-to="$current" "$abspath")
+    printf "%s\t%s\t%s\n" "$abspath" "$relpath" "$branch"
+  done <<< "$raw"
+} | column -t -s "	"
