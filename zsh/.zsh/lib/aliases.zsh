@@ -256,3 +256,8 @@ alias gcal='gc auth login --update-adc'
 alias gccl='gc config list'
 alias gclp='gc projects list'
 alias gcsp='gc config set project'
+
+# Ti-Claude
+alias c='claude'
+# Dangerous Ti-Claude
+alias dc='claude --dangerously-skip-permissions'
