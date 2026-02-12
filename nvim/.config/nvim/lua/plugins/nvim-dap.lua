@@ -291,12 +291,12 @@ return {
       end
     end,
     dependencies = {
-      'leoluz/nvim-dap-go',
-      'nvim-neotest/nvim-nio',
-      'rcarriga/nvim-dap-ui',
       'folke/snacks.nvim',
       'j-hui/fidget.nvim',
       'jbyuki/one-small-step-for-vimkind',
+      'leoluz/nvim-dap-go',
+      'nvim-neotest/nvim-nio',
+      'rcarriga/nvim-dap-ui',
     },
   },
   {
