@@ -4,11 +4,9 @@ format = """
 $os\
 $shell\
 $directory\
-$hostname\
 $git_branch\
 $git_status\
 (fg:color_blue bg:color_bg3)\
-$aws\
 $kubernetes\
 $line_break\
 $time\
@@ -121,7 +119,7 @@ style = "bold fg:color_green"
 format = '[ $symbol $branch]($style)'
 
 [git_status]
-disabled = true
+disabled = false
 stashed = "󰽂 "
 conflicted = "[](fg:color_red)"
 diverged = "[↕](fg:color_yellow"
