@@ -1,11 +1,47 @@
 
-REPLY=
-change-git-worktree-dir
-local rc=$?
-if [[ $rc -eq 0 ]]; then
-  zle reset-prompt
-  [[ -n "$REPLY" ]] && zle -M "$REPLY"
-else
-  zle redisplay
-  zle -M "${REPLY:-No other worktrees found.}"
+emulate -RL zsh
+setopt pipefail
+
+local current worktree entries
+current=$(git rev-parse --show-toplevel 2>/dev/null)
+
+entries=$(_list-git-worktrees "$current")
+
+if [[ -z "$entries" ]]; then
+  if [[ -n "$WIDGET" ]]; then
+    zle redisplay
+    zle -M "No other git worktrees found."
+  else
+    echo "$0: No other git worktree found."
+  fi
+  return 1
+fi
+
+local header="Current: $current  │  enter: switch  ctrl-x: remove"
+local reload_cmd="autoload -Uz _list-git-worktrees; _list-git-worktrees ${(q)current}"
+
+local errfile=${TMPDIR:-/tmp}/.wt-rm-err.$$
+
+worktree=$(
+  echo "$entries" |
+  fzf --layout=reverse --header-first \
+      --header="$header" \
+      --prompt="Switch path to git worktree: " \
+      --with-nth=2.. --accept-nth=1 --header-lines=1 \
+      --bind "ctrl-x:execute-silent(>$errfile; git worktree remove {1} 2>$errfile)" \
+      --bind "ctrl-x:+reload($reload_cmd)" \
+      --bind "ctrl-x:+transform-header:if [ -s $errfile ]; then cat $errfile; else echo 'Removed {1}  │  enter: switch  ctrl-x: remove'; fi"
+) || { rm -f "$errfile"; [[ -n "$WIDGET" ]] && zle redisplay; return 0; }
+
+rm -f "$errfile"
+
+if [[ -n "$worktree" ]]; then
+  if [[ -n "$WIDGET" ]]; then
+    zle push-line
+    BUFFER="builtin cd -- ${(q)worktree}"
+    zle accept-line
+    zle reset-prompt
+  else
+    builtin cd -- "$worktree"
+  fi
 fi
