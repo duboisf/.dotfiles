@@ -18,6 +18,7 @@
 	pr-merge = !gh pr merge --merge --delete-branch && git pull --prune
 	prv = !gh pr view
 	create-branch = !bash -c 'git switch -c fred/'$1
+	delete-merged = !git branch --merged main | grep -vE '^[ *]*(main)$' | xargs -r git branch -D
 [commit]
 	verbose = true
 	gpgsign = true
