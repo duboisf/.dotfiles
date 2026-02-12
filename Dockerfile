@@ -1,7 +1,7 @@
 # Used to test the bootstrapping script
 FROM ubuntu:24.04
 
-RUN apt-get update && apt-get install sudo -y
+RUN apt-get update && apt-get install curl sudo -y
 
 RUN usermod --append --groups sudo ubuntu
 

@@ -11,7 +11,6 @@ path=(
 
 function () {
     local optional_paths=(
-        /usr/local/go/bin
         ~/.ghcup/bin
         ~/.krew/bin
         ~/.rbenv/bin
@@ -35,8 +34,6 @@ export GPG_TTY=$(tty)
 export MANPAGER='nvim +Man!'
 export MANWIDTH=999
 export ZK_NOTEBOOK_DIR=~/notes
-# Enable experimental pnpm support in volta
-
 export BAT_THEME='Solarized (dark)'
 
 # Check for rootless docker via socket existence (avoids forking systemctl)

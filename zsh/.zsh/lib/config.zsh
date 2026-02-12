@@ -1,9 +1,3 @@
-# Completion
-############
-
-# Don't autocomplete . and .., this is set in oh-by-zsh/lib/completion.zsh
-zstyle ':completion:*' special-dirs false
-
 # Directory navigation lifehacks
 ################################
 
@@ -27,14 +21,6 @@ cd-to-parent-directory-widget() {
 
 # Push to the directory stack on directory change
 setopt autopushd
-
-# history
-#########
-
-# from the manual for share_history: This option both imports new commands from
-# the history file, and also causes your typed commands to be appended to the
-# history file"
-setopt share_history
 
 # Editing
 #########

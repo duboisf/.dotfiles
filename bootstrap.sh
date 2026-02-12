@@ -3,6 +3,8 @@
 # strict mode
 set -euo pipefail
 
+BRANCH="${1:-}"
+
 sudo apt-get update
 
 sudo apt-get install --no-install-recommends -y \
@@ -13,6 +15,7 @@ sudo apt-get install --no-install-recommends -y \
     git \
     ripgrep \
     stow \
+    unzip \
     wget \
     xz-utils \
     zsh
@@ -20,29 +23,32 @@ sudo apt-get install --no-install-recommends -y \
 TMPDIR=$(mktemp -d)
 trap "rm -rf $TMPDIR" EXIT
 
-# golang
+# mise
 (
-    if command -v go > /dev/null; then
-        echo "✅ golang already installed"
+    if command -v mise > /dev/null; then
+        echo "✅ mise already installed"
         exit 0
     fi
-    cd $TMPDIR
-    curl -L -o golang.tar.gz https://go.dev/dl/go1.25.4.linux-amd64.tar.gz
-    sudo tar -C /usr/local -xzf golang.tar.gz
+    echo "🔧 installing mise"
+    curl https://mise.run | sh
+    echo "✅ mise installed"
 )
 
-# gh
-(
-    if command -v gh > /dev/null; then
-        echo "✅ gh already installed"
-        exit 0
+# dotfiles
+if [ ! -d ~/.dotfiles ]; then
+    echo "🔧 cloning dotfiles"
+    clone_args=(--recurse-submodules)
+    if [[ -n "$BRANCH" ]]; then
+        clone_args+=(--branch "$BRANCH")
     fi
-    echo "🔧 installing gh"
-    cd $TMPDIR
-    curl -L -o gh.deb https://github.com/cli/cli/releases/download/v2.65.0/gh_2.65.0_linux_amd64.deb
-    sudo dpkg -i gh.deb
-    echo "✅ gh installed"
-)
+    set -x
+    git clone "${clone_args[@]}" https://github.com/duboisf/.dotfiles.git ~/.dotfiles
+    set +x
+    echo "✅ dotfiles cloned"
+else
+    echo "🔧 updating submodules"
+    git -C ~/.dotfiles submodule update --init --recursive
+fi
 
 # Caskaydia font
 (
@@ -76,23 +82,6 @@ trap "rm -rf $TMPDIR" EXIT
     echo "✅ Symbols Nerd Font installed"
 )
 
-
-# nvim
-(
-    if [[ -x ~/.local/bin/nvim ]]; then
-        echo "✅ nvim already installed"
-        exit 0
-    fi
-    echo "🔧 installing nvim"
-    cd $TMPDIR
-    curl -L -o nvim.tar.gz https://github.com/neovim/neovim/releases/download/v0.11.5/nvim-linux-x86_64.tar.gz
-    mkdir -p ~/.local/stow 2> /dev/null || true
-    cd ~/.local/stow
-    tar xf $TMPDIR/nvim.tar.gz
-    stow nvim*
-    echo "✅ nvim installed"
-)
-
 # kitty
 (
     if [[ -x ~/.local/bin/kitty ]]; then
@@ -109,92 +98,24 @@ trap "rm -rf $TMPDIR" EXIT
     echo "✅ kitty installed"
 )
 
-# starship
+# stow dotfiles
 (
-    if [[ -x ~/.local/bin/starship ]]; then
-        echo "✅ starship already installed"
-        exit 0
-    fi
-    echo "🔧 installing starship"
-    cd $TMPDIR
-    curl -L -o starship.tar.gz https://github.com/starship/starship/releases/download/v1.24.0/starship-x86_64-unknown-linux-gnu.tar.gz
-    tar xf starship.tar.gz
-    install ./starship ~/.local/bin
-    echo "✅ starship installed"
+    cd ~/.dotfiles \
+    && stow \
+       gh \
+       git \
+       kitty \
+       mise \
+       nushell \
+       nvim \
+       scripts \
+       starship \
+       zsh
 )
 
-# eza
-(
-    if [[ -x ~/.local/bin/eza ]]; then
-        echo "✅ eza already installed"
-        exit 0
-    fi
-    echo "🔧 installing eza"
-    cd $TMPDIR
-    curl -L -o eza.tar.gz https://github.com/eza-community/eza/releases/download/v0.23.4/eza_x86_64-unknown-linux-gnu.tar.gz
-    tar xf eza.tar.gz
-    install ./eza ~/.local/bin
-    echo "✅ eza installed"
-)
+# Install all tools defined in ~/.config/mise/config.toml
+echo "🔧 installing mise tools"
+~/.local/bin/mise install
+echo "✅ mise tools installed"
 
-# fzf
-(
-    if [[ -x ~/.local/bin/fzf ]]; then
-        echo "✅ fzf already installed"
-        exit 0
-    fi
-    echo "🔧 installing fzf"
-    cd $TMPDIR
-    curl -L -o fzf.tar.gz https://github.com/junegunn/fzf/releases/download/v0.66.1/fzf-0.66.1-linux_amd64.tar.gz
-    tar xf fzf.tar.gz
-    install ./fzf ~/.local/bin
-    echo "✅ fzf installed"
-)
-
-# fd
-(
-    if [[ -x ~/.local/bin/fd ]]; then
-        echo "✅ fd already installed"
-        exit 0
-    fi
-    echo "🔧 installing fd"
-    cd $TMPDIR
-    curl -L -o fd.tar.gz https://github.com/sharkdp/fd/releases/download/v10.3.0/fd-v10.3.0-x86_64-unknown-linux-gnu.tar.gz
-    tar xf fd.tar.gz
-    find | grep fd
-    install ./fd-*/fd ~/.local/bin
-    echo "✅ fd installed"
-)
-
-# volta
-(
-    if [[ -x ~/.volta/bin/volta ]]; then
-        echo "✅ volta already installed"
-        exit 0
-    fi
-    echo "🔧 installing volta"
-    curl curl https://get.volta.sh | bash
-    # install latest lts node
-    ~/.volta/bin/volta install node
-    echo "✅ volta installed"
-)
-
-# dotfiles
-(
-    cd
-    if [ ! -d ~/.dotfiles ]; then
-        # This should already be clone but 🤷
-        echo "🔧 cloning dotfiles"
-        git clone --recursive https://github.com/duboisf/.dotfiles.git
-        echo "✅ dotfiles cloned"
-    fi
-    cd ~/.dotfiles
-    git submodule update --init --recursive
-    echo "🔧 stowing various dotfiles"
-    stow gh git kitty nushell nvim starship zsh
-    echo "✅ dotfiles stowed"
-)
-
-echo "ℹ There are other zsh functions to bootstrap other tools,"
-echo "  they start with 'duboisf-bootstrap-*'"
-echo "All done! You might need to log out and log back in for some changes to take effect."
+echo "🎉 bootstrap complete! Please restart your terminal to apply changes."

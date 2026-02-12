@@ -1,8 +1,11 @@
 # zmodload zsh/zprof
 
-# define some XDG variables
+# Define XDG variables
 export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
 export XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR:-/run/user/$UID}
+
+# Resolve zsh config directory (follows stow symlinks)
+ZSH_DIR="${${(%):-%x}:A:h}/.zsh"
 
 # Cache eval output from slow tool init commands.
 # Usage: source <(_zsh_cache_eval <name> <command>)
@@ -25,51 +28,39 @@ zsh-regen-cache() {
     echo "Cache cleared. Restart your shell to regenerate."
 }
 
-export ZPLUG_LOG_LOAD_FAILURE=true
-source ~/.zplug/init.zsh
-# Commands
+# fpath additions
+[[ -d $ZSH_DIR/completions ]] && fpath=($ZSH_DIR/completions $fpath)
+[[ -d $ZSH_DIR/functions ]]   && fpath=($ZSH_DIR/functions $fpath)
+
+# Initialize completion system
+autoload -Uz compinit
+mkdir -p "${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
+compinit -d "${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump"
+
+# Autoload user functions
+[[ -d $ZSH_DIR/functions ]] && autoload $ZSH_DIR/functions/*(N)
 
 # Plugins
-# Add fzf completion and key bindings. Need to execute after compinit, so defer
-zplug "junegunn/fzf", use:"shell/*.zsh", defer:2
-zplug "eza-community/eza", use:"completions/zsh/_eza", defer:2
-zplug "duboisf/kube-switch-context.zsh"
-# Reuse oh-my-zsh configs that I'm used to
-zplug "lib/completion", from:oh-my-zsh
-zplug "lib/history", from:oh-my-zsh
-# Nice syntax highlighting like fish, need to run after compinit (defer:2)
-zplug "zsh-users/zsh-syntax-highlighting", defer:2
+source $ZSH_DIR/plugins/kube-switch-context.zsh/kube-switch-context.plugin.zsh
 
-# Theme
-# zplug "duboisf/fred.zsh-theme", as:theme
-# zplug "~/git/fred.zsh-theme", from:local, as:theme
-
-if ! zplug check --verbose; then
-    printf "Install? [y/N]: "
-    if read -q; then
-        echo; zplug install
-    fi
+# fzf key-bindings and completion (after compinit)
+if (( ${+commands[fzf]} )); then
+    source <(_zsh_cache_eval fzf "fzf --zsh")
 fi
 
-if [[ -d ~/.zsh/completions ]]; then
-    fpath=(~/.zsh/completions $fpath)
-fi
+# Pre-declare for syntax-highlighting config (set in lib/syntax-highlighting.zsh,
+# read by the plugin sourced after the lib loop)
+typeset -gA ZSH_HIGHLIGHT_STYLES
 
-if [[ -d ~/.zsh/functions ]]; then
-    fpath=(~/.zsh/functions $fpath)
-fi
-
-zplug load
-
-if [[ -d ~/.zsh/functions ]]; then
-    autoload ~/.zsh/functions/*(N)
-fi
-
-# Load local config
-for file in ~/.zsh/lib/*.zsh ~/.zsh.private/lib/*.zsh(N); do
+# Load config files
+for file in $ZSH_DIR/lib/*.zsh ~/.zsh.private/lib/*.zsh(N); do
     source $file
 done
 
+# Syntax highlighting (must be sourced last, after all widget definitions)
+source $ZSH_DIR/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# Prompt
 if [[ $TERM != "linux" ]]; then
     if (( ${+commands[starship]} )); then
         source <(_zsh_cache_eval starship "starship init zsh")

@@ -1,0 +1,24 @@
+[tools]
+eza = "latest"
+fd = "latest"
+fzf = "latest"
+gcloud = "latest"
+gh = "latest"
+go = "latest"
+gojq = "latest"
+neovim = "latest"
+node = "lts"
+"npm:@devcontainers/cli" = "latest"
+"npm:@openai/codex" = "latest"
+"npm:@zed-industries/claude-code-acp" = "latest"
+pnpm = "10"
+starship = "latest"
+stern = "latest"
+usage = "latest"
+yq = "latest"
+zoxide = "latest"
+
+[settings]
+
+[settings.npm]
+package_manager = "pnpm"

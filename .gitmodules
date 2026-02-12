@@ -1,6 +1,9 @@
-[submodule "zsh/.zplug"]
-	path = zsh/.zplug
-	url = https://github.com/zplug/zplug
 [submodule "nvim/.local/share/nvim/site/pack/packer/start/packer.nvim"]
 	path = nvim/.local/share/nvim/site/pack/packer/start/packer.nvim
 	url = https://github.com/wbthomason/packer.nvim
+[submodule "zsh/.zsh/plugins/zsh-syntax-highlighting"]
+	path = zsh/.zsh/plugins/zsh-syntax-highlighting
+	url = https://github.com/zsh-users/zsh-syntax-highlighting.git
+[submodule "zsh/.zsh/plugins/kube-switch-context.zsh"]
+	path = zsh/.zsh/plugins/kube-switch-context.zsh
+	url = https://github.com/duboisf/kube-switch-context.zsh.git
