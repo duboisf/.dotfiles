@@ -1,6 +1,5 @@
 
-emulate -RL zsh
-setopt pipefail
+setopt localoptions pipefail no_aliases 2>/dev/null
 
 local current worktree entries
 current=$(git rev-parse --show-toplevel 2>/dev/null)
