@@ -4,6 +4,27 @@
 export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
 export XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR:-/run/user/$UID}
 
+# Cache eval output from slow tool init commands.
+# Usage: source <(_zsh_cache_eval <name> <command>)
+# Regenerate all caches: zsh-regen-cache
+_zsh_cache_eval() {
+    local name=$1 cmd=$2
+    local cache_dir=${XDG_CACHE_HOME:-$HOME/.cache}/zsh
+    local cache_file=$cache_dir/$name.zsh
+
+    if [[ ! -f $cache_file ]] || () { setopt local_options extended_glob; [[ -n $cache_file(#qN.mh+24) ]] }; then
+        mkdir -p $cache_dir
+        eval "$cmd" > $cache_file
+    fi
+    cat $cache_file
+}
+
+zsh-regen-cache() {
+    local cache_dir=${XDG_CACHE_HOME:-$HOME/.cache}/zsh
+    rm -f $cache_dir/*.zsh
+    echo "Cache cleared. Restart your shell to regenerate."
+}
+
 export ZPLUG_LOG_LOAD_FAILURE=true
 source ~/.zplug/init.zsh
 # Commands
@@ -51,7 +72,7 @@ done
 
 if [[ $TERM != "linux" ]]; then
     if (( ${+commands[starship]} )); then
-        eval "$(starship init zsh)"
+        source <(_zsh_cache_eval starship "starship init zsh")
     fi
 else
     PS1='%n@%m:%~%# '

@@ -39,11 +39,9 @@ export ZK_NOTEBOOK_DIR=~/notes
 
 export BAT_THEME='Solarized (dark)'
 
-if (( $+commands[systemctl] )); then
-  if systemctl --user --quiet is-active docker.service; then
-      # Using docker in rootless mode
-      export DOCKER_HOST=unix://${XDG_RUNTIME_DIR}/docker.sock
-  fi
+# Check for rootless docker via socket existence (avoids forking systemctl)
+if [[ -S ${XDG_RUNTIME_DIR}/docker.sock ]]; then
+    export DOCKER_HOST=unix://${XDG_RUNTIME_DIR}/docker.sock
 fi
 
 # Prevent "WARNING: Getting tokens from fapi backend failed." message
@@ -51,9 +49,9 @@ fi
 export TPM2_PKCS11_LOG_LEVEL=0
 
 if (( $+commands[mise] )); then
-  eval "$(mise activate zsh)"
+  source <(_zsh_cache_eval mise "mise activate zsh")
 fi
 
 if (( $+commands[zoxide] )); then
-  eval "$(zoxide init zsh)"
+  source <(_zsh_cache_eval zoxide "zoxide init zsh")
 fi
