@@ -18,7 +18,7 @@ worktree=$(
   echo "$entries" |
   fzf --layout=reverse --header-first \
       --header="$header" \
-      --prompt="Worktree: " \
+      --prompt="Switch path to git worktree: " \
       --with-nth=2.. --accept-nth=1 --header-lines=1 \
       --bind "ctrl-x:execute-silent(>$errfile; git worktree remove {1} 2>$errfile)" \
       --bind "ctrl-x:+reload($reload_cmd)" \
