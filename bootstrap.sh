@@ -5,20 +5,35 @@ set -euo pipefail
 
 BRANCH="${1:-}"
 
-sudo apt-get update
-
-sudo apt-get install --no-install-recommends -y \
-    build-essential \
-    ca-certificates \
-    curl \
-    fontconfig \
-    git \
-    ripgrep \
-    stow \
-    unzip \
-    wget \
-    xz-utils \
+REQUIRED_PKGS=(
+    build-essential
+    ca-certificates
+    curl
+    fontconfig
+    git
+    ripgrep
+    stow
+    unzip
+    wget
+    xz-utils
     zsh
+)
+
+missing_pkgs=()
+for pkg in "${REQUIRED_PKGS[@]}"; do
+    if ! dpkg -s "$pkg" &> /dev/null; then
+        missing_pkgs+=("$pkg")
+    fi
+done
+
+if (( ${#missing_pkgs[@]} > 0 )); then
+    echo "🔧 installing missing packages: ${missing_pkgs[*]}"
+    sudo apt-get update
+    sudo apt-get install --no-install-recommends -y "${missing_pkgs[@]}"
+    echo "✅ packages installed"
+else
+    echo "✅ all required packages already installed"
+fi
 
 TMPDIR=$(mktemp -d)
 trap "rm -rf $TMPDIR" EXIT
