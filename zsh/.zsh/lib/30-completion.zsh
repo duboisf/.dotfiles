@@ -10,6 +10,7 @@ setopt always_to_end
 # Navigate completion menu
 bindkey -M menuselect '^o' accept-and-infer-next-history
 zstyle ':completion:*:*:*:*:*' menu select
+zstyle ':completion:*' insert-unambiguous true
 
 # Case-insensitive, partial-word, and substring completion
 zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'r:|=*' 'l:|=* r:|=*'
