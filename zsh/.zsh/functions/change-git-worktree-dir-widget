@@ -17,7 +17,7 @@ if [[ -z "$entries" ]]; then
 fi
 
 local header="Current: $current  │  enter: switch  ctrl-x: remove"
-local reload_cmd="autoload -Uz _list-git-worktrees; _list-git-worktrees ${(q)current}"
+local reload_cmd="FPATH=${(q)FPATH}; autoload -Uz _list-git-worktrees; _list-git-worktrees ${(q)current}"
 
 local errfile=${TMPDIR:-/tmp}/.wt-rm-err.$$
 
