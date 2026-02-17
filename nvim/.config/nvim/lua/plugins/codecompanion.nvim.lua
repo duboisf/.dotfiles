@@ -1,5 +1,39 @@
 ---@module 'codecompanion.schema'
 
+local _claude_code_token = nil
+
+local function fetch_claude_code_token_async()
+  vim.system(
+    { 'secret-tool', 'lookup', 'app', 'claude-code', 'for', 'nvim' },
+    { text = true },
+    function(result)
+      if result.code == 0 and result.stdout then
+        print("Successfully retrieved Claude Code token")
+        _claude_code_token = result.stdout:gsub("%s+$", "")
+      else
+        vim.schedule(function()
+          vim.notify("CodeCompanion: Failed to retrieve Claude Code token", vim.log.levels.WARN)
+        end)
+      end
+    end
+  )
+end
+
+local function get_claude_code_token()
+  if _claude_code_token then
+    return _claude_code_token
+  end
+  -- Sync fallback if async hasn't completed yet (unlikely)
+  local result = vim.system(
+    { 'secret-tool', 'lookup', 'app', 'claude-code', 'for', 'nvim' },
+    { text = true }
+  ):wait()
+  if result.code == 0 and result.stdout then
+    _claude_code_token = result.stdout:gsub("%s+$", "")
+  end
+  return _claude_code_token
+end
+
 local function spinner()
   local M = {
     ---@type boolean
@@ -122,40 +156,15 @@ end
 ---@type LazyPluginSpec
 return {
   "olimorris/codecompanion.nvim",
-  version = "v17.*",
+  version = "v18.*",
+  enabled = true,
   opts = {
-    adapters = {
-      acp = {
-        codex = function()
-          return require("codecompanion.adapters").extend("codex", {
-            defaults = {
-              auth_method = "chatgpt",
-            },
-          })
-        end,
-      },
-      http = {
-        copilot = function()
-          return require("codecompanion.adapters").extend(
-            "copilot",
-            ---@type CodeCompanion.HTTPAdapter.Copilot
-            {
-              schema = {
-                model = {
-                  default = "claude-sonnet-4"
-                },
-                max_tokens = {
-                  default = 200000
-                }
-              },
-            }
-          )
-        end
-      }
-    },
-    strategies = {
+    interactions = {
       chat = {
-        adapter = "codex",
+        adapter = {
+          name = "claude_code",
+          model = "opus",
+        },
         keymaps = {
           clear = {
             modes = {},
@@ -164,63 +173,52 @@ return {
             modes = { i = "<C-CR>" }
           },
         },
-        role = {
+        roles = {
           user = "Fred",
+          llm = function(adapter)
+            if adapter.name == "claude_code" then
+              return "Ti Claude"
+            else
+              return adapter.formatted_name
+            end
+          end,
         },
       },
     },
-    prompt_library = {
-      ["WriteGoTests"] = {
-        strategy = "chat",
-        description = "Write Go tests for a file",
+    adapters = {
+      acp = {
         opts = {
-          is_slash_cmd = false,
-          auto_submit = true,
-          short_name = "golang_tests",
+          show_presets = false,
         },
-        prompts = {
-          {
-            role = "user",
-            content = function(context)
-              local lines = vim.api.nvim_buf_get_lines(context.bufnr, 0, -1, false)
-              local text = table.concat(lines, "\n")
-              return "I have the following code:\n\n```" .. context.filetype .. "\n" .. text .. "\n```\n\n" .. [[
-Write unit tests for this using BDD, use a package suffixed with _test,
-don't test private methods (you won't be able to).
-Use // Given, When, Then comments in tests. Use stretchr/testify/assert and mock.
-]]
-            end,
-            contains_code = true,
-          },
+        claude_code = function()
+          return require("codecompanion.adapters").extend("claude_code", {
+            env = {
+              CLAUDE_CODE_OAUTH_TOKEN = get_claude_code_token(),
+            },
+          })
+        end,
+      },
+      http = {
+        opts = {
+          show_presets = false,
         },
       },
-      ["Fix go linting errors"] = {
-        strategy = "chat",
-        description = "Fix go linting errors",
-        opts = {
-          is_slash_cmd = true,
-          auto_submit = false,
-          short_name = "golang_lint",
-        },
-        prompts = {
-          {
-            role = "user",
-            content =
-            [[I want you to fix the linting errors in this project. @full_stack_dev start by running `make lint` and based on the linting errors:
-
-1. Fix the first error by modifying the file, to do so:
-  1.1. Read the around the lines where the error is (+- 5 lines), to get the context of the code
-  1.2. Fix the error
-  1.3. When updating the file, make sure to only update the lines that you read, don't overwrite the file with only the changes.
-2. Rerun `make lint` to make sure the error was fixed
-3. Repeat until all linting errors are fixed.]]
+      strategies = {
+        chat = {
+          keymaps = {
+            clear = {
+              modes = {},
+            },
+            send = {
+              modes = { i = "<C-CR>" }
+            },
           },
-
         },
       },
     },
   },
   config = function(_, opts)
+    fetch_claude_code_token_async()
     spinner():init()
     local cc = require('codecompanion')
     cc.setup(opts)
@@ -229,14 +227,6 @@ Use // Given, When, Then comments in tests. Use stretchr/testify/assert and mock
       ':CodeCompanionChat<CR>',
       { desc = "Toggle CodeCompanionChat", nowait = true }
     )
-    -- vim.api.nvim_create_autocmd("FileType", {
-    --   pattern = "codecompanion",
-    --   callback = function()
-    --     print("hi")
-    --     vim.o.number = false
-    --     vim.o.relativenumber = false
-    --   end
-    -- })
   end,
   dependencies = {
     "folke/snacks.nvim",
