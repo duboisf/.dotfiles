@@ -261,3 +261,5 @@ alias gcsp='gc config set project'
 alias c='claude'
 # Dangerous Ti-Claude
 alias dc='claude --dangerously-skip-permissions'
+
+alias lli='linear issue list'
