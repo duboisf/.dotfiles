@@ -43,11 +43,6 @@ compinit -d "${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump"
 # Plugins
 source $ZSH_DIR/plugins/kube-switch-context.zsh/kube-switch-context.plugin.zsh
 
-# fzf key-bindings and completion (after compinit)
-if (( ${+commands[fzf]} )); then
-    source <(_zsh_cache_eval fzf "fzf --zsh")
-fi
-
 # Pre-declare for syntax-highlighting config (set in lib/syntax-highlighting.zsh,
 # read by the plugin sourced after the lib loop)
 typeset -gA ZSH_HIGHLIGHT_STYLES
@@ -56,6 +51,11 @@ typeset -gA ZSH_HIGHLIGHT_STYLES
 for file in $ZSH_DIR/lib/*.zsh ~/.zsh.private/lib/*.zsh(N); do
     source $file
 done
+
+# fzf key-bindings and completion (after compinit and mise activation in lib/01-env.zsh)
+if (( ${+commands[fzf]} )); then
+    source <(_zsh_cache_eval fzf "fzf --zsh")
+fi
 
 # Syntax highlighting (must be sourced last, after all widget definitions)
 source $ZSH_DIR/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

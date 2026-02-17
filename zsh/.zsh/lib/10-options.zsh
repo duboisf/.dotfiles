@@ -3,6 +3,6 @@ setopt combiningchars
 setopt extendedglob
 setopt incappendhistory
 setopt interactivecomments
-setopt menucomplete
+setopt nobanghist
 unsetopt listbeep
 unsetopt histbeep
