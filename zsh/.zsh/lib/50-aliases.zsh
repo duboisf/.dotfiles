@@ -262,4 +262,6 @@ alias c='claude'
 # Dangerous Ti-Claude
 alias dc='claude --dangerously-skip-permissions'
 
-alias lli='linear issue list'
+alias lr='linear'
+alias lri='linear issue'
+alias lrl='linear issue list'
