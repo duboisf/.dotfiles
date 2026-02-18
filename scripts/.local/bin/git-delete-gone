@@ -1,0 +1,34 @@
+#!/bin/bash
+set -euo pipefail
+
+# Delete local branches whose upstream tracking branch is gone (e.g. after
+# squash-merge on GitHub). If a branch is checked out in a worktree, the
+# worktree is removed first — unless processes still have their cwd in it.
+
+git fetch --prune
+
+git branch -vv | grep ': gone]' | awk '{gsub(/^[* +] +/, ""); print $1}' | while read -r branch; do
+  # Check if branch is checked out in a worktree
+  wt=$(git worktree list --porcelain \
+    | awk -v b="refs/heads/$branch" '/^worktree /{p=substr($0,10)} /^branch /{if($2==b)print p}')
+
+  if [ -n "$wt" ]; then
+    # Refuse if any process has its cwd inside the worktree
+    has_procs=false
+    if [ -d /proc ]; then
+      # Linux: check /proc/*/cwd symlinks
+      find /proc/[0-9]*/cwd -maxdepth 0 -exec readlink {} + 2>/dev/null \
+        | grep -q "^${wt}" && has_procs=true
+    else
+      # macOS: use lsof to find processes with cwd under the worktree
+      lsof -d cwd +D "$wt" >/dev/null 2>&1 && has_procs=true
+    fi
+    if [ "$has_procs" = true ]; then
+      echo "Skipping $branch: processes using worktree $wt"
+      continue
+    fi
+    git worktree remove "$wt" || continue
+  fi
+
+  git branch -D "$branch"
+done
