@@ -137,6 +137,7 @@ alias kubelistall='kubectl api-resources --verbs=list --namespaced -o name | gre
 
 # git
 #####
+alias prs='xdg-open https://github.com/pulls'
 alias g='git'
 alias gb='git branch'
 alias gco='git checkout'
