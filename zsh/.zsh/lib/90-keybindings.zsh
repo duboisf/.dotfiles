@@ -22,3 +22,7 @@ bindkey "^[m" copy-prev-shell-word
 
 # Use Esc-s (or Alt-s) to switch git branches
 bindkey -s '\es' 'gh switch-branch\n'
+
+# Use Esc-r (or Alt-r) to browse and cd into git repos
+zle -N repos
+bindkey '\er' repos
