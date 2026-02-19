@@ -2,13 +2,14 @@
 setopt localoptions pipefail no_aliases 2>/dev/null
 
 local repo_dir=$HOME/git
+local max_depth=${REPOS_FIND_MAX_DEPTH:-5}
 local result key selected
 
 local find_cmd
 if (( $+commands[fd] )); then
-  find_cmd="fd --hidden --no-ignore --type d --max-depth 5 '^\.git$' ${(q)repo_dir}"
+  find_cmd="fd --hidden --no-ignore --type d --max-depth $max_depth '^\.git$' ${(q)repo_dir}"
 else
-  find_cmd="find ${(q)repo_dir} -maxdepth 5 -type d -name .git"
+  find_cmd="find ${(q)repo_dir} -maxdepth $max_depth -type d -name .git"
 fi
 
 result=$(
