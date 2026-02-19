@@ -52,6 +52,9 @@ for file in $ZSH_DIR/lib/*.zsh ~/.zsh.private/lib/*.zsh(N); do
     source $file
 done
 
+# fzf-tab (after compinit + completion config, before syntax-highlighting)
+source $ZSH_DIR/plugins/fzf-tab/fzf-tab.plugin.zsh
+
 # fzf key-bindings and completion (after compinit and mise activation in lib/01-env.zsh)
 if (( ${+commands[fzf]} )); then
     source <(_zsh_cache_eval fzf "fzf --zsh")
