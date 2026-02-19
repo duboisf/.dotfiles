@@ -4,6 +4,16 @@ set -euo pipefail
 # Delete local branches whose upstream tracking branch is gone (e.g. after
 # squash-merge on GitHub). If a branch is checked out in a worktree, the
 # worktree is removed first — unless processes still have their cwd in it.
+#
+# Usage: git delete-gone [--dry-run|-n]
+
+dry_run=false
+for arg in "$@"; do
+  case "$arg" in
+    --dry-run|-n) dry_run=true ;;
+    *) echo "Usage: git delete-gone [--dry-run|-n]" >&2; exit 1 ;;
+  esac
+done
 
 git fetch --prune
 
@@ -27,8 +37,16 @@ git branch -vv | grep ': gone]' | awk '{gsub(/^[* +] +/, ""); print $1}' | while
       echo "Skipping $branch: processes using worktree $wt"
       continue
     fi
-    git worktree remove "$wt" || continue
+    if [ "$dry_run" = true ]; then
+      echo "[dry-run] Would remove worktree $wt"
+    else
+      git worktree remove "$wt" || continue
+    fi
   fi
 
-  git branch -D "$branch"
+  if [ "$dry_run" = true ]; then
+    echo "[dry-run] Would delete branch $branch"
+  else
+    git branch -D "$branch"
+  fi
 done
