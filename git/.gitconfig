@@ -40,9 +40,9 @@
 [core]
 	pager = less -F -X
 [credential "https://github.com"]
-	helper = !/home/fred/.local/bin/gh auth git-credential
+	helper = !mise exec gh -- gh auth git-credential
 [credential "https://gist.github.com"]
-	helper = !/home/fred/.local/bin/gh auth git-credential
+	helper = !mise exec gh -- gh auth git-credential
 [fetch]
 	pruneTags = true
 [worktree]
