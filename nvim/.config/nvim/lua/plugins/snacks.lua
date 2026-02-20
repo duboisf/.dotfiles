@@ -1,5 +1,17 @@
 ---@module 'snacks'
 
+local function get_submodule_paths()
+  local obj = vim.system({ "git", "submodule", "--quiet", "foreach", "echo $sm_path" }):wait()
+  if obj.code ~= 0 or not obj.stdout or obj.stdout == "" then
+    return {}
+  end
+  local paths = {}
+  for sm_path in vim.gsplit(vim.fn.trim(obj.stdout), "\n") do
+    table.insert(paths, sm_path)
+  end
+  return paths
+end
+
 local function get_git_root()
   local obj = vim.system({ "git", "rev-parse", "--show-toplevel" }):wait()
   if obj.code ~= 0 then
@@ -113,7 +125,7 @@ return {
     -- find
     { "<leader><Tab>",   function() Snacks.picker.buffers() end,                                 desc = "Buffers" },
     { "<leader>fc",      function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
-    { "<leader>fe",      function() Snacks.picker.files() end,                                   desc = "Find Files" },
+    { "<leader>fe",      function() Snacks.picker.files({ exclude = get_submodule_paths() }) end, desc = "Find Files" },
     { "<leader>fg",      function() Snacks.picker.git_files() end,                               desc = "Find Git Files" },
     { "<leader>fl",      function() find_lazy_plugin_files() end,                                desc = "Find Lazy Plugin Files" },
     { "<leader>fp",      function() Snacks.picker.projects() end,                                desc = "Projects" },
