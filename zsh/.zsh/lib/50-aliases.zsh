@@ -265,4 +265,4 @@ alias dc='claude --dangerously-skip-permissions'
 
 alias lr='linear'
 alias lri='linear issue'
-alias lrl='linear issue list'
+alias lrl='linear issue list -i'
