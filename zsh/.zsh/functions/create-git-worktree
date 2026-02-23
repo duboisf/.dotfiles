@@ -1,24 +1,55 @@
 emulate -RL zsh
 
 local branch="$1"
+local group="${2:-}"
+
 if [[ -z "$branch" ]]; then
-    echo "Usage: create-git-worktree <branch-name>" >&2
+    echo "Usage: create-git-worktree <branch-name> [group]" >&2
     return 1
 fi
-local repo
-repo="$(basename "$(git rev-parse --show-toplevel)")" || return 1
-local worktree_dir="../${repo}--${branch//\//-}"
-git fetch origin main || return 1
 
-if git show-ref --verify --quiet "refs/heads/$branch" ||
-   git show-ref --verify --quiet "refs/remotes/origin/$branch"; then
-    echo "Branch '$branch' already exists, creating worktree from it."
-    git worktree add "$worktree_dir" "$branch" || return 1
-else
-    echo "Creating new branch '$branch' from origin/main."
-    git worktree add -b "$branch" "$worktree_dir" origin/main || return 1
+local repo_root
+repo_root="$(git rev-parse --show-toplevel)" || return 1
+local repo_name="${repo_root:t}"
+local repo_parent="${repo_root:h}"
+
+# Derive group from branch if not provided (replace / with -)
+if [[ -z "$group" ]]; then
+    group="${branch//\//-}"
 fi
 
+local wt_path="$repo_parent/wts/$group/$repo_name"
+
+# Already exists
+if [[ -d "$wt_path" ]]; then
+    echo "Worktree already exists: $wt_path"
+    return 0
+fi
+
+# Clean up stale worktree references
+git worktree prune
+
+git fetch origin main || return 1
+
+mkdir -p "${wt_path:h}"
+
+# Try creating with a new branch from origin/main first
+if git worktree add "$wt_path" -b "$branch" origin/main 2>/dev/null; then
+    echo "Created worktree: $wt_path (new branch)"
+elif git worktree add "$wt_path" "$branch" 2>/dev/null; then
+    echo "Created worktree: $wt_path (existing branch)"
+else
+    echo "Error: could not create worktree for '$branch' in $repo_name" >&2
+    echo "Hint: check 'git worktree list' for conflicts" >&2
+    return 1
+fi
+
+# Bootstrap
 if (( $+commands[mise] )); then
-    mise trust --quiet -C "$worktree_dir"
+    mise trust --quiet -C "$wt_path"
+fi
+
+if make -C "$wt_path" -n bootstrap &>/dev/null; then
+    echo "Running make bootstrap..."
+    make -C "$wt_path" bootstrap || echo "Warning: make bootstrap failed" >&2
 fi
