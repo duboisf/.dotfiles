@@ -59,6 +59,12 @@ if (( ${+commands[fzf]} )); then
     source <(_zsh_cache_eval fzf "fzf --zsh")
 fi
 
+# Workaround for zsh < 5.9: zsh-autocomplete defers widget creation to precmd
+# but binds keys immediately. Pre-register so zsh-syntax-highlighting can wrap them.
+# These get overwritten by autocomplete's precmd hook on first prompt.
+zle -C menu-search menu-select .autocomplete__complete-word__completion-widget
+zle -N recent-paths .autocomplete:async:toggle-context
+
 # Syntax highlighting (must be sourced last, after all widget definitions)
 source $ZSH_DIR/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
