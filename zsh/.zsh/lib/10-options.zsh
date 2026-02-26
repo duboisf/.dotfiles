@@ -4,6 +4,5 @@ setopt extendedglob
 setopt incappendhistory
 setopt interactivecomments
 setopt nobanghist
-unsetopt listambiguous
 unsetopt listbeep
 unsetopt histbeep

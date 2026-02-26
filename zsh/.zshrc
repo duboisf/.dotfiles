@@ -32,10 +32,9 @@ zsh-regen-cache() {
 [[ -d $ZSH_DIR/completions ]] && fpath=($ZSH_DIR/completions $fpath)
 [[ -d $ZSH_DIR/functions ]]   && fpath=($ZSH_DIR/functions $fpath)
 
-# Initialize completion system
-autoload -Uz compinit
-mkdir -p "${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
-compinit -d "${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump"
+# zsh-autocomplete (handles compinit internally)
+zstyle ':autocomplete:*:compinit' arguments -d "${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump"
+source $ZSH_DIR/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 
 # Autoload user functions
 [[ -d $ZSH_DIR/functions ]] && autoload $ZSH_DIR/functions/*(N)

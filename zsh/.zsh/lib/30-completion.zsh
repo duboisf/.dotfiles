@@ -3,13 +3,11 @@ zmodload -i zsh/complist
 
 unsetopt menu_complete   # do not autoselect the first completion entry
 unsetopt flowcontrol
-setopt auto_menu         # show completion menu on successive tab press
 setopt complete_in_word
 setopt always_to_end
 
 # Navigate completion menu
 bindkey -M menuselect '^o' accept-and-infer-next-history
-zstyle ':completion:*:*:*:*:*' menu select
 zstyle ':completion:*' insert-unambiguous true
 
 # Case-insensitive, partial-word, and substring completion
