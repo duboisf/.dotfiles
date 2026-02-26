@@ -34,7 +34,11 @@ zsh-regen-cache() {
 
 # zsh-autocomplete (handles compinit internally)
 zstyle ':autocomplete:*:compinit' arguments -d "${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump"
+zstyle ':autocomplete:*' delay 0.1
+zstyle ':autocomplete:*' min-input 2
 source $ZSH_DIR/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+bindkey '^I' menu-select
+bindkey "$terminfo[kcbt]" menu-select
 
 # Autoload user functions
 [[ -d $ZSH_DIR/functions ]] && autoload $ZSH_DIR/functions/*(N)
@@ -51,8 +55,8 @@ for file in $ZSH_DIR/lib/*.zsh ~/.zsh.private/lib/*.zsh(N); do
     source $file
 done
 
-# fzf-tab (after compinit + completion config, before syntax-highlighting)
-source $ZSH_DIR/plugins/fzf-tab/fzf-tab.plugin.zsh
+# fzf-tab (disabled while testing zsh-autocomplete)
+# source $ZSH_DIR/plugins/fzf-tab/fzf-tab.plugin.zsh
 
 # fzf key-bindings and completion (after compinit and mise activation in lib/01-env.zsh)
 if (( ${+commands[fzf]} )); then
