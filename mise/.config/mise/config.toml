@@ -24,3 +24,6 @@ zoxide = "latest"
 
 [settings.npm]
 package_manager = "pnpm"
+
+[env]
+GOBIN = "{{env.HOME}}/go/bin"
