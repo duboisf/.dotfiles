@@ -35,7 +35,7 @@ zsh-regen-cache() {
 # zsh-autocomplete (handles compinit internally)
 zstyle ':autocomplete:*:compinit' arguments -d "${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump"
 zstyle ':autocomplete:*' delay 0.1
-zstyle ':autocomplete:*' min-input 2
+zstyle ':autocomplete:*' min-input 4
 source $ZSH_DIR/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 bindkey '^I' menu-select
 
