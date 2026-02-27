@@ -38,7 +38,6 @@ zstyle ':autocomplete:*' delay 0.1
 zstyle ':autocomplete:*' min-input 2
 source $ZSH_DIR/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 bindkey '^I' menu-select
-bindkey "$terminfo[kcbt]" menu-select
 
 # Autoload user functions
 [[ -d $ZSH_DIR/functions ]] && autoload $ZSH_DIR/functions/*(N)
@@ -54,9 +53,6 @@ typeset -gA ZSH_HIGHLIGHT_STYLES
 for file in $ZSH_DIR/lib/*.zsh ~/.zsh.private/lib/*.zsh(N); do
     source $file
 done
-
-# fzf-tab (disabled while testing zsh-autocomplete)
-# source $ZSH_DIR/plugins/fzf-tab/fzf-tab.plugin.zsh
 
 # fzf key-bindings and completion (after compinit and mise activation in lib/01-env.zsh)
 if (( ${+commands[fzf]} )); then

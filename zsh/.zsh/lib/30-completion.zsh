@@ -13,9 +13,6 @@ zstyle ':completion:*' insert-unambiguous true
 # Case-insensitive, partial-word, and substring completion
 zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'r:|=*' 'l:|=* r:|=*'
 
-# Disable fzf-tab for cd (use default completion menu)
-zstyle ':fzf-tab:complete:cd:*' disabled-on any
-
 # Don't autocomplete . and ..
 zstyle ':completion:*' special-dirs false
 

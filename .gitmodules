@@ -7,9 +7,6 @@
 [submodule "zsh/.zsh/plugins/kube-switch-context.zsh"]
 	path = zsh/.zsh/plugins/kube-switch-context.zsh
 	url = https://github.com/duboisf/kube-switch-context.zsh.git
-[submodule "zsh/.zsh/plugins/fzf-tab"]
-	path = zsh/.zsh/plugins/fzf-tab
-	url = https://github.com/Aloxaf/fzf-tab.git
 [submodule "zsh/.zsh/plugins/zsh-autocomplete"]
 	path = zsh/.zsh/plugins/zsh-autocomplete
 	url = https://github.com/marlonrichert/zsh-autocomplete.git
