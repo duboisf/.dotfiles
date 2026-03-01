@@ -43,9 +43,9 @@ aliases:
           --header="Enter: switch | Ctrl-L: local only | Ctrl-A: all | Ctrl-D: delete | Ctrl-X: force delete" \
           --bind="ctrl-l:reload(git branch --color --list)" \
           --bind="ctrl-a:reload(git branch --color --list --all)" \
-          --bind="ctrl-d:execute(git branch -d {1})+reload(git branch --color --list --all)" \
-          --bind="ctrl-x:execute(echo \"Force delete {1}? (y/N) \" && read -q && git branch -D {1})+reload(git branch --color --list --all)" \
-          --preview="echo; git log -20 --color --decorate \$(echo {1} | sed 's#^remotes/[^/]*/##')" \
+          --bind="ctrl-d:execute(git branch -d \$(echo {} | sed 's/^[* +]*//'))+reload(git branch --color --list --all)" \
+          --bind="ctrl-x:execute(echo \"Force delete {}? (y/N) \" && read -q && git branch -D \$(echo {} | sed 's/^[* +]*//'))+reload(git branch --color --list --all)" \
+          --preview="echo; git log -20 --color --decorate \$(echo {} | sed 's/^[* +]*//' | sed 's#^remotes/[^/]*/##')" \
       | sed "s/^[*+ ] //" \
       | sed "s#^remotes/[^/]*/##" \
       | xargs -r git switch
