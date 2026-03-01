@@ -10,7 +10,7 @@ pager:
 # TODO: create upgrade command to download and install latest gh version (thanks for the suggestion @bilyes)
 aliases:
     create-auto-merge-pr: |
-        !gh pr create && gh pr merge --auto --merge
+        !gh pr create && gh pr merge --auto --squash
     changelog: |
         !nu -c '
           gh release list --json name
