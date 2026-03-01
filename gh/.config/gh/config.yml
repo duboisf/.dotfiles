@@ -29,6 +29,7 @@ aliases:
         test -n $picked_asset && echo "Downloading asset $picked_asset..." && gh release download -R $repo -p $picked_asset
     merge-and-delete-pr: |
         !gh pr merge --delete-branch && git pull
+    pr ready-for-review: pr list -A @me --draft=false --json url -q '.[].url'
     pr watch-checks: pr checks --watch
     show-branch-protection: |
         !gh api graphql \
