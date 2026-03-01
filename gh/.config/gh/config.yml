@@ -38,10 +38,18 @@ aliases:
           -F owner=:owner \
           -F repo=:repo
     switch-branch: |
-        !picked_branch="$(git branch --list \
-          | fzf --preview='echo; git log -20 --color --decorate ${-1}'
-          )"
-        test -n "$picked_branch" && git switch "$(echo "$picked_branch" | cut -c 3-)"
+        !git branch --color --list --all \
+          | fzf --ansi \
+              --header="Enter: switch | Ctrl-L: local only | Ctrl-A: all | Ctrl-D: delete | Ctrl-X: force delete" \
+              --bind="ctrl-l:reload(git branch --color --list)" \
+              --bind="ctrl-a:reload(git branch --color --list --all)" \
+              --bind="ctrl-d:execute(git branch -d {1})+reload(git branch --color --list --all)" \
+              --bind="ctrl-x:execute(echo \"Force delete {1}? (y/N) \" && read -q && git branch -D {1})+reload(git branch --color --list --all)" \
+              --preview="echo; git log -20 --color --decorate \$(echo {1} | sed 's#^remotes/[^/]*/##')" \
+          | sed "s/^[*+ ] //" \
+          | sed "s#^remotes/[^/]*/##" \
+          | xargs -r git switch
+
     # Args: <team-slug> <permission>
     # Permission can be one of: pull, triage, push, maintain, admin and custom repository role names, if the org defined any.
     repo add-permission: "!gh api /orgs/{owner}/teams/$1/repos/{owner}/{repo} -f permission=$2 \\\n  --method PUT -H \"Accept: application/vnd.github+json\" -H \"X-GitHub-Api-Version: 2022-11-28\" \n"
