@@ -45,7 +45,7 @@ aliases:
           --bind="ctrl-a:reload(git branch --color --list --all)" \
           --bind="ctrl-d:execute(git branch -d \$(echo {} | sed 's/^[* +]*//'))+reload(git branch --color --list --all)" \
           --bind="ctrl-x:execute(echo \"Force delete {}? (y/N) \" && read -q && git branch -D \$(echo {} | sed 's/^[* +]*//'))+reload(git branch --color --list --all)" \
-          --preview="echo; git log -20 --color --decorate \$(echo {} | sed 's/^[* +]*//' | sed 's#^remotes/[^/]*/##')" \
+          --preview="echo; git log -20 --color --decorate \$(echo {} | sed 's/^[* +]*//; s/ -> .*//')" \
       | sed "s/^[*+ ] //" \
       | sed "s#^remotes/[^/]*/##" \
       | xargs -r git switch
