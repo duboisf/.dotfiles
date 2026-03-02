@@ -28,7 +28,7 @@ worktree=$(
       --prompt="Switch path to git worktree: " \
       --with-nth=2.. --accept-nth=1 --header-lines=1 \
       --preview='git -C {1} log --oneline --graph --decorate --color=always -20' \
-      --preview-window=right:50% \
+      --preview-window='right,50%,border-left,<80(bottom,40%,border-top)' \
       --bind "ctrl-x:execute-silent(>$errfile; git worktree remove {1} 2>$errfile)" \
       --bind "ctrl-x:+reload($reload_cmd)" \
       --bind "ctrl-x:+transform-header:if [ -s $errfile ]; then cat $errfile; else echo 'Removed {1}  │  enter: switch  ctrl-x: remove'; fi"
