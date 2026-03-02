@@ -43,9 +43,7 @@ zstyle '*' single-ignored show
 zstyle ':completion:*:*:make:*' tag-order 'targets'
 
 # git: show branches and tags before commit objects
-zstyle ':completion:*:*:git-log:*' tag-order 'heads tags commit-tags recent-commits'
-zstyle ':completion:*:*:git-diff:*' tag-order 'heads tags commit-tags recent-commits'
-zstyle ':completion:*:*:git-checkout:*' tag-order 'heads tags commit-tags recent-commits'
+zstyle ':completion:*:*:git-*' tag-order 'heads tags commit-tags recent-commits'
 
 # Register custom git subcommands for completion
 zstyle ':completion:*:*:git:*' user-commands merge-worktree:'merge worktree branch and remove worktree'
