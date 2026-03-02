@@ -39,7 +39,7 @@ aliases:
       -F repo=:repo
   switch-branch: |
     !git branch --color --list --all \
-      | fzf --ansi \
+      | fzf --ansi --layout=reverse \
           --header="Enter: switch | Ctrl-L: local only | Ctrl-A: all | Ctrl-D: delete | Ctrl-X: force delete" \
           --bind="ctrl-l:reload(git branch --color --list)" \
           --bind="ctrl-a:reload(git branch --color --list --all)" \
