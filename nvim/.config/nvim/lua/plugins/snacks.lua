@@ -1,17 +1,5 @@
 ---@module 'snacks'
 
-local function get_submodule_paths()
-  local obj = vim.system({ "git", "submodule", "--quiet", "foreach", "echo $sm_path" }):wait()
-  if obj.code ~= 0 or not obj.stdout or obj.stdout == "" then
-    return {}
-  end
-  local paths = {}
-  for sm_path in vim.gsplit(vim.fn.trim(obj.stdout), "\n") do
-    table.insert(paths, sm_path)
-  end
-  return paths
-end
-
 local function get_git_root()
   local obj = vim.system({ "git", "rev-parse", "--show-toplevel" }):wait()
   if obj.code ~= 0 then
@@ -19,6 +7,24 @@ local function get_git_root()
     return nil
   end
   return vim.fn.trim(obj.stdout)
+end
+
+local function get_submodule_paths()
+  local obj = vim.system({ "git", "submodule", "--quiet", "foreach", "echo $sm_path" }):wait()
+  if obj.code ~= 0 or not obj.stdout or obj.stdout == "" then
+    return {}
+  end
+  local git_root = get_git_root()
+  if not git_root then
+    return {}
+  end
+  local paths = {}
+  for sm_path in vim.gsplit(vim.fn.trim(obj.stdout), "\n") do
+    local abs_path = git_root .. "/" .. sm_path
+    local rel_path = vim.fn.fnamemodify(abs_path, ":.")
+    table.insert(paths, rel_path)
+  end
+  return paths
 end
 
 local function files_in_git_root()
