@@ -1,0 +1,63 @@
+emulate -RL zsh
+
+if (( ! $+commands[asciinema] )); then
+    echo "asciinema is not installed. Install with: sudo apt install asciinema" >&2
+    return 1
+fi
+
+local filename="$1"
+
+if [[ -z "$filename" ]]; then
+    echo "Usage: asciinema-rec <filename>" >&2
+    return 1
+fi
+
+# Ensure .cast extension
+[[ "$filename" != *.cast ]] && filename="${filename}.cast"
+
+local tmpconfig
+tmpconfig="$(mktemp -t starship-asciinema-XXXXXX.toml)"
+
+cat > "$tmpconfig" <<'TOML'
+format = """
+$directory\
+$git_branch\
+$git_status\
+$line_break\
+$character"""
+
+add_newline = false
+
+[directory]
+format = "[$path]($style) "
+style = "bold #0550ae"
+truncation_length = 3
+truncation_symbol = ".../"
+
+[git_branch]
+symbol = ""
+format = "[$symbol$branch]($style)"
+style = "bold #116329"
+
+[git_status]
+format = "[ $all_status$ahead_behind]($style)"
+style = "#57606a"
+stashed = "*"
+conflicted = "!"
+diverged = "^"
+deleted = "x"
+up_to_date = ""
+
+[character]
+success_symbol = "[>](bold #116329)"
+error_symbol = "[>](bold #cf222e)"
+
+[line_break]
+disabled = false
+TOML
+
+STARSHIP_CONFIG="$tmpconfig" asciinema rec --idle-time-limit 1 "$filename"
+local ret=$?
+
+rm -f "$tmpconfig"
+return $ret
