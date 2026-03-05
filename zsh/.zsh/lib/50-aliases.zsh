@@ -167,6 +167,7 @@ alias gmw='git merge-worktree'
 # github gh
 ###########
 alias p='gh pr'
+alias pl='gh pr list'
 alias pc='p checks $(git branch --show-current) --watch'
 alias prv='p view'
 alias prvw='p view -w'
