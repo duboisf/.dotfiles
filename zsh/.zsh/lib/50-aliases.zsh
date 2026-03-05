@@ -212,31 +212,10 @@ alias hs='h search repo'
 alias hsd='h search repo --devel'
 alias hru='h repo up'
 
-# pulumi
-#########
-alias pu=pulumi
-alias pl='pulumi stack ls'
-alias pss='pulumi stack select'
-alias pp='pulumi preview'
-alias ppd='pulumi preview --diff'
-alias pusl='pulumi stack --show-urns'
-
 # openssl
 ##########
 alias view-cert='openssl x509 -text -noout -in'
 alias s_connect='openssl s_client -state -debug -connect'
-
-# aws cli
-##########
-alias iaws='aws --cli-auto-prompt'
-alias ssogroups='aws --no-cli-pager \
-    --profile $AWS_IDENTITY_CENTER_PROFILE \
-    identitystore list-groups --identity-store-id $IDENTITY_STORE_ID \
-    | jq ".Groups[].DisplayName" -r | sort'
-alias ssousers='aws --no-cli-pager \
-    --profile $AWS_IDENTITY_CENTER_PROFILE \
-    identitystore list-users --identity-store-id $IDENTITY_STORE_ID \
-    | jq ".Users[].UserName" -r | sort'
 
 # rg
 #####
