@@ -6,3 +6,4 @@ setopt interactivecomments
 setopt nobanghist
 unsetopt listbeep
 unsetopt histbeep
+WORDCHARS=${WORDCHARS//=}
