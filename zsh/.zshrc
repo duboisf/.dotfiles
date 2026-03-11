@@ -32,19 +32,7 @@ zsh-regen-cache() {
 [[ -d $ZSH_DIR/completions ]] && fpath=($ZSH_DIR/completions $fpath)
 [[ -d $ZSH_DIR/functions ]]   && fpath=($ZSH_DIR/functions $fpath)
 
-# zsh-autocomplete (handles compinit internally)
-zstyle ':autocomplete:*:compinit' arguments -d "${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump"
-zstyle ':autocomplete:*' delay 0.1
-zstyle ':autocomplete:*' min-input 4
-zstyle ':autocomplete:*' add-semicolon no
-source $ZSH_DIR/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
-bindkey '^I' menu-select
-# Restore default up/down arrow behavior (history navigation, not autocomplete menu)
-bindkey -M emacs \
-    "^[OA"  .up-line-or-history \
-    "^[[A"  .up-line-or-history \
-    "^[OB"  .down-line-or-history \
-    "^[[B"  .down-line-or-history
+source $ZSH_DIR/autocomplete.zsh
 
 # Autoload user functions
 [[ -d $ZSH_DIR/functions ]] && autoload $ZSH_DIR/functions/*(N)
