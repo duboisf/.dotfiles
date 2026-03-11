@@ -59,17 +59,17 @@ colorize() {
 
 # Output: visible columns \t URL (hidden, used by ctrl-o)
 fmtline() {
-    printf "%-${repo_w}s  #%-${num_w}s  %s  %s  %s\t%s\n" \
-        "$1" "$2" "$(colorize "$3")" "$(colorize "$4")" "$5" "$6"
+    printf "%-${repo_w}s  #%-${num_w}s  %s  %s  %s  %s\t%s\n" \
+        "$1" "$2" "$(colorize "$3")" "$(colorize "$4")" "$(colorize "$5")" "$6" "$7"
 }
 
 # Initial display with loading placeholders
 {
-    fmtline "REPO" "PR" "REVIEW" "CHECKS" "TITLE" ""
+    fmtline "REPO" "PR" "REVIEW" "CHECKS" "AUTO-MERGE" "TITLE" ""
     while IFS=$'\t' read -r repo num title url draft; do
         dtag=""
         [[ "$draft" == "draft" ]] && dtag="${C_DIM}[draft]${C_RESET} "
-        fmtline "$repo" "$num" "   ···" "   ···" "${dtag}${title}" "$url"
+        fmtline "$repo" "$num" "   ···" "   ···" "   ···" "${dtag}${title}" "$url"
     done < "$TMPDIR/basic.tsv"
 } > "$TMPDIR/display.tsv"
 
@@ -77,22 +77,28 @@ fmtline() {
 (
     n=0
     {
-        fmtline "REPO" "PR" "REVIEW" "CHECKS" "TITLE" ""
+        fmtline "REPO" "PR" "REVIEW" "CHECKS" "AUTO-MERGE" "TITLE" ""
         while IFS=$'\t' read -r repo num title url draft; do
             (
                 dtag=""
                 [[ "$draft" == "draft" ]] && dtag="${C_DIM}[draft]${C_RESET} "
 
-                # Review status
-                rv=$(gh pr view "$num" --repo "$repo" \
-                    --json reviewDecision,reviewRequests,reviews \
-                    --jq '
+                # Review status + auto-merge (single API call)
+                pr_data=$(gh pr view "$num" --repo "$repo" \
+                    --json reviewDecision,reviewRequests,reviews,autoMergeRequest 2>/dev/null || echo '{}')
+
+                rv=$(echo "$pr_data" | jq -r '
                         if .reviewDecision == "APPROVED" then "✓ approved"
                         elif .reviewDecision == "CHANGES_REQUESTED" then "✗ changes"
                         elif (.reviews | length) > 0 then "◑ in review"
                         elif (.reviewRequests | length) > 0 then "◯ requested"
                         else "— none"
                         end' 2>/dev/null || echo "? error")
+
+                am=$(echo "$pr_data" | jq -r '
+                        if .autoMergeRequest != null then "✓ auto"
+                        else "—"
+                        end' 2>/dev/null || echo "?")
 
                 # Checks status
                 ck=$(gh pr checks "$num" --repo "$repo" --json name,state 2>/dev/null \
@@ -109,7 +115,7 @@ fmtline() {
                             end
                         end' 2>/dev/null || echo "? error")
 
-                fmtline "$repo" "$num" "$rv" "$ck" "${dtag}${title}" "$url"
+                fmtline "$repo" "$num" "$rv" "$ck" "$am" "${dtag}${title}" "$url"
             ) &
             (( ++n % MAX_JOBS == 0 )) && wait
         done < "$TMPDIR/basic.tsv"
@@ -118,7 +124,7 @@ fmtline() {
 
     # Auto-reload fzf
     curl -s -XPOST "localhost:$LISTEN_PORT" \
-        -d "reload(cat '$TMPDIR/enriched.tsv')+change-header(ctrl-o: open in browser │ ctrl-r: refresh │ ✓ reviews & checks loaded)" \
+        -d "reload(cat '$TMPDIR/enriched.tsv')+change-header(ctrl-o: open │ alt-m: merge │ ctrl-r: refresh │ ✓ data loaded)" \
         2>/dev/null || true
 ) &
 
@@ -127,9 +133,10 @@ fzf \
     --delimiter=$'\t' \
     --with-nth=1 \
     --header-lines=1 \
-    --header "ctrl-o: open in browser │ ctrl-r: refresh │ loading reviews & checks..." \
-    --bind "ctrl-o:execute-silent($OPEN_CMD {2})" \
+    --header "ctrl-o: open │ alt-m: merge │ ctrl-r: refresh │ loading reviews & checks..." \
+    --bind "ctrl-o:execute-silent($OPEN_CMD {2})+abort" \
     --bind "ctrl-r:reload(cat '$TMPDIR/enriched.tsv' 2>/dev/null || cat '$TMPDIR/display.tsv')" \
+    --bind "alt-m:execute(url={2}; repo=\${url#https://github.com/}; repo=\${repo%%/pull/*}; num=\${url##*/}; gh pr merge \"\$num\" --repo \"\$repo\" && { grep -Fv \"\$url\" '$TMPDIR/display.tsv' > '$TMPDIR/display.tmp' && mv '$TMPDIR/display.tmp' '$TMPDIR/display.tsv'; grep -Fv \"\$url\" '$TMPDIR/enriched.tsv' > '$TMPDIR/enriched.tmp' && mv '$TMPDIR/enriched.tmp' '$TMPDIR/enriched.tsv'; } 2>/dev/null)+reload(cat '$TMPDIR/enriched.tsv' 2>/dev/null || cat '$TMPDIR/display.tsv')" \
     --bind "enter:execute-silent($OPEN_CMD {2})+abort" \
     --listen "$LISTEN_PORT" \
     --reverse \
