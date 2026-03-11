@@ -25,9 +25,9 @@ printf "\033[2mFetching all your open PRs...\033[0m\n" >&2
 
 # --- Phase 1: Fetch all my open PRs across all of GitHub ---
 gh search prs --author=@me --state=open --limit=200 \
-    --json repository,number,title,url,updatedAt \
-    --jq '.[] | [.repository.nameWithOwner, (.number|tostring), .title, .url, .updatedAt] | @tsv' \
-    2>/dev/null | sort -t$'\t' -k5 -r | cut -f1-4 > "$TMPDIR/basic.tsv"
+    --json repository,number,title,url,updatedAt,isDraft \
+    --jq '.[] | [.repository.nameWithOwner, (.number|tostring), .title, .url, .updatedAt, (if .isDraft then "draft" else "" end)] | @tsv' \
+    2>/dev/null | sort -t$'\t' -k5 -r | cut -f1-4,6 > "$TMPDIR/basic.tsv"
 
 [[ -s "$TMPDIR/basic.tsv" ]] || { echo "No open PRs found." >&2; exit 0; }
 
@@ -46,7 +46,7 @@ C_CYAN=$'\033[36m' C_DIM=$'\033[2m' C_RESET=$'\033[0m'
 # Pad then wrap in color (so padding isn't thrown off by escape codes)
 colorize() {
     local val="$1" padded
-    padded=$(printf "%-12s" "$val")
+    padded=$(printf "%-14s" "$val")
     case "$val" in
         ✓*) printf "%s%s%s" "$C_GREEN"  "$padded" "$C_RESET" ;;
         ✗*) printf "%s%s%s" "$C_RED"    "$padded" "$C_RESET" ;;
@@ -66,8 +66,10 @@ fmtline() {
 # Initial display with loading placeholders
 {
     fmtline "REPO" "PR" "REVIEW" "CHECKS" "TITLE" ""
-    while IFS=$'\t' read -r repo num title url; do
-        fmtline "$repo" "$num" "   ···" "   ···" "$title" "$url"
+    while IFS=$'\t' read -r repo num title url draft; do
+        dtag=""
+        [[ "$draft" == "draft" ]] && dtag="${C_DIM}[draft]${C_RESET} "
+        fmtline "$repo" "$num" "   ···" "   ···" "${dtag}${title}" "$url"
     done < "$TMPDIR/basic.tsv"
 } > "$TMPDIR/display.tsv"
 
@@ -76,8 +78,11 @@ fmtline() {
     n=0
     {
         fmtline "REPO" "PR" "REVIEW" "CHECKS" "TITLE" ""
-        while IFS=$'\t' read -r repo num title url; do
+        while IFS=$'\t' read -r repo num title url draft; do
             (
+                dtag=""
+                [[ "$draft" == "draft" ]] && dtag="${C_DIM}[draft]${C_RESET} "
+
                 # Review status
                 rv=$(gh pr view "$num" --repo "$repo" \
                     --json reviewDecision,reviewRequests,reviews \
@@ -104,7 +109,7 @@ fmtline() {
                             end
                         end' 2>/dev/null || echo "? error")
 
-                fmtline "$repo" "$num" "$rv" "$ck" "$title" "$url"
+                fmtline "$repo" "$num" "$rv" "$ck" "${dtag}${title}" "$url"
             ) &
             (( ++n % MAX_JOBS == 0 )) && wait
         done < "$TMPDIR/basic.tsv"
