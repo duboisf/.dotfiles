@@ -1,0 +1,133 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+MAX_JOBS="${GH_PRS_MAX_JOBS:-10}"
+LISTEN_PORT=$((RANDOM % 10000 + 20000))
+
+TMPDIR=$(mktemp -d /tmp/gh-prs.XXXXXX)
+cleanup() {
+    local pids
+    pids=$(jobs -p 2>/dev/null) || true
+    [[ -n "$pids" ]] && kill $pids 2>/dev/null || true
+    wait 2>/dev/null || true
+    rm -rf "$TMPDIR"
+}
+trap cleanup EXIT INT TERM
+
+for cmd in gh fzf jq; do
+    command -v "$cmd" &>/dev/null || { echo "Required: $cmd" >&2; exit 1; }
+done
+
+OPEN_CMD="xdg-open"
+[[ "$(uname)" == "Darwin" ]] && OPEN_CMD="open"
+
+printf "\033[2mFetching all your open PRs...\033[0m\n" >&2
+
+# --- Phase 1: Fetch all my open PRs across all of GitHub ---
+gh search prs --author=@me --state=open --limit=200 \
+    --json repository,number,title,url,updatedAt \
+    --jq '.[] | [.repository.nameWithOwner, (.number|tostring), .title, .url, .updatedAt] | @tsv' \
+    2>/dev/null | sort -t$'\t' -k5 -r | cut -f1-4 > "$TMPDIR/basic.tsv"
+
+[[ -s "$TMPDIR/basic.tsv" ]] || { echo "No open PRs found." >&2; exit 0; }
+
+total=$(wc -l < "$TMPDIR/basic.tsv")
+printf "\033[2mFound %d PR(s)\033[0m\n" "$total" >&2
+
+# --- Display formatting ---
+# Compute column widths from data
+repo_w=$(awk -F'\t' 'BEGIN{m=4} {l=length($1); if(l>m) m=l} END{print m}' "$TMPDIR/basic.tsv")
+num_w=$(awk -F'\t' 'BEGIN{m=2} {l=length($2)+1; if(l>m) m=l} END{print m}' "$TMPDIR/basic.tsv")
+
+# ANSI colors
+C_GREEN=$'\033[32m' C_RED=$'\033[31m' C_YELLOW=$'\033[33m'
+C_CYAN=$'\033[36m' C_DIM=$'\033[2m' C_RESET=$'\033[0m'
+
+# Pad then wrap in color (so padding isn't thrown off by escape codes)
+colorize() {
+    local val="$1" padded
+    padded=$(printf "%-12s" "$val")
+    case "$val" in
+        ✓*) printf "%s%s%s" "$C_GREEN"  "$padded" "$C_RESET" ;;
+        ✗*) printf "%s%s%s" "$C_RED"    "$padded" "$C_RESET" ;;
+        ◑*|…*) printf "%s%s%s" "$C_YELLOW" "$padded" "$C_RESET" ;;
+        ◯*) printf "%s%s%s" "$C_CYAN"   "$padded" "$C_RESET" ;;
+        —*) printf "%s%s%s" "$C_DIM"    "$padded" "$C_RESET" ;;
+        *)  printf "%s" "$padded" ;;
+    esac
+}
+
+# Output: visible columns \t URL (hidden, used by ctrl-o)
+fmtline() {
+    printf "%-${repo_w}s  #%-${num_w}s  %s  %s  %s\t%s\n" \
+        "$1" "$2" "$(colorize "$3")" "$(colorize "$4")" "$5" "$6"
+}
+
+# Initial display with loading placeholders
+{
+    fmtline "REPO" "PR" "REVIEW" "CHECKS" "TITLE" ""
+    while IFS=$'\t' read -r repo num title url; do
+        fmtline "$repo" "$num" "   ···" "   ···" "$title" "$url"
+    done < "$TMPDIR/basic.tsv"
+} > "$TMPDIR/display.tsv"
+
+# --- Phase 2: Background enrichment ---
+(
+    n=0
+    {
+        fmtline "REPO" "PR" "REVIEW" "CHECKS" "TITLE" ""
+        while IFS=$'\t' read -r repo num title url; do
+            (
+                # Review status
+                rv=$(gh pr view "$num" --repo "$repo" \
+                    --json reviewDecision,reviewRequests,reviews \
+                    --jq '
+                        if .reviewDecision == "APPROVED" then "✓ approved"
+                        elif .reviewDecision == "CHANGES_REQUESTED" then "✗ changes"
+                        elif (.reviews | length) > 0 then "◑ in review"
+                        elif (.reviewRequests | length) > 0 then "◯ requested"
+                        else "— none"
+                        end' 2>/dev/null || echo "? error")
+
+                # Checks status
+                ck=$(gh pr checks "$num" --repo "$repo" --json name,state 2>/dev/null \
+                    | jq -r '
+                        if length == 0 then "— none"
+                        else
+                            [.[].state] |
+                            { s: map(select(. == "SUCCESS")) | length,
+                              f: map(select(. == "FAILURE")) | length,
+                              p: map(select(. == "PENDING" or . == "QUEUED" or . == "IN_PROGRESS")) | length } |
+                            if .f > 0 then "✗ \(.f) fail"
+                            elif .p > 0 then "… \(.p) pend"
+                            else "✓ \(.s) pass"
+                            end
+                        end' 2>/dev/null || echo "? error")
+
+                fmtline "$repo" "$num" "$rv" "$ck" "$title" "$url"
+            ) &
+            (( ++n % MAX_JOBS == 0 )) && wait
+        done < "$TMPDIR/basic.tsv"
+        wait
+    } > "$TMPDIR/enriched.tsv"
+
+    # Auto-reload fzf
+    curl -s -XPOST "localhost:$LISTEN_PORT" \
+        -d "reload(cat '$TMPDIR/enriched.tsv')+change-header(ctrl-o: open in browser │ ctrl-r: refresh │ ✓ reviews & checks loaded)" \
+        2>/dev/null || true
+) &
+
+# --- fzf ---
+fzf \
+    --delimiter=$'\t' \
+    --with-nth=1 \
+    --header-lines=1 \
+    --header "ctrl-o: open in browser │ ctrl-r: refresh │ loading reviews & checks..." \
+    --bind "ctrl-o:execute-silent($OPEN_CMD {2})" \
+    --bind "ctrl-r:reload(cat '$TMPDIR/enriched.tsv' 2>/dev/null || cat '$TMPDIR/display.tsv')" \
+    --bind "enter:execute-silent($OPEN_CMD {2})+abort" \
+    --listen "$LISTEN_PORT" \
+    --reverse \
+    --no-sort \
+    --ansi \
+    < "$TMPDIR/display.tsv" || true
