@@ -109,49 +109,53 @@ num_w=$(awk -F'\t' 'BEGIN{m=2} {l=length($2)+1; if(l>m) m=l} END{print m}' "$TMP
 HEADER_COLS=$(fmtline "REPO" "PR" "REVIEW" "CHECKS" "AUTO-MERGE" "TITLE" "" | cut -f1)
 
 n=0
-{
-    while IFS=$'\t' read -r repo num title url draft; do
-        (
-            pr_data=$(gh pr view "$num" --repo "$repo" \
-                --json reviewDecision,reviewRequests,reviews,autoMergeRequest,isDraft 2>/dev/null || echo '{}')
+line=0
+while IFS=$'\t' read -r repo num title url draft; do
+    (( ++line ))
+    (
+        pr_data=$(gh pr view "$num" --repo "$repo" \
+            --json reviewDecision,reviewRequests,reviews,autoMergeRequest,isDraft 2>/dev/null || echo '{}')
 
-            dtag=""
-            is_draft=$(echo "$pr_data" | jq -r '.isDraft // false' 2>/dev/null)
-            [[ "$is_draft" == "true" ]] && dtag="${C_DIM}[draft]${C_RESET} "
+        dtag=""
+        is_draft=$(echo "$pr_data" | jq -r '.isDraft // false' 2>/dev/null)
+        [[ "$is_draft" == "true" ]] && dtag="${C_DIM}[draft]${C_RESET} "
 
-            rv=$(echo "$pr_data" | jq -r '
-                    if .reviewDecision == "APPROVED" then "✓ approved"
-                    elif .reviewDecision == "CHANGES_REQUESTED" then "✗ changes"
-                    elif (.reviews | length) > 0 then "◑ in review"
-                    elif (.reviewRequests | length) > 0 then "◯ requested"
-                    else "— none"
-                    end' 2>/dev/null || echo "? error")
+        rv=$(echo "$pr_data" | jq -r '
+                if .reviewDecision == "APPROVED" then "✓ approved"
+                elif .reviewDecision == "CHANGES_REQUESTED" then "✗ changes"
+                elif (.reviews | length) > 0 then "◑ in review"
+                elif (.reviewRequests | length) > 0 then "◯ requested"
+                else "— none"
+                end' 2>/dev/null || echo "? error")
 
-            am=$(echo "$pr_data" | jq -r '
-                    if .autoMergeRequest != null then "✓ auto"
-                    else "—"
-                    end' 2>/dev/null || echo "?")
+        am=$(echo "$pr_data" | jq -r '
+                if .autoMergeRequest != null then "✓ auto"
+                else "—"
+                end' 2>/dev/null || echo "?")
 
-            ck=$(gh pr checks "$num" --repo "$repo" --json name,state 2>/dev/null \
-                | jq -r '
-                    if length == 0 then "— none"
-                    else
-                        [.[].state] |
-                        { s: map(select(. == "SUCCESS")) | length,
-                          f: map(select(. == "FAILURE")) | length,
-                          p: map(select(. == "PENDING" or . == "QUEUED" or . == "IN_PROGRESS")) | length } |
-                        if .f > 0 then "✗ \(.f) fail"
-                        elif .p > 0 then "… \(.p) pend"
-                        else "✓ \(.s) pass"
-                        end
-                    end' 2>/dev/null || echo "? error")
+        ck=$(gh pr checks "$num" --repo "$repo" --json name,state 2>/dev/null \
+            | jq -r '
+                if length == 0 then "— none"
+                else
+                    [.[].state] |
+                    { s: map(select(. == "SUCCESS")) | length,
+                      f: map(select(. == "FAILURE")) | length,
+                      p: map(select(. == "PENDING" or . == "QUEUED" or . == "IN_PROGRESS")) | length } |
+                    if .f > 0 then "✗ \(.f) fail"
+                    elif .p > 0 then "… \(.p) pend"
+                    else "✓ \(.s) pass"
+                    end
+                end' 2>/dev/null || echo "? error")
 
-            fmtline "$repo" "$num" "$rv" "$ck" "$am" "${dtag}${title}" "$url"
-        ) &
-        (( ++n % MAX_JOBS == 0 )) && wait
-    done < "$TMPDIR/basic.tsv"
-    wait
-} > "$TMPDIR/enriched.tsv"
+        fmtline "$repo" "$num" "$rv" "$ck" "$am" "${dtag}${title}" "$url"
+    ) > "$TMPDIR/pr_${line}.tsv" &
+    (( ++n % MAX_JOBS == 0 )) && wait
+done < "$TMPDIR/basic.tsv"
+wait
+
+for i in $(seq 1 $line); do
+    cat "$TMPDIR/pr_${i}.tsv"
+done > "$TMPDIR/enriched.tsv"
 
 HINTS="ctrl-o: open │ alt-m: auto-merge │ alt-d: draft/ready │ ctrl-r: refresh"
 curl -s -XPOST "localhost:$LISTEN_PORT" \
