@@ -32,7 +32,7 @@ aliases:
   pr ready-for-review: pr list -A @me --draft=false --json url -q '.[].url'
   pr watch-checks: pr checks --watch
   my-prs: |
-    !gh-prs
+    !gh-my-prs
   show-branch-protection: |
     !gh api graphql \
       -f query="$(curl -s https://gist.githubusercontent.com/duboisf/68fb6e22ac0a2165ca298074f0e3b553/raw/23c22a0f3922b812581684e2fbd7c6d5bb8f9532/operations.graphql)" \
