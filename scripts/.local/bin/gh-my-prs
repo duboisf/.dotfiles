@@ -162,6 +162,68 @@ REOF
 } > "$TMPDIR/refresh.sh"
 chmod +x "$TMPDIR/refresh.sh"
 
+# --- Toggle draft script (used by alt-d) ---
+{
+    cat << TEOF
+#!/usr/bin/env bash
+set -uo pipefail
+TMPDIR='$TMPDIR'
+TEOF
+    cat << 'TEOF'
+url="$1"
+repo="${url#https://github.com/}"
+repo="${repo%%/pull/*}"
+num="${url##*/}"
+ESC=$'\033'
+DRAFT_TAG="${ESC}[2m[draft]${ESC}[0m "
+if gh pr view "$num" --repo "$repo" --json isDraft -q .isDraft | grep -q true; then
+    gh pr ready "$num" --repo "$repo"
+    for f in "$TMPDIR/enriched.tsv" "$TMPDIR/display.tsv"; do
+        [[ -f "$f" ]] && sed -i "\|${url}|s/${ESC}\[2m\[draft\]${ESC}\[0m //" "$f"
+    done
+else
+    gh pr ready --undo "$num" --repo "$repo"
+    for f in "$TMPDIR/enriched.tsv" "$TMPDIR/display.tsv"; do
+        [[ -f "$f" ]] && sed -i "\|${url}|s/\(.*  \)\([^\t]*\t\)/\1${DRAFT_TAG}\2/" "$f"
+    done
+fi
+TEOF
+} > "$TMPDIR/toggle-draft.sh"
+chmod +x "$TMPDIR/toggle-draft.sh"
+
+# --- Toggle auto-merge script (used by alt-m) ---
+{
+    cat << AMEOF
+#!/usr/bin/env bash
+set -uo pipefail
+TMPDIR='$TMPDIR'
+AMEOF
+    cat << 'AMEOF'
+url="$1"
+repo="${url#https://github.com/}"
+repo="${repo%%/pull/*}"
+num="${url##*/}"
+ESC=$'\033'
+# Colorized column values — patterns use \[ to escape [ for sed regex
+AM_ON_PAT="${ESC}\[32m✓ auto        ${ESC}\[0m"
+AM_OFF_PAT="${ESC}\[2m—             ${ESC}\[0m"
+AM_ON="${ESC}[32m✓ auto        ${ESC}[0m"
+AM_OFF="${ESC}[2m—             ${ESC}[0m"
+if gh pr view "$num" --repo "$repo" --json autoMergeRequest -q '.autoMergeRequest != null' | grep -q true; then
+    gh pr merge "$num" --repo "$repo" --disable-auto && \
+        for f in "$TMPDIR/enriched.tsv" "$TMPDIR/display.tsv"; do
+            [[ -f "$f" ]] && sed -i "\|${url}|s/${AM_ON_PAT}/${AM_OFF}/" "$f"
+        done
+else
+    gh pr merge "$num" --repo "$repo" --auto && \
+        for f in "$TMPDIR/enriched.tsv" "$TMPDIR/display.tsv"; do
+            [[ -f "$f" ]] && sed -i "\|${url}|s/${AM_OFF_PAT}/${AM_ON}/" "$f"
+        done
+fi
+AMEOF
+} > "$TMPDIR/toggle-auto-merge.sh"
+chmod +x "$TMPDIR/toggle-auto-merge.sh"
+
 # --- Background enrichment ---
 bash "$TMPDIR/refresh.sh" --enrich-only &
 
@@ -174,8 +236,8 @@ $HEADER_COLS" \
     --bind "ctrl-o:execute-silent($OPEN_CMD {2})+abort" \
     --bind "ctrl-r:execute-silent(bash '$TMPDIR/refresh.sh' &)+change-header($HINTS │ refreshing...
 $HEADER_COLS)" \
-    --bind "alt-m:execute(url={2}; repo=\${url#https://github.com/}; repo=\${repo%%/pull/*}; num=\${url##*/}; gh pr merge \"\$num\" --repo \"\$repo\" --auto && { grep -Fv \"\$url\" '$TMPDIR/display.tsv' > '$TMPDIR/display.tmp' && mv '$TMPDIR/display.tmp' '$TMPDIR/display.tsv'; grep -Fv \"\$url\" '$TMPDIR/enriched.tsv' > '$TMPDIR/enriched.tmp' && mv '$TMPDIR/enriched.tmp' '$TMPDIR/enriched.tsv'; } 2>/dev/null)+reload(cat '$TMPDIR/enriched.tsv' 2>/dev/null || cat '$TMPDIR/display.tsv')" \
-    --bind "alt-d:execute(url={2}; repo=\${url#https://github.com/}; repo=\${repo%%/pull/*}; num=\${url##*/}; if gh pr view \"\$num\" --repo \"\$repo\" --json isDraft -q .isDraft | grep -q true; then gh pr ready \"\$num\" --repo \"\$repo\"; else gh pr ready --undo \"\$num\" --repo \"\$repo\"; fi)" \
+    --bind "alt-m:execute(bash '$TMPDIR/toggle-auto-merge.sh' {2})+reload(cat '$TMPDIR/enriched.tsv' 2>/dev/null || cat '$TMPDIR/display.tsv')" \
+    --bind "alt-d:execute(bash '$TMPDIR/toggle-draft.sh' {2})+reload(cat '$TMPDIR/enriched.tsv' 2>/dev/null || cat '$TMPDIR/display.tsv')" \
     --bind "enter:execute-silent($OPEN_CMD {2})+abort" \
     --listen "$LISTEN_PORT" \
     --reverse \
