@@ -239,10 +239,12 @@ alias gclp='gc projects list'
 alias gcsp='gc config set project'
 
 # Ti-Claude
-alias c='claude'
+alias c='PULSE_SOURCE=alsa_input.usb-Sunplus_IT_Co_Live_Streamer_CAM_313_20240219001-02.mono-fallback claude'
 # Dangerous Ti-Claude
-alias dc='claude --allow-dangerously-skip-permissions'
+alias dc='c --dangerously-skip-permissions'
 
 alias lr='linear'
 alias lri='linear issue'
 alias lrl='linear issue list -i'
+
+alias te='make e2e-pick && make e2e-report'
