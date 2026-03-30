@@ -17,6 +17,16 @@ done
 
 git fetch --prune
 
+# Pull if currently on main branch
+current_branch=$(git symbolic-ref --short HEAD 2>/dev/null || true)
+if [ "$current_branch" = "main" ]; then
+  if [ "$dry_run" = true ]; then
+    echo "[dry-run] Would pull on main"
+  else
+    git pull
+  fi
+fi
+
 git branch -vv | grep ': gone]' | awk '{gsub(/^[* +] +/, ""); print $1}' | while read -r branch; do
   # Check if branch is checked out in a worktree
   wt=$(git worktree list --porcelain \
