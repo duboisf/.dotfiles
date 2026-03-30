@@ -219,6 +219,7 @@ alias s_connect='openssl s_client -state -debug -connect'
 
 # rg
 #####
+alias rg='rg --hidden'
 alias rgf='rg --files-with-matches'
 
 alias ic=istioctl
@@ -229,7 +230,7 @@ alias cpc='nvim -c CopilotChat -c only'
 
 alias kssh='kitten ssh'
 
-alias rgh='rg --hidden'
+alias fd='fd --hidden'
 
 alias ts=tailscale
 
