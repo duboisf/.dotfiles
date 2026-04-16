@@ -1,2 +1,4 @@
 skip_global_compinit=1
-. "$HOME/.cargo/env"
+if [[ -d "$HOME/.cargo/env" ]]; then
+    . "$HOME/.cargo/env"
+fi
