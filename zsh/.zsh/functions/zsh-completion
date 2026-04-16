@@ -1,0 +1,7 @@
+if (( $# < 1 )); then
+    print "USAGE: $0 <command>" >&2
+    return 1
+fi
+
+local binary=$1
+$binary completion zsh > "$HOME/.zsh/completions/_${binary}"

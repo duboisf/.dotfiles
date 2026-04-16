@@ -1,1 +1,3 @@
-_kubectl
+*
+!.gitignore
+!_zsh-completion
