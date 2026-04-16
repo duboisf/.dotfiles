@@ -5,6 +5,7 @@ zstyle ':autocomplete:*:compinit' arguments -d "${XDG_CACHE_HOME:-$HOME/.cache}/
 zstyle ':autocomplete:*' delay 0.1
 zstyle ':autocomplete:*' min-input 4
 zstyle ':autocomplete:*' add-semicolon no
+zstyle ':autocomplete:*:*' list-lines 50
 
 source $ZSH_DIR/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 
