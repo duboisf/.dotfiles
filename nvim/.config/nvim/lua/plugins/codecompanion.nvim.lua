@@ -157,7 +157,7 @@ end
 return {
   "olimorris/codecompanion.nvim",
   version = "v18.*",
-  enabled = true,
+  enabled = false,
   opts = {
     interactions = {
       chat = {
