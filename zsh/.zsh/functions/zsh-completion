@@ -4,4 +4,11 @@ if (( $# < 1 )); then
 fi
 
 local binary=$1
-$binary completion zsh > "$HOME/.zsh/completions/_${binary}"
+local completion_file_path="$HOME/.zsh/completions/_${binary}"
+
+if ! $binary completion zsh > $completion_file_path; then
+    print "Failed to install completion." >&2
+    return 1
+fi
+
+print "Completion written to ${completion_file_path}, you'll need to restart your shell to use it."
