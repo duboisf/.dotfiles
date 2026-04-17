@@ -1,5 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+set -e
 
 # This script is used by the copilot plugin to run node 20.x
 
-~/.local/bin/mise exec node@22 -- node "$@"
+mise install -q node@22
+exec mise x node@22 -- node "$@"
