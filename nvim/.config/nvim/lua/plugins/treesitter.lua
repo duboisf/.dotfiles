@@ -2,10 +2,10 @@ return {
   ---@type LazyPluginSpec
   {
     'nvim-treesitter/nvim-treesitter',
+    enabled = true,
     build = ':TSUpdate',
     dependencies = {
       'nvim-treesitter/nvim-treesitter-textobjects',
-      'nvim-treesitter/playground',
     },
     ---@module 'nvim-treesitter.configs'
     ---@type TSConfig
@@ -59,35 +59,6 @@ return {
       indent = {
         enable = true,
         disable = { 'yaml' }
-      },
-      playground = {
-        enable = true,
-        persist_queries = true,
-      },
-      rainbow = {
-        enable = true,
-        extended_mode = true,
-      },
-      refactor = {
-        highlight_definitions = {
-          enable = true
-        },
-        highlight_current_scope = {
-          enable = true
-        },
-        smart_rename = {
-          enable = true,
-          keymaps = {
-            smart_rename = "grr" -- mapping to rename reference under cursor
-          }
-        },
-        navigation = {
-          enable = true,
-          keymaps = {
-            goto_definition = "gnd", -- mapping to go to definition of symbol under cursor
-            list_definitions = "gnD" -- mapping to list all definitions in current file
-          }
-        }
       },
       textobjects = {
         -- syntax-aware textobjects
