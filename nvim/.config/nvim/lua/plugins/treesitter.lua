@@ -1,17 +1,11 @@
 return {
-  ---@type LazyPluginSpec
   {
     'nvim-treesitter/nvim-treesitter',
-    enabled = true,
+    branch = 'main',
+    lazy = false,
     build = ':TSUpdate',
-    ---@module 'nvim-treesitter.configs'
-    ---@type TSConfig
-    opts = {
-      sync_install = false,
-      ignore_install = {},
-      auto_install = false,
-      modules = {},
-      ensure_installed = {
+    config = function()
+      local parsers = {
         'bash',
         'comment',
         'diff',
@@ -19,7 +13,6 @@ return {
         'git_rebase',
         'gitattributes',
         'gitcommit',
-        'gitignore',
         'go',
         'gomod',
         'gosum',
@@ -39,26 +32,18 @@ return {
         'vim',
         'vimdoc',
         'yaml',
-      },
-      highlight = {
-        enable = true,
-      },
-      incremental_selection = {
-        enable = true,
-        -- mappings are configured using hydra in ~/.config/nvim/lua/cfg/plugins/hydra.lua
-        keymaps = {                        -- mappings for incremental selection (visual mappings)
-          init_selection    = 'gs',        -- maps in normal mode to init the node/scope selection
-          node_incremental  = '<C-Down>',  -- increment to the upper named parent
-          scope_incremental = '<C-Right>', -- increment to the upper scope (as defined in locals.scm)
-          node_decremental  = '<C-Up>',    -- decrement to the previous node
-        }
-      },
-      indent = {
-        enable = true,
-        disable = { 'yaml' }
-      },
-    },
-    main = 'nvim-treesitter.configs',
+      }
+      require('nvim-treesitter').install(parsers)
+
+      vim.api.nvim_create_autocmd('FileType', {
+        callback = function(args)
+          if not pcall(vim.treesitter.start) then return end
+          if vim.bo[args.buf].filetype ~= 'yaml' then
+            vim.bo[args.buf].indentexpr = "v:lua.require('nvim-treesitter').indentexpr()"
+          end
+        end,
+      })
+    end,
   },
   {
     'nvim-treesitter/nvim-treesitter-textobjects',
@@ -132,9 +117,6 @@ return {
   },
   {
     'nvim-treesitter/nvim-treesitter-context',
-    dependencies = {
-      'nvim-treesitter/nvim-treesitter',
-    },
     opts = {
       enable = true,
       separator = '─',
