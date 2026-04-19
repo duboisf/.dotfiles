@@ -94,3 +94,7 @@ end, {
   nargs = 1,
   desc = "Delete a Go struct member from spew output"
 })
+
+vim.api.nvim_create_user_command('CopyMessages', function()
+  vim.cmd('redir @+  | silent messages | redir END')
+end, {})
