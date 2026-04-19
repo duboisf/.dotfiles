@@ -90,7 +90,7 @@ local function config()
 
     if server_capabilities then
       if server_capabilities.codeLensProvider then
-        autocmd({ 'BufEnter', 'CursorHold', 'InsertLeave' }, nil, vim.lsp.codelens.refresh, 'Refresh codelens', opts)
+        vim.lsp.codelens.enable(true, { bufnr = bufnr })
       end
 
       if server_capabilities.documentHighlightProvider then
