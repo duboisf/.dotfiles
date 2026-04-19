@@ -1,3 +1,9 @@
+-- When Claude Code opens a prompt file in nvim via $EDITOR (Ctrl-G in the
+-- Claude prompt), the last agent response above the reply marker is
+-- commented out with `# ` prefixes. This strips those prefixes on BufRead
+-- so the response is readable as markdown, then places the cursor at the
+-- end of the buffer ready to continue typing.
+
 local utils = require("core.utils")
 local autocmd = utils.autogroup('duboisf.claude_prompt', true)
 
@@ -24,7 +30,7 @@ autocmd(
     vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, new_lines)
     vim.bo[bufnr].modified = false
     vim.b[bufnr].disable_jump_to_last_position = true
-    vim.api.nvim_win_set_cursor(0, { #new_lines, 0 })
+    vim.api.nvim_win_set_cursor(0, { #new_lines, #(new_lines[#new_lines] or '') })
   end,
   'Uncomment Claude prompt reference section for readability'
 )
