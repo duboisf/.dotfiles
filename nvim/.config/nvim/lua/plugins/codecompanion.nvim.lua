@@ -232,6 +232,5 @@ return {
     "folke/snacks.nvim",
     "j-hui/fidget.nvim",
     "nvim-lua/plenary.nvim",
-    "nvim-treesitter/nvim-treesitter",
   },
 }
