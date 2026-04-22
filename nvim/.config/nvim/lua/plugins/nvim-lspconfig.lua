@@ -358,6 +358,11 @@ local function config()
       lspconfig.yamlls = {
         settings = {
           yaml = {
+            format = {
+              enable = true,
+              printWidth = 9999,
+              proseWrap = "preserve",
+            },
             schemas = {
               ["https://json.schemastore.org/github-workflow"] = "/.github/workflows/*.yml",
             },
