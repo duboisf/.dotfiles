@@ -5,6 +5,9 @@ return {
     preset = "helix",
     sort = { "alphanum", "local", "order", "group", "mod" },
     show_help = false,
+    plugins = {
+      registers = false,
+    },
   },
   -- config = function(_, opts)
   --   require('which-key').setup(opts)
