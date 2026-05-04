@@ -1,39 +1,5 @@
 ---@module 'codecompanion.schema'
 
-local _claude_code_token = nil
-
-local function fetch_claude_code_token_async()
-  vim.system(
-    { 'secret-tool', 'lookup', 'app', 'claude-code', 'for', 'nvim' },
-    { text = true },
-    function(result)
-      if result.code == 0 and result.stdout then
-        print("Successfully retrieved Claude Code token")
-        _claude_code_token = result.stdout:gsub("%s+$", "")
-      else
-        vim.schedule(function()
-          vim.notify("CodeCompanion: Failed to retrieve Claude Code token", vim.log.levels.WARN)
-        end)
-      end
-    end
-  )
-end
-
-local function get_claude_code_token()
-  if _claude_code_token then
-    return _claude_code_token
-  end
-  -- Sync fallback if async hasn't completed yet (unlikely)
-  local result = vim.system(
-    { 'secret-tool', 'lookup', 'app', 'claude-code', 'for', 'nvim' },
-    { text = true }
-  ):wait()
-  if result.code == 0 and result.stdout then
-    _claude_code_token = result.stdout:gsub("%s+$", "")
-  end
-  return _claude_code_token
-end
-
 local function spinner()
   local M = {
     ---@type boolean
@@ -156,15 +122,11 @@ end
 ---@type LazyPluginSpec
 return {
   "olimorris/codecompanion.nvim",
-  version = "v18.*",
-  enabled = false,
+  version = "v19.*",
+  enabled = true,
   opts = {
     interactions = {
       chat = {
-        adapter = {
-          name = "claude_code",
-          model = "opus",
-        },
         keymaps = {
           clear = {
             modes = {},
@@ -175,50 +137,11 @@ return {
         },
         roles = {
           user = "Fred",
-          llm = function(adapter)
-            if adapter.name == "claude_code" then
-              return "Ti Claude"
-            else
-              return adapter.formatted_name
-            end
-          end,
-        },
-      },
-    },
-    adapters = {
-      acp = {
-        opts = {
-          show_presets = false,
-        },
-        claude_code = function()
-          return require("codecompanion.adapters").extend("claude_code", {
-            env = {
-              CLAUDE_CODE_OAUTH_TOKEN = get_claude_code_token(),
-            },
-          })
-        end,
-      },
-      http = {
-        opts = {
-          show_presets = false,
-        },
-      },
-      strategies = {
-        chat = {
-          keymaps = {
-            clear = {
-              modes = {},
-            },
-            send = {
-              modes = { i = "<C-CR>" }
-            },
-          },
         },
       },
     },
   },
   config = function(_, opts)
-    fetch_claude_code_token_async()
     spinner():init()
     local cc = require('codecompanion')
     cc.setup(opts)
