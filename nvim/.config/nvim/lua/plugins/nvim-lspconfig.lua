@@ -374,15 +374,6 @@ local function config()
           }
         }
       }
-      -- Use volta to run yamlls with node 22.
-      -- This is needed because if there is a project with an old (volta) pinned node version
-      -- then yamlls fails to start.
-      local cmd = lspconfig.yamlls.cmd
-      ---@cast cmd string[]
-      table.insert(cmd, 1, "--")
-      table.insert(cmd, 1, "node@22")
-      table.insert(cmd, 1, "exec")
-      table.insert(cmd, 1, "mise")
     end
 
     do
