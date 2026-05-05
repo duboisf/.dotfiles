@@ -5,31 +5,74 @@ set -euo pipefail
 
 BRANCH="${1:-}"
 
-REQUIRED_PKGS=(
-    build-essential
-    ca-certificates
-    curl
-    fontconfig
-    git
-    ripgrep
-    stow
-    unzip
-    wget
-    xz-utils
-    zsh
-)
+# detect OS family from /etc/os-release
+OS_FAMILY=""
+if [[ -r /etc/os-release ]]; then
+    . /etc/os-release
+    case "${ID:-} ${ID_LIKE:-}" in
+        *fedora*|*rhel*|*centos*) OS_FAMILY="fedora" ;;
+        *debian*|*ubuntu*) OS_FAMILY="debian" ;;
+    esac
+fi
+if [[ -z "$OS_FAMILY" ]]; then
+    echo "❌ unsupported OS (expected debian/ubuntu or fedora/rhel)" >&2
+    exit 1
+fi
+echo "🔍 detected OS family: $OS_FAMILY"
+
+if [[ "$OS_FAMILY" == "debian" ]]; then
+    REQUIRED_PKGS=(
+        build-essential
+        ca-certificates
+        curl
+        fontconfig
+        git
+        ripgrep
+        stow
+        unzip
+        wget
+        xz-utils
+        zsh
+    )
+else
+    REQUIRED_PKGS=(
+        ca-certificates
+        curl
+        fontconfig
+        gcc
+        gcc-c++
+        git
+        make
+        ripgrep
+        stow
+        unzip
+        wget
+        xz
+        zsh
+    )
+fi
 
 missing_pkgs=()
 for pkg in "${REQUIRED_PKGS[@]}"; do
-    if ! dpkg -s "$pkg" &> /dev/null; then
-        missing_pkgs+=("$pkg")
+    if [[ "$OS_FAMILY" == "debian" ]]; then
+        if ! dpkg -s "$pkg" &> /dev/null; then
+            missing_pkgs+=("$pkg")
+        fi
+    else
+        if ! rpm -q "$pkg" &> /dev/null; then
+            missing_pkgs+=("$pkg")
+        fi
     fi
 done
 
 if (( ${#missing_pkgs[@]} > 0 )); then
     echo "🔧 installing missing packages: ${missing_pkgs[*]}"
-    sudo apt-get update
-    sudo apt-get install --no-install-recommends -y "${missing_pkgs[@]}"
+    if [[ "$OS_FAMILY" == "debian" ]]; then
+        sudo apt-get update
+        sudo apt-get install --no-install-recommends -y "${missing_pkgs[@]}"
+    else
+        sudo dnf install -y "${missing_pkgs[@]}"
+    fi
     echo "✅ packages installed"
 else
     echo "✅ all required packages already installed"
@@ -109,7 +152,9 @@ fi
     cd ~/.local/stow
     stow kitty.app
     sudo ln -s ~/.local/bin/kitty /usr/local/bin/kitty
-    sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /usr/local/bin/kitty 100
+    if [[ "$OS_FAMILY" == "debian" ]]; then
+        sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /usr/local/bin/kitty 100
+    fi
     echo "✅ kitty installed"
 )
 
