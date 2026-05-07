@@ -25,17 +25,12 @@ setopt autopushd
 # Editing
 #########
 
-# Copy the current buffer into the system clipboard so that you can paste with ctrl-v
+# Copy the current buffer into the system clipboard so that you can paste with ctrl-v.
+# Uses OSC 52 so the terminal emulator (kitty) writes the clipboard directly —
+# avoids wl-copy, which on GNOME has to spawn a transient toplevel to satisfy
+# wl_data_device_manager and steals focus, causing tiling-extension reflows.
 copy-to-system-clipboard () {
-    local clipboard_cmd
-    if (( $+commands[xclip] )); then
-        clipboard_cmd=(xclip -selection clipboard)
-    elif (( $+commands[wl-copy] )); then
-        clipboard_cmd=(wl-copy)
-    else
-        zle -M "No clipboard command found (xclip/wl-copy)"
-        return 1
-    fi
-
-    print -rn -- $BUFFER | "${clipboard_cmd[@]}"
+    local b64
+    b64=$(print -rn -- $BUFFER | base64 | tr -d '\n')
+    printf '\e]52;c;%s\a' "$b64" > /dev/tty
 }
