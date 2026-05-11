@@ -1,5 +1,9 @@
 # zmodload zsh/zprof
 
+# Force emacs keymap (zsh otherwise picks viins when $EDITOR/$VISUAL contains "vi",
+# e.g. nvim — which leaves ^P/^N as self-insert).
+bindkey -e
+
 # Define XDG variables
 export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
 export XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR:-/run/user/$UID}
