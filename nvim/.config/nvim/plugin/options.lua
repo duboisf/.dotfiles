@@ -6,6 +6,7 @@ local opt = vim.opt
 o.cmdheight = 1
 o.concealcursor = 'nc'
 o.conceallevel = 2
+o.cursorline = true
 opt.dictionary:append('/usr/share/dict/american-english')
 o.encoding = 'utf-8'
 o.expandtab = true
