@@ -58,16 +58,16 @@ export def "kctxs" [] {
 # Get kubernetes pods
 export def poj []: nothing -> table<name: string, ready: string, status: string, age: datetime> {
     kubectl get pods -o json | from json | get items
-        | each { |in| {
-            name: $in.metadata.name,
-            ready: ($in.status.containerStatuses
+        | each { |i| {
+            name: $i.metadata.name,
+            ready: ($i.status.containerStatuses
                 | do {
-                    let total = ($in | length)
-                    let ready = ($in | where state.running? != null | length)
+                    let total = ($i | length)
+                    let ready = ($i | where state.running? != null | length)
                     $"($ready)/($total)"
                 }
             ),
-            status: $in.status.phase,
-            age: ($in.metadata.creationTimestamp | into datetime)
+            status: $i.status.phase,
+            age: ($i.metadata.creationTimestamp | into datetime)
         }}
 }
