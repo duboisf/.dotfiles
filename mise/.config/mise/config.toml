@@ -9,7 +9,6 @@ go = "latest"
 gojq = "latest"
 kubectl = "latest"
 node = "lts"
-"npm:@openai/codex" = "latest"
 "pipx:mitmproxy" = "latest"
 pnpm = "latest"
 starship = "latest"
@@ -19,8 +18,13 @@ usage = "latest"
 uv = "latest"
 yq = "latest"
 zoxide = "latest"
+"npm:clerk" = "v1.4.0"
+codex = "0.144.0"
+claude = "2.1.212"
+"npm:turbo" = "2.10.5"
 
 [settings]
+pin = true
 
 [settings.npm]
 package_manager = "pnpm"
