@@ -1,0 +1,90 @@
+#!/bin/bash
+set -euo pipefail
+
+# Create a git worktree from origin/main, placed as a sibling under
+# <repo-parent>/wts/<group>/<repo-name>. Bootstraps it (mise trust + make
+# bootstrap) when applicable.
+#
+# Usage: git create-worktree <branch-name> [group]
+#
+# If [group] is omitted it is derived from the branch (slashes become dashes).
+
+usage() {
+    cat <<'EOF'
+Usage: git create-worktree <branch-name> [group]
+
+Create a git worktree from origin/main, placed as a sibling of the repo under
+<repo-parent>/wts/<group>/<repo-name>, then bootstrap it (mise trust + make
+bootstrap) when applicable.
+
+Arguments:
+  <branch-name>   Branch to create (from origin/main) or check out if it exists.
+  [group]         Subdirectory under wts/ to group the worktree. Defaults to the
+                  branch name with slashes replaced by dashes.
+
+Options:
+  -h, --help      Show this help and exit.
+
+If a worktree already exists at the target path, it is left untouched.
+EOF
+}
+
+case "${1:-}" in
+    -h|--help)
+        usage
+        exit 0
+        ;;
+esac
+
+branch="${1:-}"
+group="${2:-}"
+
+if [[ -z "$branch" ]]; then
+    usage >&2
+    exit 1
+fi
+
+repo_root="$(git rev-parse --show-toplevel)"
+repo_name="${repo_root##*/}"
+repo_parent="${repo_root%/*}"
+
+# Derive group from branch if not provided (replace / with -)
+if [[ -z "$group" ]]; then
+    group="${branch//\//-}"
+fi
+
+wt_path="$repo_parent/wts/$group/$repo_name"
+
+# Already exists
+if [[ -d "$wt_path" ]]; then
+    echo "Worktree already exists: $wt_path"
+    exit 0
+fi
+
+# Clean up stale worktree references
+git worktree prune
+
+git fetch origin main
+
+mkdir -p "${wt_path%/*}"
+
+# Try creating with a new branch from origin/main first
+if git worktree add "$wt_path" -b "$branch" origin/main 2>/dev/null; then
+    echo "Created worktree: $wt_path (new branch)"
+elif git worktree add "$wt_path" "$branch" 2>/dev/null; then
+    echo "Created worktree: $wt_path (existing branch)"
+else
+    echo "Error: could not create worktree for '$branch' in $repo_name" >&2
+    echo "Hint: check 'git worktree list' for conflicts" >&2
+    exit 1
+fi
+
+# Bootstrap
+if command -v mise >/dev/null 2>&1; then
+    mise trust --quiet -C "$wt_path" || true
+fi
+
+if make -C "$wt_path" -n bootstrap &>/dev/null; then
+    echo "Running make bootstrap..."
+    make -C "$wt_path" bootstrap || echo "Warning: make bootstrap failed" >&2
+fi

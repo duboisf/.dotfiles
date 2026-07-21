@@ -46,7 +46,9 @@ zstyle ':completion:*:*:make:*' tag-order 'targets'
 zstyle ':completion:*:*:git-*' tag-order 'heads tags commit-tags recent-commits'
 
 # Register custom git subcommands for completion
-zstyle ':completion:*:*:git:*' user-commands merge-worktree:'merge worktree branch and remove worktree'
+zstyle ':completion:*:*:git:*' user-commands \
+    merge-worktree:'merge worktree branch and remove worktree' \
+    create-worktree:'create a worktree from origin/main under wts/'
 
 # Load bashcompinit once for all bash-style completions below
 if (( $+commands[aws] || $+commands[terraform] || $+commands[gcloud] )); then
