@@ -23,6 +23,19 @@ aliases:
       }
       | str join "\n"
     '
+  # Open the diff between the latest release and the latest pre-release in the browser.
+  # Args: [<owner>/<repo>] (defaults to the current repo)
+  diff-latest-prerelease: |
+    !set -e
+    repo=${1:-$(gh repo view --json nameWithOwner --jq .nameWithOwner)}
+    releases=$(gh release list --repo "$repo" --exclude-drafts --limit 100 --json tagName,isLatest,isPrerelease)
+    release_tag=$(printf '%s' "$releases" | jq -r 'map(select(.isLatest)) | .[0].tagName // empty')
+    prerelease_tag=$(printf '%s' "$releases" | jq -r 'map(select(.isPrerelease)) | .[0].tagName // empty')
+    test -n "$release_tag" || { echo "No latest release found in $repo" >&2; exit 1; }
+    test -n "$prerelease_tag" || { echo "No pre-release found in $repo" >&2; exit 1; }
+    url="https://github.com/$repo/compare/$release_tag...$prerelease_tag"
+    echo "Opening $url"
+    exec ${BROWSER:-xdg-open} "$url"
   download-latest-release: |
     !repo=${1:-cli/cli}; picked_asset=$(gh release view -R $repo --json assets -q ".assets[].name" \
       | fzf --prompt="Pick an asset to download: "); \
