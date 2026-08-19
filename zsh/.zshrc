@@ -19,11 +19,20 @@ _zsh_cache_eval() {
     local cache_dir=${XDG_CACHE_HOME:-$HOME/.cache}/zsh
     local cache_file=$cache_dir/$name.zsh
 
-    if [[ ! -f $cache_file ]] || () { setopt local_options extended_glob; [[ -n $cache_file(#qN.mh+24) ]] }; then
+    if [[ ! -s $cache_file ]] || () { setopt local_options extended_glob; [[ -n $cache_file(#qN.mh+24) ]] }; then
         mkdir -p $cache_dir
-        eval "$cmd" > $cache_file
+        local tmp=$cache_file.$$.tmp
+        if eval "$cmd" > $tmp && [[ -s $tmp ]]; then
+            mv -f $tmp $cache_file
+        else
+            # Init failed (tool missing, mid-upgrade, shim error). Keep the old
+            # cache instead of overwriting it with empty output, which would
+            # silently disable the tool until the 24h expiry.
+            rm -f $tmp
+            print -u2 "zsh: '$name' init failed; using previous cache (zsh-regen-cache after fixing)"
+        fi
     fi
-    cat $cache_file
+    [[ -s $cache_file ]] && cat $cache_file
 }
 
 zsh-regen-cache() {
