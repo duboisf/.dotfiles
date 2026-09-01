@@ -6,9 +6,11 @@ current=$(git rev-parse --show-toplevel 2>/dev/null)
 
 local pr_cache=${TMPDIR:-/tmp}/.wt-pr-cache.$$
 local port_file=${TMPDIR:-/tmp}/.wt-fzf-port.$$
+local sort_file=${TMPDIR:-/tmp}/.wt-sort.$$
 : > "$pr_cache"
+print -r -- "${WORKTREE_SORT:-mtime}" > "$sort_file"
 
-local reload_cmd="FPATH=${(q)FPATH}; autoload -Uz _list-git-worktrees; _list-git-worktrees ${(q)current} ${(q)pr_cache}"
+local reload_cmd="read s < ${(q)sort_file}; FPATH=${(q)FPATH}; autoload -Uz _list-git-worktrees; _list-git-worktrees ${(q)current} ${(q)pr_cache} \$s"
 
 # Fetch PRs asynchronously — fzf opens immediately, reloads when data arrives
 local fetch_pid=0
@@ -29,10 +31,10 @@ if (( $+commands[gh] )); then
   fetch_pid=$!
 fi
 
-entries=$(_list-git-worktrees "$current" "$pr_cache")
+entries=$(_list-git-worktrees "$current" "$pr_cache" "$(<"$sort_file")")
 
 if [[ -z "$entries" ]]; then
-  rm -f "$pr_cache" "$port_file"
+  rm -f "$pr_cache" "$port_file" "$sort_file"
   (( fetch_pid )) && kill $fetch_pid 2>/dev/null
   if [[ -n "$WIDGET" ]]; then
     zle redisplay
@@ -43,7 +45,10 @@ if [[ -z "$entries" ]]; then
   return 1
 fi
 
-local header="Current: $current  │  enter: switch  ctrl-x: remove"
+local header_tail="enter: switch  ctrl-s: sort  ctrl-x: remove"
+local header="Current: $current  │  sort: $(<"$sort_file")  │  $header_tail"
+local header_cmd="read s < ${(q)sort_file}; echo \"Current: $current  │  sort: \$s  │  $header_tail\""
+local toggle_sort_cmd="if grep -qx name ${(q)sort_file}; then echo mtime > ${(q)sort_file}; else echo name > ${(q)sort_file}; fi"
 
 local errfile=${TMPDIR:-/tmp}/.wt-rm-err.$$
 
@@ -57,12 +62,15 @@ worktree=$(
       --with-nth=2.. --accept-nth=1 --header-lines=1 \
       --preview='git -C {1} log --oneline --graph --decorate --color=always -100' \
       --preview-window='bottom,70%,border-top' \
+      --bind "ctrl-s:execute-silent($toggle_sort_cmd)" \
+      --bind "ctrl-s:+reload($reload_cmd)" \
+      --bind "ctrl-s:+transform-header:$header_cmd" \
       --bind "ctrl-x:execute-silent(>$errfile; git worktree remove {1} 2>$errfile)" \
       --bind "ctrl-x:+reload($reload_cmd)" \
-      --bind "ctrl-x:+transform-header:if [ -s $errfile ]; then cat $errfile; else echo 'Removed {1}  │  enter: switch  ctrl-x: remove'; fi"
-) || { rm -f "$errfile" "$pr_cache" "$port_file"; (( fetch_pid )) && kill $fetch_pid 2>/dev/null; [[ -n "$WIDGET" ]] && zle redisplay; return 0; }
+      --bind "ctrl-x:+transform-header:if [ -s $errfile ]; then cat $errfile; else read s < ${(q)sort_file}; echo \"Removed {1}  │  sort: \$s  │  $header_tail\"; fi"
+) || { rm -f "$errfile" "$pr_cache" "$port_file" "$sort_file"; (( fetch_pid )) && kill $fetch_pid 2>/dev/null; [[ -n "$WIDGET" ]] && zle redisplay; return 0; }
 
-rm -f "$errfile" "$pr_cache" "$port_file"
+rm -f "$errfile" "$pr_cache" "$port_file" "$sort_file"
 
 if [[ -n "$worktree" ]]; then
   if [[ -n "$WIDGET" ]]; then

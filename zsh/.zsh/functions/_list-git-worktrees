@@ -1,9 +1,12 @@
 
 emulate -RL zsh
+zmodload zsh/datetime
 
-local current=${1:?usage: _list-git-worktrees <current-worktree-root>}
+local current=${1:?usage: _list-git-worktrees <current-worktree-root> [pr-cache] [name|mtime]}
 local pr_cache="${2:-}"
-local raw abspath branch relpath pr_info
+local sort_by="${3:-mtime}"
+local raw abspath branch relpath pr_info gitdir commit_ts index_ts modified_ts modified delta
+local -a sort_args
 
 raw=$(
   git worktree list --porcelain |
@@ -19,14 +22,38 @@ raw=$(
 
 [[ -z "$raw" ]] && return
 
+if [[ "$sort_by" == mtime ]]; then
+  sort_args=(-k1,1nr)
+else
+  sort_args=(-k3,3)
+fi
+
 {
-  printf "_\tPATH\tBRANCH\tPR\n"
+  printf "_\tPATH\tBRANCH\tMODIFIED\tPR\n"
   while IFS=$'\t' read -r abspath branch; do
     relpath=$(realpath --relative-to="$current" "$abspath")
+
+    # Last activity = newer of the HEAD commit and the worktree's index (checkout/stage/status)
+    gitdir=$(git -C "$abspath" rev-parse --absolute-git-dir 2>/dev/null)
+    commit_ts=$(git -C "$abspath" log -1 --format=%ct 2>/dev/null)
+    index_ts=$(stat -c %Y "$gitdir/index" 2>/dev/null)
+    modified_ts=$(( ${commit_ts:-0} > ${index_ts:-0} ? ${commit_ts:-0} : ${index_ts:-0} ))
+    if (( modified_ts == 0 )); then
+      modified="unknown"
+    else
+      delta=$(( EPOCHSECONDS - modified_ts ))
+      if   (( delta < 60 ));      then modified="just now"
+      elif (( delta < 3600 ));    then modified="$(( delta / 60 ))m ago"
+      elif (( delta < 86400 ));   then modified="$(( delta / 3600 ))h ago"
+      elif (( delta < 2592000 )); then modified="$(( delta / 86400 ))d ago"
+      else                             modified="$(( delta / 2592000 ))mo ago"
+      fi
+    fi
+
     pr_info=""
     if [[ -n "$pr_cache" && -s "$pr_cache" ]]; then
       pr_info=$(awk -F'\t' -v b="$branch" '$1 == b { print $2; exit }' "$pr_cache")
     fi
-    printf "%s\t%s\t%s\t%s\n" "$abspath" "$relpath" "$branch" "$pr_info"
-  done <<< "$raw"
+    printf "%s\t%s\t%s\t%s\t%s\t%s\n" "$modified_ts" "$abspath" "$relpath" "$branch" "$modified" "$pr_info"
+  done <<< "$raw" | sort -t $'\t' "${sort_args[@]}" | cut -f2-
 } | column -t -s "	"
