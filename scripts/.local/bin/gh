@@ -1,4 +1,3 @@
 #!/bin/sh
 
-# Simple wrapper to run gh via mise, used as credentials helper in git config.
-exec mise exec gh -- gh "$@"
+exec "$(mise which gh)" "$@"
